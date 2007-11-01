@@ -1,0 +1,22 @@
+2007-11-01  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
+
+	* AUTHORS:
+	* COPYING:
+	* INSTALL:
+	* Makefile.am:
+	* NEWS:
+	* README:
+	* autogen.sh:
+	* configure.ac:
+	* gupnp-av-1.0-uninstalled.pc.in:
+	* gupnp-av-1.0.pc.in:
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av-main.c:
+	* libgupnp-av/gupnp-av-main.h:
+	* libgupnp-av/gupnp-av.h:
+	* po/ChangeLog:
+	* po/POTFILES.in:
+	* po/libgupnp-av.pot:
+
+	Add basic skeleton for gupnp-av.
+

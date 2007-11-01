@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: gupnp-av-1.0
+Description: GObject-based AV specific UPnP library
+Version: @VERSION@
+Libs: -L${libdir} -lgupnp-av-1.0
+Cflags: -I${includedir}/gupnp-av-1.0
+Requires: gupnp-1.0
