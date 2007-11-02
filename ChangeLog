@@ -1,5 +1,13 @@
 2007-11-02  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
 
+	* libgupnp-av/gupnp-didl-lite-parser.h:
+	* libgupnp-av/gupnp-media-renderer-proxy.h:
+	* libgupnp-av/gupnp-media-server-proxy.h:
+
+	Rename all IS_GUPNP_* type check macros to GUPNP_IS_*.
+
+2007-11-02  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
+
 	* libgupnp-av/Makefile.am:
 	* libgupnp-av/gupnp-av-main.c:
 	* libgupnp-av/gupnp-av.h:

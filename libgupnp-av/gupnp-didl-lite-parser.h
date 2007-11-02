@@ -40,10 +40,10 @@ gupnp_didl_lite_parser_get_type (void) G_GNUC_CONST;
                 (G_TYPE_CHECK_CLASS_CAST ((obj), \
                  GUPNP_TYPE_DIDL_LITE_PARSER, \
                  GUPnPDIDLLiteParserClass))
-#define IS_GUPNP_DIDL_LITE_PARSER(obj) \
+#define GUPNP_IS_DIDL_LITE_PARSER(obj) \
                 (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
                  GUPNP_TYPE_DIDL_LITE_PARSER))
-#define IS_GUPNP_DIDL_LITE_PARSER_CLASS(obj) \
+#define GUPNP_IS_DIDL_LITE_PARSER_CLASS(obj) \
                 (G_TYPE_CHECK_CLASS_TYPE ((obj), \
                  GUPNP_TYPE_DIDL_LITE_PARSER))
 #define GUPNP_DIDL_LITE_PARSER_GET_CLASS(obj) \

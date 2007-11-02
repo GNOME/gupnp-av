@@ -40,10 +40,10 @@ gupnp_media_server_proxy_get_type (void) G_GNUC_CONST;
                 (G_TYPE_CHECK_CLASS_CAST ((obj), \
                  GUPNP_TYPE_MEDIA_SERVER_PROXY, \
                  GUPnPMediaServerProxyClass))
-#define IS_GUPNP_MEDIA_SERVER_PROXY(obj) \
+#define GUPNP_IS_MEDIA_SERVER_PROXY(obj) \
                 (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
                  GUPNP_TYPE_MEDIA_SERVER_PROXY))
-#define IS_GUPNP_MEDIA_SERVER_PROXY_CLASS(obj) \
+#define GUPNP_IS_MEDIA_SERVER_PROXY_CLASS(obj) \
                 (G_TYPE_CHECK_CLASS_TYPE ((obj), \
                  GUPNP_TYPE_MEDIA_SERVER_PROXY))
 #define GUPNP_MEDIA_SERVER_PROXY_GET_CLASS(obj) \
