@@ -1,6 +1,6 @@
 prefix=
 exec_prefix=
-libdir=${pcfiledir}/libgupnp
+libdir=${pcfiledir}/libgupnp-av
 includedir=${pcfiledir}/
 
 Name: gupnp-av-1.0
