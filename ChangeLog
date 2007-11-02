@@ -1,3 +1,21 @@
+2007-11-02  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
+
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av-main.c:
+	* libgupnp-av/gupnp-av.h:
+	* libgupnp-av/gupnp-didl-lite-object.c:
+	* libgupnp-av/gupnp-didl-lite-object.h:
+	* libgupnp-av/gupnp-didl-lite-parser.c:
+	* libgupnp-av/gupnp-didl-lite-parser.h:
+	* libgupnp-av/gupnp-media-renderer-proxy.c:
+	* libgupnp-av/gupnp-media-renderer-proxy.h:
+	* libgupnp-av/gupnp-media-server-proxy.c:
+	* libgupnp-av/gupnp-media-server-proxy.h:
+	* libgupnp-av/xml-util.c:
+	* libgupnp-av/xml-util.h:
+
+	Move all generic AV code into gupnp-av.
+
 2007-11-01  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
 
 	* AUTHORS:

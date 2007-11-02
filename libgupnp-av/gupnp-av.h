@@ -22,5 +22,8 @@
  */
 
 #include "gupnp-av-main.h"
-
+#include "gupnp-media-server-proxy.h"
+#include "gupnp-media-renderer-proxy.h"
+#include "gupnp-didl-lite-object.h"
+#include "gupnp-didl-lite-parser.h"
 

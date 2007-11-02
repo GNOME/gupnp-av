@@ -22,10 +22,39 @@
  */
 
 #include "gupnp-av-main.h"
+#include "gupnp-media-renderer-proxy.h"
+#include "gupnp-media-server-proxy.h"
+
+#define MEDIA_RENDERER_V1 "urn:schemas-upnp-org:device:MediaRenderer:1"
+#define MEDIA_RENDERER_V2 "urn:schemas-upnp-org:device:MediaRenderer:2"
+#define MEDIA_SERVER_V1 "urn:schemas-upnp-org:device:MediaServer:1"
+#define MEDIA_SERVER_V2 "urn:schemas-upnp-org:device:MediaServer:2"
 
 void
 gupnp_av_init (void)
 {
+        GUPnPResourceFactory *factory;
+
         g_type_init ();
+
+        factory = gupnp_resource_factory_get_default ();
+        g_assert (factory != NULL);
+
+        gupnp_resource_factory_register_resource_proxy_type
+                                        (factory,
+                                         MEDIA_RENDERER_V1,
+                                         GUPNP_TYPE_MEDIA_RENDERER_PROXY);
+        gupnp_resource_factory_register_resource_proxy_type
+                                        (factory,
+                                         MEDIA_RENDERER_V2,
+                                         GUPNP_TYPE_MEDIA_RENDERER_PROXY);
+        gupnp_resource_factory_register_resource_proxy_type
+                                        (factory,
+                                         MEDIA_SERVER_V1,
+                                         GUPNP_TYPE_MEDIA_SERVER_PROXY);
+        gupnp_resource_factory_register_resource_proxy_type
+                                        (factory,
+                                         MEDIA_SERVER_V2,
+                                         GUPNP_TYPE_MEDIA_SERVER_PROXY);
 }
 
