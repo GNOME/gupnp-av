@@ -1,5 +1,11 @@
 2007-11-02  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
 
+	* libgupnp-av/gupnp-media-server-proxy.c:
+
+	Indentation fixes.
+
+2007-11-02  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
+
 	* gupnp-av-1.0-uninstalled.pc.in:
 
 	Fix a typo.

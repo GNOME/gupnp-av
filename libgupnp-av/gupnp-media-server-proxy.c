@@ -50,8 +50,8 @@ struct _GUPnPMediaServerProxyPrivate {
 
 static void
 on_didl_object_available (GUPnPDIDLLiteParser *parser,
-                          xmlNode        *object_node,
-                          gpointer        user_data)
+                          xmlNode             *object_node,
+                          gpointer             user_data)
 {
         GUPnPMediaServerProxy *proxy;
         char                  *id;
@@ -172,9 +172,10 @@ browse_cb (GUPnPServiceProxy       *content_dir,
            gpointer                 user_data)
 {
         GUPnPMediaServerProxy *proxy;
-        xmlDoc           *didl;
-        char             *didl_xml;
-        GError           *error;
+
+        xmlDoc *didl;
+        char   *didl_xml;
+        GError *error;
 
         proxy = GUPNP_MEDIA_SERVER_PROXY (user_data);
 
@@ -205,7 +206,7 @@ browse_cb (GUPnPServiceProxy       *content_dir,
 
 void
 gupnp_media_server_proxy_start_browsing (GUPnPMediaServerProxy *proxy,
-                                   const char       *object_id)
+                                         const char            *object_id)
 {
         GUPnPServiceProxy *content_dir;
         GError            *error;
