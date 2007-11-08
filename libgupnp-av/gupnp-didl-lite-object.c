@@ -33,7 +33,9 @@ gupnp_didl_lite_object_is_container (xmlNode *object_node)
         gboolean is_container;
 
         class_name = gupnp_didl_lite_object_get_upnp_class (object_node);
-        g_return_val_if_fail (class_name != NULL, FALSE);
+        if (class_name == NULL) {
+                return FALSE;
+        }
 
         if (0 == strncmp (class_name,
                           CONTAINER_CLASS_NAME,
@@ -55,7 +57,9 @@ gupnp_didl_lite_object_is_item (xmlNode *object_node)
         gboolean is_item;
 
         class_name = gupnp_didl_lite_object_get_upnp_class (object_node);
-        g_return_val_if_fail (class_name != NULL, FALSE);
+        if (class_name == NULL) {
+                return FALSE;
+        }
 
         if (0 == strncmp (class_name,
                           ITEM_CLASS_NAME,

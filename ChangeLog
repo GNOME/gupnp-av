@@ -1,3 +1,10 @@
+2007-11-05  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
+
+	* libgupnp-av/gupnp-didl-lite-object.c:
+
+	Silently ingore the unavailability of 'class_name' since desc and res
+	objects never specify it.
+
 2007-11-02  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
 
 	* libgupnp-av/gupnp-media-server-proxy.c:
