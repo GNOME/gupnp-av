@@ -1,3 +1,12 @@
+2007-11-09  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av.h:
+	* libgupnp-av/gupnp-media-server.c:
+	* libgupnp-av/gupnp-media-server.h:
+
+	Add basic MediaServer skels.
+
 2007-11-05  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
 
 	* libgupnp-av/gupnp-didl-lite-object.c:
