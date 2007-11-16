@@ -1,6 +1,14 @@
 2007-11-16  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-didl-lite-writer.c:
+	* libgupnp-av/gupnp-didl-lite-writer.h:
+
+	More skels.
+
+2007-11-16  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/Makefile.am:
 	* libgupnp-av/gupnp-av.h:
 	* libgupnp-av/gupnp-didl-lite-writer.h:
 

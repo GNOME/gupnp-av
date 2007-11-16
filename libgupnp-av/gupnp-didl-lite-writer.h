@@ -24,6 +24,7 @@
 
 #include <stdarg.h>
 #include <glib-object.h>
+#include <libsoup/soup-uri.h>
 
 G_BEGIN_DECLS
 
@@ -51,10 +52,12 @@ gupnp_didl_lite_writer_get_type (void) G_GNUC_CONST;
                  GUPNP_TYPE_DIDL_LITE_WRITER, \
                  GUPnPDIDLLiteWriterClass))
 
+typedef struct _GUPnPDIDLLiteWriterPrivate GUPnPDIDLLiteWriterPrivate;
+
 typedef struct {
         GObject parent;
 
-        gpointer gupnp_reserved;
+        GUPnPDIDLLiteWriterPrivate *priv;
 } GUPnPDIDLLiteWriter;
 
 typedef struct {
@@ -67,11 +70,14 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteWriterClass;
 
+#define GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC   "dc"
+#define GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP "upnp"
+
 GUPnPDIDLLiteWriter *
 gupnp_didl_lite_writer_new                 (void);
 
 void
-gupnp_didl_lite_writer_start_didl_lite     (GUPnPDIDLWriter     *writer,
+gupnp_didl_lite_writer_start_didl_lite     (GUPnPDIDLLiteWriter *writer,
                                             const char          *lang,
                                             SoupUri             *url_base);
 
@@ -98,25 +104,25 @@ void
 gupnp_didl_lite_writer_end_item            (GUPnPDIDLLiteWriter *writer);
 
 typedef struct {
-        char   *uri,
-        char   *import_uri,
-        char   *protocol_info,
+        char   *uri;
+        char   *import_uri;
+        char   *protocol_info;
 
         /* Stream data */
-        gulong  size,
-        char   *protection
-        gulong  duration,
-        guint   bitrate,
-        guint   sample_freq,
-        guint   bits_per_sample,
+        gulong  size;
+        char   *protection;
+        gulong  duration;
+        guint   bitrate;
+        guint   sample_freq;
+        guint   bits_per_sample;
 
         /* Audio */
-        guint   n_audio_channels,
+        guint   n_audio_channels;
 
         /* Video */
-        guint   width,
-        guint   height,
-        guint   color_depth,
+        guint   width;
+        guint   height;
+        guint   color_depth;
 } GUPnPDIDLLiteResource;
 
 void
@@ -133,44 +139,60 @@ gupnp_didl_lite_writer_add_desc              (GUPnPDIDLLiteWriter   *writer,
 void
 gupnp_didl_lite_writer_add_string            (GUPnPDIDLLiteWriter   *writer,
                                               const char            *property,
+                                              const char            *prefix,
+                                              const char            *ns_uri,
                                               const char            *value);
 
 void
 gupnp_didl_lite_writer_add_string_with_attrs (GUPnPDIDLLiteWriter   *writer,
                                               const char            *property,
+                                              const char            *prefix,
+                                              const char            *ns_uri,
                                               const char            *value,
-                                              ...);
+                                              ...) G_GNUC_NULL_TERMINATED;
 
 void
 gupnp_didl_lite_writer_add_string_with_attrs_valist
                                              (GUPnPDIDLLiteWriter   *writer,
                                               const char            *property,
+                                              const char            *prefix,
+                                              const char            *ns_uri,
                                               const char            *value,
                                               va_list                var_args);
 
 void
 gupnp_didl_lite_writer_add_boolean           (GUPnPDIDLLiteWriter   *writer,
                                               const char            *property,
+                                              const char            *prefix,
+                                              const char            *ns_uri,
                                               gboolean               value);
 
 void
 gupnp_didl_lite_writer_add_int               (GUPnPDIDLLiteWriter   *writer,
                                               const char            *property,
+                                              const char            *prefix,
+                                              const char            *ns_uri,
                                               int                    value);
 
 void
 gupnp_didl_lite_writer_add_uint              (GUPnPDIDLLiteWriter   *writer,
                                               const char            *property,
+                                              const char            *prefix,
+                                              const char            *ns_uri,
                                               guint                  value);
 
 void
 gupnp_didl_lite_writer_add_long              (GUPnPDIDLLiteWriter   *writer,
                                               const char            *property,
+                                              const char            *prefix,
+                                              const char            *ns_uri,
                                               long                   value);
 
 void
 gupnp_didl_lite_writer_add_ulong             (GUPnPDIDLLiteWriter   *writer,
                                               const char            *property,
+                                              const char            *prefix,
+                                              const char            *ns_uri,
                                               gulong                 value);
 
 void
