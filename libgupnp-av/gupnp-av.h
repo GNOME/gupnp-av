@@ -27,4 +27,5 @@
 #include "gupnp-media-renderer-proxy.h"
 #include "gupnp-didl-lite-object.h"
 #include "gupnp-didl-lite-parser.h"
+#include "gupnp-didl-lite-writer.h"
 

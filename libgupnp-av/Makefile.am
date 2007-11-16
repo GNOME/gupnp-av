@@ -10,6 +10,7 @@ libgupnp_av_inc_HEADERS = gupnp-av-main.h \
 			  gupnp-media-renderer-proxy.h \
 			  gupnp-didl-lite-object.h \
 			  gupnp-didl-lite-parser.h \
+			  gupnp-didl-lite-writer.h \
 			  gupnp-av.h
 
 libgupnp_av_1_0_la_SOURCES = gupnp-av-main.c \

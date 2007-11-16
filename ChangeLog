@@ -1,3 +1,11 @@
+2007-11-16  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av.h:
+	* libgupnp-av/gupnp-didl-lite-writer.h:
+
+	Added DIDLLiteWriter skels.
+
 2007-11-09  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/Makefile.am:
