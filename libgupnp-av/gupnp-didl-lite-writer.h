@@ -79,7 +79,8 @@ gupnp_didl_lite_writer_new                 (void);
 void
 gupnp_didl_lite_writer_start_didl_lite     (GUPnPDIDLLiteWriter *writer,
                                             const char          *lang,
-                                            SoupUri             *url_base);
+                                            SoupUri             *url_base,
+                                            gboolean             need_escape);
 
 void
 gupnp_didl_lite_writer_end_didl_lite       (GUPnPDIDLLiteWriter *writer);
@@ -104,26 +105,29 @@ void
 gupnp_didl_lite_writer_end_item            (GUPnPDIDLLiteWriter *writer);
 
 typedef struct {
-        char   *uri;
+        char   *uri;           /* Required */
         char   *import_uri;
-        char   *protocol_info;
+        char   *protocol_info; /* Required */
 
         /* Stream data */
-        gulong  size;
-        gulong  seconds;
-        guint   bitrate;
-        guint   sample_freq;
-        guint   bits_per_sample;
+        long    size;
+        long    seconds;
+        int     bitrate;
+        int     sample_freq;
+        int     bits_per_sample;
         char   *protection;
 
         /* Audio */
-        guint   n_audio_channels;
+        int     n_audio_channels;
 
         /* Video */
-        guint   width;
-        guint   height;
-        guint   color_depth;
+        int     width;
+        int     height;
+        int     color_depth;
 } GUPnPDIDLLiteResource;
+
+void
+gupnp_didl_lite_resource_empty (GUPnPDIDLLiteResource *res);
 
 void
 gupnp_didl_lite_writer_add_res               (GUPnPDIDLLiteWriter   *writer,

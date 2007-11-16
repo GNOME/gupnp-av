@@ -22,6 +22,8 @@
  *  - docs
  */
 
+#include <string.h>
+
 #include "gupnp-didl-lite-writer.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
@@ -34,6 +36,8 @@ struct _GUPnPDIDLLiteWriterPrivate {
         GString *str;
 
         SoupUri *base_url;
+
+        gboolean need_escape;
 };
 
 static void
@@ -128,9 +132,12 @@ append_escaped_text (GUPnPDIDLLiteWriter *writer,
 void
 gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
                                         const char          *lang,
-                                        SoupUri             *url_base)
+                                        SoupUri             *url_base,
+                                        gboolean             need_escape)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
+
+        writer->priv->need_escape = need_escape;
 
         writer->priv->str = g_string_sized_new (INITIAL_STRING_SIZE);
 
@@ -167,9 +174,19 @@ gupnp_didl_lite_writer_start_container (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (parent_id != NULL);
 
         g_string_append (writer->priv->str, "<container id=\"");
-        append_escaped_text (writer, id);
+
+        if (writer->priv->need_escape)
+                append_escaped_text (writer, id);
+        else
+                g_string_append (writer->priv->str, id);
+
         g_string_append (writer->priv->str, "\" parentID=\"");
-        append_escaped_text (writer, parent_id);
+
+        if (writer->priv->need_escape)
+                append_escaped_text (writer, parent_id);
+        else
+                g_string_append (writer->priv->str, parent_id);
+
         g_string_append (writer->priv->str, "\" restricted=\"");
         g_string_append (writer->priv->str, restricted ? "true" : "false");
         g_string_append (writer->priv->str, "\" searchable=\"");
@@ -198,9 +215,19 @@ gupnp_didl_lite_writer_start_item (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (parent_id != NULL);
 
         g_string_append (writer->priv->str, "<item id=\"");
-        append_escaped_text (writer, id);
+
+        if (writer->priv->need_escape)
+                append_escaped_text (writer, id);
+        else
+                g_string_append (writer->priv->str, id);
+
         g_string_append (writer->priv->str, "\" parentID=\"");
-        append_escaped_text (writer, parent_id);
+
+        if (writer->priv->need_escape)
+                append_escaped_text (writer, parent_id);
+        else
+                g_string_append (writer->priv->str, parent_id);
+
         g_string_append (writer->priv->str, "\" restricted=\"");
         g_string_append (writer->priv->str, restricted ? "true" : "false");
         g_string_append (writer->priv->str, "\">");
@@ -213,6 +240,22 @@ gupnp_didl_lite_writer_end_item (GUPnPDIDLLiteWriter *writer)
         g_return_if_fail (writer->priv->str);
 
         g_string_append (writer->priv->str, "</item>");
+}
+
+void
+gupnp_didl_lite_resource_empty (GUPnPDIDLLiteResource *res)
+{
+        memset (res, sizeof (GUPnPDIDLLiteResource), 0);
+
+        res->size             = -1;
+        res->seconds          = -1;
+        res->bitrate          = -1;
+        res->sample_freq      = -1;
+        res->bits_per_sample  = -1;
+        res->n_audio_channels = -1;
+        res->width            = -1;
+        res->height           = -1;
+        res->color_depth      = -1;
 }
 
 void
@@ -229,78 +272,96 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_return_if_fail (res->protocol_info != NULL);
 
         g_string_append (writer->priv->str, "<res protocolInfo=\"");
-        append_escaped_text (writer, res->protocol_info);
+
+        if (writer->priv->need_escape)
+                append_escaped_text (writer, res->protocol_info);
+        else
+                g_string_append (writer->priv->str, res->protocol_info);
+
         g_string_append_c (writer->priv->str, '"');
 
         if (res->import_uri) {
-                uri = soup_uri_new_with_base (writer->priv->base_url,
-                                              res->import_uri);
-                uri_str = soup_uri_to_string (uri, FALSE);
-                soup_uri_free (uri);
-
                 g_string_append (writer->priv->str, " importUri=\"");
-                g_string_append (writer->priv->str, uri_str);
-                g_string_append_c (writer->priv->str, '"');
 
-                g_free (uri_str);
+                if (writer->priv->base_url || writer->priv->need_escape) {
+                        uri = soup_uri_new_with_base (writer->priv->base_url,
+                                                      res->import_uri);
+                        uri_str = soup_uri_to_string (uri, FALSE);
+                        soup_uri_free (uri);
+
+                        g_string_append (writer->priv->str, uri_str);
+
+                        g_free (uri_str);
+                } else
+                        g_string_append (writer->priv->str, res->import_uri);
+
+                g_string_append_c (writer->priv->str, '"');
         }
 
-        if (res->size)
+        if (res->size >= 0)
                 g_string_append_printf (writer->priv->str,
-                                        " size=\"%lu\"", res->size);
+                                        " size=\"%ld\"", res->size);
 
         g_string_append_printf (writer->priv->str,
-                                " duration=\"%lu:%.2lu:%.2lu.\"",
+                                " duration=\"%ld:%.2ld:%.2ld.\"",
                                 res->seconds / (60 * 60),
                                 res->seconds % (60 * 60),
                                 res->seconds % 60);
 
-        if (res->bitrate)
+        if (res->bitrate >= 0)
                 g_string_append_printf (writer->priv->str,
-                                        " bitrate=\"%u\"", res->bitrate);
+                                        " bitrate=\"%d\"", res->bitrate);
 
-        if (res->sample_freq)
+        if (res->sample_freq >= 0)
                 g_string_append_printf (writer->priv->str,
-                                        " sampleFrequency=\"%u\"",
+                                        " sampleFrequency=\"%d\"",
                                         res->sample_freq);
 
-        if (res->sample_freq)
+        if (res->bits_per_sample >= 0)
                 g_string_append_printf (writer->priv->str,
-                                        " bitsPerSample=\"%u\"",
+                                        " bitsPerSample=\"%d\"",
                                         res->bits_per_sample);
 
         if (res->protection) {
                 g_string_append (writer->priv->str, " protection=\"");
-                append_escaped_text (writer, res->protection);
+
+                if (writer->priv->need_escape)
+                        append_escaped_text (writer, res->protection);
+                else
+                        g_string_append (writer->priv->str, res->protection);
+
                 g_string_append_c (writer->priv->str, '"');
         }
 
-        if (res->n_audio_channels)
+        if (res->n_audio_channels >= 0)
                 g_string_append_printf (writer->priv->str,
-                                        " nrAudioChannels=\"%u\"",
+                                        " nrAudioChannels=\"%d\"",
                                         res->n_audio_channels);
 
-        if (res->width && res->height) {
+        if (res->width >= 0 && res->height >= 0) {
                 g_string_append_printf (writer->priv->str,
-                                        " resolution=\"%ux%u\"",
+                                        " resolution=\"%dx%d\"",
                                         res->width,
                                         res->height);
         }
 
-        if (res->color_depth)
+        if (res->color_depth >= 0)
                 g_string_append_printf (writer->priv->str,
-                                        " colorDepth=\"%u\"",
+                                        " colorDepth=\"%d\"",
                                         res->color_depth);
 
         g_string_append_c (writer->priv->str, '>');
 
-        uri = soup_uri_new_with_base (writer->priv->base_url, res->uri);
-        uri_str = soup_uri_to_string (uri, FALSE);
-        soup_uri_free (uri);
+        if (writer->priv->base_url || writer->priv->need_escape) {
+                uri = soup_uri_new_with_base (writer->priv->base_url, res->uri);
+                uri_str = soup_uri_to_string (uri, FALSE);
+                soup_uri_free (uri);
 
-        g_string_append (writer->priv->str, uri_str);
+                g_string_append (writer->priv->str, uri_str);
 
-        g_free (uri_str);
+                g_free (uri_str);
+        } else
+                g_string_append (writer->priv->str, res->uri);
 
         g_string_append (writer->priv->str, "</res>");
 }
@@ -319,35 +380,55 @@ gupnp_didl_lite_writer_add_desc (GUPnPDIDLLiteWriter *writer,
 
         if (id) {
                 g_string_append (writer->priv->str, " id=\"");
-                append_escaped_text (writer, id);
+
+                if (writer->priv->need_escape)
+                        append_escaped_text (writer, id);
+                else
+                        g_string_append (writer->priv->str, id);
+
                 g_string_append_c (writer->priv->str, '"');
         }
 
         if (name) {
                 g_string_append (writer->priv->str, " name=\"");
-                append_escaped_text (writer, name);
+
+                if (writer->priv->need_escape)
+                        append_escaped_text (writer, name);
+                else
+                        g_string_append (writer->priv->str, name);
+
                 g_string_append_c (writer->priv->str, '"');
         }
 
         if (ns_uri) {
-                SoupUri *uri;
-                char *uri_str;
-
-                uri = soup_uri_new_with_base (writer->priv->base_url, ns_uri);
-                uri_str = soup_uri_to_string (uri, FALSE);
-                soup_uri_free (uri);
-
                 g_string_append (writer->priv->str, " nameSpace=\"");
-                g_string_append (writer->priv->str, uri_str);
-                g_string_append_c (writer->priv->str, '"');
 
-                g_free (uri_str);
+                if (writer->priv->base_url || writer->priv->need_escape) {
+                        SoupUri *uri;
+                        char *uri_str;
+
+                        uri = soup_uri_new_with_base (writer->priv->base_url,
+                                                      ns_uri);
+                        uri_str = soup_uri_to_string (uri, FALSE);
+                        soup_uri_free (uri);
+
+                        g_string_append (writer->priv->str, uri_str);
+
+                        g_free (uri_str);
+                } else
+                        g_string_append (writer->priv->str, ns_uri);
+
+                g_string_append_c (writer->priv->str, '"');
         }
 
         g_string_append_c (writer->priv->str, '>');
 
-        if (desc)
-                append_escaped_text (writer, desc);
+        if (desc) {
+                if (writer->priv->need_escape)
+                        append_escaped_text (writer, desc);
+                else
+                        g_string_append (writer->priv->str, desc);
+        }
 
         g_string_append (writer->priv->str, "</desc>");
 }
@@ -368,20 +449,26 @@ begin_property (GUPnPDIDLLiteWriter *writer,
         g_string_append (writer->priv->str, property);
         
         if (ns_uri) {
-                SoupUri *uri;
-                char *uri_str;
-
-                uri = soup_uri_new_with_base (writer->priv->base_url, ns_uri);
-                uri_str = soup_uri_to_string (uri, FALSE);
-                soup_uri_free (uri);
-
                 g_string_append (writer->priv->str, " xmlns:");
                 g_string_append (writer->priv->str, prefix);
                 g_string_append (writer->priv->str, "=\"");
-                g_string_append (writer->priv->str, uri_str);
-                g_string_append_c (writer->priv->str, '"');
 
-                g_free (uri_str);
+                if (writer->priv->base_url || writer->priv->need_escape) {
+                        SoupUri *uri;
+                        char *uri_str;
+
+                        uri = soup_uri_new_with_base (writer->priv->base_url,
+                                                      ns_uri);
+                        uri_str = soup_uri_to_string (uri, FALSE);
+                        soup_uri_free (uri);
+
+                        g_string_append (writer->priv->str, uri_str);
+
+                        g_free (uri_str);
+                } else
+                        g_string_append (writer->priv->str, ns_uri);
+
+                g_string_append_c (writer->priv->str, '"');
         }
 }
 
@@ -425,8 +512,12 @@ gupnp_didl_lite_writer_add_string (GUPnPDIDLLiteWriter *writer,
 
         begin_property_simple (writer, property, prefix, ns_uri);
 
-        if (value)
-                append_escaped_text (writer, value);
+        if (value) {
+                if (writer->priv->need_escape)
+                        append_escaped_text (writer, value);
+                else
+                        g_string_append (writer->priv->str, value);
+        }
 
         end_property (writer, property, prefix);
 }
@@ -479,7 +570,12 @@ gupnp_didl_lite_writer_add_string_with_attrs_valist
                 g_string_append_c (writer->priv->str, ' ');
                 g_string_append (writer->priv->str, attr_name);
                 g_string_append (writer->priv->str, "=\"");
-                append_escaped_text (writer, attr_value);
+
+                if (writer->priv->need_escape)
+                        append_escaped_text (writer, attr_value);
+                else
+                        g_string_append (writer->priv->str, attr_value);
+
                 g_string_append_c (writer->priv->str, '"');
         }
 
