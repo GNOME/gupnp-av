@@ -19,8 +19,6 @@
  * Boston, MA 02111-1307, USA.
  *
  * TODO
- *  - escaping
- *  - use base URI to resolve passed URIs
  *  - docs
  */
 
@@ -79,6 +77,47 @@ gupnp_didl_lite_writer_new (void)
         return g_object_new (GUPNP_TYPE_DIDL_LITE_WRITER, NULL);
 }
 
+/* Modified from GLib gmarkup.c */
+static void
+append_escaped_text (GUPnPDIDLLiteWriter *writer,
+                     const gchar         *text)    
+{
+  const gchar *p;
+
+  p = text;
+
+  while (*p)
+    {
+      const gchar *next;
+      next = g_utf8_next_char (p);
+
+      switch (*p)
+        {
+        case '&':
+          g_string_append (writer->priv->str, "&amp;");
+          break;
+
+        case '<':
+          g_string_append (writer->priv->str, "&lt;");
+          break;
+
+        case '>':
+          g_string_append (writer->priv->str, "&gt;");
+          break;
+
+        case '"':
+          g_string_append (writer->priv->str, "&quot;");
+          break;
+
+        default:
+          g_string_append_len (writer->priv->str, p, next - p);
+          break;
+        }
+
+      p = next;
+    }
+}
+
 #define DIDL_LITE_HEADER \
         "<DIDL-Lite xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC \
         "=\"http://purl.org/dc/elements/1.1/\"" \
@@ -128,9 +167,9 @@ gupnp_didl_lite_writer_start_container (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (parent_id != NULL);
 
         g_string_append (writer->priv->str, "<container id=\"");
-        g_string_append (writer->priv->str, id);
+        append_escaped_text (writer, id);
         g_string_append (writer->priv->str, "\" parentID=\"");
-        g_string_append (writer->priv->str, parent_id);
+        append_escaped_text (writer, parent_id);
         g_string_append (writer->priv->str, "\" restricted=\"");
         g_string_append (writer->priv->str, restricted ? "true" : "false");
         g_string_append (writer->priv->str, "\" searchable=\"");
@@ -159,9 +198,9 @@ gupnp_didl_lite_writer_start_item (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (parent_id != NULL);
 
         g_string_append (writer->priv->str, "<item id=\"");
-        g_string_append (writer->priv->str, id);
+        append_escaped_text (writer, id);
         g_string_append (writer->priv->str, "\" parentID=\"");
-        g_string_append (writer->priv->str, parent_id);
+        append_escaped_text (writer, parent_id);
         g_string_append (writer->priv->str, "\" restricted=\"");
         g_string_append (writer->priv->str, restricted ? "true" : "false");
         g_string_append (writer->priv->str, "\">");
@@ -180,6 +219,9 @@ void
 gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                                 GUPnPDIDLLiteResource *res)
 {
+        SoupUri *uri;
+        char *uri_str;
+
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (res != NULL);
@@ -187,13 +229,20 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_return_if_fail (res->protocol_info != NULL);
 
         g_string_append (writer->priv->str, "<res protocolInfo=\"");
-        g_string_append (writer->priv->str, res->protocol_info);
+        append_escaped_text (writer, res->protocol_info);
         g_string_append_c (writer->priv->str, '"');
 
         if (res->import_uri) {
+                uri = soup_uri_new_with_base (writer->priv->base_url,
+                                              res->import_uri);
+                uri_str = soup_uri_to_string (uri, FALSE);
+                soup_uri_free (uri);
+
                 g_string_append (writer->priv->str, " importUri=\"");
-                g_string_append (writer->priv->str, res->import_uri);
+                g_string_append (writer->priv->str, uri_str);
                 g_string_append_c (writer->priv->str, '"');
+
+                g_free (uri_str);
         }
 
         if (res->size)
@@ -222,7 +271,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 
         if (res->protection) {
                 g_string_append (writer->priv->str, " protection=\"");
-                g_string_append (writer->priv->str, res->protection);
+                append_escaped_text (writer, res->protection);
                 g_string_append_c (writer->priv->str, '"');
         }
 
@@ -245,7 +294,13 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 
         g_string_append_c (writer->priv->str, '>');
 
-        g_string_append (writer->priv->str, res->uri);
+        uri = soup_uri_new_with_base (writer->priv->base_url, res->uri);
+        uri_str = soup_uri_to_string (uri, FALSE);
+        soup_uri_free (uri);
+
+        g_string_append (writer->priv->str, uri_str);
+
+        g_free (uri_str);
 
         g_string_append (writer->priv->str, "</res>");
 }
@@ -264,26 +319,35 @@ gupnp_didl_lite_writer_add_desc (GUPnPDIDLLiteWriter *writer,
 
         if (id) {
                 g_string_append (writer->priv->str, " id=\"");
-                g_string_append (writer->priv->str, id);
+                append_escaped_text (writer, id);
                 g_string_append_c (writer->priv->str, '"');
         }
 
         if (name) {
                 g_string_append (writer->priv->str, " name=\"");
-                g_string_append (writer->priv->str, name);
+                append_escaped_text (writer, name);
                 g_string_append_c (writer->priv->str, '"');
         }
 
         if (ns_uri) {
+                SoupUri *uri;
+                char *uri_str;
+
+                uri = soup_uri_new_with_base (writer->priv->base_url, ns_uri);
+                uri_str = soup_uri_to_string (uri, FALSE);
+                soup_uri_free (uri);
+
                 g_string_append (writer->priv->str, " nameSpace=\"");
-                g_string_append (writer->priv->str, ns_uri);
+                g_string_append (writer->priv->str, uri_str);
                 g_string_append_c (writer->priv->str, '"');
+
+                g_free (uri_str);
         }
 
         g_string_append_c (writer->priv->str, '>');
 
         if (desc)
-                g_string_append (writer->priv->str, desc);
+                append_escaped_text (writer, desc);
 
         g_string_append (writer->priv->str, "</desc>");
 }
@@ -304,11 +368,20 @@ begin_property (GUPnPDIDLLiteWriter *writer,
         g_string_append (writer->priv->str, property);
         
         if (ns_uri) {
+                SoupUri *uri;
+                char *uri_str;
+
+                uri = soup_uri_new_with_base (writer->priv->base_url, ns_uri);
+                uri_str = soup_uri_to_string (uri, FALSE);
+                soup_uri_free (uri);
+
                 g_string_append (writer->priv->str, " xmlns:");
                 g_string_append (writer->priv->str, prefix);
                 g_string_append (writer->priv->str, "=\"");
-                g_string_append (writer->priv->str, ns_uri);
+                g_string_append (writer->priv->str, uri_str);
                 g_string_append_c (writer->priv->str, '"');
+
+                g_free (uri_str);
         }
 }
 
@@ -353,7 +426,7 @@ gupnp_didl_lite_writer_add_string (GUPnPDIDLLiteWriter *writer,
         begin_property_simple (writer, property, prefix, ns_uri);
 
         if (value)
-                g_string_append (writer->priv->str, value);
+                append_escaped_text (writer, value);
 
         end_property (writer, property, prefix);
 }
@@ -406,7 +479,7 @@ gupnp_didl_lite_writer_add_string_with_attrs_valist
                 g_string_append_c (writer->priv->str, ' ');
                 g_string_append (writer->priv->str, attr_name);
                 g_string_append (writer->priv->str, "=\"");
-                g_string_append (writer->priv->str, attr_value);
+                append_escaped_text (writer, attr_value);
                 g_string_append_c (writer->priv->str, '"');
         }
 
