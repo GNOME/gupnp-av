@@ -110,11 +110,11 @@ typedef struct {
 
         /* Stream data */
         gulong  size;
-        char   *protection;
-        gulong  duration;
+        gulong  seconds;
         guint   bitrate;
         guint   sample_freq;
         guint   bits_per_sample;
+        char   *protection;
 
         /* Audio */
         guint   n_audio_channels;

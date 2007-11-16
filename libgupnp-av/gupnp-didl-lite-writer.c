@@ -17,6 +17,11 @@
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
+ *
+ * TODO
+ *  - escaping
+ *  - use base URI to resolve passed URIs
+ *  - docs
  */
 
 #include "gupnp-didl-lite-writer.h"
@@ -74,6 +79,13 @@ gupnp_didl_lite_writer_new (void)
         return g_object_new (GUPNP_TYPE_DIDL_LITE_WRITER, NULL);
 }
 
+#define DIDL_LITE_HEADER \
+        "<DIDL-Lite xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC \
+        "=\"http://purl.org/dc/elements/1.1/\"" \
+        "xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP \
+        "=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"" \
+        "xmlns=\"n:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
+
 void
 gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
                                         const char          *lang,
@@ -82,6 +94,16 @@ gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
 
         writer->priv->str = g_string_sized_new (INITIAL_STRING_SIZE);
+
+        g_string_append (writer->priv->str, DIDL_LITE_HEADER);
+
+        if (lang) {
+                g_string_append (writer->priv->str, " lang=\"");
+                g_string_append (writer->priv->str, lang);
+                g_string_append_c (writer->priv->str, '"');
+        }
+
+        g_string_append_c (writer->priv->str, '>');
 }
 
 void
@@ -89,6 +111,8 @@ gupnp_didl_lite_writer_end_didl_lite (GUPnPDIDLLiteWriter *writer)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
+
+        g_string_append (writer->priv->str, "</DIDL-Lite>");
 }
 
 void
@@ -102,6 +126,16 @@ gupnp_didl_lite_writer_start_container (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (id != NULL);
         g_return_if_fail (parent_id != NULL);
+
+        g_string_append (writer->priv->str, "<container id=\"");
+        g_string_append (writer->priv->str, id);
+        g_string_append (writer->priv->str, "\" parentID=\"");
+        g_string_append (writer->priv->str, parent_id);
+        g_string_append (writer->priv->str, "\" restricted=\"");
+        g_string_append (writer->priv->str, restricted ? "true" : "false");
+        g_string_append (writer->priv->str, "\" searchable=\"");
+        g_string_append (writer->priv->str, searchable ? "true" : "false");
+        g_string_append (writer->priv->str, "\">");
 }
 
 void
@@ -109,6 +143,8 @@ gupnp_didl_lite_writer_end_container (GUPnPDIDLLiteWriter *writer)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
+
+        g_string_append (writer->priv->str, "</container>");
 }
 
 void
@@ -121,6 +157,14 @@ gupnp_didl_lite_writer_start_item (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (id != NULL);
         g_return_if_fail (parent_id != NULL);
+
+        g_string_append (writer->priv->str, "<item id=\"");
+        g_string_append (writer->priv->str, id);
+        g_string_append (writer->priv->str, "\" parentID=\"");
+        g_string_append (writer->priv->str, parent_id);
+        g_string_append (writer->priv->str, "\" restricted=\"");
+        g_string_append (writer->priv->str, restricted ? "true" : "false");
+        g_string_append (writer->priv->str, "\">");
 }
 
 void
@@ -128,6 +172,8 @@ gupnp_didl_lite_writer_end_item (GUPnPDIDLLiteWriter *writer)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
+
+        g_string_append (writer->priv->str, "</item>");
 }
 
 void
@@ -137,7 +183,71 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (res != NULL);
+        g_return_if_fail (res->uri != NULL);
         g_return_if_fail (res->protocol_info != NULL);
+
+        g_string_append (writer->priv->str, "<res protocolInfo=\"");
+        g_string_append (writer->priv->str, res->protocol_info);
+        g_string_append_c (writer->priv->str, '"');
+
+        if (res->import_uri) {
+                g_string_append (writer->priv->str, " importUri=\"");
+                g_string_append (writer->priv->str, res->import_uri);
+                g_string_append_c (writer->priv->str, '"');
+        }
+
+        if (res->size)
+                g_string_append_printf (writer->priv->str,
+                                        " size=\"%lu\"", res->size);
+
+        g_string_append_printf (writer->priv->str,
+                                " duration=\"%lu:%.2lu:%.2lu.\"",
+                                res->seconds / (60 * 60),
+                                res->seconds % (60 * 60),
+                                res->seconds % 60);
+
+        if (res->bitrate)
+                g_string_append_printf (writer->priv->str,
+                                        " bitrate=\"%u\"", res->bitrate);
+
+        if (res->sample_freq)
+                g_string_append_printf (writer->priv->str,
+                                        " sampleFrequency=\"%u\"",
+                                        res->sample_freq);
+
+        if (res->sample_freq)
+                g_string_append_printf (writer->priv->str,
+                                        " bitsPerSample=\"%u\"",
+                                        res->bits_per_sample);
+
+        if (res->protection) {
+                g_string_append (writer->priv->str, " protection=\"");
+                g_string_append (writer->priv->str, res->protection);
+                g_string_append_c (writer->priv->str, '"');
+        }
+
+        if (res->n_audio_channels)
+                g_string_append_printf (writer->priv->str,
+                                        " nrAudioChannels=\"%u\"",
+                                        res->n_audio_channels);
+
+        if (res->width && res->height) {
+                g_string_append_printf (writer->priv->str,
+                                        " resolution=\"%ux%u\"",
+                                        res->width,
+                                        res->height);
+        }
+
+        if (res->color_depth)
+                g_string_append_printf (writer->priv->str,
+                                        " colorDepth=\"%u\"",
+                                        res->color_depth);
+
+        g_string_append_c (writer->priv->str, '>');
+
+        g_string_append (writer->priv->str, res->uri);
+
+        g_string_append (writer->priv->str, "</res>");
 }
 
 void
@@ -149,6 +259,84 @@ gupnp_didl_lite_writer_add_desc (GUPnPDIDLLiteWriter *writer,
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
+
+        g_string_append (writer->priv->str, "<desc");
+
+        if (id) {
+                g_string_append (writer->priv->str, " id=\"");
+                g_string_append (writer->priv->str, id);
+                g_string_append_c (writer->priv->str, '"');
+        }
+
+        if (name) {
+                g_string_append (writer->priv->str, " name=\"");
+                g_string_append (writer->priv->str, name);
+                g_string_append_c (writer->priv->str, '"');
+        }
+
+        if (ns_uri) {
+                g_string_append (writer->priv->str, " nameSpace=\"");
+                g_string_append (writer->priv->str, ns_uri);
+                g_string_append_c (writer->priv->str, '"');
+        }
+
+        g_string_append_c (writer->priv->str, '>');
+
+        if (desc)
+                g_string_append (writer->priv->str, desc);
+
+        g_string_append (writer->priv->str, "</desc>");
+}
+
+static void
+begin_property (GUPnPDIDLLiteWriter *writer,
+                const char          *property,
+                const char          *prefix,
+                const char          *ns_uri)
+{
+        g_string_append_c (writer->priv->str, '<');
+
+        if (prefix) {
+                g_string_append (writer->priv->str, prefix);
+                g_string_append_c (writer->priv->str, ':');
+        }
+
+        g_string_append (writer->priv->str, property);
+        
+        if (ns_uri) {
+                g_string_append (writer->priv->str, " xmlns:");
+                g_string_append (writer->priv->str, prefix);
+                g_string_append (writer->priv->str, "=\"");
+                g_string_append (writer->priv->str, ns_uri);
+                g_string_append_c (writer->priv->str, '"');
+        }
+}
+
+static void
+begin_property_simple (GUPnPDIDLLiteWriter *writer,
+                       const char          *property,
+                       const char          *prefix,
+                       const char          *ns_uri)
+{
+        begin_property (writer, property, prefix, ns_uri);
+
+        g_string_append_c (writer->priv->str, '>');
+}
+
+static void
+end_property (GUPnPDIDLLiteWriter *writer,
+              const char          *property,
+              const char          *prefix)
+{
+        g_string_append (writer->priv->str, "</");
+
+        if (prefix) {
+                g_string_append (writer->priv->str, prefix);
+                g_string_append_c (writer->priv->str, ':');
+        }
+
+        g_string_append (writer->priv->str, property);
+        g_string_append_c (writer->priv->str, '>');
 }
 
 void
@@ -161,6 +349,13 @@ gupnp_didl_lite_writer_add_string (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (property != NULL);
+
+        begin_property_simple (writer, property, prefix, ns_uri);
+
+        if (value)
+                g_string_append (writer->priv->str, value);
+
+        end_property (writer, property, prefix);
 }
 
 void
@@ -196,9 +391,31 @@ gupnp_didl_lite_writer_add_string_with_attrs_valist
                                               const char          *value,
                                               va_list              var_args)
 {
+        const char *attr_name, *attr_value;
+
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (property != NULL);
+
+        begin_property (writer, property, prefix, ns_uri);
+
+        attr_name = va_arg (var_args, const char *);
+        while (attr_name) {
+                attr_value = va_arg (var_args, const char *);
+
+                g_string_append_c (writer->priv->str, ' ');
+                g_string_append (writer->priv->str, attr_name);
+                g_string_append (writer->priv->str, "=\"");
+                g_string_append (writer->priv->str, attr_value);
+                g_string_append_c (writer->priv->str, '"');
+        }
+
+        g_string_append_c (writer->priv->str, '>');
+
+        if (value)
+                g_string_append (writer->priv->str, value);
+
+        end_property (writer, property, prefix);
 }
 
 void
@@ -211,6 +428,12 @@ gupnp_didl_lite_writer_add_boolean (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (property != NULL);
+
+        begin_property_simple (writer, property, prefix, ns_uri);
+
+        g_string_append (writer->priv->str, value ? "true" : "false");
+
+        end_property (writer, property, prefix);
 }
 
 void
@@ -223,6 +446,12 @@ gupnp_didl_lite_writer_add_int (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (property != NULL);
+
+        begin_property_simple (writer, property, prefix, ns_uri);
+
+        g_string_append_printf (writer->priv->str, "%d", value);
+
+        end_property (writer, property, prefix);
 }
 
 void
@@ -235,6 +464,12 @@ gupnp_didl_lite_writer_add_uint (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (property != NULL);
+
+        begin_property_simple (writer, property, prefix, ns_uri);
+
+        g_string_append_printf (writer->priv->str, "%u", value);
+
+        end_property (writer, property, prefix);
 }
 
 void
@@ -247,6 +482,12 @@ gupnp_didl_lite_writer_add_long (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (property != NULL);
+
+        begin_property_simple (writer, property, prefix, ns_uri);
+
+        g_string_append_printf (writer->priv->str, "%ld", value);
+
+        end_property (writer, property, prefix);
 }
 
 void
@@ -259,6 +500,12 @@ gupnp_didl_lite_writer_add_ulong (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (property != NULL);
+
+        begin_property_simple (writer, property, prefix, ns_uri);
+
+        g_string_append_printf (writer->priv->str, "%lu", value);
+
+        end_property (writer, property, prefix);
 }
 
 void

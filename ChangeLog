@@ -1,5 +1,30 @@
 2007-11-16  Jorn Baayen  <jorn@openedhand.com>
 
+	* libgupnp-av/gupnp-didl-lite-writer.c:
+	(gupnp_didl_lite_writer_class_init), (gupnp_didl_lite_writer_new),
+	(gupnp_didl_lite_writer_start_didl_lite),
+	(gupnp_didl_lite_writer_end_didl_lite),
+	(gupnp_didl_lite_writer_start_container),
+	(gupnp_didl_lite_writer_end_container),
+	(gupnp_didl_lite_writer_start_item),
+	(gupnp_didl_lite_writer_end_item),
+	(gupnp_didl_lite_writer_add_res),
+	(gupnp_didl_lite_writer_add_desc), (begin_property),
+	(begin_property_simple), (end_property),
+	(gupnp_didl_lite_writer_add_string),
+	(gupnp_didl_lite_writer_add_string_with_attrs),
+	(gupnp_didl_lite_writer_add_string_with_attrs_valist),
+	(gupnp_didl_lite_writer_add_boolean),
+	(gupnp_didl_lite_writer_add_int),
+	(gupnp_didl_lite_writer_add_uint),
+	(gupnp_didl_lite_writer_add_long),
+	(gupnp_didl_lite_writer_add_ulong):
+	* libgupnp-av/gupnp-didl-lite-writer.h:
+
+	Fill in stubs. To do: escaping and relative URI resolving.
+
+2007-11-16  Jorn Baayen  <jorn@openedhand.com>
+
 	* libgupnp-av/Makefile.am:
 	* libgupnp-av/gupnp-didl-lite-writer.c:
 	* libgupnp-av/gupnp-didl-lite-writer.h:
