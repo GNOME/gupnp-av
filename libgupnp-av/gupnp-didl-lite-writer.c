@@ -126,7 +126,7 @@ append_escaped_text (GUPnPDIDLLiteWriter *writer,
 
 #define DIDL_LITE_HEADER \
         "<DIDL-Lite xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC \
-        "=\"http://purl.org/dc/elements/1.1/\"" \
+        "=\"http://purl.org/dc/elements/1.1/\" " \
         "xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP \
         "=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"" \
         "xmlns=\"n:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
@@ -369,11 +369,12 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                 g_string_append_printf (writer->priv->str,
                                         " size=\"%ld\"", res->size);
 
-        g_string_append_printf (writer->priv->str,
-                                " duration=\"%ld:%.2ld:%.2ld.\"",
-                                res->seconds / (60 * 60),
-                                res->seconds % (60 * 60),
-                                res->seconds % 60);
+        if (res->seconds >= 0)
+                g_string_append_printf (writer->priv->str,
+                                        " duration=\"%ld:%.2ld:%.2ld.\"",
+                                        res->seconds / (60 * 60),
+                                        res->seconds % (60 * 60),
+                                        res->seconds % 60);
 
         if (res->bitrate >= 0)
                 g_string_append_printf (writer->priv->str,
