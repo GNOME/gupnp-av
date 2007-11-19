@@ -2,6 +2,15 @@
 
 	* libgupnp-av/gupnp-didl-lite-writer.c:
 	(gupnp_didl_lite_writer_start_didl_lite),
+	(gupnp_didl_lite_writer_add_res),
+	(gupnp_didl_lite_writer_add_desc), (begin_property):
+
+	Actually set URL base.
+
+2007-11-19  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/gupnp-didl-lite-writer.c:
+	(gupnp_didl_lite_writer_start_didl_lite),
 	(gupnp_didl_lite_writer_end_didl_lite),
 	(gupnp_didl_lite_writer_start_container),
 	(gupnp_didl_lite_writer_end_container),

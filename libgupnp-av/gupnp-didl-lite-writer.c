@@ -32,7 +32,7 @@ G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
 struct _GUPnPDIDLLiteWriterPrivate {
         GString *str;
 
-        SoupUri *base_url;
+        SoupUri *url_base;
 
         gboolean need_escape;
 };
@@ -149,6 +149,7 @@ gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
 
+        writer->priv->url_base    = url_base;
         writer->priv->need_escape = need_escape;
 
         writer->priv->str = g_string_sized_new (INITIAL_STRING_SIZE);
@@ -349,8 +350,8 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         if (res->import_uri) {
                 g_string_append (writer->priv->str, " importUri=\"");
 
-                if (writer->priv->base_url || writer->priv->need_escape) {
-                        uri = soup_uri_new_with_base (writer->priv->base_url,
+                if (writer->priv->url_base || writer->priv->need_escape) {
+                        uri = soup_uri_new_with_base (writer->priv->url_base,
                                                       res->import_uri);
                         uri_str = soup_uri_to_string (uri, FALSE);
                         soup_uri_free (uri);
@@ -418,8 +419,8 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 
         g_string_append_c (writer->priv->str, '>');
 
-        if (writer->priv->base_url || writer->priv->need_escape) {
-                uri = soup_uri_new_with_base (writer->priv->base_url, res->uri);
+        if (writer->priv->url_base || writer->priv->need_escape) {
+                uri = soup_uri_new_with_base (writer->priv->url_base, res->uri);
                 uri_str = soup_uri_to_string (uri, FALSE);
                 soup_uri_free (uri);
 
@@ -476,11 +477,11 @@ gupnp_didl_lite_writer_add_desc (GUPnPDIDLLiteWriter *writer,
         if (ns_uri) {
                 g_string_append (writer->priv->str, " nameSpace=\"");
 
-                if (writer->priv->base_url || writer->priv->need_escape) {
+                if (writer->priv->url_base || writer->priv->need_escape) {
                         SoupUri *uri;
                         char *uri_str;
 
-                        uri = soup_uri_new_with_base (writer->priv->base_url,
+                        uri = soup_uri_new_with_base (writer->priv->url_base,
                                                       ns_uri);
                         uri_str = soup_uri_to_string (uri, FALSE);
                         soup_uri_free (uri);
@@ -526,11 +527,11 @@ begin_property (GUPnPDIDLLiteWriter *writer,
                 g_string_append (writer->priv->str, prefix);
                 g_string_append (writer->priv->str, "=\"");
 
-                if (writer->priv->base_url || writer->priv->need_escape) {
+                if (writer->priv->url_base || writer->priv->need_escape) {
                         SoupUri *uri;
                         char *uri_str;
 
-                        uri = soup_uri_new_with_base (writer->priv->base_url,
+                        uri = soup_uri_new_with_base (writer->priv->url_base,
                                                       ns_uri);
                         uri_str = soup_uri_to_string (uri, FALSE);
                         soup_uri_free (uri);
