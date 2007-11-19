@@ -17,9 +17,6 @@
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
- *
- * TODO
- *  - docs
  */
 
 #include <string.h>
@@ -75,6 +72,11 @@ gupnp_didl_lite_writer_class_init (GUPnPDIDLLiteWriterClass *klass)
         g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteWriterPrivate));
 }
 
+/**
+ * gupnp_didl_lite_writer_new
+ *
+ * Return value: A new #GUPnPDIDLLiteWriter object.
+ **/
 GUPnPDIDLLiteWriter *
 gupnp_didl_lite_writer_new (void)
 {
@@ -129,6 +131,16 @@ append_escaped_text (GUPnPDIDLLiteWriter *writer,
         "=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"" \
         "xmlns=\"n:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
 
+/**
+ * gupnp_didl_lite_writer_start_didl_lite
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @lang: The language the DIDL-Lite fragment is in, or NULL
+ * @url_base: A #SoupUri specifying the URI relative to which incoming URI
+ * are resolved, or NULL
+ * @need_escape: TRUE to force @writer to escape incoming string data
+ *
+ * Starts the DIDL-Lite element.
+ **/
 void
 gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
                                         const char          *lang,
@@ -152,6 +164,12 @@ gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
         g_string_append_c (writer->priv->str, '>');
 }
 
+/**
+ * gupnp_didl_lite_writer_end_didl_lite
+ * @writer: A #GUPnPDIDLLiteWriter
+ *
+ * Closes the DIDL-Lite element.
+ **/
 void
 gupnp_didl_lite_writer_end_didl_lite (GUPnPDIDLLiteWriter *writer)
 {
@@ -161,6 +179,16 @@ gupnp_didl_lite_writer_end_didl_lite (GUPnPDIDLLiteWriter *writer)
         g_string_append (writer->priv->str, "</DIDL-Lite>");
 }
 
+/**
+ * gupnp_didl_lite_writer_start_container
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @id: The object ID
+ * @parent_id: The parent object ID
+ * @restricted: TRUE if this container is restricted
+ * @searchable: TRUE if this container is searchable
+ *
+ * Starts a new container element.
+ **/
 void
 gupnp_didl_lite_writer_start_container (GUPnPDIDLLiteWriter *writer,
                                         const char          *id,
@@ -194,6 +222,12 @@ gupnp_didl_lite_writer_start_container (GUPnPDIDLLiteWriter *writer,
         g_string_append (writer->priv->str, "\">");
 }
 
+/**
+ * gupnp_didl_lite_writer_end_container
+ * @writer: A #GUPnPDIDLLiteWriter
+ *
+ * Closes the current container element.
+ **/
 void
 gupnp_didl_lite_writer_end_container (GUPnPDIDLLiteWriter *writer)
 {
@@ -203,6 +237,15 @@ gupnp_didl_lite_writer_end_container (GUPnPDIDLLiteWriter *writer)
         g_string_append (writer->priv->str, "</container>");
 }
 
+/**
+ * gupnp_didl_lite_writer_start_item
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @id: The object ID
+ * @parent_id: The parent object ID
+ * @restricted: TRUE if this item is restricted
+ *
+ * Starts a new item element.
+ **/
 void
 gupnp_didl_lite_writer_start_item (GUPnPDIDLLiteWriter *writer,
                                    const char          *id,
@@ -233,6 +276,12 @@ gupnp_didl_lite_writer_start_item (GUPnPDIDLLiteWriter *writer,
         g_string_append (writer->priv->str, "\">");
 }
 
+/**
+ * gupnp_didl_lite_writer_end_item
+ * @writer: A #GUPnPDIDLLiteWriter
+ *
+ * Closes the current item element.
+ **/
 void
 gupnp_didl_lite_writer_end_item (GUPnPDIDLLiteWriter *writer)
 {
@@ -242,10 +291,19 @@ gupnp_didl_lite_writer_end_item (GUPnPDIDLLiteWriter *writer)
         g_string_append (writer->priv->str, "</item>");
 }
 
+/**
+ * gupnp_didl_lite_resource_empty
+ * @res: A #GUPnPDIDLLiteResource
+ *
+ * Resets all fields of @res: strings to NULL and numbers to -1.
+ **/
 void
 gupnp_didl_lite_resource_empty (GUPnPDIDLLiteResource *res)
 {
-        memset (res, sizeof (GUPnPDIDLLiteResource), 0);
+        res->uri           = NULL;
+        res->import_uri    = NULL;
+        res->protocol_info = NULL;
+        res->protection    = NULL;
 
         res->size             = -1;
         res->seconds          = -1;
@@ -258,6 +316,14 @@ gupnp_didl_lite_resource_empty (GUPnPDIDLLiteResource *res)
         res->color_depth      = -1;
 }
 
+/**
+ * gupnp_didl_lite_writer_add_res
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @res: A pointer to a #GUPnPDIDLLiteResource structure
+ *
+ * Adds a new res (resource) element with the parameters specified in @res.
+ * Note that in order to ignore a numerical field it has to be set to -1.
+ **/
 void
 gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                                 GUPnPDIDLLiteResource *res)
@@ -366,36 +432,43 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_string_append (writer->priv->str, "</res>");
 }
 
+/**
+ * gupnp_didl_lite_writer_add_desc
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @desc: The description text
+ * @id: The object ID
+ * @type: The description type, or NULL
+ * @ns_uri: The namespace of (possible) child elements, or NULL
+ *
+ * Adds a new desc (description) element.
+ **/
 void
 gupnp_didl_lite_writer_add_desc (GUPnPDIDLLiteWriter *writer,
                                  const char          *desc,
                                  const char          *id,
-                                 const char          *name,
+                                 const char          *type,
                                  const char          *ns_uri)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
+        g_return_if_fail (id != NULL);
         g_return_if_fail (writer->priv->str);
 
-        g_string_append (writer->priv->str, "<desc");
+        g_string_append (writer->priv->str, "<desc id=\"");
 
-        if (id) {
-                g_string_append (writer->priv->str, " id=\"");
+        if (writer->priv->need_escape)
+                append_escaped_text (writer, id);
+        else
+                g_string_append (writer->priv->str, id);
 
-                if (writer->priv->need_escape)
-                        append_escaped_text (writer, id);
-                else
-                        g_string_append (writer->priv->str, id);
+        g_string_append_c (writer->priv->str, '"');
 
-                g_string_append_c (writer->priv->str, '"');
-        }
-
-        if (name) {
-                g_string_append (writer->priv->str, " name=\"");
+        if (type) {
+                g_string_append (writer->priv->str, " type=\"");
 
                 if (writer->priv->need_escape)
-                        append_escaped_text (writer, name);
+                        append_escaped_text (writer, type);
                 else
-                        g_string_append (writer->priv->str, name);
+                        g_string_append (writer->priv->str, type);
 
                 g_string_append_c (writer->priv->str, '"');
         }
@@ -499,6 +572,16 @@ end_property (GUPnPDIDLLiteWriter *writer,
         g_string_append_c (writer->priv->str, '>');
 }
 
+/**
+ * gupnp_didl_lite_writer_add_string
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @property: The property name
+ * @prefix: The property namespace prefix, or NULL
+ * @ns_uri: The namespace URI to be used, or NULL
+ * @value: The property value
+ *
+ * Adds a new string property.
+ **/
 void
 gupnp_didl_lite_writer_add_string (GUPnPDIDLLiteWriter *writer,
                                    const char          *property,
@@ -522,6 +605,18 @@ gupnp_didl_lite_writer_add_string (GUPnPDIDLLiteWriter *writer,
         end_property (writer, property, prefix);
 }
 
+/**
+ * gupnp_didl_lite_writer_add_string_with_attrs
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @property: The property name
+ * @prefix: The property namespace prefix, or NULL
+ * @ns_uri: The namespace URI to be used, or NULL
+ * @value: The property value
+ * @Varargs: A NULL terminated list of attribute name-attribute value string
+ * pairs.
+ *
+ * Adds a new string property with attributes.
+ **/
 void
 gupnp_didl_lite_writer_add_string_with_attrs (GUPnPDIDLLiteWriter *writer,
                                               const char          *property,
@@ -546,6 +641,17 @@ gupnp_didl_lite_writer_add_string_with_attrs (GUPnPDIDLLiteWriter *writer,
         va_end (var_args);
 }
 
+/**
+ * gupnp_didl_lite_writer_add_string_with_attrs_valist
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @property: The property name
+ * @prefix: The property namespace prefix, or NULL
+ * @ns_uri: The namespace URI to be used, or NULL
+ * @value: The property value
+ * @var_args: A #va_list with attribute name-attribute value string pairs
+ *
+ * Adds a new string property with attributes.
+ **/
 void
 gupnp_didl_lite_writer_add_string_with_attrs_valist
                                              (GUPnPDIDLLiteWriter *writer,
@@ -587,6 +693,16 @@ gupnp_didl_lite_writer_add_string_with_attrs_valist
         end_property (writer, property, prefix);
 }
 
+/**
+ * gupnp_didl_lite_writer_add_boolean
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @property: The property name
+ * @prefix: The property namespace prefix, or NULL
+ * @ns_uri: The namespace URI to be used, or NULL
+ * @value: The property value
+ *
+ * Adds a new boolean property.
+ **/
 void
 gupnp_didl_lite_writer_add_boolean (GUPnPDIDLLiteWriter *writer,
                                     const char          *property,
@@ -605,6 +721,16 @@ gupnp_didl_lite_writer_add_boolean (GUPnPDIDLLiteWriter *writer,
         end_property (writer, property, prefix);
 }
 
+/**
+ * gupnp_didl_lite_writer_add_int
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @property: The property name
+ * @prefix: The property namespace prefix, or NULL
+ * @ns_uri: The namespace URI to be used, or NULL
+ * @value: The property value
+ *
+ * Adds a new integer property.
+ **/
 void
 gupnp_didl_lite_writer_add_int (GUPnPDIDLLiteWriter *writer,
                                 const char          *property,
@@ -623,6 +749,16 @@ gupnp_didl_lite_writer_add_int (GUPnPDIDLLiteWriter *writer,
         end_property (writer, property, prefix);
 }
 
+/**
+ * gupnp_didl_lite_writer_add_uint
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @property: The property name
+ * @prefix: The property namespace prefix, or NULL
+ * @ns_uri: The namespace URI to be used, or NULL
+ * @value: The property value
+ *
+ * Adds a new unsigned integer property.
+ **/
 void
 gupnp_didl_lite_writer_add_uint (GUPnPDIDLLiteWriter *writer,
                                  const char          *property,
@@ -641,6 +777,16 @@ gupnp_didl_lite_writer_add_uint (GUPnPDIDLLiteWriter *writer,
         end_property (writer, property, prefix);
 }
 
+/**
+ * gupnp_didl_lite_writer_add_long
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @property: The property name
+ * @prefix: The property namespace prefix, or NULL
+ * @ns_uri: The namespace URI to be used, or NULL
+ * @value: The property value
+ *
+ * Adds a new long integer property.
+ **/
 void
 gupnp_didl_lite_writer_add_long (GUPnPDIDLLiteWriter *writer,
                                  const char          *property,
@@ -659,6 +805,16 @@ gupnp_didl_lite_writer_add_long (GUPnPDIDLLiteWriter *writer,
         end_property (writer, property, prefix);
 }
 
+/**
+ * gupnp_didl_lite_writer_add_ulong
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @property: The property name
+ * @prefix: The property namespace prefix, or NULL
+ * @ns_uri: The namespace URI to be used, or NULL
+ * @value: The property value
+ *
+ * Adds a new unsigned long integer property.
+ **/
 void
 gupnp_didl_lite_writer_add_ulong (GUPnPDIDLLiteWriter *writer,
                                   const char          *property,
@@ -677,6 +833,13 @@ gupnp_didl_lite_writer_add_ulong (GUPnPDIDLLiteWriter *writer,
         end_property (writer, property, prefix);
 }
 
+/**
+ * gupnp_didl_lite_writer_set_value_and_reset
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @value: A #GValue to store the generated DIDL-Lite string in
+ *
+ * Stores the generated DIDL-Lite string in #value and resets the writer.
+ **/
 void
 gupnp_didl_lite_writer_set_value_and_reset (GUPnPDIDLLiteWriter *writer,
                                             GValue              *value)
@@ -685,12 +848,21 @@ gupnp_didl_lite_writer_set_value_and_reset (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (value != NULL);
 
+        g_value_init (value, G_TYPE_STRING);
         g_value_set_string_take_ownership (value, writer->priv->str->str);
 
         g_string_free (writer->priv->str, FALSE);
         writer->priv->str = NULL;
 }
 
+/**
+ * gupnp_didl_lite_writer_get_string_and_reset
+ * @writer: A #GUPnPDIDLLiteWriter
+ *
+ * Returns the generated DIDL-Lite string and resets the writer.
+ *
+ * Return value: The generated DIDL-Lite string. Free when done.
+ **/
 char *
 gupnp_didl_lite_writer_get_string_and_reset (GUPnPDIDLLiteWriter *writer)
 {
