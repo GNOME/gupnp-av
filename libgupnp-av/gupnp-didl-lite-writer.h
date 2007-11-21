@@ -111,7 +111,7 @@ typedef struct {
 
         /* Stream data */
         long    size;
-        long    seconds;
+        long    duration;
         int     bitrate;
         int     sample_freq;
         int     bits_per_sample;

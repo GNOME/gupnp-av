@@ -308,7 +308,7 @@ gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res)
         res->protection    = NULL;
 
         res->size             = -1;
-        res->seconds          = -1;
+        res->duration         = -1;
         res->bitrate          = -1;
         res->sample_freq      = -1;
         res->bits_per_sample  = -1;
@@ -370,12 +370,12 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                 g_string_append_printf (writer->priv->str,
                                         " size=\"%ld\"", res->size);
 
-        if (res->seconds >= 0)
+        if (res->duration >= 0)
                 g_string_append_printf (writer->priv->str,
                                         " duration=\"%ld:%.2ld:%.2ld.\"",
-                                        res->seconds / (60 * 60),
-                                        res->seconds % (60 * 60),
-                                        res->seconds % 60);
+                                        res->duration / (60 * 60),
+                                        res->duration % (60 * 60),
+                                        res->duration % 60);
 
         if (res->bitrate >= 0)
                 g_string_append_printf (writer->priv->str,
