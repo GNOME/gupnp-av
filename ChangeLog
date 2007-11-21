@@ -1,6 +1,13 @@
 2007-11-21  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/gupnp-didl-lite-writer.c:
+	(gupnp_didl_lite_writer_add_res):
+
+	Format duration correctly.
+
+2007-11-21  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/gupnp-didl-lite-writer.c:
 	(gupnp_didl_lite_resource_reset), (gupnp_didl_lite_writer_add_res):
 	* libgupnp-av/gupnp-didl-lite-writer.h:
 
