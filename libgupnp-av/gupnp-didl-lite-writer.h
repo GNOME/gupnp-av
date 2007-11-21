@@ -127,7 +127,7 @@ typedef struct {
 } GUPnPDIDLLiteResource;
 
 void
-gupnp_didl_lite_resource_empty (GUPnPDIDLLiteResource *res);
+gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res);
 
 void
 gupnp_didl_lite_writer_add_res               (GUPnPDIDLLiteWriter   *writer,
@@ -199,12 +199,11 @@ gupnp_didl_lite_writer_add_ulong             (GUPnPDIDLLiteWriter   *writer,
                                               const char            *ns_uri,
                                               gulong                 value);
 
-void
-gupnp_didl_lite_writer_set_value_and_reset   (GUPnPDIDLLiteWriter   *writer,
-                                              GValue                *value);
+const char *
+gupnp_didl_lite_writer_get_string            (GUPnPDIDLLiteWriter   *writer);
 
-char *
-gupnp_didl_lite_writer_get_string_and_reset  (GUPnPDIDLLiteWriter   *writer);
+void
+gupnp_didl_lite_writer_reset                 (GUPnPDIDLLiteWriter   *writer);
 
 G_END_DECLS
 

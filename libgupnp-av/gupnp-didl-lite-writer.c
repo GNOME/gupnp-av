@@ -148,6 +148,7 @@ gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
                                         gboolean             need_escape)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
+        g_return_if_fail (writer->priv->str == NULL);
 
         writer->priv->url_base    = url_base;
         writer->priv->need_escape = need_escape;
@@ -293,13 +294,13 @@ gupnp_didl_lite_writer_end_item (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
- * gupnp_didl_lite_resource_empty
+ * gupnp_didl_lite_resource_reset
  * @res: A #GUPnPDIDLLiteResource
  *
  * Resets all fields of @res: strings to NULL and numbers to -1.
  **/
 void
-gupnp_didl_lite_resource_empty (GUPnPDIDLLiteResource *res)
+gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res)
 {
         res->uri           = NULL;
         res->import_uri    = NULL;
@@ -836,47 +837,34 @@ gupnp_didl_lite_writer_add_ulong (GUPnPDIDLLiteWriter *writer,
 }
 
 /**
- * gupnp_didl_lite_writer_set_value_and_reset
- * @writer: A #GUPnPDIDLLiteWriter
- * @value: A #GValue to store the generated DIDL-Lite string in
- *
- * Stores the generated DIDL-Lite string in #value and resets the writer.
- **/
-void
-gupnp_didl_lite_writer_set_value_and_reset (GUPnPDIDLLiteWriter *writer,
-                                            GValue              *value)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (writer->priv->str);
-        g_return_if_fail (value != NULL);
-
-        g_value_init (value, G_TYPE_STRING);
-        g_value_set_string_take_ownership (value, writer->priv->str->str);
-
-        g_string_free (writer->priv->str, FALSE);
-        writer->priv->str = NULL;
-}
-
-/**
- * gupnp_didl_lite_writer_get_string_and_reset
+ * gupnp_didl_lite_writer_get_string
  * @writer: A #GUPnPDIDLLiteWriter
  *
- * Returns the generated DIDL-Lite string and resets the writer.
+ * Returns a pointer the generated DIDL-Lite string.
  *
- * Return value: The generated DIDL-Lite string. Free when done.
+ * Return value: The generated DIDL-Lite string.
  **/
-char *
-gupnp_didl_lite_writer_get_string_and_reset (GUPnPDIDLLiteWriter *writer)
+const char *
+gupnp_didl_lite_writer_get_string (GUPnPDIDLLiteWriter *writer)
 {
-        char *ret;
-
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
         g_return_val_if_fail (writer->priv->str, NULL);
 
-        ret = writer->priv->str->str;
+        return writer->priv->str->str;
+}
+
+/**
+ * gupnp_didl_lite_writer_reset
+ * @writer: A #GUPnPDIDLLiteWriter
+ *
+ * Resets @writer.
+ **/
+void
+gupnp_didl_lite_writer_reset (GUPnPDIDLLiteWriter *writer)
+{
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
+        g_return_if_fail (writer->priv->str);
 
         g_string_free (writer->priv->str, FALSE);
         writer->priv->str = NULL;
-
-        return ret;
 }
