@@ -244,6 +244,7 @@ gupnp_didl_lite_writer_end_container (GUPnPDIDLLiteWriter *writer)
  * @writer: A #GUPnPDIDLLiteWriter
  * @id: The object ID
  * @parent_id: The parent object ID
+ * @ref_id: The RefID, or NULL
  * @restricted: TRUE if this item is restricted
  *
  * Starts a new item element.
@@ -252,6 +253,7 @@ void
 gupnp_didl_lite_writer_start_item (GUPnPDIDLLiteWriter *writer,
                                    const char          *id,
                                    const char          *parent_id,
+                                   const char          *ref_id,
                                    gboolean             restricted)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
@@ -272,6 +274,11 @@ gupnp_didl_lite_writer_start_item (GUPnPDIDLLiteWriter *writer,
                 append_escaped_text (writer, parent_id);
         else
                 g_string_append (writer->priv->str, parent_id);
+
+        if (ref_id) {
+                g_string_append (writer->priv->str, "\" refID=\"");
+                g_string_append (writer->priv->str, ref_id);
+        }
 
         g_string_append (writer->priv->str, "\" restricted=\"");
         g_string_append (writer->priv->str, restricted ? "true" : "false");

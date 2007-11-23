@@ -99,6 +99,7 @@ void
 gupnp_didl_lite_writer_start_item          (GUPnPDIDLLiteWriter *writer,
                                             const char          *id,
                                             const char          *parent_id,
+                                            const char          *ref_id,
                                             gboolean             restricted);
 
 void
