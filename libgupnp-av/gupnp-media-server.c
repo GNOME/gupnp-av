@@ -24,15 +24,7 @@
 #include <libgupnp/gupnp-service.h>
 
 #include "gupnp-media-server.h"
-
-#define CONNECTION_MANAGER_V1 \
-                "urn:schemas-upnp-org:service:ConnectionManager:1"
-#define CONNECTION_MANAGER_V2 \
-                "urn:schemas-upnp-org:service:ConnectionManager:2"
-#define CONTENT_DIR_V1        "urn:schemas-upnp-org:service:ContentDirectory:1"
-#define CONTENT_DIR_V2        "urn:schemas-upnp-org:service:ContentDirectory:2"
-#define AV_TRANSPORT_V1       "urn:schemas-upnp-org:service:AVTransport:1"
-#define AV_TRANSPORT_V2       "urn:schemas-upnp-org:service:AVTransport:2"
+#include "gupnp-av-protocol.h"
 
 G_DEFINE_TYPE (GUPnPMediaServer,
                gupnp_media_server,

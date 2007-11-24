@@ -26,15 +26,7 @@
 #include "gupnp-media-server-proxy.h"
 #include "gupnp-didl-lite-parser.h"
 #include "gupnp-didl-lite-object.h"
-
-#define CONNECTION_MANAGER_V1 \
-                "urn:schemas-upnp-org:service:ConnectionManager:1"
-#define CONNECTION_MANAGER_V2 \
-                "urn:schemas-upnp-org:service:ConnectionManager:2"
-#define CONTENT_DIR_V1        "urn:schemas-upnp-org:service:ContentDirectory:1"
-#define CONTENT_DIR_V2        "urn:schemas-upnp-org:service:ContentDirectory:2"
-#define AV_TRANSPORT_V1       "urn:schemas-upnp-org:service:AVTransport:1"
-#define AV_TRANSPORT_V2       "urn:schemas-upnp-org:service:AVTransport:2"
+#include "gupnp-av-protocol.h"
 
 G_DEFINE_TYPE (GUPnPMediaServerProxy,
                gupnp_media_server_proxy,

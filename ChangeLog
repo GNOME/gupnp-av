@@ -1,3 +1,14 @@
+2007-11-24  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
+
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av-main.c:
+	* libgupnp-av/gupnp-av-protocol.h:
+	* libgupnp-av/gupnp-media-renderer-proxy.c:
+	* libgupnp-av/gupnp-media-server-proxy.c:
+	* libgupnp-av/gupnp-media-server.c:
+
+	Put all the service/device name #defines in a private header.
+
 2007-11-23  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/gupnp-didl-lite-writer.c:

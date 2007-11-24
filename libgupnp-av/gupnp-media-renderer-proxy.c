@@ -24,15 +24,7 @@
 #include <libgupnp/gupnp-service-proxy.h>
 
 #include "gupnp-media-renderer-proxy.h"
-
-#define CONNECTION_MANAGER_V1 \
-                        "urn:schemas-upnp-org:service:ConnectionManager:1"
-#define CONNECTION_MANAGER_V2 \
-                        "urn:schemas-upnp-org:service:ConnectionManager:2"
-#define RENDERING_CONTROL_V1  "urn:schemas-upnp-org:service:RenderingControl:1"
-#define RENDERING_CONTROL_V2  "urn:schemas-upnp-org:service:RenderingControl:2"
-#define AV_TRANSPORT_V1       "urn:schemas-upnp-org:service:AVTransport:1"
-#define AV_TRANSPORT_V2       "urn:schemas-upnp-org:service:AVTransport:2"
+#include "gupnp-av-protocol.h"
 
 G_DEFINE_TYPE (GUPnPMediaRendererProxy,
                gupnp_media_renderer_proxy,

@@ -24,11 +24,7 @@
 #include "gupnp-av-main.h"
 #include "gupnp-media-renderer-proxy.h"
 #include "gupnp-media-server-proxy.h"
-
-#define MEDIA_RENDERER_V1 "urn:schemas-upnp-org:device:MediaRenderer:1"
-#define MEDIA_RENDERER_V2 "urn:schemas-upnp-org:device:MediaRenderer:2"
-#define MEDIA_SERVER_V1 "urn:schemas-upnp-org:device:MediaServer:1"
-#define MEDIA_SERVER_V2 "urn:schemas-upnp-org:device:MediaServer:2"
+#include "gupnp-av-protocol.h"
 
 void
 gupnp_av_init (void)

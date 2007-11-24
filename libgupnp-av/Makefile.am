@@ -14,6 +14,7 @@ libgupnp_av_inc_HEADERS = gupnp-av-main.h \
 			  gupnp-av.h
 
 libgupnp_av_1_0_la_SOURCES = gupnp-av-main.c \
+			     gupnp-av-protocol.h \
 		             gupnp-media-server.c \
 		             gupnp-media-server-proxy.c \
 			     gupnp-media-renderer-proxy.c \
