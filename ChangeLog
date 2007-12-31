@@ -1,8 +1,12 @@
 2007-12-31  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av-util.c:
+	* libgupnp-av/gupnp-av-util.h:
+	* libgupnp-av/gupnp-av.h:
 
-	Copy some needed gvalue util api from gupnp package.
+	- Copy some needed gvalue util api from gupnp package.
+	- Add helper API for parsing of LastChange event xml.
 
 2007-11-24  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
 
