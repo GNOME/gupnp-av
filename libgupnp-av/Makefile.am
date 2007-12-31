@@ -22,7 +22,9 @@ libgupnp_av_1_0_la_SOURCES = gupnp-av-main.c \
 			     gupnp-didl-lite-parser.c \
 			     gupnp-didl-lite-writer.c \
 			     xml-util.c \
-			     xml-util.h
+			     xml-util.h \
+			     gvalue-util.c \
+			     gvalue-util.h
 
 libgupnp_av_1_0_la_LIBADD = $(LIBGUPNP_LIBS)
 

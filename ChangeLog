@@ -1,3 +1,9 @@
+2007-12-31  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/Makefile.am:
+
+	Copy some needed gvalue util api from gupnp package.
+
 2007-11-24  Zeeshan Ali Khattak  <zeenix@gstreamer.net>
 
 	* libgupnp-av/Makefile.am:
