@@ -11,6 +11,14 @@
 
 	Add initial search criteria parsing code.
 
+2008-01-02  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/gupnp-av-util.c:
+	* libgupnp-av/gupnp-didl-lite-object.c:
+	* libgupnp-av/xml-util.h:
+
+	Use the term 'content' instead of 'contents'.
+
 2007-12-31  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/Makefile.am:

@@ -44,7 +44,7 @@ read_state_variable (const char *variable_name,
         if (!variable_node)
                 return;
 
-        val_str = xml_util_get_attribute_contents (variable_node, "val");
+        val_str = xml_util_get_attribute_content (variable_node, "val");
         if (!val_str) {
                 g_warning ("No value provided for variable \"%s\" in "
                            "LastChange event",

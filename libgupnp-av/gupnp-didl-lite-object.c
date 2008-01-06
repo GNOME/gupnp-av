@@ -83,13 +83,13 @@ gupnp_didl_lite_object_get_upnp_class (xmlNode *object_node)
 char *
 gupnp_didl_lite_object_get_id (xmlNode *object_node)
 {
-        return xml_util_get_attribute_contents (object_node, "id");
+        return xml_util_get_attribute_content (object_node, "id");
 }
 
 char *
 gupnp_didl_lite_object_get_parent_id (xmlNode *object_node)
 {
-        return xml_util_get_attribute_contents (object_node,
+        return xml_util_get_attribute_content (object_node,
                                                 "parentID");
 }
 
@@ -145,19 +145,19 @@ gupnp_didl_lite_container_get_child_count (xmlNode *container_node)
 char *
 gupnp_didl_lite_item_get_ref_id (xmlNode *item_node)
 {
-        return xml_util_get_attribute_contents (item_node, "refID");
+        return xml_util_get_attribute_content (item_node, "refID");
 }
 
 char *
 gupnp_didl_lite_descriptor_get_type (xmlNode *desc_node)
 {
-        return xml_util_get_attribute_contents (desc_node, "type");
+        return xml_util_get_attribute_content (desc_node, "type");
 }
 
 char *
 gupnp_didl_lite_descriptor_get_name_space (xmlNode *desc_node)
 {
-        return xml_util_get_attribute_contents (desc_node, "nameSpace");
+        return xml_util_get_attribute_content (desc_node, "nameSpace");
 }
 
 char *
@@ -169,13 +169,13 @@ gupnp_didl_lite_resource_get_contents (xmlNode *res_node)
 char *
 gupnp_didl_lite_resource_get_import_uri (xmlNode *res_node)
 {
-        return xml_util_get_attribute_contents (res_node, "importUri");
+        return xml_util_get_attribute_content (res_node, "importUri");
 }
 
 char *
 gupnp_didl_lite_resource_get_protocol_info (xmlNode *res_node)
 {
-        return xml_util_get_attribute_contents (res_node, "protocolInfo");
+        return xml_util_get_attribute_content (res_node, "protocolInfo");
 }
 
 guint
@@ -187,7 +187,7 @@ gupnp_didl_lite_resource_get_size (xmlNode *res_node)
 char *
 gupnp_didl_lite_resource_get_duration (xmlNode *res_node)
 {
-        return xml_util_get_attribute_contents (res_node, "duration");
+        return xml_util_get_attribute_content (res_node, "duration");
 }
 
 guint
@@ -217,7 +217,7 @@ gupnp_didl_lite_resource_get_nr_audio_channels (xmlNode *res_node)
 char *
 gupnp_didl_lite_resource_get_resolution (xmlNode *res_node)
 {
-        return xml_util_get_attribute_contents (res_node, "resolution");
+        return xml_util_get_attribute_content (res_node, "resolution");
 }
 
 guint
@@ -229,6 +229,6 @@ gupnp_didl_lite_resource_get_color_depth (xmlNode *res_node)
 char *
 gupnp_didl_lite_resource_get_protection (xmlNode *res_node)
 {
-        return xml_util_get_attribute_contents (res_node, "protection");
+        return xml_util_get_attribute_content (res_node, "protection");
 }
 
