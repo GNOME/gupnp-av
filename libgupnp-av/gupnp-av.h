@@ -22,6 +22,7 @@
  */
 
 #include "gupnp-av-main.h"
+#include "gupnp-av-search-criteria-scanner.h"
 #include "gupnp-av-util.h"
 #include "gupnp-media-server.h"
 #include "gupnp-media-server-proxy.h"

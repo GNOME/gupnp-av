@@ -5,6 +5,7 @@ libgupnp_av_incdir = $(includedir)/gupnp-av-1.0/libgupnp-av
 lib_LTLIBRARIES = libgupnp-av-1.0.la
 
 libgupnp_av_inc_HEADERS = gupnp-av-main.h \
+		          gupnp-av-search-criteria-scanner.h \
 		          gupnp-media-server.h \
 		      	  gupnp-media-server-proxy.h \
 			  gupnp-media-renderer-proxy.h \
@@ -15,6 +16,7 @@ libgupnp_av_inc_HEADERS = gupnp-av-main.h \
 			  gupnp-av.h
 
 libgupnp_av_1_0_la_SOURCES = gupnp-av-main.c \
+			     gupnp-av-search-criteria-scanner.c \
 			     gupnp-av-protocol.h \
 		             gupnp-media-server.c \
 		             gupnp-media-server-proxy.c \
