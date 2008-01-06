@@ -13,6 +13,14 @@
 
 2008-01-02  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
+	* libgupnp-av/gvalue-util.h:
+	* libgupnp-av/xml-util.h:
+
+	Use 'G_GNUC_INTERNAL' macro to declare functions we don't want to
+	export.
+
+2008-01-02  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
 	* libgupnp-av/gupnp-av-util.c:
 	* libgupnp-av/gupnp-didl-lite-object.c:
 	* libgupnp-av/xml-util.h:

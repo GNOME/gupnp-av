@@ -29,30 +29,30 @@
 #include <stdarg.h>
 
 /* Misc utilities for inspecting xmlNodes */
-xmlNode *
+G_GNUC_INTERNAL xmlNode *
 xml_util_get_element                    (xmlNode    *node,
                                          ...) G_GNUC_NULL_TERMINATED;
 
-GList *
+G_GNUC_INTERNAL GList *
 xml_util_get_child_elements_by_name     (xmlNode *node,
                                          const char *name);
 
-char *
+G_GNUC_INTERNAL char *
 xml_util_get_element_content            (xmlNode    *node);
 
-char *
+G_GNUC_INTERNAL char *
 xml_util_get_child_element_content      (xmlNode    *node,
                                          const char *child_name);
 
-char *
+G_GNUC_INTERNAL char *
 xml_util_get_attribute_content         (xmlNode    *node,
                                          const char *attribute_name);
 
-gboolean
+G_GNUC_INTERNAL gboolean
 xml_util_get_boolean_attribute          (xmlNode    *node,
                                          const char *attribute_name);
 
-guint
+G_GNUC_INTERNAL guint
 xml_util_get_uint_attribute             (xmlNode    *node,
                                          const char *attribute_name);
 

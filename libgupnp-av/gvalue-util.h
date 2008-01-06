@@ -24,7 +24,7 @@
 
 #include <glib-object.h>
 
-gboolean
+G_GNUC_INTERNAL gboolean
 gvalue_util_set_value_from_string      (GValue       *value,
                                         const char   *str);
 
