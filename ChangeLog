@@ -1,5 +1,12 @@
 2008-01-07  Jorn Baayen  <jorn@openedhand.com>
 
+	* libgupnp-av/gupnp-av-search-criteria-parser.c: (scan_rel_exp),
+	(scan_search_exp):
+
+	Added missing "break".
+
+2008-01-07  Jorn Baayen  <jorn@openedhand.com>
+
 	* libgupnp-av/gupnp-av-search-criteria-parser.c: (scan_rel_exp):
 
 	Only emit "exists" expression if argument is set to "true".

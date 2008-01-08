@@ -336,6 +336,8 @@ scan_rel_exp (GUPnPAVSearchCriteriaParser *parser,
                                        (parser->priv->scanner));
 
                         ret = FALSE;
+
+                        break;
                 }
 
                 value = g_scanner_cur_value (parser->priv->scanner);
@@ -425,6 +427,8 @@ scan_search_exp (GUPnPAVSearchCriteriaParser *parser,
                                         (parser->priv->scanner));
 
                         ret = FALSE;
+
+                        break;
                 }
 
                 g_signal_emit (parser, signals[END_PARENS], 0);
