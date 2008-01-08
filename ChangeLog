@@ -1,5 +1,12 @@
 2008-01-07  Jorn Baayen  <jorn@openedhand.com>
 
+	* libgupnp-av/gupnp-av-search-criteria-parser.c:
+	(gupnp_av_search_criteria_parser_init):
+
+	Allow ':' to occur in identifiers.
+
+2008-01-07  Jorn Baayen  <jorn@openedhand.com>
+
 	* libgupnp-av/gupnp-av-search-criteria-parser.c: (scan_rel_exp),
 	(scan_search_exp):
 

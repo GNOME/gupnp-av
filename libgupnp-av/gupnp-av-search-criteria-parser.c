@@ -136,7 +136,7 @@ gupnp_av_search_criteria_parser_init (GUPnPAVSearchCriteriaParser *parser)
                                                                "_*<>=!"
                                                                G_CSET_A_2_Z;
         parser->priv->scanner->config->cset_identifier_nth =   G_CSET_a_2_z
-                                                               "_0123456789="
+                                                               "_0123456789=:"
                                                                G_CSET_A_2_Z
                                                                G_CSET_LATINS
                                                                G_CSET_LATINC;
