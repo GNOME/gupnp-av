@@ -1,3 +1,22 @@
+2008-01-07  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/Makefile.am:
+	A libgupnp-av/gupnp-av-search-criteria-parser.c:
+	A libgupnp-av/gupnp-av-search-criteria-parser.h:
+	D libgupnp-av/gupnp-av-search-criteria-scanner.c:
+	D libgupnp-av/gupnp-av-search-criteria-scanner.h:
+	* libgupnp-av/gupnp-av.h:
+	* tests/Makefile.am:
+	A tests/test-search-criteria-parser.c:
+	D tests/test-search-criteria-scanner.c:
+
+	Replace SearchCriteriaScanner with SearchCriteriaParser which is
+	slightly higher level. Update test case accordingly.
+
+	* libgupnp-av/gupnp-didl-lite-writer.c:
+
+	Added SECTION documentation.
+
 2008-01-06  Jorn Baayen  <jorn@openedhand.com>
 
 	* Makefile.am:
