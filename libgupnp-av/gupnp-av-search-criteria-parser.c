@@ -68,10 +68,12 @@ static guint signals[SIGNAL_LAST];
 enum {
         SYMBOL_ASTERISK = G_TOKEN_LAST + 11,
         SYMBOL_AND      = G_TOKEN_LAST + 12,
-        SYMBOL_OR       = G_TOKEN_LAST + 13
+        SYMBOL_OR       = G_TOKEN_LAST + 13,
+        SYMBOL_TRUE     = G_TOKEN_LAST + 14,
+        SYMBOL_FALSE    = G_TOKEN_LAST + 15
 };
 
-#define NUM_SYMBOLS 13
+#define NUM_SYMBOLS 15
 
 struct {
         const char *name;
@@ -106,7 +108,12 @@ struct {
           GUPNP_AV_SEARCH_CRITERIA_OP_DERIVED_FROM },
 
         { "exists",
-          GUPNP_AV_SEARCH_CRITERIA_OP_EXISTS }
+          GUPNP_AV_SEARCH_CRITERIA_OP_EXISTS },
+
+        { "true",
+          SYMBOL_TRUE },
+        { "false",
+          SYMBOL_FALSE }
 };
 
 static void
@@ -344,7 +351,19 @@ scan_rel_exp (GUPnPAVSearchCriteriaParser *parser,
                 op = token;
 
                 token = g_scanner_get_next_token (parser->priv->scanner);
-                if (token != G_TOKEN_IDENTIFIER) {
+                switch (token) {
+                case SYMBOL_TRUE:
+                        g_signal_emit (parser, signals[EXPRESSION], 0,
+                                       arg1, op, NULL);
+
+                        ret = TRUE;
+
+                        break;
+                case SYMBOL_FALSE:
+                        ret = TRUE;
+
+                        break;
+                default:
                         g_set_error
                                 (error,
                                  GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR,
@@ -354,14 +373,9 @@ scan_rel_exp (GUPnPAVSearchCriteriaParser *parser,
                                        (parser->priv->scanner));
 
                         ret = FALSE;
+
+                        break;
                 }
-
-                value = g_scanner_cur_value (parser->priv->scanner);
-
-                g_signal_emit (parser, signals[EXPRESSION], 0,
-                               arg1, op, value.v_string);
-
-                ret = TRUE;
 
                 break;
 

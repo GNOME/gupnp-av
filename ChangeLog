@@ -1,5 +1,11 @@
 2008-01-07  Jorn Baayen  <jorn@openedhand.com>
 
+	* libgupnp-av/gupnp-av-search-criteria-parser.c: (scan_rel_exp):
+
+	Only emit "exists" expression if argument is set to "true".
+
+2008-01-07  Jorn Baayen  <jorn@openedhand.com>
+
 	* libgupnp-av/Makefile.am:
 	A libgupnp-av/gupnp-av-search-criteria-parser.c:
 	A libgupnp-av/gupnp-av-search-criteria-parser.h:
