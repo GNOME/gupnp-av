@@ -1,5 +1,12 @@
 2008-01-14  Jorn Baayen  <jorn@openedhand.com>
 
+	* doc/Makefile.am:
+
+	Temporarily not inspect gupnp-didl-lite-object.h because 
+	of gupnp_didl_lite_descriptor_get_type() confusing gtk-doc.
+
+2008-01-14  Jorn Baayen  <jorn@openedhand.com>
+
 	* libgupnp-av/gupnp-didl-lite-object.c:
 	(gupnp_didl_lite_object_is_container),
 	(gupnp_didl_lite_object_is_item), (gupnp_didl_lite_object_get_id),

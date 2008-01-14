@@ -50,7 +50,8 @@ CFILE_GLOB=$(top_srcdir)/libgupnp-av/*.c
 IGNORE_HFILES=gupnp-av-protocol.h	\
 	      xml-util.h		\
 	      gvalue-util.h		\
-	      gupnp-av-marshal.h
+	      gupnp-av-marshal.h	\
+	      gupnp-didl-lite-object.h
 
 # Images to copy into HTML directory.
 # e.g. HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/stock_about_24.png
