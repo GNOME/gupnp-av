@@ -1,5 +1,16 @@
 2008-01-14  Jorn Baayen  <jorn@openedhand.com>
 
+	* libgupnp-av/gupnp-didl-lite-object.c:
+	(gupnp_didl_lite_object_is_container),
+	(gupnp_didl_lite_object_is_item), (gupnp_didl_lite_object_get_id),
+	(gupnp_didl_lite_object_get_parent_id),
+	(gupnp_didl_lite_object_get_title),
+	(gupnp_didl_lite_object_get_value):
+
+	Add g_return_val_if_fail() checks. 
+
+2008-01-14  Jorn Baayen  <jorn@openedhand.com>
+
 	* Makefile.am:
 	* configure.ac:
 	* doc/Makefile.am:
