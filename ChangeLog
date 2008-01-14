@@ -1,3 +1,25 @@
+2008-01-14  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/gupnp-av-main.h:
+	* libgupnp-av/gupnp-av-util.h:
+	* libgupnp-av/gupnp-didl-lite-parser.h:
+	* libgupnp-av/gupnp-didl-lite-writer.c:
+	* libgupnp-av/gupnp-didl-lite-writer.h:
+
+	Minor cosmetic cleanups.
+
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av.h:
+	* libgupnp-av/gupnp-av-search-criteria-parser.c:
+	* libgupnp-av/gupnp-av-search-criteria-parser.h:
+	* libgupnp-av/gupnp-search-criteria-parser.c:
+	(gupnp_search_criteria_parser_init),
+	(gupnp_search_criteria_parser_class_init), (scan_rel_exp),
+	(scan_search_exp), (gupnp_search_criteria_parser_parse_text):
+	* libgupnp-av/gupnp-search-criteria-parser.h:
+
+	Rename AVSearchCriteriaParser to SearchCriteriaParser.
+
 2008-01-07  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/gupnp-av-search-criteria-parser.c:

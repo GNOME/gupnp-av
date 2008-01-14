@@ -61,20 +61,22 @@ typedef struct {
         GObjectClass parent_class;
 
         /* signals */
-        void (* didl_object_available)      (GUPnPDIDLLiteParser *parser,
-                                             xmlNode             *object_node);
+        void (* didl_object_available) (GUPnPDIDLLiteParser *parser,
+                                        xmlNode             *object_node);
 
         /* future padding */
         void (* _gupnp_reserved1) (void);
         void (* _gupnp_reserved2) (void);
+        void (* _gupnp_reserved3) (void);
+        void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteParserClass;
 
 GUPnPDIDLLiteParser *
-gupnp_didl_lite_parser_new                   (void);
+gupnp_didl_lite_parser_new        (void);
 
 void
-gupnp_didl_lite_parser_parse_didl            (GUPnPDIDLLiteParser *parser,
-                                              xmlDoc              *didl);
+gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
+                                   xmlDoc              *didl);
 
 G_END_DECLS
 

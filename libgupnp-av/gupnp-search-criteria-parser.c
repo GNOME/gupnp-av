@@ -20,10 +20,10 @@
  */
 
 /**
- * SECTION:gupnp-av-search-criteria-parser
+ * SECTION:gupnp-search-criteria-parser
  * @short_description: AV search criteria parser
  *
- * #GUPnPAVSearchCriteriaParser parses ContentDirectory search criteria
+ * #GUPnPSearchCriteriaParser parses ContentDirectory search criteria
  * strings.
  *
  * Note that no signals will be emitted if a wildcard is specified,
@@ -33,23 +33,23 @@
 
 #include <string.h>
 
-#include "gupnp-av-search-criteria-parser.h"
+#include "gupnp-search-criteria-parser.h"
 #include "gupnp-av-marshal.h"
 
-/* GUPnPAVSearchCriteriaParserError */
+/* GUPnPSearchCriteriaParserError */
 GQuark
-gupnp_av_search_criteria_parser_error_quark (void)
+gupnp_search_criteria_parser_error_quark (void)
 {
         return g_quark_from_static_string
-                ("gupnp-av-search-criteria-parser-error-quark");
+                ("gupnp-search-criteria-parser-error-quark");
 }
 
-/* GUPnPAVSearchCriteriaParser */
-G_DEFINE_TYPE (GUPnPAVSearchCriteriaParser,
-               gupnp_av_search_criteria_parser,
+/* GUPnPSearchCriteriaParser */
+G_DEFINE_TYPE (GUPnPSearchCriteriaParser,
+               gupnp_search_criteria_parser,
                G_TYPE_OBJECT);
 
-struct _GUPnPAVSearchCriteriaParserPrivate {
+struct _GUPnPSearchCriteriaParserPrivate {
         GScanner *scanner;
 };
 
@@ -88,27 +88,27 @@ struct {
           SYMBOL_OR },
 
         { "=",
-          GUPNP_AV_SEARCH_CRITERIA_OP_EQ },
+          GUPNP_SEARCH_CRITERIA_OP_EQ },
         { "!=",
-          GUPNP_AV_SEARCH_CRITERIA_OP_NEQ },
+          GUPNP_SEARCH_CRITERIA_OP_NEQ },
         { "<",
-          GUPNP_AV_SEARCH_CRITERIA_OP_LESS },
+          GUPNP_SEARCH_CRITERIA_OP_LESS },
         { "<=",
-          GUPNP_AV_SEARCH_CRITERIA_OP_LEQ },
+          GUPNP_SEARCH_CRITERIA_OP_LEQ },
         { ">",
-          GUPNP_AV_SEARCH_CRITERIA_OP_GREATER },
+          GUPNP_SEARCH_CRITERIA_OP_GREATER },
         { ">=",
-          GUPNP_AV_SEARCH_CRITERIA_OP_GEQ },
+          GUPNP_SEARCH_CRITERIA_OP_GEQ },
 
         { "contains",
-          GUPNP_AV_SEARCH_CRITERIA_OP_CONTAINS },
+          GUPNP_SEARCH_CRITERIA_OP_CONTAINS },
         { "doesNotContain",
-          GUPNP_AV_SEARCH_CRITERIA_OP_DOES_NOT_CONTAIN },
+          GUPNP_SEARCH_CRITERIA_OP_DOES_NOT_CONTAIN },
         { "derivedfrom",
-          GUPNP_AV_SEARCH_CRITERIA_OP_DERIVED_FROM },
+          GUPNP_SEARCH_CRITERIA_OP_DERIVED_FROM },
 
         { "exists",
-          GUPNP_AV_SEARCH_CRITERIA_OP_EXISTS },
+          GUPNP_SEARCH_CRITERIA_OP_EXISTS },
 
         { "true",
           SYMBOL_TRUE },
@@ -117,14 +117,14 @@ struct {
 };
 
 static void
-gupnp_av_search_criteria_parser_init (GUPnPAVSearchCriteriaParser *parser)
+gupnp_search_criteria_parser_init (GUPnPSearchCriteriaParser *parser)
 {
         int i;
 
         parser->priv = G_TYPE_INSTANCE_GET_PRIVATE
                          (parser,
-                          GUPNP_AV_TYPE_SEARCH_CRITERIA_PARSER,
-                          GUPnPAVSearchCriteriaParserPrivate);
+                          GUPNP_TYPE_SEARCH_CRITERIA_PARSER,
+                          GUPnPSearchCriteriaParserPrivate);
 
         /* Set up GScanner */
         parser->priv->scanner = g_scanner_new (NULL);
@@ -152,34 +152,34 @@ gupnp_av_search_criteria_parser_init (GUPnPAVSearchCriteriaParser *parser)
 }
 
 static void
-gupnp_av_search_criteria_parser_finalize (GObject *object)
+gupnp_search_criteria_parser_finalize (GObject *object)
 {
         GObjectClass *gobject_class;
-        GUPnPAVSearchCriteriaParser *parser;
+        GUPnPSearchCriteriaParser *parser;
 
-        parser = GUPNP_AV_SEARCH_CRITERIA_PARSER (object);
+        parser = GUPNP_SEARCH_CRITERIA_PARSER (object);
 
         /* Destroy GScanner */
         g_scanner_destroy (parser->priv->scanner);
 
         gobject_class =
-                G_OBJECT_CLASS (gupnp_av_search_criteria_parser_parent_class);
+                G_OBJECT_CLASS (gupnp_search_criteria_parser_parent_class);
         gobject_class->dispose (object);
 }
 
 static void
-gupnp_av_search_criteria_parser_class_init
-                                    (GUPnPAVSearchCriteriaParserClass *klass)
+gupnp_search_criteria_parser_class_init
+                                    (GUPnPSearchCriteriaParserClass *klass)
 {
         GObjectClass *object_class;
 
         object_class = G_OBJECT_CLASS (klass);
 
-        object_class->finalize = gupnp_av_search_criteria_parser_finalize;
+        object_class->finalize = gupnp_search_criteria_parser_finalize;
 
         /**
-         * GUPnPAVSearchCriteriaParser::begin_parens
-         * @parser: The #GUPnPGUPnPAVSearchCriteriaParser that received the
+         * GUPnPSearchCriteriaParser::begin_parens
+         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
          * signal
          *
          * The ::begin_parens signal is emitted to mark the beginning
@@ -187,9 +187,9 @@ gupnp_av_search_criteria_parser_class_init
          **/
         signals[BEGIN_PARENS] =
                 g_signal_new ("begin-parens",
-                              GUPNP_AV_TYPE_SEARCH_CRITERIA_PARSER,
+                              GUPNP_TYPE_SEARCH_CRITERIA_PARSER,
                               G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GUPnPAVSearchCriteriaParserClass,
+                              G_STRUCT_OFFSET (GUPnPSearchCriteriaParserClass,
                                                begin_parens),
                               NULL,
                               NULL,
@@ -198,8 +198,8 @@ gupnp_av_search_criteria_parser_class_init
                               0);
 
         /**
-         * GUPnPAVSearchCriteriaParser::end_parens
-         * @parser: The #GUPnPGUPnPAVSearchCriteriaParser that received the
+         * GUPnPSearchCriteriaParser::end_parens
+         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
          * signal
          *
          * The ::end_parens signal is emitted to mark the end
@@ -207,9 +207,9 @@ gupnp_av_search_criteria_parser_class_init
          **/
         signals[END_PARENS] =
                 g_signal_new ("end-parens",
-                              GUPNP_AV_TYPE_SEARCH_CRITERIA_PARSER,
+                              GUPNP_TYPE_SEARCH_CRITERIA_PARSER,
                               G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GUPnPAVSearchCriteriaParserClass,
+                              G_STRUCT_OFFSET (GUPnPSearchCriteriaParserClass,
                                                end_parens),
                               NULL,
                               NULL,
@@ -218,8 +218,8 @@ gupnp_av_search_criteria_parser_class_init
                               0);
 
         /**
-         * GUPnPAVSearchCriteriaParser::conjunction
-         * @parser: The #GUPnPGUPnPAVSearchCriteriaParser that received the
+         * GUPnPSearchCriteriaParser::conjunction
+         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
          * signal
          *
          * The ::conjuction signal is emitted whenever a conjuction marker
@@ -227,9 +227,9 @@ gupnp_av_search_criteria_parser_class_init
          **/
         signals[CONJUNCTION] =
                 g_signal_new ("conjunction",
-                              GUPNP_AV_TYPE_SEARCH_CRITERIA_PARSER,
+                              GUPNP_TYPE_SEARCH_CRITERIA_PARSER,
                               G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GUPnPAVSearchCriteriaParserClass,
+                              G_STRUCT_OFFSET (GUPnPSearchCriteriaParserClass,
                                                conjunction),
                               NULL,
                               NULL,
@@ -238,8 +238,8 @@ gupnp_av_search_criteria_parser_class_init
                               0);
 
         /**
-         * GUPnPAVSearchCriteriaParser::disjunction
-         * @parser: The #GUPnPGUPnPAVSearchCriteriaParser that received the
+         * GUPnPSearchCriteriaParser::disjunction
+         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
          * signal
          *
          * The ::disjuction signal is emitted whenever a disjuction marker
@@ -247,9 +247,9 @@ gupnp_av_search_criteria_parser_class_init
          **/
         signals[DISJUNCTION] =
                 g_signal_new ("disjunction",
-                              GUPNP_AV_TYPE_SEARCH_CRITERIA_PARSER,
+                              GUPNP_TYPE_SEARCH_CRITERIA_PARSER,
                               G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GUPnPAVSearchCriteriaParserClass,
+                              G_STRUCT_OFFSET (GUPnPSearchCriteriaParserClass,
                                                disjunction),
                               NULL,
                               NULL,
@@ -258,8 +258,8 @@ gupnp_av_search_criteria_parser_class_init
                               0);
 
         /**
-         * GUPnPAVSearchCriteriaParser::expression
-         * @parser: The #GUPnPGUPnPAVSearchCriteriaParser that received the
+         * GUPnPSearchCriteriaParser::expression
+         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
          * signal
          *
          * The ::expression signal is emitted whenever an expression
@@ -267,9 +267,9 @@ gupnp_av_search_criteria_parser_class_init
          **/
         signals[EXPRESSION] =
                 g_signal_new ("expression",
-                              GUPNP_AV_TYPE_SEARCH_CRITERIA_PARSER,
+                              GUPNP_TYPE_SEARCH_CRITERIA_PARSER,
                               G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GUPnPAVSearchCriteriaParserClass,
+                              G_STRUCT_OFFSET (GUPnPSearchCriteriaParserClass,
                                                expression),
                               NULL,
                               NULL,
@@ -281,29 +281,29 @@ gupnp_av_search_criteria_parser_class_init
                               G_TYPE_STRING);
 
         g_type_class_add_private (klass,
-                                  sizeof (GUPnPAVSearchCriteriaParserPrivate));
+                                  sizeof (GUPnPSearchCriteriaParserPrivate));
 }
 
 /**
- * gupnp_av_search_criteria_parser_new
+ * gupnp_search_criteria_parser_new
  *
- * Return value: A new #GUPnPAVSearchCriteriaParser object.
+ * Return value: A new #GUPnPSearchCriteriaParser object.
  **/
-GUPnPAVSearchCriteriaParser *
-gupnp_av_search_criteria_parser_new (void)
+GUPnPSearchCriteriaParser *
+gupnp_search_criteria_parser_new (void)
 {
-        return g_object_new (GUPNP_AV_TYPE_SEARCH_CRITERIA_PARSER, NULL);
+        return g_object_new (GUPNP_TYPE_SEARCH_CRITERIA_PARSER, NULL);
 }
 
 /* Scan a relExp portion of a search criteria string */
 static gboolean
-scan_rel_exp (GUPnPAVSearchCriteriaParser *parser,
-              GError                     **error)
+scan_rel_exp (GUPnPSearchCriteriaParser *parser,
+              GError                   **error)
 {
         GTokenValue value;
         gboolean ret;
         guint token;
-        GUPnPAVSearchCriteriaOp op;
+        GUPnPSearchCriteriaOp op;
         char *arg1;
 
         token = g_scanner_get_next_token (parser->priv->scanner);
@@ -314,23 +314,23 @@ scan_rel_exp (GUPnPAVSearchCriteriaParser *parser,
 
         token = g_scanner_get_next_token (parser->priv->scanner);
         switch (token) {
-        case GUPNP_AV_SEARCH_CRITERIA_OP_EQ:
-        case GUPNP_AV_SEARCH_CRITERIA_OP_NEQ:
-        case GUPNP_AV_SEARCH_CRITERIA_OP_LESS:
-        case GUPNP_AV_SEARCH_CRITERIA_OP_LEQ:
-        case GUPNP_AV_SEARCH_CRITERIA_OP_GREATER:
-        case GUPNP_AV_SEARCH_CRITERIA_OP_GEQ:
-        case GUPNP_AV_SEARCH_CRITERIA_OP_CONTAINS:
-        case GUPNP_AV_SEARCH_CRITERIA_OP_DOES_NOT_CONTAIN:
-        case GUPNP_AV_SEARCH_CRITERIA_OP_DERIVED_FROM:
+        case GUPNP_SEARCH_CRITERIA_OP_EQ:
+        case GUPNP_SEARCH_CRITERIA_OP_NEQ:
+        case GUPNP_SEARCH_CRITERIA_OP_LESS:
+        case GUPNP_SEARCH_CRITERIA_OP_LEQ:
+        case GUPNP_SEARCH_CRITERIA_OP_GREATER:
+        case GUPNP_SEARCH_CRITERIA_OP_GEQ:
+        case GUPNP_SEARCH_CRITERIA_OP_CONTAINS:
+        case GUPNP_SEARCH_CRITERIA_OP_DOES_NOT_CONTAIN:
+        case GUPNP_SEARCH_CRITERIA_OP_DERIVED_FROM:
                 op = token;
 
                 token = g_scanner_get_next_token (parser->priv->scanner);
                 if (token != G_TOKEN_STRING) {
                         g_set_error
                                 (error,
-                                 GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR,
-                                 GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
                                  "Expected quoted string at position %u",
                                  g_scanner_cur_position
                                        (parser->priv->scanner));
@@ -349,7 +349,7 @@ scan_rel_exp (GUPnPAVSearchCriteriaParser *parser,
 
                 break;
 
-        case GUPNP_AV_SEARCH_CRITERIA_OP_EXISTS:
+        case GUPNP_SEARCH_CRITERIA_OP_EXISTS:
                 op = token;
 
                 token = g_scanner_get_next_token (parser->priv->scanner);
@@ -368,8 +368,8 @@ scan_rel_exp (GUPnPAVSearchCriteriaParser *parser,
                 default:
                         g_set_error
                                 (error,
-                                 GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR,
-                                 GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
                                  "Expected boolean value at position %u",
                                  g_scanner_cur_position
                                        (parser->priv->scanner));
@@ -383,8 +383,8 @@ scan_rel_exp (GUPnPAVSearchCriteriaParser *parser,
 
         default:
                 g_set_error (error,
-                             GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR,
-                             GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                             GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                             GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
                              "Expected operator at position %u",
                              g_scanner_cur_position
                                (parser->priv->scanner));
@@ -399,8 +399,8 @@ scan_rel_exp (GUPnPAVSearchCriteriaParser *parser,
 
 /* Scan a searchExp portion of a search criteria string */
 static gboolean
-scan_search_exp (GUPnPAVSearchCriteriaParser *parser,
-                 GError                     **error)
+scan_search_exp (GUPnPSearchCriteriaParser *parser,
+                 GError                   **error)
 {
         gboolean ret;
         guint token;
@@ -420,8 +420,8 @@ scan_search_exp (GUPnPAVSearchCriteriaParser *parser,
                 if (token != G_TOKEN_RIGHT_PAREN) {
                         g_set_error
                                 (error,
-                                 GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR,
-                                 GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
                                  "Expected right parenthesis at position %u",
                                  g_scanner_cur_position
                                         (parser->priv->scanner));
@@ -471,8 +471,8 @@ scan_search_exp (GUPnPAVSearchCriteriaParser *parser,
                 g_scanner_get_next_token (parser->priv->scanner);
 
                 g_set_error (error,
-                             GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR,
-                             GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                             GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                             GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
                              "Expected property name or left parenthesis at "
                              "position %u",
                              g_scanner_cur_position (parser->priv->scanner));
@@ -484,8 +484,8 @@ scan_search_exp (GUPnPAVSearchCriteriaParser *parser,
 }
 
 /**
- * gupnp_av_search_criteria_parser_parse_text
- * @parser: A #GUPnPAVSearchCriteriaParser
+ * gupnp_search_criteria_parser_parse_text
+ * @parser: A #GUPnPSearchCriteriaParser
  * @text: The search criteria string to be parsed
  * @error: The location where to store the error information if any, or NULL
  *
@@ -495,14 +495,14 @@ scan_search_exp (GUPnPAVSearchCriteriaParser *parser,
  * Return value: TRUE on success.
  **/
 gboolean
-gupnp_av_search_criteria_parser_parse_text (GUPnPAVSearchCriteriaParser *parser,
-                                            const char                  *text,
-                                            GError                     **error)
+gupnp_search_criteria_parser_parse_text (GUPnPSearchCriteriaParser *parser,
+                                         const char                *text,
+                                         GError                   **error)
 {
         gboolean ret;
         guint token;
 
-        g_return_val_if_fail (GUPNP_AV_IS_SEARCH_CRITERIA_PARSER (parser),
+        g_return_val_if_fail (GUPNP_IS_SEARCH_CRITERIA_PARSER (parser),
                               FALSE);
         g_return_val_if_fail (text != NULL, FALSE);
 
@@ -525,8 +525,8 @@ gupnp_av_search_criteria_parser_parse_text (GUPnPAVSearchCriteriaParser *parser,
                 if (token != G_TOKEN_EOF) {
                         g_set_error
                                 (error,
-                                 GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR,
-                                 GUPNP_AV_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
                                  "Expected EOF at position %u",
                                  g_scanner_cur_position
                                        (parser->priv->scanner));

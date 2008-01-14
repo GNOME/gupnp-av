@@ -29,17 +29,16 @@
 G_BEGIN_DECLS
 
 gboolean
-gupnp_av_util_parse_last_change_valist
-                                    (const char        *last_change_xml,
-                                     guint              instance_id,
-                                     GError           **error,
-                                     va_list            var_args);
+gupnp_av_util_parse_last_change_valist (const char *last_change_xml,
+                                        guint       instance_id,
+                                        GError    **error,
+                                        va_list     var_args);
 
 gboolean
-gupnp_av_util_parse_last_change     (const char        *last_change_xml,
-                                     guint              instance_id,
-                                     GError           **error,
-                                     ...) G_GNUC_NULL_TERMINATED;
+gupnp_av_util_parse_last_change        (const char *last_change_xml,
+                                        guint       instance_id,
+                                        GError    **error,
+                                        ...) G_GNUC_NULL_TERMINATED;
 
 G_END_DECLS
 

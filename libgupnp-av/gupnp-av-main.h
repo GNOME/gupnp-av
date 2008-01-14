@@ -29,7 +29,7 @@
 G_BEGIN_DECLS
 
 void
-gupnp_av_init                 (void);
+gupnp_av_init (void);
 
 G_END_DECLS
 
