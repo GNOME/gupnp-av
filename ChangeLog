@@ -1,5 +1,26 @@
 2008-01-14  Jorn Baayen  <jorn@openedhand.com>
 
+	* Makefile.am:
+	* configure.ac:
+	* doc/Makefile.am:
+
+	Add gtk-doc bits.
+
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av.h:
+	* libgupnp-av/gupnp-media-server.c:
+	* libgupnp-av/gupnp-media-server.h:
+
+	Remove MediaServer object, as it does nothing.
+
+	* libgupnp-av/gupnp-didl-lite-parser.c:
+	* libgupnp-av/gupnp-didl-lite-parser.h:
+	* libgupnp-av/gupnp-media-server-proxy.c: (browse_cb):
+
+	Update for new xmlNode retrieval API. 
+
+2008-01-14  Jorn Baayen  <jorn@openedhand.com>
+
 	* tests/test-search-criteria-parser.c: (main):
 
 	Update.

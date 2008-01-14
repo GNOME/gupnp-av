@@ -91,14 +91,17 @@ gupnp_didl_lite_parser_new (void)
 
 void
 gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
-                                   xmlDoc              *didl)
+                                   xmlNode             *didl)
 {
         xmlNode *element;
 
         /* Get a pointer to root element */
-        element = xml_util_get_element ((xmlNode *) didl,
+        element = xml_util_get_element (didl,
                                         "DIDL-Lite",
                                         NULL);
+        if (element == NULL)
+                return;
+
         for (element = element->children; element; element = element->next) {
                 g_signal_emit (parser,
                                signals[DIDL_OBJECT_AVAILABLE],
