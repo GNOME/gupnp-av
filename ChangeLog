@@ -1,5 +1,12 @@
 2008-01-14  Jorn Baayen  <jorn@openedhand.com>
 
+	* Makefile.am:
+	* configure.ac:
+
+	Remove unused translation framework.
+
+2008-01-14  Jorn Baayen  <jorn@openedhand.com>
+
 	* doc/Makefile.am:
 
 	Temporarily not inspect gupnp-didl-lite-object.h because 
