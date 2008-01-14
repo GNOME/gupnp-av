@@ -19,42 +19,42 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <libgupnp-av/gupnp-av-search-criteria-parser.h>
+#include <libgupnp-av/gupnp-search-criteria-parser.h>
 
 static void
-begin_parens_cb (GUPnPAVSearchCriteriaParser *parser,
-                 gpointer                     user_data)
+begin_parens_cb (GUPnPSearchCriteriaParser *parser,
+                 gpointer                   user_data)
 {
         g_print ("(");
 }
 
 static void
-end_parens_cb (GUPnPAVSearchCriteriaParser *parser,
-               gpointer                     user_data)
+end_parens_cb (GUPnPSearchCriteriaParser *parser,
+               gpointer                   user_data)
 {
         g_print (")");
 }
 
 static void
-conjunction_cb (GUPnPAVSearchCriteriaParser *parser,
-                gpointer                     user_data)
+conjunction_cb (GUPnPSearchCriteriaParser *parser,
+                gpointer                   user_data)
 {
         g_print (" and ");
 }
 
 static void
-disjunction_cb (GUPnPAVSearchCriteriaParser *parser,
-                gpointer                     user_data)
+disjunction_cb (GUPnPSearchCriteriaParser *parser,
+                gpointer                   user_data)
 {
         g_print (" or ");
 }
 
 static void
-expression_cb (GUPnPAVSearchCriteriaParser *parser,
-               const char                  *property,
-               GUPnPAVSearchCriteriaOp      op,
-               const char                  *value,
-               gpointer                     user_data)
+expression_cb (GUPnPSearchCriteriaParser *parser,
+               const char                *property,
+               GUPnPSearchCriteriaOp      op,
+               const char                *value,
+               gpointer                   user_data)
 {
         g_print ("%s %d %s", property, op, value);
 }
@@ -62,14 +62,14 @@ expression_cb (GUPnPAVSearchCriteriaParser *parser,
 int
 main (int argc, char **argv)
 {
-        GUPnPAVSearchCriteriaParser *parser;
+        GUPnPSearchCriteriaParser *parser;
         GError *error;
 
         g_assert (argc == 2);
 
         g_type_init ();
 
-        parser = gupnp_av_search_criteria_parser_new ();
+        parser = gupnp_search_criteria_parser_new ();
 
         g_signal_connect (parser,
                           "begin_parens",
@@ -93,7 +93,7 @@ main (int argc, char **argv)
                           NULL);
 
         error = NULL;
-        gupnp_av_search_criteria_parser_parse_text (parser, argv[1], &error);
+        gupnp_search_criteria_parser_parse_text (parser, argv[1], &error);
         if (error != NULL) {
                 g_error (error->message);
 

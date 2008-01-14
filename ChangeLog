@@ -1,5 +1,11 @@
 2008-01-14  Jorn Baayen  <jorn@openedhand.com>
 
+	* tests/test-search-criteria-parser.c: (main):
+
+	Update.
+
+2008-01-14  Jorn Baayen  <jorn@openedhand.com>
+
 	* libgupnp-av/gupnp-av-main.h:
 	* libgupnp-av/gupnp-av-util.h:
 	* libgupnp-av/gupnp-didl-lite-parser.h:
