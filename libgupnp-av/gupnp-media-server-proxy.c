@@ -165,8 +165,9 @@ browse_cb (GUPnPServiceProxy       *content_dir,
 {
         GUPnPMediaServerProxy *proxy;
 
-        xmlNode *didl;
-        GError  *error;
+        xmlDoc *didl;
+        char   *didl_xml;
+        GError *error;
 
         proxy = GUPNP_MEDIA_SERVER_PROXY (user_data);
 
@@ -176,17 +177,24 @@ browse_cb (GUPnPServiceProxy       *content_dir,
                                         &error,
                                         /* OUT args */
                                         "Result",
-                                        GUPNP_TYPE_XML_NODE,
-                                        &didl,
+                                        G_TYPE_STRING,
+                                        &didl_xml,
                                         NULL);
         if (error) {
                 on_browse_failure (GUPNP_SERVICE_INFO (content_dir), error);
                 return;
         }
 
-        gupnp_didl_lite_parser_parse_didl (proxy->priv->parser, didl);
+        didl = xmlParseMemory (didl_xml, strlen (didl_xml));
+	if (didl == NULL) {
+	        g_warning ("Parse error on XML DIDL-Light:\n'%s'", didl_xml);
+	} else {
+                gupnp_didl_lite_parser_parse_didl (proxy->priv->parser,
+                                                   (xmlNode *) didl);
+                xmlFreeDoc (didl);
+        }
 
-        xmlFreeNode (didl);
+        g_free (didl_xml);
 }
 
 void
