@@ -133,10 +133,10 @@ gupnp_search_criteria_parser_init (GUPnPSearchCriteriaParser *parser)
                                                                "\013\014\015";
         parser->priv->scanner->config->scan_identifier_1char = TRUE;
         parser->priv->scanner->config->cset_identifier_first = G_CSET_a_2_z
-                                                               "_*<>=!"
+                                                               "_*<>=!@"
                                                                G_CSET_A_2_Z;
         parser->priv->scanner->config->cset_identifier_nth =   G_CSET_a_2_z
-                                                               "_0123456789=:"
+                                                               "_0123456789=:@"
                                                                G_CSET_A_2_Z
                                                                G_CSET_LATINS
                                                                G_CSET_LATINC;
@@ -356,12 +356,15 @@ scan_rel_exp (GUPnPSearchCriteriaParser *parser,
                 switch (token) {
                 case SYMBOL_TRUE:
                         g_signal_emit (parser, signals[EXPRESSION], 0,
-                                       arg1, op, NULL);
+                                       arg1, op, "true");
 
                         ret = TRUE;
 
                         break;
                 case SYMBOL_FALSE:
+                        g_signal_emit (parser, signals[EXPRESSION], 0,
+                                       arg1, op, "false");
+
                         ret = TRUE;
 
                         break;

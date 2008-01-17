@@ -1,5 +1,14 @@
 2008-01-17  Jorn Baayen  <jorn@openedhand.com>
 
+	* libgupnp-av/gupnp-search-criteria-parser.c:
+	(gupnp_search_criteria_parser_init), (scan_rel_exp):
+
+	Allow '@' in identifier names.
+	Also emit expression for "exists false", and include boolean value
+	in value parameter.
+
+2008-01-17  Jorn Baayen  <jorn@openedhand.com>
+
 	* libgupnp-av/gupnp-media-server-proxy.c: (browse_cb):
 
 	Revert change of 2008-01-14 -- the value of "Result" is supposed to 
