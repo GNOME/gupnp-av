@@ -1,3 +1,9 @@
+2008-01-17  Ross Burton  <ross@openedhand.com>
+
+	* tests/Makefile.am:
+	* tests/check-search.c:
+	Add very basic test suite for the search expression parser.
+
 2008-01-17  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/gupnp-search-criteria-parser.c:
