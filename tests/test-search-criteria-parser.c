@@ -49,14 +49,17 @@ disjunction_cb (GUPnPSearchCriteriaParser *parser,
         g_print (" or ");
 }
 
-static void
+static gboolean
 expression_cb (GUPnPSearchCriteriaParser *parser,
                const char                *property,
                GUPnPSearchCriteriaOp      op,
                const char                *value,
+               GError                   **error,
                gpointer                   user_data)
 {
         g_print ("%s %d %s", property, op, value);
+
+        return TRUE;
 }
 
 int

@@ -263,7 +263,7 @@ gupnp_search_criteria_parser_class_init
          * signal
          *
          * The ::expression signal is emitted whenever an expression
-         * (or) is parsed.
+         * (or) is parsed. Set @error and return FALSE if an error occurred.
          **/
         signals[EXPRESSION] =
                 g_signal_new ("expression",
@@ -273,12 +273,13 @@ gupnp_search_criteria_parser_class_init
                                                expression),
                               NULL,
                               NULL,
-                              gupnp_av_marshal_VOID__STRING_UINT_STRING,
-                              G_TYPE_NONE,
-                              3,
+                              gupnp_av_marshal_BOOLEAN__STRING_UINT_STRING_POINTER,
+                              G_TYPE_BOOLEAN,
+                              4,
                               G_TYPE_STRING,
                               G_TYPE_UINT,
-                              G_TYPE_STRING);
+                              G_TYPE_STRING,
+                              G_TYPE_POINTER);
 
         g_type_class_add_private (klass,
                                   sizeof (GUPnPSearchCriteriaParserPrivate));
@@ -343,9 +344,7 @@ scan_rel_exp (GUPnPSearchCriteriaParser *parser,
                 value = g_scanner_cur_value (parser->priv->scanner);
 
                 g_signal_emit (parser, signals[EXPRESSION], 0,
-                               arg1, op, value.v_string);
-
-                ret = TRUE;
+                               arg1, op, value.v_string, error, &ret);
 
                 break;
 
@@ -356,16 +355,12 @@ scan_rel_exp (GUPnPSearchCriteriaParser *parser,
                 switch (token) {
                 case SYMBOL_TRUE:
                         g_signal_emit (parser, signals[EXPRESSION], 0,
-                                       arg1, op, "true");
-
-                        ret = TRUE;
+                                       arg1, op, "true", error, &ret);
 
                         break;
                 case SYMBOL_FALSE:
                         g_signal_emit (parser, signals[EXPRESSION], 0,
-                                       arg1, op, "false");
-
-                        ret = TRUE;
+                                       arg1, op, "false", error, &ret);
 
                         break;
                 default:

@@ -89,14 +89,15 @@ typedef struct {
         GObjectClass parent_class;
 
         /* signals */
-        void (* begin_parens) (GUPnPSearchCriteriaParser  *parser);
-        void (* end_parens)   (GUPnPSearchCriteriaParser  *parser);
-        void (* conjunction)  (GUPnPSearchCriteriaParser  *parser);
-        void (* disjunction)  (GUPnPSearchCriteriaParser  *parser);
-        void (* expression)   (GUPnPSearchCriteriaParser  *parser,
-                               const char                 *property,
-                               GUPnPSearchCriteriaOp       op,
-                               const char                 *value);
+        void     (* begin_parens) (GUPnPSearchCriteriaParser  *parser);
+        void     (* end_parens)   (GUPnPSearchCriteriaParser  *parser);
+        void     (* conjunction)  (GUPnPSearchCriteriaParser  *parser);
+        void     (* disjunction)  (GUPnPSearchCriteriaParser  *parser);
+        gboolean (* expression)   (GUPnPSearchCriteriaParser  *parser,
+                                   const char                 *property,
+                                   GUPnPSearchCriteriaOp       op,
+                                   const char                 *value,
+                                   GError                    **error);
 
         /* future padding */
         void (* _gupnp_reserved1) (void);

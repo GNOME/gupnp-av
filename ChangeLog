@@ -1,3 +1,13 @@
+2008-01-22  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/gupnp-search-criteria-parser.c:
+	(gupnp_search_criteria_parser_class_init), (scan_rel_exp):
+	* libgupnp-av/gupnp-search-criteria-parser.h:
+	* tests/test-search-criteria-parser.c: (disjunction_cb):
+
+	Allow application to error out returning from the "expression"
+	callback.
+
 2008-01-17  Ross Burton  <ross@openedhand.com>
 
 	* tests/Makefile.am:
