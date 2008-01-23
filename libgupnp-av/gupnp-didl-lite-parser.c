@@ -91,12 +91,20 @@ gupnp_didl_lite_parser_new (void)
 
 void
 gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
-                                   xmlNode             *didl)
+                                   const char          *didl)
 {
+        xmlDoc  *doc;
         xmlNode *element;
 
+        doc = xmlParseMemory (didl, strlen (didl));
+	if (doc == NULL) {
+	        g_warning ("Parse error on XML DIDL-Light:\n'%s'", didl);
+
+                return;
+        }
+
         /* Get a pointer to root element */
-        element = xml_util_get_element (didl,
+        element = xml_util_get_element ((xmlNode *) doc,
                                         "DIDL-Lite",
                                         NULL);
         if (element == NULL)
@@ -108,5 +116,7 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                                0,
                                element);
         }
+
+        xmlFreeDoc (doc);
 }
 

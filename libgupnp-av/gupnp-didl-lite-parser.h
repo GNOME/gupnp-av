@@ -76,7 +76,7 @@ gupnp_didl_lite_parser_new        (void);
 
 void
 gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
-                                   xmlNode             *didl);
+                                   const char          *didl);
 
 G_END_DECLS
 

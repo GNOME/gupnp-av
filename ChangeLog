@@ -1,3 +1,11 @@
+2008-01-22  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/gupnp-didl-lite-parser.c:
+	* libgupnp-av/gupnp-didl-lite-parser.h:
+	* libgupnp-av/gupnp-media-server-proxy.c:
+
+	_parse_didl takes the xml string rather than xml document.
+
 2008-01-22  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/gupnp-search-criteria-parser.c:
