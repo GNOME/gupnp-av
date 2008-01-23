@@ -1,3 +1,14 @@
+2008-01-23  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av-main.c:
+	* libgupnp-av/gupnp-media-renderer-proxy.c:
+	* libgupnp-av/gupnp-media-renderer-proxy.h:
+	* libgupnp-av/gupnp-media-server-proxy.c:
+	* libgupnp-av/gupnp-media-server-proxy.h:
+
+	Get rid of now unneeded/unwanted proxy objects.
+
 2008-01-22  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/gupnp-didl-lite-parser.c:

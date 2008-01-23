@@ -23,8 +23,6 @@
 
 #include "gupnp-av-main.h"
 #include "gupnp-av-util.h"
-#include "gupnp-media-server-proxy.h"
-#include "gupnp-media-renderer-proxy.h"
 #include "gupnp-didl-lite-object.h"
 #include "gupnp-didl-lite-parser.h"
 #include "gupnp-didl-lite-writer.h"
