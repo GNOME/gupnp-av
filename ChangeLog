@@ -3,8 +3,9 @@
 	* libgupnp-av/gupnp-didl-lite-parser.c:
 	* libgupnp-av/gupnp-didl-lite-parser.h:
 
-	Use callback instead of signal to report the availability of a DIDL
-	object.
+	- Use callback instead of signal to report the availability of a DIDL
+	  object.
+	- Warn if there is no ''DIDL-Lite' element in the DIDL document.
 
 2008-01-23  Zeeshan Ali Khattak  <zeenix@gmail.com>
 

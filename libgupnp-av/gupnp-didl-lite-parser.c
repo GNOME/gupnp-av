@@ -82,8 +82,12 @@ gupnp_didl_lite_parser_parse_didl
         element = xml_util_get_element ((xmlNode *) doc,
                                         "DIDL-Lite",
                                         NULL);
-        if (element == NULL)
+        if (element == NULL) {
+                g_warning ("No 'DIDL-Lite' element in the DIDL document:\n"
+                           "'%s'", didl);
+
                 return;
+        }
 
         for (element = element->children; element; element = element->next) {
                 callback (parser, element, user_data);
