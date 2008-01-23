@@ -28,13 +28,6 @@ G_DEFINE_TYPE (GUPnPDIDLLiteParser,
                gupnp_didl_lite_parser,
                G_TYPE_OBJECT);
 
-enum {
-        DIDL_OBJECT_AVAILABLE,
-        SIGNAL_LAST
-};
-
-static guint signals[SIGNAL_LAST];
-
 static void
 gupnp_didl_lite_parser_init (GUPnPDIDLLiteParser *didl)
 {
@@ -60,27 +53,6 @@ gupnp_didl_lite_parser_class_init (GUPnPDIDLLiteParserClass *klass)
         object_class = G_OBJECT_CLASS (klass);
 
         object_class->dispose = gupnp_didl_lite_parser_dispose;
-
-        /**
-         * GUPnPDIDLLiteParser::didl-object-available
-         * @didl: The #GUPnPGUPnPDIDLLiteParser that received the signal
-         * @object_node: The now available object node
-         *
-         * The ::didl-object-available signal is emitted whenever a new
-         * DIDL-Lite object node is available.
-         **/
-        signals[DIDL_OBJECT_AVAILABLE] =
-                g_signal_new ("didl-object-available",
-                              GUPNP_TYPE_DIDL_LITE_PARSER,
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GUPnPDIDLLiteParserClass,
-                                               didl_object_available),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__POINTER,
-                              G_TYPE_NONE,
-                              1,
-                              G_TYPE_POINTER);
 }
 
 GUPnPDIDLLiteParser *
@@ -90,8 +62,11 @@ gupnp_didl_lite_parser_new (void)
 }
 
 void
-gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
-                                   const char          *didl)
+gupnp_didl_lite_parser_parse_didl
+                              (GUPnPDIDLLiteParser              *parser,
+                               const char                       *didl,
+                               GUPnPDIDLLiteParserObjectCallback callback,
+                               gpointer                          user_data)
 {
         xmlDoc  *doc;
         xmlNode *element;
@@ -111,10 +86,7 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                 return;
 
         for (element = element->children; element; element = element->next) {
-                g_signal_emit (parser,
-                               signals[DIDL_OBJECT_AVAILABLE],
-                               0,
-                               element);
+                callback (parser, element, user_data);
         }
 
         xmlFreeDoc (doc);

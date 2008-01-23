@@ -71,12 +71,26 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteParserClass;
 
+/**
+ * GUPnPDIDLLiteParserObjectCallback:
+ * @parser: The #GUPnPDIDLLiteParser the notification originates from
+ * @object_node: The now available DIDL object
+ * @user_data: User data
+ **/
+typedef void (* GUPnPDIDLLiteParserObjectCallback) (
+                                 GUPnPDIDLLiteParser *parser,
+                                 xmlNode             *object_node,
+                                 gpointer             user_data);
+
 GUPnPDIDLLiteParser *
 gupnp_didl_lite_parser_new        (void);
 
 void
-gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
-                                   const char          *didl);
+gupnp_didl_lite_parser_parse_didl
+                              (GUPnPDIDLLiteParser              *parser,
+                               const char                       *didl,
+                               GUPnPDIDLLiteParserObjectCallback callback,
+                               gpointer                          user_data);
 
 G_END_DECLS
 
