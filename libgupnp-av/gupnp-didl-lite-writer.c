@@ -136,7 +136,7 @@ append_escaped_text (GUPnPDIDLLiteWriter *writer,
         "=\"http://purl.org/dc/elements/1.1/\" " \
         "xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP \
         "=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"" \
-        "xmlns=\"n:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
+        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
 
 /**
  * gupnp_didl_lite_writer_start_didl_lite
