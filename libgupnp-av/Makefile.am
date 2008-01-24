@@ -22,7 +22,6 @@ gupnp-av-marshal.h: gupnp-av-marshal.list
 BUILT_SOURCES = gupnp-av-marshal.c gupnp-av-marshal.h
 
 libgupnp_av_1_0_la_SOURCES = gupnp-av-main.c \
-			     gupnp-av-protocol.h \
 			     gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-parser.c \
 			     gupnp-didl-lite-writer.c \

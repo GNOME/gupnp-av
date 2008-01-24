@@ -1,3 +1,10 @@
+2008-01-25  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av-protocol.h:
+
+	Remove the now unneeded gupnp-av-protocol.h.
+
 2008-01-23  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/gupnp-didl-lite-parser.c:
