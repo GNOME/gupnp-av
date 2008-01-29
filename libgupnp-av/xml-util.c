@@ -40,9 +40,13 @@ xml_util_get_element (xmlNode *node,
                 if (!arg)
                         break;
 
-                for (node = node->children; node; node = node->next)
+                for (node = node->children; node; node = node->next) {
+                        if (node->name == NULL)
+                                continue;
+
                         if (!strcmp (arg, (char *) node->name))
                                 break;
+                }
 
                 if (!node)
                         break;
@@ -59,6 +63,10 @@ xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
        GList *children = NULL;
 
        for (node = node->children; node; node = node->next) {
+               if (node->name == NULL) {
+                       continue;
+               }
+
                if (strcmp (name, (char *) node->name) == 0) {
                        children = g_list_append (children, node);
                }
@@ -126,6 +134,9 @@ get_attribute_content (xmlNode    *node,
         for (attribute = node->properties;
              attribute;
              attribute = attribute->next) {
+                if (attribute->name == NULL)
+                        continue;
+
                 if (strcmp (attribute_name, (char *) attribute->name) == 0)
                         break;
         }

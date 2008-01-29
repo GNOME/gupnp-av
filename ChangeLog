@@ -1,3 +1,10 @@
+2008-01-30  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/xml-util.c:
+
+	Check for names of xml nodes and attrs to be non-NULL. Seems we can't
+	rely on libxml on this one.
+
 2008-01-25  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/Makefile.am:
