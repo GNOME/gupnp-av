@@ -25,6 +25,11 @@
 
 	Get rid of now unneeded/unwanted proxy objects.
 
+2008-01-23  Ross Burton  <ross@openedhand.com>
+
+	* gupnp-didl-lite-writer.c:
+	Fix the XML namespace of DIDL-Lite.
+
 2008-01-22  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/gupnp-didl-lite-parser.c:
