@@ -1,3 +1,11 @@
+2008-02-13  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/gupnp-didl-lite-object.c:
+	* libgupnp-av/gupnp-didl-lite-object.h:
+
+	Provide a convenient function to get a hashtable of ProtocolInfo and
+	URI pairs from an object.
+
 2008-01-30  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/xml-util.c:

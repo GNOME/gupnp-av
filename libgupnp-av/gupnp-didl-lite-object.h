@@ -61,6 +61,9 @@ gupnp_didl_lite_object_is_container            (xmlNode        *object_node);
 gboolean
 gupnp_didl_lite_object_is_item                 (xmlNode        *object_node);
 
+GHashTable *
+gupnp_didl_lite_object_get_resource_hash       (xmlNode        *object_node);
+
 /* DIDL-Lite container Object functions */
 gboolean
 gupnp_didl_lite_container_is_searchable        (xmlNode     *container_node);
