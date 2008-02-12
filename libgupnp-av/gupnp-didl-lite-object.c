@@ -188,6 +188,7 @@ gupnp_didl_lite_object_get_resource_hash (xmlNode *object_node)
 
            g_hash_table_insert (resource_hash, proto_info, uri);
    }
+   g_list_free (resources);
 
    if (g_hash_table_size (resource_hash) == 0) {
            /* No point in keeping empty hash tables here */
