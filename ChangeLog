@@ -1,5 +1,11 @@
 2008-02-25  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
+	* libgupnp-av/gupnp-didl-lite-parser.h:
+
+	Remove the uneeded signal pointers from the class struct.
+
+2008-02-25  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
 	* libgupnp-av/gupnp-didl-lite-parser.c:
 	* libgupnp-av/gupnp-last-change-parser.c:
 
