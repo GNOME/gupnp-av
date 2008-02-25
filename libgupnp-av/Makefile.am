@@ -9,7 +9,7 @@ libgupnp_av_inc_HEADERS = gupnp-av-main.h \
 			  gupnp-didl-lite-parser.h \
 			  gupnp-didl-lite-writer.h \
 		          gupnp-search-criteria-parser.h \
-			  gupnp-av-util.h \
+			  gupnp-last-change-parser.h \
 			  gupnp-av.h
 
 
@@ -26,7 +26,7 @@ libgupnp_av_1_0_la_SOURCES = gupnp-av-main.c \
 			     gupnp-didl-lite-parser.c \
 			     gupnp-didl-lite-writer.c \
 			     gupnp-search-criteria-parser.c \
-			     gupnp-av-util.c \
+			     gupnp-last-change-parser.c \
 			     xml-util.c \
 			     xml-util.h \
 			     gvalue-util.c \

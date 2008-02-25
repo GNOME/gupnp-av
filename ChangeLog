@@ -1,3 +1,15 @@
+2008-02-25  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/Makefile.am:
+	* libgupnp-av/gupnp-av-util.c:
+	* libgupnp-av/gupnp-av-util.h:
+	* libgupnp-av/gupnp-av.h:
+	* libgupnp-av/gupnp-last-change-parser.c:
+	* libgupnp-av/gupnp-last-change-parser.h:
+
+	A new parser object for last change parsing for consistency with the
+	rest of the API.
+
 2008-02-13  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/gupnp-didl-lite-object.c:

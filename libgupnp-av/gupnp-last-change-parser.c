@@ -23,9 +23,40 @@
 
 #include <gobject/gvaluecollector.h>
 
-#include "gupnp-av-util.h"
+#include "gupnp-last-change-parser.h"
 #include "gvalue-util.h"
 #include "xml-util.h"
+
+G_DEFINE_TYPE (GUPnPLastChangeParser,
+               gupnp_last_change_parser,
+               G_TYPE_OBJECT);
+
+static void
+gupnp_last_change_parser_init (GUPnPLastChangeParser *didl)
+{
+}
+
+static void
+gupnp_last_change_parser_dispose (GObject *object)
+{
+        GObjectClass   *gobject_class;
+        GUPnPLastChangeParser *parser;
+
+        parser = GUPNP_LAST_CHANGE_PARSER (object);
+
+        gobject_class = G_OBJECT_CLASS (gupnp_last_change_parser_parent_class);
+        gobject_class->dispose (object);
+}
+
+static void
+gupnp_last_change_parser_class_init (GUPnPLastChangeParserClass *klass)
+{
+        GObjectClass *object_class;
+
+        object_class = G_OBJECT_CLASS (klass);
+
+        object_class->dispose = gupnp_last_change_parser_dispose;
+}
 
 /* Reads a value of state variable @variable_name to an initialised GValue pair
  * from the InstanceID node of a LastChange xml doc */
@@ -77,8 +108,15 @@ get_instance_node (xmlDoc *doc,
         return node;
 }
 
+GUPnPLastChangeParser *
+gupnp_last_change_parser_new (void)
+{
+        return g_object_new (GUPNP_TYPE_LAST_CHANGE_PARSER, NULL);
+}
+
 /**
- * gupnp_av_util_parse_last_change_valist
+ * gupnp_last_change_parser_parse_last_change_valist
+ * @parser: A #GUPnPLastChangeParser
  * @last_change_xml: The xml from the "LastChange" event to parse
  * @instance_id: The ID of instance the caller is interested in
  * @error: The location where to store any error, or NULL
@@ -86,16 +124,18 @@ get_instance_node (xmlDoc *doc,
  * and state variable value location, terminated with NULL. The state variable
  * values should be freed after use
  *
- * See gupnp_av_util_parse_last_change(); this version takes a va_list for use
+ * See gupnp_last_change_parser_parse_last_change(); this version takes a va_list for use
  * by language bindings.
  *
  * Return value: TRUE on success.
  **/
 gboolean
-gupnp_av_util_parse_last_change_valist (const char *last_change_xml,
-                                        guint       instance_id,
-                                        GError    **error,
-                                        va_list     var_args)
+gupnp_last_change_parser_parse_last_change_valist
+                                       (GUPnPLastChangeParser *parser,
+                                        const char            *last_change_xml,
+                                        guint                  instance_id,
+                                        GError               **error,
+                                        va_list                var_args)
 {
         const char *variable_name;
         xmlDoc  *doc;
@@ -157,7 +197,8 @@ gupnp_av_util_parse_last_change_valist (const char *last_change_xml,
 }
 
 /**
- * gupnp_av_util_parse_last_change
+ * gupnp_last_change_parser_parse_last_change
+ * @parser: A #GUPnPLastChangeParser
  * @last_change_xml: The xml from the "LastChange" event to parse
  * @instance_id: The ID of instance the caller is interested in
  * @error: The location where to store any error, or NULL
@@ -170,19 +211,23 @@ gupnp_av_util_parse_last_change_valist (const char *last_change_xml,
  * Return value: TRUE on success.
  **/
 gboolean
-gupnp_av_util_parse_last_change (const char *last_change_xml,
-                                 guint       instance_id,
-                                 GError    **error,
+gupnp_last_change_parser_parse_last_change
+                                (GUPnPLastChangeParser *parser,
+                                 const char            *last_change_xml,
+                                 guint                  instance_id,
+                                 GError               **error,
                                  ...)
 {
         va_list var_args;
         gboolean ret;
 
         va_start (var_args, error);
-        ret = gupnp_av_util_parse_last_change_valist (last_change_xml,
-                                                      instance_id,
-                                                      error,
-                                                      var_args);
+        ret = gupnp_last_change_parser_parse_last_change_valist
+                                                (parser,
+                                                 last_change_xml,
+                                                 instance_id,
+                                                 error,
+                                                 var_args);
         va_end (var_args);
 
         return ret;
