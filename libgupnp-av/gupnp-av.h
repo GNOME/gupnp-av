@@ -21,7 +21,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gupnp-av-main.h"
 #include "gupnp-didl-lite-object.h"
 #include "gupnp-didl-lite-parser.h"
 #include "gupnp-didl-lite-writer.h"
