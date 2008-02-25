@@ -41,10 +41,10 @@ enum {
 };
 
 static void
-gupnp_last_change_parser_init (GUPnPLastChangeParser *didl)
+gupnp_last_change_parser_init (GUPnPLastChangeParser *parser)
 {
-        didl->priv = G_TYPE_INSTANCE_GET_PRIVATE
-                                        (didl,
+        parser->priv = G_TYPE_INSTANCE_GET_PRIVATE
+                                        (parser,
                                          GUPNP_TYPE_LAST_CHANGE_PARSER,
                                          GUPnPLastChangeParserPrivate);
 }

@@ -29,7 +29,7 @@ G_DEFINE_TYPE (GUPnPDIDLLiteParser,
                G_TYPE_OBJECT);
 
 static void
-gupnp_didl_lite_parser_init (GUPnPDIDLLiteParser *didl)
+gupnp_didl_lite_parser_init (GUPnPDIDLLiteParser *parser)
 {
 }
 
