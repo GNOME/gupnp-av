@@ -31,9 +31,22 @@ G_DEFINE_TYPE (GUPnPLastChangeParser,
                gupnp_last_change_parser,
                G_TYPE_OBJECT);
 
+struct _GUPnPLastChangeParserPrivate {
+        guint instance_id;
+};
+
+enum {
+        PROP_0,
+        PROP_INSTANCE_ID
+};
+
 static void
 gupnp_last_change_parser_init (GUPnPLastChangeParser *didl)
 {
+        didl->priv = G_TYPE_INSTANCE_GET_PRIVATE
+                                        (didl,
+                                         GUPNP_TYPE_LAST_CHANGE_PARSER,
+                                         GUPnPLastChangeParserPrivate);
 }
 
 static void
@@ -49,6 +62,46 @@ gupnp_last_change_parser_dispose (GObject *object)
 }
 
 static void
+gupnp_last_change_parser_set_property (GObject      *object,
+                                       guint         property_id,
+                                       const GValue *value,
+                                       GParamSpec   *pspec)
+{
+        GUPnPLastChangeParser *parser;
+
+        parser = GUPNP_LAST_CHANGE_PARSER (object);
+
+        switch (property_id) {
+        case PROP_INSTANCE_ID:
+                parser->priv->instance_id = g_value_get_uint (value);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+                break;
+        }
+}
+
+static void
+gupnp_last_change_parser_get_property (GObject    *object,
+                                       guint       property_id,
+                                       GValue     *value,
+                                       GParamSpec *pspec)
+{
+        GUPnPLastChangeParser *parser;
+
+        parser = GUPNP_LAST_CHANGE_PARSER (object);
+
+        switch (property_id) {
+        case PROP_INSTANCE_ID:
+                g_value_set_uint (value, parser->priv->instance_id);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+                break;
+        }
+}
+
+static void
 gupnp_last_change_parser_class_init (GUPnPLastChangeParserClass *klass)
 {
         GObjectClass *object_class;
@@ -56,6 +109,32 @@ gupnp_last_change_parser_class_init (GUPnPLastChangeParserClass *klass)
         object_class = G_OBJECT_CLASS (klass);
 
         object_class->dispose = gupnp_last_change_parser_dispose;
+        object_class->set_property = gupnp_last_change_parser_set_property;
+        object_class->get_property = gupnp_last_change_parser_get_property;
+
+        g_type_class_add_private (klass,
+                                  sizeof (GUPnPLastChangeParserPrivate));
+
+        /**
+         * GUPnPLastChangeParser:instance-id
+         *
+         * The ID of the AV instance this object should be concerned with
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_INSTANCE_ID,
+                 g_param_spec_uint ("instance-id",
+                                    "Instance ID",
+                                    "The AV instance ID",
+                                    0,
+                                    G_MAXUINT,
+                                    0,
+                                    G_PARAM_READWRITE |
+                                    G_PARAM_CONSTRUCT_ONLY |
+                                    G_PARAM_STATIC_NAME |
+                                    G_PARAM_STATIC_NICK |
+                                    G_PARAM_STATIC_BLURB));
+
 }
 
 /* Reads a value of state variable @variable_name to an initialised GValue pair
@@ -108,17 +187,24 @@ get_instance_node (xmlDoc *doc,
         return node;
 }
 
+/**
+ * gupnp_last_change_parser_parse_new
+ * @instance_id: The ID of the AV instance the parser should be concerned with
+ *
+ * Return value: A new #GUPnPLastChangeParser
+ **/
 GUPnPLastChangeParser *
-gupnp_last_change_parser_new (void)
+gupnp_last_change_parser_new (guint instance_id)
 {
-        return g_object_new (GUPNP_TYPE_LAST_CHANGE_PARSER, NULL);
+        return g_object_new (GUPNP_TYPE_LAST_CHANGE_PARSER,
+                             "instance-id", instance_id,
+                             NULL);
 }
 
 /**
  * gupnp_last_change_parser_parse_last_change_valist
  * @parser: A #GUPnPLastChangeParser
  * @last_change_xml: The xml from the "LastChange" event to parse
- * @instance_id: The ID of instance the caller is interested in
  * @error: The location where to store any error, or NULL
  * @Varargs: A va_list of tuples of state variable name, state variable type,
  * and state variable value location, terminated with NULL. The state variable
@@ -133,7 +219,6 @@ gboolean
 gupnp_last_change_parser_parse_last_change_valist
                                        (GUPnPLastChangeParser *parser,
                                         const char            *last_change_xml,
-                                        guint                  instance_id,
                                         GError               **error,
                                         va_list                var_args)
 {
@@ -153,7 +238,7 @@ gupnp_last_change_parser_parse_last_change_valist
                 return FALSE;
         }
 
-        instance_node = get_instance_node (doc, instance_id);
+        instance_node = get_instance_node (doc, parser->priv->instance_id);
         if (instance_node == NULL) {
                 /* This is not an error since the caller of this function
                  * doesn't (need to) know if the instance of his interest is
@@ -200,7 +285,6 @@ gupnp_last_change_parser_parse_last_change_valist
  * gupnp_last_change_parser_parse_last_change
  * @parser: A #GUPnPLastChangeParser
  * @last_change_xml: The xml from the "LastChange" event to parse
- * @instance_id: The ID of instance the caller is interested in
  * @error: The location where to store any error, or NULL
  * @Varargs: tuples of state variable name, state variable type, and state
  * variable value location, terminated with NULL. The state variable values
@@ -214,7 +298,6 @@ gboolean
 gupnp_last_change_parser_parse_last_change
                                 (GUPnPLastChangeParser *parser,
                                  const char            *last_change_xml,
-                                 guint                  instance_id,
                                  GError               **error,
                                  ...)
 {
@@ -225,7 +308,6 @@ gupnp_last_change_parser_parse_last_change
         ret = gupnp_last_change_parser_parse_last_change_valist
                                                 (parser,
                                                  last_change_xml,
-                                                 instance_id,
                                                  error,
                                                  var_args);
         va_end (var_args);

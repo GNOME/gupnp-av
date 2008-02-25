@@ -52,10 +52,12 @@ gupnp_last_change_parser_get_type (void) G_GNUC_CONST;
                  GUPNP_TYPE_LAST_CHANGE_PARSER, \
                  GUPnPLastChangeParserClass))
 
+typedef struct _GUPnPLastChangeParserPrivate GUPnPLastChangeParserPrivate;
+
 typedef struct {
         GObject parent;
 
-        gpointer gupnp_reserved;
+        GUPnPLastChangeParserPrivate *priv;
 } GUPnPLastChangeParser;
 
 typedef struct {
@@ -69,13 +71,12 @@ typedef struct {
 } GUPnPLastChangeParserClass;
 
 GUPnPLastChangeParser *
-gupnp_last_change_parser_new           (void);
+gupnp_last_change_parser_new           (guint instance_id);
 
 gboolean
 gupnp_last_change_parser_parse_last_change_valist
                                        (GUPnPLastChangeParser *parser,
                                         const char            *last_change_xml,
-                                        guint                  instance_id,
                                         GError               **error,
                                         va_list                var_args);
 
@@ -83,7 +84,6 @@ gboolean
 gupnp_last_change_parser_parse_last_change
                                        (GUPnPLastChangeParser *parser,
                                         const char            *last_change_xml,
-                                        guint                  instance_id,
                                         GError               **error,
                                         ...) G_GNUC_NULL_TERMINATED;
 

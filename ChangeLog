@@ -1,5 +1,12 @@
 2008-02-25  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
+	* libgupnp-av/gupnp-last-change-parser.c:
+	* libgupnp-av/gupnp-last-change-parser.h:
+
+	Make "instance-id" a property of the parser object.
+
+2008-02-25  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
 	* libgupnp-av/Makefile.am:
 	* libgupnp-av/gupnp-av-util.c:
 	* libgupnp-av/gupnp-av-util.h:
