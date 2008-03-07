@@ -21,7 +21,7 @@
 
 /**
  * SECTION:gupnp-didl-lite-parser
- * @short_description: AV DIDL-Lite XML parser
+ * @short_description: A/V DIDL-Lite XML parser
  *
  * #GUPnPDIDLLiteParser parses DIDL-Lite XML strings.
  *
