@@ -6,6 +6,14 @@
 
 2008-03-07  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
+	* doc/Makefile.am:
+	* doc/gupnp-av-docs.sgml:
+	* doc/gupnp-av-sections.txt:
+
+	Create the missing parts of documentation build.
+
+2008-03-07  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
 	* libgupnp-av/gupnp-didl-lite-parser.c:
 	* libgupnp-av/gupnp-last-change-parser.c:
 	* libgupnp-av/gupnp-search-criteria-parser.c:

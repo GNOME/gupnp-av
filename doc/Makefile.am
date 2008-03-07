@@ -47,11 +47,9 @@ CFILE_GLOB=$(top_srcdir)/libgupnp-av/*.c
 
 # Header files to ignore when scanning.
 # e.g. IGNORE_HFILES=gtkdebug.h gtkintl.h
-IGNORE_HFILES=gupnp-av-protocol.h	\
-	      xml-util.h		\
-	      gvalue-util.h		\
-	      gupnp-av-marshal.h	\
-	      gupnp-didl-lite-object.h
+IGNORE_HFILES= xml-util.h		\
+	       gvalue-util.h		\
+	       gupnp-av-marshal.h
 
 # Images to copy into HTML directory.
 # e.g. HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/stock_about_24.png
