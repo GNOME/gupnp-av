@@ -19,6 +19,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SECTION:gupnp-didl-lite-parser
+ * @short_description: AV DIDL-Lite XML parser
+ *
+ * #GUPnPDIDLLiteParser parses DIDL-Lite XML strings.
+ *
+ */
+
 #include <string.h>
 #include "gupnp-didl-lite-parser.h"
 #include "gupnp-didl-lite-object.h"
@@ -55,12 +63,28 @@ gupnp_didl_lite_parser_class_init (GUPnPDIDLLiteParserClass *klass)
         object_class->dispose = gupnp_didl_lite_parser_dispose;
 }
 
+/**
+ * gupnp_didl_lite_parser_new
+ *
+ * Return value: A new #GUPnPDIDLLiteParser object.
+ **/
 GUPnPDIDLLiteParser *
 gupnp_didl_lite_parser_new (void)
 {
         return g_object_new (GUPNP_TYPE_DIDL_LITE_PARSER, NULL);
 }
 
+/**
+ * gupnp_didl_lite_parser_parse_didl
+ * @parser: A #GUPnPDIDLLiteParser
+ * @didl: The DIDL-Lite XML string to be parsed
+ * @callback: The callback to call for each DIDL-Lite object found
+ * @user_data: User data for callback
+ *
+ * Parses DIDL-Lite XML string @didl, calling the supplied callback for each
+ * DIDL-Lite object it finds in the process.
+ *
+ **/
 void
 gupnp_didl_lite_parser_parse_didl
                               (GUPnPDIDLLiteParser              *parser,

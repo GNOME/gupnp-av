@@ -4,6 +4,14 @@
 
 	Header aestethics.
 
+2008-03-07  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/gupnp-didl-lite-object.c:
+	* libgupnp-av/gupnp-didl-lite-parser.c:
+	* libgupnp-av/gupnp-last-change-parser.c:
+
+	More documentation.
+
 2008-02-25  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/Makefile.am:
