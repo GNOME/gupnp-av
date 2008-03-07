@@ -65,7 +65,6 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-        void (* _gupnp_reserved5) (void);
 } GUPnPDIDLLiteParserClass;
 
 /**
@@ -80,7 +79,7 @@ typedef void (* GUPnPDIDLLiteParserObjectCallback) (
                                  gpointer             user_data);
 
 GUPnPDIDLLiteParser *
-gupnp_didl_lite_parser_new        (void);
+gupnp_didl_lite_parser_new    (void);
 
 void
 gupnp_didl_lite_parser_parse_didl

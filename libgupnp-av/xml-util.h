@@ -45,7 +45,7 @@ xml_util_get_child_element_content      (xmlNode    *node,
                                          const char *child_name);
 
 G_GNUC_INTERNAL char *
-xml_util_get_attribute_content         (xmlNode    *node,
+xml_util_get_attribute_content          (xmlNode    *node,
                                          const char *attribute_name);
 
 G_GNUC_INTERNAL gboolean

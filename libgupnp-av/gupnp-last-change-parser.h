@@ -71,7 +71,7 @@ typedef struct {
 } GUPnPLastChangeParserClass;
 
 GUPnPLastChangeParser *
-gupnp_last_change_parser_new           (guint instance_id);
+gupnp_last_change_parser_new           (guint                  instance_id);
 
 gboolean
 gupnp_last_change_parser_parse_last_change_valist

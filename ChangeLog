@@ -1,3 +1,9 @@
+2008-03-07  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/gupnp-didl-lite-parser.h:
+
+	Header aestethics.
+
 2008-02-25  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/Makefile.am:
