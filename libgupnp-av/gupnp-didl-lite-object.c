@@ -177,6 +177,20 @@ gupnp_didl_lite_object_get_title (xmlNode *object_node)
 }
 
 /**
+ * gupnp_didl_lite_object_get_creator
+ * @object_node: The object node
+ *
+ * Return value: The creator of the @object_node, or NULL. g_free() after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_creator (xmlNode *object_node)
+{
+        g_return_val_if_fail (object_node != NULL, NULL);
+
+        return gupnp_didl_lite_object_get_property (object_node, "creator");
+}
+
+/**
  * gupnp_didl_lite_object_get_property
  * @object_node: The object node
  * @property_name: name of the property
