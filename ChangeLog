@@ -5,6 +5,7 @@
 	 Add function to:
 	 - retreive the friendly class name of the DIDL object.
 	 - creator property.
+	 - writeStatus property.
 
 2008-03-08  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
