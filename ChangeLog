@@ -3,7 +3,8 @@
 	* libgupnp-av/gupnp-didl-lite-object.c:
 	* libgupnp-av/gupnp-didl-lite-object.h:
 
-	Rename _is_searchable() to _get_searchable().
+	- Rename _is_searchable() to _get_searchable().
+	- Rename _get_value() to _get_property().
 
 2008-03-07  Zeeshan Ali Khattak  <zeenix@gmail.com>
 

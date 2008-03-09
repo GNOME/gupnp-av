@@ -113,7 +113,7 @@ gupnp_didl_lite_object_get_upnp_class (xmlNode *object_node)
 {
         g_return_val_if_fail (object_node != NULL, NULL);
 
-        return gupnp_didl_lite_object_get_value (object_node, "class");
+        return gupnp_didl_lite_object_get_property (object_node, "class");
 }
 
 /**
@@ -157,26 +157,26 @@ gupnp_didl_lite_object_get_title (xmlNode *object_node)
 {
         g_return_val_if_fail (object_node != NULL, NULL);
 
-        return gupnp_didl_lite_object_get_value (object_node, "title");
+        return gupnp_didl_lite_object_get_property (object_node, "title");
 }
 
 /**
- * gupnp_didl_lite_object_get_value
+ * gupnp_didl_lite_object_get_property
  * @object_node: The object node
- * @value_id: name of the value
+ * @property_name: name of the property
  *
- * Use this function to retreive a value by name.
+ * Use this function to retreive a property by name.
  *
- * Return value: The value of @value_id belonging to @object_node as a string,
- * or NULL. g_free() after usage.
+ * Return value: The value of property @property_name belonging to @object_node
+ * as a string, or NULL. g_free() after usage.
  **/
 char *
-gupnp_didl_lite_object_get_value (xmlNode    *object_node,
-                                  const char *value_id)
+gupnp_didl_lite_object_get_property (xmlNode    *object_node,
+                                     const char *property_name)
 {
         g_return_val_if_fail (object_node != NULL, NULL);
 
-        return xml_util_get_child_element_content (object_node, value_id);
+        return xml_util_get_child_element_content (object_node, property_name);
 }
 
 /**
