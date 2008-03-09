@@ -5,6 +5,7 @@
 
 	- Rename _is_searchable() to _get_searchable().
 	- Rename _get_value() to _get_property().
+	- Add generic function to get multi-valued properties.
 
 2008-03-07  Zeeshan Ali Khattak  <zeenix@gmail.com>
 

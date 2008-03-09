@@ -180,6 +180,28 @@ gupnp_didl_lite_object_get_property (xmlNode    *object_node,
 }
 
 /**
+ * gupnp_didl_lite_object_get_properties
+ * @object_node: The object node
+ * @properties_name: name of the properties
+ *
+ * Use this function to retreive a list of properties by the same name. Useful
+ * for dealing with multi-valued properties.
+ *
+ * Return value: The list of property nodes by the name @properties_name
+ * belonging to @object_node, or NULL. g_list_free() the returned list after
+ * usage but do not modify the contents.
+ **/
+GList *
+gupnp_didl_lite_object_get_properties (xmlNode    *object_node,
+                                       const char *properties_name)
+{
+        g_return_val_if_fail (object_node != NULL, NULL);
+
+        return xml_util_get_child_elements_by_name (object_node,
+                                                    properties_name);
+}
+
+/**
  * gupnp_didl_lite_object_get_restricted
  * @object_node: The object node
  *
@@ -217,9 +239,7 @@ gupnp_didl_lite_object_get_never_playable (xmlNode *object_node)
 GList *
 gupnp_didl_lite_object_get_descriptors (xmlNode *object_node)
 {
-        g_return_val_if_fail (object_node != NULL, FALSE);
-
-        return xml_util_get_child_elements_by_name (object_node, "desc");
+       return gupnp_didl_lite_object_get_properties (object_node, "desc");
 }
 
 /**
@@ -232,9 +252,7 @@ gupnp_didl_lite_object_get_descriptors (xmlNode *object_node)
 GList *
 gupnp_didl_lite_object_get_resources (xmlNode *object_node)
 {
-        g_return_val_if_fail (object_node != NULL, NULL);
-
-        return xml_util_get_child_elements_by_name (object_node, "res");
+        return gupnp_didl_lite_object_get_properties (object_node, "res");
 }
 
 /**

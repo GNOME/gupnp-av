@@ -31,6 +31,10 @@ char *
 gupnp_didl_lite_object_get_property            (xmlNode        *object_node,
                                                 const char     *property_name);
 
+GList *
+gupnp_didl_lite_object_get_properties          (xmlNode    *object_node,
+                                                const char *properties_name);
+
 char *
 gupnp_didl_lite_object_get_upnp_class          (xmlNode        *object_node);
 
