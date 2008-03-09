@@ -294,13 +294,13 @@ gupnp_didl_lite_object_get_resource_hash (xmlNode *object_node)
 }
 
 /**
- * gupnp_didl_lite_object_is_searchable
+ * gupnp_didl_lite_object_get_searchable
  * @object_node: The object node
  *
  * Return value: TRUE if @object_node is searchable
  **/
 gboolean
-gupnp_didl_lite_container_is_searchable (xmlNode *container_node)
+gupnp_didl_lite_container_get_searchable (xmlNode *container_node)
 {
         g_return_val_if_fail (container_node != NULL, FALSE);
 

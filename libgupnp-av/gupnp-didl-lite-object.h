@@ -66,7 +66,7 @@ gupnp_didl_lite_object_get_resource_hash       (xmlNode        *object_node);
 
 /* DIDL-Lite container Object functions */
 gboolean
-gupnp_didl_lite_container_is_searchable        (xmlNode     *container_node);
+gupnp_didl_lite_container_get_searchable       (xmlNode     *container_node);
 
 guint
 gupnp_didl_lite_container_get_child_count      (xmlNode     *container_node);
