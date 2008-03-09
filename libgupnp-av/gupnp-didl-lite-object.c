@@ -117,7 +117,7 @@ gupnp_didl_lite_object_get_upnp_class_name (xmlNode *object_node)
 
         return xml_util_get_child_attribute_content (object_node,
                                                      "class",
-                                                     "id");
+                                                     "name");
 }
 
 /**

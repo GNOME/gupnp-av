@@ -47,6 +47,9 @@ gupnp_didl_lite_object_get_restricted          (xmlNode        *object_node);
 gboolean
 gupnp_didl_lite_object_get_never_playable      (xmlNode        *object_node);
 
+char *
+gupnp_didl_lite_object_get_upnp_class_name     (xmlNode        *object_node);
+
 GList *
 gupnp_didl_lite_object_get_descriptors         (xmlNode        *object_node);
 
