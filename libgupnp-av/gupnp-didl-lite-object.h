@@ -126,6 +126,9 @@ gupnp_didl_lite_resource_get_color_depth       (xmlNode          *res_node);
 char *
 gupnp_didl_lite_resource_get_protection        (xmlNode          *res_node);
 
+char **
+gupnp_didl_lite_resource_get_allowed_use       (xmlNode          *res_node);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_OBJECT_H__ */

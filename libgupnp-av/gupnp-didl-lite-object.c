@@ -599,3 +599,27 @@ gupnp_didl_lite_resource_get_protection (xmlNode *res_node)
         return xml_util_get_attribute_content (res_node, "protection");
 }
 
+/**
+ * gupnp_didl_lite_resource_get_allowed_use
+ * @res_node: The resource node
+ *
+ * Retreives allowedUse strings of the resource @res_node.
+ *
+ * Return value: A newly-allocated NULL-terminated array of strings, or NULL.
+ * g_strfreev() after usage.
+ **/
+char **
+gupnp_didl_lite_resource_get_allowed_use (xmlNode *res_node)
+{
+        char *allowed_use;
+
+        g_return_val_if_fail (res_node != NULL, NULL);
+
+        allowed_use = xml_util_get_attribute_content (res_node, "allowedUse");
+        if (allowed_use == NULL) {
+                return NULL;
+        } else {
+                return g_strsplit (allowed_use, ",", 0);
+        }
+}
+

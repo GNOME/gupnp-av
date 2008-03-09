@@ -6,6 +6,7 @@
 	 - retreive the friendly class name of the DIDL object.
 	 - creator property.
 	 - writeStatus property.
+	 - res@allowedUse property.
 
 2008-03-08  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
