@@ -1,3 +1,11 @@
+2008-03-09  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/gupnp-didl-lite-object.c:
+	* libgupnp-av/gupnp-didl-lite-object.h:
+
+	Remove all regular getters. Regular getters are the ones that can
+	easily be handled by _get_property().
+
 2008-03-08  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/gupnp-didl-lite-object.c:

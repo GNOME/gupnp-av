@@ -51,7 +51,8 @@ gupnp_didl_lite_object_is_container (xmlNode *object_node)
 
         g_return_val_if_fail (object_node != NULL, FALSE);
 
-        class_name = gupnp_didl_lite_object_get_upnp_class (object_node);
+        class_name = gupnp_didl_lite_object_get_property (object_node,
+                                                          "class");
         if (class_name == NULL) {
                 return FALSE;
         }
@@ -83,7 +84,8 @@ gupnp_didl_lite_object_is_item (xmlNode *object_node)
 
         g_return_val_if_fail (object_node != NULL, FALSE);
 
-        class_name = gupnp_didl_lite_object_get_upnp_class (object_node);
+        class_name = gupnp_didl_lite_object_get_property (object_node,
+                                                          "class");
         if (class_name == NULL) {
                 return FALSE;
         }
@@ -99,20 +101,6 @@ gupnp_didl_lite_object_is_item (xmlNode *object_node)
         g_free (class_name);
 
         return is_item;
-}
-
-/**
- * gupnp_didl_lite_object_get_upnp_class
- * @object_node: The object node
- *
- * Return value: The class of the @object_node, or NULL. g_free() after usage.
- **/
-char *
-gupnp_didl_lite_object_get_upnp_class (xmlNode *object_node)
-{
-        g_return_val_if_fail (object_node != NULL, NULL);
-
-        return gupnp_didl_lite_object_get_property (object_node, "class");
 }
 
 /**
@@ -160,50 +148,6 @@ gupnp_didl_lite_object_get_parent_id (xmlNode *object_node)
 
         return xml_util_get_attribute_content (object_node,
                                                 "parentID");
-}
-
-/**
- * gupnp_didl_lite_object_get_title
- * @object_node: The object node
- *
- * Return value: The title of the @object_node, or NULL. g_free() after usage.
- **/
-char *
-gupnp_didl_lite_object_get_title (xmlNode *object_node)
-{
-        g_return_val_if_fail (object_node != NULL, NULL);
-
-        return gupnp_didl_lite_object_get_property (object_node, "title");
-}
-
-/**
- * gupnp_didl_lite_object_get_creator
- * @object_node: The object node
- *
- * Return value: The creator of the @object_node, or NULL. g_free() after usage.
- **/
-char *
-gupnp_didl_lite_object_get_creator (xmlNode *object_node)
-{
-        g_return_val_if_fail (object_node != NULL, NULL);
-
-        return gupnp_didl_lite_object_get_property (object_node, "creator");
-}
-
-/**
- * gupnp_didl_lite_object_get_write_status
- * @object_node: The object node
- *
- * Return value: The write status of the @object_node, or NULL. g_free() after
- * usage.
- **/
-char *
-gupnp_didl_lite_object_get_write_status (xmlNode *object_node)
-{
-        g_return_val_if_fail (object_node != NULL, NULL);
-
-        return gupnp_didl_lite_object_get_property (object_node,
-                                                    "writeStatus");
 }
 
 /**
