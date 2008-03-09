@@ -1,3 +1,9 @@
+2008-03-07  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/gupnp-didl-lite-object.c:
+
+	Fix some copy&paste mistakes in doc comments.
+
 2008-03-07  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/gupnp-didl-lite-parser.h:

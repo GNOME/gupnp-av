@@ -194,7 +194,7 @@ gupnp_didl_lite_object_get_restricted (xmlNode *object_node)
 }
 
 /**
- * gupnp_didl_lite_object_get_restricted
+ * gupnp_didl_lite_object_get_never_playable
  * @object_node: The object node
  *
  * Return value: TRUE if @object_node is never playable.
@@ -294,7 +294,7 @@ gupnp_didl_lite_object_get_resource_hash (xmlNode *object_node)
 }
 
 /**
- * gupnp_didl_lite_object_is_container
+ * gupnp_didl_lite_object_is_searchable
  * @object_node: The object node
  *
  * Return value: TRUE if @object_node is searchable
