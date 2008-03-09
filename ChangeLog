@@ -1,3 +1,10 @@
+2008-03-08  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/xml-util.c:
+	* libgupnp-av/xml-util.h:
+
+	Add utility function to get an attribute of child node.
+
 2008-03-07  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/gupnp-didl-lite-object.c:

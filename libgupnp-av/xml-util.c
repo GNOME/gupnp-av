@@ -214,3 +214,20 @@ xml_util_get_uint_attribute (xmlNode    *node,
         return ret;
 }
 
+char *
+xml_util_get_child_attribute_content (xmlNode    *node,
+                                      const char *child_name,
+                                      const char *attribute_name)
+{
+        xmlNode *child_node;
+
+        child_node = xml_util_get_element (node,
+                                           child_name,
+                                           NULL);
+        if (!child_node) {
+                return NULL;
+        }
+
+        return xml_util_get_attribute_content (child_node, attribute_name);
+}
+

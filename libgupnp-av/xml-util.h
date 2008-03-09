@@ -56,4 +56,9 @@ G_GNUC_INTERNAL guint
 xml_util_get_uint_attribute             (xmlNode    *node,
                                          const char *attribute_name);
 
+G_GNUC_INTERNAL char *
+xml_util_get_child_attribute_content    (xmlNode    *node,
+                                         const char *child_name,
+                                         const char *attribute_name);
+
 #endif /* __XML_UTIL_H__ */
