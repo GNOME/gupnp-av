@@ -2,8 +2,8 @@
 
 	* libgupnp-av/gupnp-didl-lite-object.c:
 
-	 Add function to:
-	 - retreive the friendly class name of the DIDL object.
+	 Add function to retreive the:
+	 - friendly class name of the DIDL object.
 	 - creator property.
 	 - writeStatus property.
 	 - res@allowedUse property.
