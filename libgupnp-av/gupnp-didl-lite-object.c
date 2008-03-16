@@ -165,7 +165,7 @@ gupnp_didl_lite_object_get_parent_id (xmlNode *object_node)
 /**
  * gupnp_didl_lite_object_get_property
  * @object_node: The object node
- * @properties_name: name of the property
+ * @property_name: name of the property
  *
  * Use this function to retreive property nodes by name.
  *
@@ -272,7 +272,7 @@ gupnp_didl_lite_object_get_write_status (xmlNode *object_node)
 
 /**
  * gupnp_didl_lite_object_get_searchable
- * @object_node: The object node
+ * @container_node: The container node
  *
  * Return value: TRUE if @object_node is searchable
  **/

@@ -1,5 +1,12 @@
 2008-03-16  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
+	* doc/gupnp-av-sections.txt:
+	* libgupnp-av/gupnp-didl-lite-object.c:
+
+	Documentation updates and corrections.
+
+2008-03-16  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
 	* libgupnp-av/gupnp-didl-lite-parser.c:
 	* libgupnp-av/gupnp-didl-lite-parser.h:
 
