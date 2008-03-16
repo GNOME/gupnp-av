@@ -1,5 +1,13 @@
 2008-03-16  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
+	* libgupnp-av/gupnp-didl-lite-parser.c:
+	* libgupnp-av/gupnp-didl-lite-parser.h:
+
+	_didl_lite_parser_parse_didl() now returns a boolean and takes an error
+	argument.
+
+2008-03-16  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
 	* libgupnp-av/gupnp-last-change-parser.c:
 	* libgupnp-av/gupnp-last-change-parser.h:
 

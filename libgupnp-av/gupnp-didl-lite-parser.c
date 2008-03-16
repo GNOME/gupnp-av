@@ -80,26 +80,32 @@ gupnp_didl_lite_parser_new (void)
  * @didl: The DIDL-Lite XML string to be parsed
  * @callback: The callback to call for each DIDL-Lite object found
  * @user_data: User data for callback
+ * @error: The location where to store any error, or NULL
  *
  * Parses DIDL-Lite XML string @didl, calling the supplied callback for each
  * DIDL-Lite object it finds in the process.
  *
+ * Return value: TRUE on success.
  **/
-void
+gboolean
 gupnp_didl_lite_parser_parse_didl
                               (GUPnPDIDLLiteParser              *parser,
                                const char                       *didl,
                                GUPnPDIDLLiteParserObjectCallback callback,
-                               gpointer                          user_data)
+                               gpointer                          user_data,
+                               GError                          **error)
 {
         xmlDoc  *doc;
         xmlNode *element;
 
         doc = xmlParseMemory (didl, strlen (didl));
 	if (doc == NULL) {
-	        g_warning ("Parse error on XML DIDL-Light:\n'%s'", didl);
+                g_set_error (error,
+                             GUPNP_SERVER_ERROR,
+                             GUPNP_SERVER_ERROR_INVALID_RESPONSE,
+                             "Could not parse DIDL-Lite XML:\n%s", didl);
 
-                return;
+                return FALSE;
         }
 
         /* Get a pointer to root element */
@@ -107,10 +113,13 @@ gupnp_didl_lite_parser_parse_didl
                                         "DIDL-Lite",
                                         NULL);
         if (element == NULL) {
-                g_warning ("No 'DIDL-Lite' element in the DIDL document:\n"
-                           "'%s'", didl);
+                g_set_error (error,
+                             GUPNP_SERVER_ERROR,
+                             GUPNP_SERVER_ERROR_INVALID_RESPONSE,
+                             "No 'DIDL-Lite' node in the DIDL-Lite XML:\n%s",
+                             didl);
 
-                return;
+                return FALSE;
         }
 
         for (element = element->children; element; element = element->next) {
@@ -118,5 +127,7 @@ gupnp_didl_lite_parser_parse_didl
         }
 
         xmlFreeDoc (doc);
+
+        return TRUE;
 }
 

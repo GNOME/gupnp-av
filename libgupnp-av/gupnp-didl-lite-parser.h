@@ -22,8 +22,7 @@
 #ifndef __GUPNP_DIDL_LITE_PARSER_H__
 #define __GUPNP_DIDL_LITE_PARSER_H__
 
-#include <libxml/tree.h>
-#include <glib-object.h>
+#include <libgupnp/gupnp.h>
 
 G_BEGIN_DECLS
 
@@ -81,12 +80,13 @@ typedef void (* GUPnPDIDLLiteParserObjectCallback) (
 GUPnPDIDLLiteParser *
 gupnp_didl_lite_parser_new    (void);
 
-void
+gboolean
 gupnp_didl_lite_parser_parse_didl
                               (GUPnPDIDLLiteParser              *parser,
                                const char                       *didl,
                                GUPnPDIDLLiteParserObjectCallback callback,
-                               gpointer                          user_data);
+                               gpointer                          user_data,
+                               GError                          **error);
 
 G_END_DECLS
 
