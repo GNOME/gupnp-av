@@ -1,3 +1,13 @@
+2008-03-16  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/gupnp-didl-lite-object.c:
+	* libgupnp-av/gupnp-didl-lite-object.h:
+
+	New generic getters API:
+	- function to retreive a list of property nodes from object node
+	- function to retreive value from a property node.
+	- function to retreive attribute from a property node.
+
 2008-03-13  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/gupnp-didl-lite-object.c:

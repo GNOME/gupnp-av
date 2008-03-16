@@ -27,13 +27,16 @@
 G_BEGIN_DECLS
 
 /* DIDL-Lite Generic Object related functions */
-char *
-gupnp_didl_lite_object_get_property            (xmlNode        *object_node,
-                                                const char     *property_name);
-
 GList *
-gupnp_didl_lite_object_get_properties          (xmlNode    *object_node,
-                                                const char *properties_name);
+gupnp_didl_lite_object_get_property            (xmlNode         *object_node,
+                                                const char      *property_name);
+
+char *
+gupnp_didl_lite_property_get_value             (xmlNode         *property_node);
+
+char *
+gupnp_didl_lite_property_get_attribute         (xmlNode         *property_node,
+                                                const char      *attribute);
 
 char *
 gupnp_didl_lite_object_get_id                  (xmlNode        *object_node);

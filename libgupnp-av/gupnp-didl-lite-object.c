@@ -112,7 +112,7 @@ gupnp_didl_lite_object_get_upnp_class (xmlNode *object_node)
 {
         g_return_val_if_fail (object_node != NULL, NULL);
 
-        return gupnp_didl_lite_object_get_property (object_node, "class");
+        return xml_util_get_child_element_content (object_node, "class");
 }
 
 /**
@@ -165,42 +165,52 @@ gupnp_didl_lite_object_get_parent_id (xmlNode *object_node)
 /**
  * gupnp_didl_lite_object_get_property
  * @object_node: The object node
- * @property_name: name of the property
+ * @properties_name: name of the property
  *
- * Use this function to retreive a property by name.
+ * Use this function to retreive property nodes by name.
  *
- * Return value: The value of property @property_name belonging to @object_node
- * as a string, or NULL. g_free() after usage.
+ * Return value: The list of property nodes by the name @property_name
+ * belonging to @object_node, or NULL. g_list_free() the returned list after
+ * usage but do not modify the contents.
  **/
-char *
+GList *
 gupnp_didl_lite_object_get_property (xmlNode    *object_node,
                                      const char *property_name)
 {
         g_return_val_if_fail (object_node != NULL, NULL);
 
-        return xml_util_get_child_element_content (object_node, property_name);
+        return xml_util_get_child_elements_by_name (object_node,
+                                                    property_name);
 }
 
 /**
- * gupnp_didl_lite_object_get_properties
- * @object_node: The object node
- * @properties_name: name of the properties
+ * gupnp_didl_lite_property_get_value
+ * @property_node: The object property node
  *
- * Use this function to retreive a list of properties by the same name. Useful
- * for dealing with multi-valued properties.
- *
- * Return value: The list of property nodes by the name @properties_name
- * belonging to @object_node, or NULL. g_list_free() the returned list after
- * usage but do not modify the contents.
+ * Return value: The value of the property node @property_node as a string or
+ * NULL. g_free() after usage.
  **/
-GList *
-gupnp_didl_lite_object_get_properties (xmlNode    *object_node,
-                                       const char *properties_name)
+char *
+gupnp_didl_lite_property_get_value (xmlNode *property_node)
 {
-        g_return_val_if_fail (object_node != NULL, NULL);
+        return xml_util_get_element_content (property_node);
+}
 
-        return xml_util_get_child_elements_by_name (object_node,
-                                                    properties_name);
+/**
+ * gupnp_didl_lite_property_get_attribute
+ * @property_node: The object property node
+ * @attribute: name of the attribute
+ *
+ * Use this function to retreive attributes of object properties.
+ *
+ * Return value: The value of the attribute @attribute of the property node
+ * @property_node as a string or NULL. g_free() after usage.
+ **/
+char *
+gupnp_didl_lite_property_get_attribute (xmlNode    *property_node,
+                                        const char *attribute)
+{
+        return xml_util_get_attribute_content (property_node, attribute);
 }
 
 /**
