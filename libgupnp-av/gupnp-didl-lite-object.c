@@ -51,8 +51,7 @@ gupnp_didl_lite_object_is_container (xmlNode *object_node)
 
         g_return_val_if_fail (object_node != NULL, FALSE);
 
-        class_name = gupnp_didl_lite_object_get_property (object_node,
-                                                          "class");
+        class_name = gupnp_didl_lite_object_get_upnp_class (object_node);
         if (class_name == NULL) {
                 return FALSE;
         }
@@ -84,8 +83,7 @@ gupnp_didl_lite_object_is_item (xmlNode *object_node)
 
         g_return_val_if_fail (object_node != NULL, FALSE);
 
-        class_name = gupnp_didl_lite_object_get_property (object_node,
-                                                          "class");
+        class_name = gupnp_didl_lite_object_get_upnp_class (object_node);
         if (class_name == NULL) {
                 return FALSE;
         }
@@ -101,6 +99,20 @@ gupnp_didl_lite_object_is_item (xmlNode *object_node)
         g_free (class_name);
 
         return is_item;
+}
+
+/**
+ * gupnp_didl_lite_object_get_upnp_class
+ * @object_node: The object node
+ *
+ * Return value: The class of @object_node, or NULL. g_free() after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_upnp_class (xmlNode *object_node)
+{
+        g_return_val_if_fail (object_node != NULL, NULL);
+
+        return gupnp_didl_lite_object_get_property (object_node, "class");
 }
 
 /**
@@ -206,99 +218,46 @@ gupnp_didl_lite_object_get_restricted (xmlNode *object_node)
 }
 
 /**
- * gupnp_didl_lite_object_get_never_playable
+ * gupnp_didl_lite_object_get_title
  * @object_node: The object node
  *
- * Return value: TRUE if @object_node is never playable.
+ * Return value: The title of the @object_node, or NULL. g_free() after usage.
  **/
-gboolean
-gupnp_didl_lite_object_get_never_playable (xmlNode *object_node)
+char *
+gupnp_didl_lite_object_get_title (xmlNode *object_node)
 {
         g_return_val_if_fail (object_node != NULL, FALSE);
 
-        return xml_util_get_boolean_attribute (object_node, "neverPlayable");
+        return xml_util_get_child_element_content (object_node, "title");
 }
 
 /**
- * gupnp_didl_lite_object_get_descriptors
+ * gupnp_didl_lite_object_get_creator
  * @object_node: The object node
  *
- * Return value: The list of descriptor nodes of the @object_node, or NULL.
- * g_list_free() the returned list after usage but do not modify the contents.
+ * Return value: The creator of the @object_node, or NULL. g_free() after usage.
  **/
-GList *
-gupnp_didl_lite_object_get_descriptors (xmlNode *object_node)
+char *
+gupnp_didl_lite_object_get_creator (xmlNode *object_node)
 {
-       return gupnp_didl_lite_object_get_properties (object_node, "desc");
+        g_return_val_if_fail (object_node != NULL, FALSE);
+
+        return xml_util_get_child_element_content (object_node, "creator");
 }
 
 /**
- * gupnp_didl_lite_object_get_resources
+ * gupnp_didl_lite_object_get_write_status
  * @object_node: The object node
  *
- * Return value: The list of resource nodes of the @object_node, or NULL.
- * g_list_free() the returned list after usage but do not modify the contents.
+ * Return value: The write status of the @object_node, or NULL. g_free() after
+ * usage.
  **/
-GList *
-gupnp_didl_lite_object_get_resources (xmlNode *object_node)
+char *
+gupnp_didl_lite_object_get_write_status (xmlNode *object_node)
 {
-        return gupnp_didl_lite_object_get_properties (object_node, "res");
-}
+        g_return_val_if_fail (object_node != NULL, FALSE);
 
-/**
- * gupnp_didl_lite_object_get_resource_hash
- * @object_node: The object node
- *
- * Use this function to create a hashtable that maps protocolInfo to
- * corresponding URIs.
- *
- * Return value: A newly created hashtable, or NULL. g_hash_table_unref () the
- * returned hash table after usage but do not modify the contents.
- **/
-GHashTable *
-gupnp_didl_lite_object_get_resource_hash (xmlNode *object_node)
-{
-   GHashTable *resource_hash;
-   GList *resources;
-   GList *iter;
-
-   resources = gupnp_didl_lite_object_get_resources (object_node);
-
-   if (resources == NULL)
-           return NULL;
-
-   resource_hash = g_hash_table_new_full (g_str_hash,
-                                          g_str_equal,
-                                          g_free,
-                                          g_free);
-
-   for (iter = resources; iter; iter = iter->next) {
-           xmlNode *res_node;
-           char *uri;
-           char *proto_info;
-
-           res_node = (xmlNode *) iter->data;
-           proto_info = gupnp_didl_lite_resource_get_protocol_info (res_node);
-           if (proto_info == NULL)
-                   continue;
-
-           uri = gupnp_didl_lite_resource_get_contents (res_node);
-           if (uri == NULL) {
-                   g_free (proto_info);
-                   continue;
-           }
-
-           g_hash_table_insert (resource_hash, proto_info, uri);
-   }
-   g_list_free (resources);
-
-   if (g_hash_table_size (resource_hash) == 0) {
-           /* No point in keeping empty hash tables here */
-           g_hash_table_destroy (resource_hash);
-           resource_hash = NULL;
-   }
-
-   return resource_hash;
+        return xml_util_get_child_element_content (object_node, "writeStatus");
 }
 
 /**
@@ -341,229 +300,5 @@ gupnp_didl_lite_item_get_ref_id (xmlNode *item_node)
         g_return_val_if_fail (item_node != NULL, NULL);
 
         return xml_util_get_attribute_content (item_node, "refID");
-}
-
-/**
- * gupnp_didl_lite_descriptor_get_type
- * @desc_node: The descriptor node
- *
- * Return value: The type of the @desc_node, or NULL. g_free() after usage.
- **/
-char *
-gupnp_didl_lite_descriptor_get_type (xmlNode *desc_node)
-{
-        g_return_val_if_fail (desc_node != NULL, NULL);
-
-        return xml_util_get_attribute_content (desc_node, "type");
-}
-
-/**
- * gupnp_didl_lite_descriptor_get_name_space
- * @desc_node: The descriptor node
- *
- * Return value: The name space of the @desc_node, or NULL. g_free() after
- * usage.
- **/
-char *
-gupnp_didl_lite_descriptor_get_name_space (xmlNode *desc_node)
-{
-        g_return_val_if_fail (desc_node != NULL, NULL);
-
-        return xml_util_get_attribute_content (desc_node, "nameSpace");
-}
-
-/**
- * gupnp_didl_lite_resource_get_contents
- * @res_node: The resource node
- *
- * Return value: The contents of the @res_node, or NULL. g_free() after usage.
- **/
-char *
-gupnp_didl_lite_resource_get_contents (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, NULL);
-
-        return xml_util_get_element_content (res_node);
-}
-
-/**
- * gupnp_didl_lite_resource_get_import_uri
- * @res_node: The resource node
- *
- * Return value: The import UI of the @res_node, or NULL. g_free() after usage.
- **/
-char *
-gupnp_didl_lite_resource_get_import_uri (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, NULL);
-
-        return xml_util_get_attribute_content (res_node, "importUri");
-}
-
-/**
- * gupnp_didl_lite_resource_get_protocol_info
- * @res_node: The resource node
- *
- * Return value: The protocol info of the @res_node, or NULL. g_free() after
- * usage.
- **/
-char *
-gupnp_didl_lite_resource_get_protocol_info (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, NULL);
-
-        return xml_util_get_attribute_content (res_node, "protocolInfo");
-}
-
-/**
- * gupnp_didl_lite_resource_get_size
- * @res_node: The resource node
- *
- * Return value: The size of the @res_node.
- **/
-guint
-gupnp_didl_lite_resource_get_size (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, 0);
-
-        return xml_util_get_uint_attribute (res_node, "size");
-}
-
-/**
- * gupnp_didl_lite_resource_get_duration
- * @res_node: The resource node
- *
- * Return value: The duration of the @res_node, or NULL. g_free() after usage.
- **/
-char *
-gupnp_didl_lite_resource_get_duration (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, NULL);
-
-        return xml_util_get_attribute_content (res_node, "duration");
-}
-
-/**
- * gupnp_didl_lite_resource_get_bitrate
- * @res_node: The resource node
- *
- * Return value: The bitrate of the @res_node.
- **/
-guint
-gupnp_didl_lite_resource_get_bitrate (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, 0);
-
-        return xml_util_get_uint_attribute (res_node, "bitrate");
-}
-
-/**
- * gupnp_didl_lite_resource_get_sample_frequency
- * @res_node: The resource node
- *
- * Return value: The sample frequency of the @res_node.
- **/
-guint
-gupnp_didl_lite_resource_get_sample_frequency (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, 0);
-
-        return xml_util_get_uint_attribute (res_node, "frequency");
-}
-
-/**
- * gupnp_didl_lite_resource_get_bits_per_sample
- * @res_node: The resource node
- *
- * Return value: The bits-per-sample of the @res_node.
- **/
-guint
-gupnp_didl_lite_resource_get_bits_per_sample (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, 0);
-
-        return xml_util_get_uint_attribute (res_node, "bitsPerSample");
-}
-
-/**
- * gupnp_didl_lite_resource_get_nr_audio_channels
- * @res_node: The resource node
- *
- * Return value: The number of audio channel of the @res_node.
- **/
-guint
-gupnp_didl_lite_resource_get_nr_audio_channels (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, 0);
-
-        return xml_util_get_uint_attribute (res_node, "nrAudioChannels");
-}
-
-/**
- * gupnp_didl_lite_resource_get_resolution
- * @res_node: The resource node
- *
- * Return value: The resolution of the @res_node, or NULL. g_free() after
- * usage.
- **/
-char *
-gupnp_didl_lite_resource_get_resolution (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, NULL);
-
-        return xml_util_get_attribute_content (res_node, "resolution");
-}
-
-/**
- * gupnp_didl_lite_resource_get_color_depth
- * @res_node: The resource node
- *
- * Return value: The color depth of the @res_node.
- **/
-guint
-gupnp_didl_lite_resource_get_color_depth (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, 0);
-
-        return xml_util_get_uint_attribute (res_node, "colorDepth");
-}
-
-/**
- * gupnp_didl_lite_resource_get_protection
- * @res_node: The resource node
- *
- * Return value: The protection field of the @res_node, or NULL. g_free() after
- * usage.
- **/
-char *
-gupnp_didl_lite_resource_get_protection (xmlNode *res_node)
-{
-        g_return_val_if_fail (res_node != NULL, NULL);
-
-        return xml_util_get_attribute_content (res_node, "protection");
-}
-
-/**
- * gupnp_didl_lite_resource_get_allowed_use
- * @res_node: The resource node
- *
- * Retreives allowedUse strings of the resource @res_node.
- *
- * Return value: A newly-allocated NULL-terminated array of strings, or NULL.
- * g_strfreev() after usage.
- **/
-char **
-gupnp_didl_lite_resource_get_allowed_use (xmlNode *res_node)
-{
-        char *allowed_use;
-
-        g_return_val_if_fail (res_node != NULL, NULL);
-
-        allowed_use = xml_util_get_attribute_content (res_node, "allowedUse");
-        if (allowed_use == NULL) {
-                return NULL;
-        } else {
-                return g_strsplit (allowed_use, ",", 0);
-        }
 }
 
