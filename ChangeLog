@@ -1,5 +1,11 @@
 2008-03-17  Jorn Baayen  <jorn@openedhand.com>
 
+	* configure.ac:
+
+	Remove reference to po/ dir.
+
+2008-03-17  Jorn Baayen  <jorn@openedhand.com>
+
 	* doc/gupnp-av-docs.sgml:
 
 	Correct link.

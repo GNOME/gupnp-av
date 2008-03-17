@@ -33,8 +33,6 @@ libgupnp-av/Makefile
 tests/Makefile
 doc/Makefile
 doc/version.xml
-po/Makefile.in
-po/Makefile
 gupnp-av-1.0.pc
 gupnp-av-1.0-uninstalled.pc
 ])
