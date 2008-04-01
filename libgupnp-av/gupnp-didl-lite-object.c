@@ -271,7 +271,7 @@ gupnp_didl_lite_object_get_write_status (xmlNode *object_node)
 }
 
 /**
- * gupnp_didl_lite_object_get_searchable
+ * gupnp_didl_lite_container_get_searchable
  * @container_node: The container node
  *
  * Return value: TRUE if @object_node is searchable

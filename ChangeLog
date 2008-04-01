@@ -1,3 +1,9 @@
+2008-04-02  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/gupnp-didl-lite-object.c:
+
+	Fix a small typo.
+
 2008-03-17  Jorn Baayen  <jorn@openedhand.com>
 
 	* configure.ac:
