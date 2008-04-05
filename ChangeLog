@@ -1,3 +1,10 @@
+2008-04-06  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* NEWS:
+	* README:
+
+	Prepare the NEWS and README for the release.
+
 2008-04-02  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/gupnp-didl-lite-object.c:
