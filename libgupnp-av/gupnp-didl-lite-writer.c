@@ -39,7 +39,7 @@ G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
 struct _GUPnPDIDLLiteWriterPrivate {
         GString *str;
 
-        SoupUri *url_base;
+        SoupURI *url_base;
 
         gboolean need_escape;
 };
@@ -142,7 +142,7 @@ append_escaped_text (GUPnPDIDLLiteWriter *writer,
  * gupnp_didl_lite_writer_start_didl_lite
  * @writer: A #GUPnPDIDLLiteWriter
  * @lang: The language the DIDL-Lite fragment is in, or NULL
- * @url_base: A #SoupUri specifying the URI relative to which incoming URI
+ * @url_base: A #SoupURI specifying the URI relative to which incoming URI
  * are resolved, or NULL
  * @need_escape: TRUE to force @writer to escape incoming string data
  *
@@ -151,7 +151,7 @@ append_escaped_text (GUPnPDIDLLiteWriter *writer,
 void
 gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
                                         const char          *lang,
-                                        SoupUri             *url_base,
+                                        SoupURI             *url_base,
                                         gboolean             need_escape)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
@@ -344,7 +344,7 @@ void
 gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                                 GUPnPDIDLLiteResource *res)
 {
-        SoupUri *uri;
+        SoupURI *uri;
         char *uri_str;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
@@ -494,7 +494,7 @@ gupnp_didl_lite_writer_add_desc (GUPnPDIDLLiteWriter *writer,
                 g_string_append (writer->priv->str, " nameSpace=\"");
 
                 if (writer->priv->url_base || writer->priv->need_escape) {
-                        SoupUri *uri;
+                        SoupURI *uri;
                         char *uri_str;
 
                         uri = soup_uri_new_with_base (writer->priv->url_base,
@@ -544,7 +544,7 @@ begin_property (GUPnPDIDLLiteWriter *writer,
                 g_string_append (writer->priv->str, "=\"");
 
                 if (writer->priv->url_base || writer->priv->need_escape) {
-                        SoupUri *uri;
+                        SoupURI *uri;
                         char *uri_str;
 
                         uri = soup_uri_new_with_base (writer->priv->url_base,

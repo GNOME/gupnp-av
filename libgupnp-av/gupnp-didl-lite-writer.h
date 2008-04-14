@@ -79,7 +79,7 @@ gupnp_didl_lite_writer_new                 (void);
 void
 gupnp_didl_lite_writer_start_didl_lite     (GUPnPDIDLLiteWriter *writer,
                                             const char          *lang,
-                                            SoupUri             *url_base,
+                                            SoupURI             *url_base,
                                             gboolean             need_escape);
 
 void

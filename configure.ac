@@ -1,5 +1,5 @@
 AC_PREREQ(2.53)
-AC_INIT(gupnp-av, 0.1, http://www.gupnp.org/)
+AC_INIT(gupnp-av, 0.1.99, http://www.gupnp.org/)
 AM_INIT_AUTOMAKE()
 AC_CONFIG_SRCDIR(libgupnp-av/gupnp-av.h)
 AM_CONFIG_HEADER(config.h)
@@ -11,7 +11,7 @@ AC_STDC_HEADERS
 AC_PROG_LIBTOOL
 AC_FUNC_MMAP
 
-PKG_CHECK_MODULES(LIBGUPNP, gupnp-1.0 >= 0.6)
+PKG_CHECK_MODULES(LIBGUPNP, gupnp-1.0 >= 0.8.99)
 
 # glib-genmarshal
 GLIB_GENMARSHAL=`pkg-config --variable=glib_genmarshal glib-2.0`

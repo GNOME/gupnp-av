@@ -1,3 +1,14 @@
+2008-04-15  Jorn Baayen  <jorn@openedhand.com>
+
+	* configure.ac:
+	* libgupnp-av/gupnp-didl-lite-writer.c
+	(gupnp_didl_lite_writer_start_didl_lite),
+	(gupnp_didl_lite_writer_add_res),
+	(gupnp_didl_lite_writer_add_desc), (begin_property):
+	* libgupnp-av/gupnp-didl-lite-writer.h:
+
+	Port to libsoup 2.4.
+
 2008-04-06  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* NEWS:
