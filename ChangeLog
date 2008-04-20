@@ -1,3 +1,11 @@
+2008-04-20  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/gupnp-didl-lite-writer.c
+	(gupnp_didl_lite_writer_start_container):
+	* libgupnp-av/gupnp-didl-lite-writer.h:
+
+	Add child_count argument to start_container().
+
 2008-04-15  Jorn Baayen  <jorn@openedhand.com>
 
 	* configure.ac:

@@ -89,6 +89,7 @@ void
 gupnp_didl_lite_writer_start_container     (GUPnPDIDLLiteWriter *writer,
                                             const char          *id,
                                             const char          *parent_id,
+                                            int                  child_count,
                                             gboolean             restricted,
                                             gboolean             searchable);
 

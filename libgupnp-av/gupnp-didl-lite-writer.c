@@ -193,6 +193,7 @@ gupnp_didl_lite_writer_end_didl_lite (GUPnPDIDLLiteWriter *writer)
  * @writer: A #GUPnPDIDLLiteWriter
  * @id: The object ID
  * @parent_id: The parent object ID
+ * @child_count: The number of children or -1
  * @restricted: TRUE if this container is restricted
  * @searchable: TRUE if this container is searchable
  *
@@ -202,6 +203,7 @@ void
 gupnp_didl_lite_writer_start_container (GUPnPDIDLLiteWriter *writer,
                                         const char          *id,
                                         const char          *parent_id,
+                                        int                  child_count,
                                         gboolean             restricted,
                                         gboolean             searchable)
 {
@@ -223,6 +225,11 @@ gupnp_didl_lite_writer_start_container (GUPnPDIDLLiteWriter *writer,
                 append_escaped_text (writer, parent_id);
         else
                 g_string_append (writer->priv->str, parent_id);
+
+        if (child_count >= 0) {
+                g_string_append_printf
+                        (writer->priv->str, "\" childCount=\"%d", child_count);
+        }
 
         g_string_append (writer->priv->str, "\" restricted=\"");
         g_string_append (writer->priv->str, restricted ? "true" : "false");
