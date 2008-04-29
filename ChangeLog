@@ -1,3 +1,9 @@
+2008-04-29  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/gupnp-didl-lite-writer.c:
+
+	Add missing whitespace.
+
 2008-04-20  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/gupnp-didl-lite-writer.c
