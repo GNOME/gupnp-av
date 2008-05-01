@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 OpenedHand Ltd.
+ * Copyright (C) 2007, 2008 OpenedHand Ltd.
  *
  * Authors: Jorn Baayen <jorn@openedhand.com>
  *
@@ -325,8 +325,13 @@ gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res)
 {
         res->uri           = NULL;
         res->import_uri    = NULL;
-        res->protocol_info = NULL;
+        res->network       = "*";
         res->protection    = NULL;
+
+        res->dlna_play_speed = GUPNP_DLNA_PLAY_SPEED_NORMAL;
+        res->dlna_conversion = GUPNP_DLNA_CONVERSION_NONE;
+        res->dlna_operation  = GUPNP_DLNA_OPERATION_NONE;
+        res->dlna_flags      = GUPNP_DLNA_FLAG_DLNA_V15;
 
         res->size             = -1;
         res->duration         = -1;
@@ -358,16 +363,31 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (res != NULL);
         g_return_if_fail (res->uri != NULL);
-        g_return_if_fail (res->protocol_info != NULL);
+        g_return_if_fail (res->protocol != NULL);
+        g_return_if_fail (res->network != NULL);
+        g_return_if_fail (res->mime_type != NULL);
+        g_return_if_fail (res->dlna_profile != NULL);
 
         g_string_append (writer->priv->str, "<res protocolInfo=\"");
 
-        if (writer->priv->need_escape)
-                append_escaped_text (writer, res->protocol_info);
-        else
-                g_string_append (writer->priv->str, res->protocol_info);
+        g_string_append (writer->priv->str, res->protocol);
+        g_string_append_c (writer->priv->str, ':');
+        g_string_append (writer->priv->str, res->network);
+        g_string_append_c (writer->priv->str, ':');
+        g_string_append (writer->priv->str, res->mime_type);
 
-        g_string_append_c (writer->priv->str, '"');
+        g_string_append_printf (writer->priv->str,
+                                ":DLNA.ORG_PS=%d"
+                                ";DLNA.ORG_CI=%d"
+                                ";DLNA.ORG_OP=%.2x"
+                                ";DLNA.ORG_PN=%s"
+                                ";DLNA.ORG_FLAGS=%.8x%.24x\"",
+                                res->dlna_play_speed,
+                                res->dlna_conversion,
+                                res->dlna_operation,
+                                res->dlna_profile,
+                                res->dlna_flags,
+                                0);
 
         if (res->import_uri) {
                 g_string_append (writer->priv->str, " importUri=\"");

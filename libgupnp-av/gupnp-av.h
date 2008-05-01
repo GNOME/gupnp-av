@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007 Zeeshan Ali <zeenix@gstreamer.net>
- * Copyright (C) 2006, 2007 OpenedHand Ltd.
+ * Copyright (C) 2006, 2007, 2008 OpenedHand Ltd.
  *
  * Author: Zeeshan Ali Khattak <zeenix@gstreamer.net>
  *         Jorn Baayen <jorn@openedhand.com>
@@ -26,4 +26,5 @@
 #include "gupnp-didl-lite-writer.h"
 #include "gupnp-search-criteria-parser.h"
 #include "gupnp-last-change-parser.h"
+#include "gupnp-dlna.h"
 

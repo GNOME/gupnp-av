@@ -9,6 +9,7 @@ libgupnp_av_inc_HEADERS = gupnp-didl-lite-object.h \
 			  gupnp-didl-lite-writer.h \
 		          gupnp-search-criteria-parser.h \
 			  gupnp-last-change-parser.h \
+			  gupnp-dlna.h \
 			  gupnp-av.h
 
 

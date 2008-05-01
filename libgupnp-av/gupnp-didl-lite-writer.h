@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 OpenedHand Ltd.
+ * Copyright (C) 2007, 2008 OpenedHand Ltd.
  *
  * Authors: Jorn Baayen <jorn@openedhand.com>
  *
@@ -22,9 +22,12 @@
 #ifndef __GUPNP_DIDL_LITE_WRITER_H__
 #define __GUPNP_DIDL_LITE_WRITER_H__
 
+
 #include <stdarg.h>
 #include <glib-object.h>
 #include <libsoup/soup-uri.h>
+
+#include "gupnp-dlna.h"
 
 G_BEGIN_DECLS
 
@@ -107,9 +110,16 @@ void
 gupnp_didl_lite_writer_end_item            (GUPnPDIDLLiteWriter *writer);
 
 typedef struct {
-        char   *uri;           /* Required */
-        char   *import_uri;
-        char   *protocol_info; /* Required */
+        char               *uri;           /* Required */
+        char               *import_uri;
+        char               *protocol;      /* Required */
+        char               *network;
+        char               *mime_type;     /* Required */
+        char               *dlna_profile;  /* Required */
+        GUPnPDLNAPlaySpeed  dlna_play_speed;
+        GUPnPDLNAConversion dlna_conversion;
+        GUPnPDLNAOperation  dlna_operation;
+        GUPnPDLNAFlags      dlna_flags;
 
         /* Stream data */
         long    size;
