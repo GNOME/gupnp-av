@@ -1,3 +1,9 @@
+2008-05-15  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* NEWS:
+
+	Prepare NEWS file for release.
+
 2008-05-01  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/Makefile.am:

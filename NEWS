@@ -1,3 +1,10 @@
+0.1.99
+======
+
+- Use libsoup 2.4. [Jorn Baayen]
+- Add DLNA support to DIDL writer. [Jorn Baayen]
+- Some small fixes. [Jorn Baayen]
+
 0.1
 ===
 
