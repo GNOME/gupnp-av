@@ -1,3 +1,5 @@
+LTVERSION = 1:0:0
+
 AM_CFLAGS = $(LIBGUPNP_CFLAGS) -I$(top_srcdir)
 
 libgupnp_av_incdir = $(includedir)/gupnp-av-1.0/libgupnp-av
@@ -20,6 +22,8 @@ gupnp-av-marshal.h: gupnp-av-marshal.list
 	$(GLIB_GENMARSHAL) --prefix=gupnp_av_marshal $(srcdir)/gupnp-av-marshal.list --header > gupnp-av-marshal.h
 
 BUILT_SOURCES = gupnp-av-marshal.c gupnp-av-marshal.h
+
+libgupnp_av_1_0_la_LDFLAGS = -version-info $(LTVERSION)
 
 libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-parser.c \
