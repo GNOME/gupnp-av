@@ -1,3 +1,9 @@
+2008-05-23  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* libgupnp-av/gupnp-didl-lite-object.h:
+
+	Include the glib header to setisfy vala-gen-introspect.
+
 2008-05-19  Jorn Baayen  <jorn@openedhand.com>
 
 	* NEWS:

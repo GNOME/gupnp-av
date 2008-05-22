@@ -22,6 +22,7 @@
 #ifndef __GUPNP_DIDL_LITE_OBJECT_H__
 #define __GUPNP_DIDL_LITE_OBJECT_H__
 
+#include <glib.h>
 #include <libxml/tree.h>
 
 G_BEGIN_DECLS
