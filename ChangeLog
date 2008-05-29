@@ -1,3 +1,9 @@
+2008-05-29  Jorn Baayen  <jorn@openedhand.com>
+
+	* libgupnp-av/gupnp-didl-lite-writer.h:
+
+	Correct function prototype. Fixes #940.
+
 2008-05-23  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* libgupnp-av/gupnp-didl-lite-object.h:

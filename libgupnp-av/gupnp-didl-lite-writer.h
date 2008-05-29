@@ -149,7 +149,7 @@ void
 gupnp_didl_lite_writer_add_desc              (GUPnPDIDLLiteWriter   *writer,
                                               const char            *desc,
                                               const char            *id,
-                                              const char            *name,
+                                              const char            *type,
                                               const char            *ns_uri);
 
 void
