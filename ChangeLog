@@ -1,3 +1,10 @@
+2008-06-17  Jorn Baayen  <jorn@openedhand.com>
+
+	* NEWS:
+	* configure.ac:
+
+	Release 0.2.1.
+
 2008-05-29  Jorn Baayen  <jorn@openedhand.com>
 
 	* libgupnp-av/gupnp-didl-lite-writer.h:

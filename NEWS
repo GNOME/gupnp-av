@@ -1,3 +1,9 @@
+0.2.1
+=====
+
+- Correct function prototype. Fixes #940. [Jorn Baayen]
+- Include the glib header to satisfy vala-gen-introspect. [Zeeshan Ali Khattak]
+
 0.2
 ===
 
