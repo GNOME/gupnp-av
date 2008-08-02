@@ -38,9 +38,9 @@ GUPnPDeviceInfoPrivate
 </SECTION>
 
 <SECTION>
-<FILE>gupnp-didl-writer</FILE>
-<TITLE>GUPnPDIDLWriter</TITLE>
-GUPnPDIDLWriter
+<FILE>gupnp-didl-lite-writer</FILE>
+<TITLE>GUPnPDIDLLiteWriter</TITLE>
+GUPnPDIDLLiteWriter
 GUPnPDIDLLiteResource
 gupnp_didl_lite_writer_new
 gupnp_didl_lite_writer_start_didl_lite

@@ -1,3 +1,10 @@
+2008-08-02  Zeeshan Ali Khattak  <zeenix@gmail.com>
+
+	* doc/gupnp-av-sections.txt:
+
+	Correct a typo to allow the doc build see DIDLLiteWriter and generate
+	docs for it.
+
 2008-06-17  Jorn Baayen  <jorn@openedhand.com>
 
 	* NEWS:
