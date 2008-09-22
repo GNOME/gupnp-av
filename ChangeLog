@@ -1,5 +1,11 @@
 2008-09-22  Ross Burton  <ross@linux.intel.com>
 
+	* Makefile.am:
+	Enable gtk-doc when distchecking, and don't bother adding the
+	.pc.in files to EXTRA_DIST.
+	
+2008-09-22  Ross Burton  <ross@linux.intel.com>
+
 	* doc/Makefile.am:
 	Add version.xml to content_files.
 
