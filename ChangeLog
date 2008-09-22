@@ -1,5 +1,10 @@
 2008-09-22  Ross Burton  <ross@linux.intel.com>
 
+	* doc/Makefile.am:
+	Add version.xml to content_files.
+
+2008-09-22  Ross Burton  <ross@linux.intel.com>
+
 	* configure.ac:
 	Remove AM_MAINTAINER_MODE.
 
