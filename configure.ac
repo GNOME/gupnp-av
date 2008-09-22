@@ -3,7 +3,6 @@ AC_INIT(gupnp-av, 0.2.1, http://www.gupnp.org/)
 AM_INIT_AUTOMAKE()
 AC_CONFIG_SRCDIR(libgupnp-av/gupnp-av.h)
 AM_CONFIG_HEADER(config.h)
-AM_MAINTAINER_MODE
 
 AC_ISC_POSIX
 AC_PROG_CC

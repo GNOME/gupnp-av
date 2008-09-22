@@ -1,3 +1,8 @@
+2008-09-22  Ross Burton  <ross@linux.intel.com>
+
+	* configure.ac:
+	Remove AM_MAINTAINER_MODE.
+
 2008-08-02  Zeeshan Ali Khattak  <zeenix@gmail.com>
 
 	* doc/gupnp-av-sections.txt:
