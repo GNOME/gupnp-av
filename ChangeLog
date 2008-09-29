@@ -1,3 +1,9 @@
+2008-09-29  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
+
+	* libgupnp-av/gupnp-didl-lite-parser.c:
+
+	Only report container and item nodes. Fixes #1155.
+
 2008-09-22  Ross Burton  <ross@linux.intel.com>
 
 	* Makefile.am:

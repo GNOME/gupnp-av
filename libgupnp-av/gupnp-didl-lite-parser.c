@@ -123,7 +123,12 @@ gupnp_didl_lite_parser_parse_didl
         }
 
         for (element = element->children; element; element = element->next) {
-                callback (parser, element, user_data);
+                const char *name = (const char *) element->name;
+
+                if (g_ascii_strcasecmp (name, "container") == 0 ||
+                    g_ascii_strcasecmp (name, "item") == 0) {
+                        callback (parser, element, user_data);
+                }
         }
 
         xmlFreeDoc (doc);
