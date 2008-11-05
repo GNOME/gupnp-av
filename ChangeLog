@@ -1,3 +1,17 @@
+2008-11-06  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
+
+	* libgupnp-av/gupnp-av.h:
+	* libgupnp-av/gupnp-didl-lite-object.c:
+	* libgupnp-av/gupnp-didl-lite-object.h:
+	* libgupnp-av/gupnp-didl-lite-parser.c:
+	* libgupnp-av/gupnp-didl-lite-parser.h:
+	* libgupnp-av/gupnp-last-change-parser.c:
+	* libgupnp-av/gupnp-last-change-parser.h:
+	* libgupnp-av/xml-util.c:
+	* libgupnp-av/xml-util.h:
+
+        Replace my non-working "@gstreamer.net" email with "@gnome.org" one.
+
 2008-09-29  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
 
 	* libgupnp-av/gupnp-didl-lite-parser.c:

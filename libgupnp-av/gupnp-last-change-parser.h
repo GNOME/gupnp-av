@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Zeeshan Ali <zeenix@gstreamer.net>
+ * Copyright (C) 2007 Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
  * Copyright (C) 2007 OpenedHand Ltd
  *
  * Authors: Zeeshan Ali Khattak <zeenix@gstreamer.net>

@@ -3,7 +3,7 @@
  * Copyright (C) 2007 Zeeshan Ali.
  *
  * Author: Jorn Baayen <jorn@openedhand.com>
- * Author: Zeeshan Ali <zeenix@gstreamer.net>
+ * Author: Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
