@@ -98,7 +98,7 @@ main (int argc, char **argv)
         error = NULL;
         gupnp_search_criteria_parser_parse_text (parser, argv[1], &error);
         if (error != NULL) {
-                g_error (error->message);
+                g_printerr ("%s", error->message);
 
                 return 1;
         }

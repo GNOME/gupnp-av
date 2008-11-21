@@ -1,3 +1,9 @@
+2008-11-21  Jorn Baayen  <jorn.baayen@collabora.co.uk>
+
+	* tests/test-search-criteria-parser.c (main):
+
+	Use g_printerr().
+
 2008-11-06  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
 
 	* libgupnp-av/gupnp-av.h:
