@@ -20,6 +20,7 @@
  */
 
 #include <libgupnp-av/gupnp-search-criteria-parser.h>
+#include <stdlib.h>
 
 static void
 begin_parens_cb (GUPnPSearchCriteriaParser *parser,
@@ -98,12 +99,14 @@ main (int argc, char **argv)
         error = NULL;
         gupnp_search_criteria_parser_parse_text (parser, argv[1], &error);
         if (error != NULL) {
-                g_printerr ("%s", error->message);
-
-                return 1;
+                g_printerr ("Parse error: %s\n", error->message);
+                g_error_free (error);
+                return EXIT_FAILURE;
         }
 
         g_print ("\n");
 
-        return 0;
+        g_object_unref (parser);
+
+        return EXIT_SUCCESS;
 }

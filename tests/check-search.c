@@ -20,6 +20,7 @@
  */
 
 #include <libgupnp-av/gupnp-search-criteria-parser.h>
+#include <stdlib.h>
 
 static const char * const searches[] = {
         "dc:title contains \"foo\"",
@@ -43,9 +44,11 @@ main (int argc, char **argv)
                 error = NULL;
                 gupnp_search_criteria_parser_parse_text (parser, searches[i], &error);
                 if (error) {
-                        g_print ("\n\nCannot parse '%s'", searches[i]);
-                        g_error (error->message);
-                        return 1;
+                        g_printerr ("\n\nCannot parse '%s': %s\n",
+                                    searches[i], error->message);
+                        g_error_free (error);
+
+                        return EXIT_FAILURE;
                 }
                 /* TODO: obviously an important next step is to verify that the
                    data was actually parsed correctly */
@@ -53,5 +56,5 @@ main (int argc, char **argv)
         }
 
         g_print ("\n");
-        return 0;
+        return EXIT_SUCCESS;
 }

@@ -1,3 +1,11 @@
+2008-11-24  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
+
+	* tests/check-search.c:
+	* tests/test-search-criteria-parser.c:
+
+        Better error handling in test apps. Based on a patch from Sven Neumann
+        <s.neumann@phase-zero.de>.
+
 2008-11-21  Jorn Baayen  <jorn.baayen@collabora.co.uk>
 
 	* tests/test-search-criteria-parser.c (main):
