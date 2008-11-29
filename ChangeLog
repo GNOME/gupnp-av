@@ -1,3 +1,9 @@
+2008-11-29  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
+
+	* configure.ac:
+
+        Don't use "-Werror" if configured with '--enable-debug'.
+
 2008-11-24  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
 
 	* tests/check-search.c:
