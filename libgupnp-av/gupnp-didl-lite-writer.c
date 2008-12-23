@@ -325,8 +325,12 @@ gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res)
 {
         res->uri           = NULL;
         res->import_uri    = NULL;
-        res->network       = "*";
+        res->protocol      = NULL;
+        res->network       = NULL;
         res->protection    = NULL;
+
+        res->mime_type = NULL;
+        res->dlna_profile = NULL;
 
         res->dlna_play_speed = GUPNP_DLNA_PLAY_SPEED_NORMAL;
         res->dlna_conversion = GUPNP_DLNA_CONVERSION_NONE;
@@ -364,7 +368,6 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_return_if_fail (res != NULL);
         g_return_if_fail (res->uri != NULL);
         g_return_if_fail (res->protocol != NULL);
-        g_return_if_fail (res->network != NULL);
         g_return_if_fail (res->mime_type != NULL);
         g_return_if_fail (res->dlna_profile != NULL);
 
@@ -372,7 +375,10 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 
         g_string_append (writer->priv->str, res->protocol);
         g_string_append_c (writer->priv->str, ':');
-        g_string_append (writer->priv->str, res->network);
+        if (res->network != NULL)
+                g_string_append (writer->priv->str, res->network);
+        else
+                g_string_append (writer->priv->str, "*");
         g_string_append_c (writer->priv->str, ':');
         g_string_append (writer->priv->str, res->mime_type);
 

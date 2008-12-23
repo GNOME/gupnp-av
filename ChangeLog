@@ -1,3 +1,9 @@
+2008-12-23  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
+
+	* libgupnp-av/gupnp-didl-lite-writer.c:
+
+        gupnp_didl_lite_resource_reset() set all string fields to NULL.
+
 2008-11-29  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
 
 	* configure.ac:
