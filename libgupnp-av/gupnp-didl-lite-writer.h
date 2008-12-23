@@ -142,6 +142,13 @@ void
 gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res);
 
 void
+gupnp_didl_lite_resource_destroy             (GUPnPDIDLLiteResource *res);
+
+GUPnPDIDLLiteResource*
+gupnp_didl_lite_resource_copy  (const GUPnPDIDLLiteResource *source_res,
+                                GUPnPDIDLLiteResource       *dest_res);
+
+void
 gupnp_didl_lite_writer_add_res               (GUPnPDIDLLiteWriter   *writer,
                                               GUPnPDIDLLiteResource *res);
 

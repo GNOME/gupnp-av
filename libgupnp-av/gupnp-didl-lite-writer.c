@@ -349,6 +349,61 @@ gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res)
 }
 
 /**
+ * gupnp_didl_lite_resource_destroy
+ * @res: A #GUPnPDIDLLiteResource
+ *
+ * Frees the string fields of @res.
+ *
+ * Mainly intended for bindings, avoid using it in applications.
+ **/
+void
+gupnp_didl_lite_resource_destroy (GUPnPDIDLLiteResource *res)
+{
+        g_return_if_fail (res);
+
+        g_free (res->uri);
+        g_free (res->import_uri);
+        g_free (res->protocol);
+        g_free (res->network);
+        g_free (res->mime_type);
+        g_free (res->dlna_profile);
+        g_free (res->protection);
+}
+
+/**
+ * gupnp_didl_lite_resource_copy
+ * @res: A #GUPnPDIDLLiteResource
+ *
+ * Makes @dest_res a copy of @source_res. Call
+ * #gupnp_didl_lite_resource_destroy() on the @dest_res before freeing the
+ * struct itself.
+ *
+ * Mainly intended for bindings, avoid using it in applications.
+ *
+ * Return value: @dest_res.
+ **/
+GUPnPDIDLLiteResource*
+gupnp_didl_lite_resource_copy (const GUPnPDIDLLiteResource *source_res,
+                               GUPnPDIDLLiteResource       *dest_res)
+{
+        g_return_val_if_fail (source_res, NULL);
+        g_return_val_if_fail (dest_res, NULL);
+
+        g_memmove (dest_res, source_res, sizeof (GUPnPDIDLLiteResource));
+
+        /* Create a copy of the string fields */
+        dest_res->uri = g_strdup (dest_res->uri);
+        dest_res->import_uri = g_strdup (dest_res->import_uri);
+        dest_res->protocol = g_strdup (dest_res->protocol);
+        dest_res->network = g_strdup (dest_res->network);
+        dest_res->mime_type = g_strdup (dest_res->mime_type);
+        dest_res->dlna_profile = g_strdup (dest_res->dlna_profile);
+        dest_res->protection = g_strdup (dest_res->protection);
+
+        return dest_res;
+}
+
+/**
  * gupnp_didl_lite_writer_add_res
  * @writer: A #GUPnPDIDLLiteWriter
  * @res: A pointer to a #GUPnPDIDLLiteResource structure
