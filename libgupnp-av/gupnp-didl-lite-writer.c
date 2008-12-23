@@ -372,10 +372,11 @@ gupnp_didl_lite_resource_destroy (GUPnPDIDLLiteResource *res)
 
 /**
  * gupnp_didl_lite_resource_copy
- * @res: A #GUPnPDIDLLiteResource
+ * @source_res: The source #GUPnPDIDLLiteResource struct pointer
+ * @dest_res: The destincation #GUPnPDIDLLiteResource struct pointer
  *
  * Makes @dest_res a copy of @source_res. Call
- * #gupnp_didl_lite_resource_destroy() on the @dest_res before freeing the
+ * #gupnp_didl_lite_resource_destroy on the @dest_res before freeing the
  * struct itself.
  *
  * Mainly intended for bindings, avoid using it in applications.

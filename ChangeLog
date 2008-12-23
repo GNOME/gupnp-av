@@ -1,6 +1,14 @@
 2008-12-23  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
 
 	* libgupnp-av/gupnp-didl-lite-writer.c:
+	* doc/gupnp-av-sections.txt:
+
+        Proper docs for the new _copy and _destroy functions of
+        DIDLLiteResource.
+
+2008-12-23  Zeeshan Ali (Khattak)  <zeeshanak@gnome.org>
+
+	* libgupnp-av/gupnp-didl-lite-writer.c:
 	* libgupnp-av/gupnp-didl-lite-writer.h:
 
         Provide copy() and _destroy() functions for DIDLLiteResource.
