@@ -1,3 +1,13 @@
+0.3
+===
+
+- Better error handling. [Jorn Baayen, Sven Neumann]
+- Fixes to documentation and build. [Ross Burton, Zeeshan Ali]
+- Fixes and additions to DIDLLiteResource to ease impelementation of
+  higher-level language bindings. [Zeeshan Ali]
+- DIDLLiteParser should only report container and item nodes. Fixes bug#1155.
+  [Zeeshan Ali]
+
 0.2.1
 =====
 
