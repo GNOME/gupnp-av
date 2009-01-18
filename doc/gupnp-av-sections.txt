@@ -79,6 +79,8 @@ GUPnPDIDLLiteResource
 gupnp_didl_lite_resource_reset
 gupnp_didl_lite_resource_copy
 gupnp_didl_lite_resource_destroy
+<SUBSECTION Standard>
+GUPNP_TYPE_DIDL_LITE_RESOURCE
 </SECTION>
 
 <SECTION>

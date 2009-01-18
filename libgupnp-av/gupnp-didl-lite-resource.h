@@ -31,6 +31,14 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GUPNP_TYPE_DIDL_LITE_RESOURCE:
+ *
+ * #GType for GUPnPDIDLLiteResource struct.
+ */
+#define GUPNP_TYPE_DIDL_LITE_RESOURCE \
+                (gupnp_didl_lite_resource_get_type ())
+
 typedef struct {
         char               *uri;           /* Required */
         char               *import_uri;
@@ -59,6 +67,9 @@ typedef struct {
         int     height;
         int     color_depth;
 } GUPnPDIDLLiteResource;
+
+GType
+gupnp_didl_lite_resource_get_type (void);
 
 void
 gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res);

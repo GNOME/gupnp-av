@@ -123,3 +123,37 @@ gupnp_didl_lite_resource_copy (const GUPnPDIDLLiteResource *source_res,
         return dest_res;
 }
 
+static GUPnPDIDLLiteResource*
+boxed_copy (const GUPnPDIDLLiteResource *res)
+{
+        GUPnPDIDLLiteResource *copy = g_slice_new (GUPnPDIDLLiteResource);
+
+        return gupnp_didl_lite_resource_copy (res, copy);
+}
+
+static void
+boxed_free (GUPnPDIDLLiteResource *res)
+{
+        gupnp_didl_lite_resource_destroy (res);
+
+        g_slice_free (GUPnPDIDLLiteResource, res);
+}
+
+GType
+gupnp_didl_lite_resource_get_type (void)
+{
+        static GType type = 0;
+
+        if (!type) {
+                const char *name =
+                        g_intern_static_string ("GUPnPDIDLLiteResource");
+
+                type = g_boxed_type_register_static (
+                                        name,
+                                        (GBoxedCopyFunc) boxed_copy,
+                                        (GBoxedFreeFunc) boxed_free);
+        }
+
+        return type;
+}
+
