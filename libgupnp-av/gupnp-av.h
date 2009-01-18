@@ -23,6 +23,7 @@
 
 #include "gupnp-didl-lite-object.h"
 #include "gupnp-didl-lite-parser.h"
+#include "gupnp-didl-lite-resource.h"
 #include "gupnp-didl-lite-writer.h"
 #include "gupnp-search-criteria-parser.h"
 #include "gupnp-last-change-parser.h"

@@ -28,6 +28,7 @@
 #include <libsoup/soup-uri.h>
 
 #include "gupnp-dlna.h"
+#include "gupnp-didl-lite-resource.h"
 
 G_BEGIN_DECLS
 
@@ -108,45 +109,6 @@ gupnp_didl_lite_writer_start_item          (GUPnPDIDLLiteWriter *writer,
 
 void
 gupnp_didl_lite_writer_end_item            (GUPnPDIDLLiteWriter *writer);
-
-typedef struct {
-        char               *uri;           /* Required */
-        char               *import_uri;
-        char               *protocol;      /* Required */
-        char               *network;
-        char               *mime_type;     /* Required */
-        char               *dlna_profile;  /* Required */
-        GUPnPDLNAPlaySpeed  dlna_play_speed;
-        GUPnPDLNAConversion dlna_conversion;
-        GUPnPDLNAOperation  dlna_operation;
-        GUPnPDLNAFlags      dlna_flags;
-
-        /* Stream data */
-        long    size;
-        long    duration;
-        int     bitrate;
-        int     sample_freq;
-        int     bits_per_sample;
-        char   *protection;
-
-        /* Audio */
-        int     n_audio_channels;
-
-        /* Video */
-        int     width;
-        int     height;
-        int     color_depth;
-} GUPnPDIDLLiteResource;
-
-void
-gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res);
-
-void
-gupnp_didl_lite_resource_destroy             (GUPnPDIDLLiteResource *res);
-
-GUPnPDIDLLiteResource*
-gupnp_didl_lite_resource_copy  (const GUPnPDIDLLiteResource *source_res,
-                                GUPnPDIDLLiteResource       *dest_res);
 
 void
 gupnp_didl_lite_writer_add_res               (GUPnPDIDLLiteWriter   *writer,

@@ -8,6 +8,7 @@ lib_LTLIBRARIES = libgupnp-av-1.0.la
 
 libgupnp_av_inc_HEADERS = gupnp-didl-lite-object.h \
 			  gupnp-didl-lite-parser.h \
+			  gupnp-didl-lite-resource.h \
 			  gupnp-didl-lite-writer.h \
 		          gupnp-search-criteria-parser.h \
 			  gupnp-last-change-parser.h \
@@ -27,6 +28,7 @@ libgupnp_av_1_0_la_LDFLAGS = -version-info $(LTVERSION)
 
 libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-parser.c \
+			     gupnp-didl-lite-resource.c \
 			     gupnp-didl-lite-writer.c \
 			     gupnp-search-criteria-parser.c \
 			     gupnp-last-change-parser.c \

@@ -41,7 +41,6 @@ GUPnPDeviceInfoPrivate
 <FILE>gupnp-didl-lite-writer</FILE>
 <TITLE>GUPnPDIDLLiteWriter</TITLE>
 GUPnPDIDLLiteWriter
-GUPnPDIDLLiteResource
 gupnp_didl_lite_writer_new
 gupnp_didl_lite_writer_start_didl_lite
 gupnp_didl_lite_writer_end_didl_lite
@@ -49,9 +48,6 @@ gupnp_didl_lite_writer_start_container
 gupnp_didl_lite_writer_end_container
 gupnp_didl_lite_writer_start_item
 gupnp_didl_lite_writer_end_item
-gupnp_didl_lite_resource_reset
-gupnp_didl_lite_resource_copy
-gupnp_didl_lite_resource_destroy
 gupnp_didl_lite_writer_add_res
 gupnp_didl_lite_writer_add_desc
 gupnp_didl_lite_writer_add_string
@@ -74,6 +70,15 @@ GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC
 GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP
 <SUBSECTION Private>
 GUPnPDIDLLiteWriterPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gupnp-didl-lite-resource</FILE>
+<TITLE>GUPnPDIDLLiteResource</TITLE>
+GUPnPDIDLLiteResource
+gupnp_didl_lite_resource_reset
+gupnp_didl_lite_resource_copy
+gupnp_didl_lite_resource_destroy
 </SECTION>
 
 <SECTION>
