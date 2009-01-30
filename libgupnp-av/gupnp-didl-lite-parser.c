@@ -122,6 +122,16 @@ gupnp_didl_lite_parser_parse_didl
                 return FALSE;
         }
 
+        if (element->children == NULL) {
+                g_set_error (error,
+                             GUPNP_SERVER_ERROR,
+                             GUPNP_SERVER_ERROR_INVALID_RESPONSE,
+                             "Empty 'DIDL-Lite' node in the DIDL-Lite XML:\n%s",
+                             didl);
+
+                return FALSE;
+        }
+
         for (element = element->children; element; element = element->next) {
                 const char *name = (const char *) element->name;
 
