@@ -370,7 +370,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                         uri_str = soup_uri_to_string (uri, FALSE);
                         soup_uri_free (uri);
 
-                        g_string_append (writer->priv->str, uri_str);
+                        append_escaped_text (writer, uri_str);
 
                         g_free (uri_str);
                 } else
@@ -439,7 +439,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                 uri_str = soup_uri_to_string (uri, FALSE);
                 soup_uri_free (uri);
 
-                g_string_append (writer->priv->str, uri_str);
+                append_escaped_text (writer, uri_str);
 
                 g_free (uri_str);
         } else
