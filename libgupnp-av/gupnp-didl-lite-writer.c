@@ -385,7 +385,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 
         if (res->duration >= 0)
                 g_string_append_printf (writer->priv->str,
-                                        " duration=\"%ld:%.2ld:%.2ld.\"",
+                                        " duration=\"%ld:%.2ld:%.2ld\"",
                                         res->duration / (60 * 60),
                                         (res->duration / 60) % 60,
                                         res->duration % 60);
