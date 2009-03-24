@@ -98,7 +98,7 @@ gupnp_didl_lite_parser_parse_didl
         xmlDoc  *doc;
         xmlNode *element;
 
-        doc = xmlParseMemory (didl, strlen (didl));
+        doc = xmlRecoverMemory (didl, strlen (didl));
 	if (doc == NULL) {
                 g_set_error (error,
                              GUPNP_SERVER_ERROR,
