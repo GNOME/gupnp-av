@@ -335,7 +335,6 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_return_if_fail (res->uri != NULL);
         g_return_if_fail (res->protocol != NULL);
         g_return_if_fail (res->mime_type != NULL);
-        g_return_if_fail (res->dlna_profile != NULL);
 
         g_string_append (writer->priv->str, "<res protocolInfo=\"");
 
@@ -351,13 +350,18 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_string_append_printf (writer->priv->str,
                                 ":DLNA.ORG_PS=%d"
                                 ";DLNA.ORG_CI=%d"
-                                ";DLNA.ORG_OP=%.2x"
-                                ";DLNA.ORG_PN=%s"
-                                ";DLNA.ORG_FLAGS=%.8x%.24x\"",
+                                ";DLNA.ORG_OP=%.2x",
                                 res->dlna_play_speed,
                                 res->dlna_conversion,
-                                res->dlna_operation,
-                                res->dlna_profile,
+                                res->dlna_operation);
+
+        if (res->dlna_profile != NULL)
+                g_string_append_printf (writer->priv->str,
+                                        ";DLNA.ORG_PN=%s",
+                                        res->dlna_profile);
+
+        g_string_append_printf (writer->priv->str,
+                                ";DLNA.ORG_FLAGS=%.8x%.24x\"",
                                 res->dlna_flags,
                                 0);
 
