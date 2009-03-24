@@ -347,23 +347,21 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_string_append_c (writer->priv->str, ':');
         g_string_append (writer->priv->str, res->mime_type);
 
-        g_string_append_printf (writer->priv->str,
-                                ":DLNA.ORG_PS=%d"
-                                ";DLNA.ORG_CI=%d"
-                                ";DLNA.ORG_OP=%.2x",
-                                res->dlna_play_speed,
-                                res->dlna_conversion,
-                                res->dlna_operation);
-
-        if (res->dlna_profile != NULL)
+        if (res->dlna_profile == NULL)
+                g_string_append_printf (writer->priv->str, "*\"");
+        else
                 g_string_append_printf (writer->priv->str,
-                                        ";DLNA.ORG_PN=%s",
-                                        res->dlna_profile);
-
-        g_string_append_printf (writer->priv->str,
-                                ";DLNA.ORG_FLAGS=%.8x%.24x\"",
-                                res->dlna_flags,
-                                0);
+                                        ":DLNA.ORG_PS=%d"
+                                        ";DLNA.ORG_CI=%d"
+                                        ";DLNA.ORG_OP=%.2x"
+                                        ";DLNA.ORG_PN=%s"
+                                        ";DLNA.ORG_FLAGS=%.8x%.24x\"",
+                                        res->dlna_play_speed,
+                                        res->dlna_conversion,
+                                        res->dlna_operation,
+                                        res->dlna_profile,
+                                        res->dlna_flags,
+                                        0);
 
         if (res->import_uri) {
                 g_string_append (writer->priv->str, " importUri=\"");
