@@ -348,7 +348,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_string_append (writer->priv->str, res->mime_type);
 
         if (res->dlna_profile == NULL)
-                g_string_append_printf (writer->priv->str, "*\"");
+                g_string_append_printf (writer->priv->str, ":*\"");
         else
                 g_string_append_printf (writer->priv->str,
                                         ":DLNA.ORG_PS=%d"
