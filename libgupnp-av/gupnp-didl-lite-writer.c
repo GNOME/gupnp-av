@@ -29,6 +29,7 @@
 #include <string.h>
 
 #include "gupnp-didl-lite-writer.h"
+#include "gupnp-dlna-private.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
                gupnp_didl_lite_writer,
@@ -328,6 +329,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 {
         SoupURI *uri;
         char *uri_str;
+        const char *dlna_profile;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
@@ -347,7 +349,12 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         g_string_append_c (writer->priv->str, ':');
         g_string_append (writer->priv->str, res->mime_type);
 
-        if (res->dlna_profile == NULL)
+        dlna_profile = res->dlna_profile;
+        if (dlna_profile == NULL)
+                /* Try guessing */
+                dlna_profile = dlna_guess_profile (res);
+
+        if (dlna_profile == NULL)
                 g_string_append_printf (writer->priv->str, ":*\"");
         else
                 g_string_append_printf (writer->priv->str,
@@ -359,7 +366,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                                         res->dlna_play_speed,
                                         res->dlna_conversion,
                                         res->dlna_operation,
-                                        res->dlna_profile,
+                                        dlna_profile,
                                         res->dlna_flags,
                                         0);
 

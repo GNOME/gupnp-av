@@ -32,6 +32,8 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-writer.c \
 			     gupnp-search-criteria-parser.c \
 			     gupnp-last-change-parser.c \
+			     gupnp-dlna-private.h \
+			     gupnp-dlna.c \
 			     xml-util.c \
 			     xml-util.h \
 			     gvalue-util.c \
