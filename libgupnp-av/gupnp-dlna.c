@@ -44,6 +44,28 @@ guess_jpeg_profile (GUPnPDIDLLiteResource *resource)
         }
 }
 
+static const char *
+guess_png_profile (GUPnPDIDLLiteResource *resource)
+{
+        if (resource->width < 0 || resource->height < 0) {
+                return "PNG_MED";
+        } else if (resource->width <= 48 && resource->height <= 48) {
+                return "PNG_SM_ICO";
+        } else if (resource->width <= 120 && resource->height <= 120) {
+                return "PNG_LRG_ICO";
+        } else if (resource->width <= 160 && resource->height <= 160) {
+                return "PNG_TN"; /* Thumbnail */
+        } else if (resource->width <= 640 && resource->height <= 480) {
+                return "PNG_SM";
+        } else if (resource->width <= 1024 && resource->height <= 768) {
+                return "PNG_MED";
+        } else if (resource->width <= 4096 && resource->height <= 4096) {
+                return "PNG_LRG";
+        } else {
+                return NULL;
+        }
+}
+
 static void
 check_int_allowed (int         value,
                    const char *value_name,
@@ -224,6 +246,8 @@ dlna_guess_profile (GUPnPDIDLLiteResource *resource)
 {
         if (g_str_has_prefix (resource->mime_type, "image/jpeg")) {
                 return guess_jpeg_profile (resource);
+        } else if (g_str_has_prefix (resource->mime_type, "image/png")) {
+                return guess_png_profile (resource);
         } else if (g_str_has_prefix (resource->mime_type,
                                      "audio/vnd.dolby.dd-raw")) {
                 return guess_ac3_profile (resource);
