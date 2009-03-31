@@ -193,6 +193,21 @@ guess_aac_profile (GUPnPDIDLLiteResource *resource)
         }
 }
 
+static const char *
+guess_wma_profile (GUPnPDIDLLiteResource *resource)
+{
+        if (resource->sample_freq > 0 && resource->n_audio_channels > 0 &&
+            resource->sample_freq <= 48000 && resource->n_audio_channels <= 2) {
+                if (resource->bitrate > 0 && resource->bitrate <=  192999) {
+                        return "WMABASE";
+                } else {
+                        return "WMAFULL";
+                }
+        } else {
+                return "WMAPRO";
+        }
+}
+
 const char *
 dlna_guess_profile (GUPnPDIDLLiteResource *resource)
 {
@@ -208,6 +223,8 @@ dlna_guess_profile (GUPnPDIDLLiteResource *resource)
                 return guess_lpcm_profile (resource);
         } else if (g_str_has_prefix (resource->mime_type, "audio/mpeg")) {
                 return guess_mp3_profile (resource);
+        } else if (g_str_has_prefix (resource->mime_type, "audio/x-ms-wma")) {
+                return guess_wma_profile (resource);
         } else {
                 return NULL;
         }
