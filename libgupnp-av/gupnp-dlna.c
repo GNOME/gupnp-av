@@ -83,6 +83,39 @@ check_frequency (GUPnPDIDLLiteResource *resource,
                            profile);
 }
 
+static void
+check_bitrate (GUPnPDIDLLiteResource *resource,
+               int                   *allowed_bitrates,
+               const char            *profile)
+{
+        check_int_allowed (resource->bitrate,
+                           "bitrate",
+                           allowed_bitrates,
+                           profile);
+}
+
+static void
+check_sample_size (GUPnPDIDLLiteResource *resource,
+                   int                   *allowed_sample_size,
+                   const char            *profile)
+{
+        check_int_allowed (resource->bits_per_sample,
+                           "bitsPerSample",
+                           allowed_sample_size,
+                           profile);
+}
+
+static void
+check_num_channels (GUPnPDIDLLiteResource *resource,
+                    int                   *allowed_num_channels,
+                    const char            *profile)
+{
+        check_int_allowed (resource->n_audio_channels,
+                           "nrAudioChannels",
+                           allowed_num_channels,
+                           profile);
+}
+
 static const char *
 guess_ac3_profile (GUPnPDIDLLiteResource *resource)
 {
