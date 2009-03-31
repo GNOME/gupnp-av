@@ -25,7 +25,9 @@
 static const char *
 guess_jpeg_profile (GUPnPDIDLLiteResource *resource)
 {
-        if (resource->width <= 48 && resource->height <= 48) {
+        if (resource->width < 0 || resource->height < 0) {
+                return "JPEG_MED";
+        } else if (resource->width <= 48 && resource->height <= 48) {
                 return "JPEG_SM_ICO";
         } else if (resource->width <= 120 && resource->height <= 120) {
                 return "JPEG_LRG_ICO";
