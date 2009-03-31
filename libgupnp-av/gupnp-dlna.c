@@ -44,27 +44,43 @@ guess_jpeg_profile (GUPnPDIDLLiteResource *resource)
         }
 }
 
-static const char *
-guess_ac3_profile (GUPnPDIDLLiteResource *resource)
+static void
+check_int_allowed (int         value,
+                   const char *value_name,
+                   int        *allowed_values,
+                   const char *profile)
 {
-        int allowed_freq[] = { 32000, 41000, 4800, -1 };
+        if (value > 0) {
+                int     *allowed_value;
+                gboolean not_allowed = TRUE;
 
-        if (resource->sample_freq > 0) {
-            int *freq;
-            gboolean not_allowed = TRUE;
-
-            for (freq = allowed_freq; *freq != -1; freq++) {
-                if (resource->sample_freq == *freq) {
+            for (allowed_value = allowed_values;
+                 *allowed_value != -1;
+                 allowed_value++) {
+                if (value == *allowed_value) {
                         not_allowed = FALSE;
                         break;
                 }
             }
 
             if (not_allowed) {
-                g_warning ("DLNA specs do not allow frequency %d for AC3 media",
-                           resource->sample_freq);
+                g_warning ("DLNA specs do not allow %d as %s for %s profile",
+                           value,
+                           value_name,
+                           profile);
             }
         }
+}
+
+static const char *
+guess_ac3_profile (GUPnPDIDLLiteResource *resource)
+{
+        int allowed_freq[] = { 32000, 41000, 4800, -1 };
+
+        check_int_allowed (resource->sample_freq,
+                           "frequency",
+                           allowed_freq,
+                           "AC3");
 
         return "AC3";
 }
