@@ -72,15 +72,23 @@ check_int_allowed (int         value,
         }
 }
 
+static void
+check_frequency (GUPnPDIDLLiteResource *resource,
+                 int                   *allowed_freq,
+                 const char            *profile)
+{
+        check_int_allowed (resource->sample_freq,
+                           "frequency",
+                           allowed_freq,
+                           profile);
+}
+
 static const char *
 guess_ac3_profile (GUPnPDIDLLiteResource *resource)
 {
         int allowed_freq[] = { 32000, 41000, 4800, -1 };
 
-        check_int_allowed (resource->sample_freq,
-                           "frequency",
-                           allowed_freq,
-                           "AC3");
+        check_frequency (resource, allowed_freq, "AC3");
 
         return "AC3";
 }
