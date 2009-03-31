@@ -47,14 +47,26 @@ guess_jpeg_profile (GUPnPDIDLLiteResource *resource)
 static const char *
 guess_ac3_profile (GUPnPDIDLLiteResource *resource)
 {
-        if (resource->sample_freq < 0 ||       /* Unknown */
-            resource->sample_freq == 32000 ||
-            resource->sample_freq == 41000 ||
-            resource->sample_freq == 48000) {
-                return "AC3";
-        } else {
-                return NULL;
+        int allowed_freq[] = { 32000, 41000, 4800, -1 };
+
+        if (resource->sample_freq > 0) {
+            int *freq;
+            gboolean not_allowed = TRUE;
+
+            for (freq = allowed_freq; *freq != -1; freq++) {
+                if (resource->sample_freq == *freq) {
+                        not_allowed = FALSE;
+                        break;
+                }
+            }
+
+            if (not_allowed) {
+                g_warning ("DLNA specs do not allow frequency %d for AC3 media",
+                           resource->sample_freq);
+            }
         }
+
+        return "AC3";
 }
 
 static const char *
