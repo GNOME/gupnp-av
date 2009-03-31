@@ -238,6 +238,9 @@ dlna_guess_profile (GUPnPDIDLLiteResource *resource)
                 return guess_wma_profile (resource);
         } else if (g_str_has_prefix (resource->mime_type, "video/mpeg")) {
                 return guess_mpeg_ts_profile (resource);
+        } else if (g_str_has_prefix (resource->mime_type, "video/mp4") ||
+                   g_str_has_prefix (resource->mime_type, "video/3gpp")) {
+                return "MPEG4_P2_MP4_SP_VGA_AAC";
         } else {
                 return NULL;
         }
