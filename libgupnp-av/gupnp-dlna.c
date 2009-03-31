@@ -208,6 +208,17 @@ guess_wma_profile (GUPnPDIDLLiteResource *resource)
         }
 }
 
+static const char *
+guess_mpeg_ts_profile (GUPnPDIDLLiteResource *resource)
+{
+        if (resource->width > 0 && resource->height < 0 &&
+            resource->width / resource->height == 16 / 9) {
+                return "MPEG_TS_HD_NA";
+        } else {
+                return "MPEG_TS_SD_NA";
+        }
+}
+
 const char *
 dlna_guess_profile (GUPnPDIDLLiteResource *resource)
 {
@@ -225,6 +236,8 @@ dlna_guess_profile (GUPnPDIDLLiteResource *resource)
                 return guess_mp3_profile (resource);
         } else if (g_str_has_prefix (resource->mime_type, "audio/x-ms-wma")) {
                 return guess_wma_profile (resource);
+        } else if (g_str_has_prefix (resource->mime_type, "video/mpeg")) {
+                return guess_mpeg_ts_profile (resource);
         } else {
                 return NULL;
         }
