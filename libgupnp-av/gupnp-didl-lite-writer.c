@@ -371,6 +371,25 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                                                 res->dlna_operation);
                 }
 
+                /* Specify PS parameter if list of play speeds is provided */
+                if (res->play_speeds != NULL) {
+                        GList *lst;
+
+                        g_string_append_printf (writer->priv->str,
+                                                ";DLNA.ORG_PS=");
+
+                        for (lst = res->play_speeds; lst; lst = lst->next) {
+                                char *speed = (char *) lst->data;
+
+                                g_string_append (writer->priv->str, speed);
+
+                                if (lst->next) {
+                                        g_string_append_c (writer->priv->str,
+                                                           ',');
+                                }
+                        }
+                }
+
                 /* omit the CI parameter for non-converted content */
                 if (res->dlna_conversion != GUPNP_DLNA_CONVERSION_NONE) {
                         g_string_append_printf (writer->priv->str,
