@@ -357,12 +357,9 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         if (dlna_profile == NULL) {
                 g_string_append_printf (writer->priv->str, ":*\"");
         } else {
-                /* omit the CI parameter for non-converted content */
-                if (res->dlna_conversion != GUPNP_DLNA_CONVERSION_NONE) {
-                        g_string_append_printf (writer->priv->str,
-                                                ";DLNA.ORG_CI=%d",
-                                                res->dlna_conversion);
-                }
+                g_string_append_printf (writer->priv->str,
+                                        ";DLNA.ORG_PN=%s",
+                                        dlna_profile);
 
                 /* the OP parameter is only allowed for the "http-get"
                  * and "rtsp-rtp-udp" protocols
@@ -374,10 +371,15 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                                                 res->dlna_operation);
                 }
 
+                /* omit the CI parameter for non-converted content */
+                if (res->dlna_conversion != GUPNP_DLNA_CONVERSION_NONE) {
+                        g_string_append_printf (writer->priv->str,
+                                                ";DLNA.ORG_CI=%d",
+                                                res->dlna_conversion);
+                }
+
                 g_string_append_printf (writer->priv->str,
-                                        ";DLNA.ORG_PN=%s"
                                         ";DLNA.ORG_FLAGS=%.8x%.24x\"",
-                                        dlna_profile,
                                         res->dlna_flags,
                                         0);
         }
