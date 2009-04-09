@@ -358,7 +358,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                 g_string_append_printf (writer->priv->str, ":*\"");
         } else {
                 g_string_append_printf (writer->priv->str,
-                                        ";DLNA.ORG_PN=%s",
+                                        ":DLNA.ORG_PN=%s",
                                         dlna_profile);
 
                 /* the OP parameter is only allowed for the "http-get"
