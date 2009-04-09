@@ -708,6 +708,8 @@ gupnp_didl_lite_writer_add_string_with_attrs_valist
                         g_string_append (writer->priv->str, attr_value);
 
                 g_string_append_c (writer->priv->str, '"');
+
+                attr_name = va_arg (var_args, const char *);
         }
 
         g_string_append_c (writer->priv->str, '>');
