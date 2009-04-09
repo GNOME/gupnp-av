@@ -46,7 +46,9 @@ typedef struct {
         char               *network;
         char               *mime_type;     /* Required */
         char               *dlna_profile;  /* Required */
-        GUPnPDLNAPlaySpeed  dlna_play_speed;
+        GList              *play_speeds;   /* GList of strings indicating
+                                            * allowed play speeds
+                                            */
         GUPnPDLNAConversion dlna_conversion;
         GUPnPDLNAOperation  dlna_operation;
         GUPnPDLNAFlags      dlna_flags;

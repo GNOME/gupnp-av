@@ -27,11 +27,6 @@
 G_BEGIN_DECLS
 
 typedef enum {
-        GUPNP_DLNA_PLAY_SPEED_INVALID = 0,
-        GUPNP_DLNA_PLAY_SPEED_NORMAL  = 1
-} GUPnPDLNAPlaySpeed;
-
-typedef enum {
         GUPNP_DLNA_CONVERSION_NONE       = 0,
         GUPNP_DLNA_CONVERSION_TRANSCODED = 1
 } GUPnPDLNAConversion;

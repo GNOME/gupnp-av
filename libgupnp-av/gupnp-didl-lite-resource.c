@@ -51,7 +51,7 @@ gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res)
         res->mime_type = NULL;
         res->dlna_profile = NULL;
 
-        res->dlna_play_speed = GUPNP_DLNA_PLAY_SPEED_NORMAL;
+        res->play_speeds = NULL;
         res->dlna_conversion = GUPNP_DLNA_CONVERSION_NONE;
         res->dlna_operation  = GUPNP_DLNA_OPERATION_NONE;
         res->dlna_flags      = GUPNP_DLNA_FLAG_DLNA_V15;
@@ -78,6 +78,8 @@ gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res)
 void
 gupnp_didl_lite_resource_destroy (GUPnPDIDLLiteResource *res)
 {
+        GList *lst;
+
         g_return_if_fail (res);
 
         g_free (res->uri);
@@ -87,6 +89,13 @@ gupnp_didl_lite_resource_destroy (GUPnPDIDLLiteResource *res)
         g_free (res->mime_type);
         g_free (res->dlna_profile);
         g_free (res->protection);
+
+        for (lst = res->play_speeds; lst; lst = lst->next) {
+                g_free (lst->data);
+        }
+
+        if (res->play_speeds != NULL)
+                g_list_free (res->play_speeds);
 }
 
 /**
@@ -106,6 +115,8 @@ GUPnPDIDLLiteResource*
 gupnp_didl_lite_resource_copy (const GUPnPDIDLLiteResource *source_res,
                                GUPnPDIDLLiteResource       *dest_res)
 {
+        GList *lst;
+
         g_return_val_if_fail (source_res, NULL);
         g_return_val_if_fail (dest_res, NULL);
 
@@ -119,6 +130,12 @@ gupnp_didl_lite_resource_copy (const GUPnPDIDLLiteResource *source_res,
         dest_res->mime_type = g_strdup (dest_res->mime_type);
         dest_res->dlna_profile = g_strdup (dest_res->dlna_profile);
         dest_res->protection = g_strdup (dest_res->protection);
+
+        for (lst = source_res->play_speeds; lst; lst = lst->next) {
+                char *speed = g_strdup (lst->data);
+                dest_res->play_speeds = g_list_append (dest_res->play_speeds,
+                                                       speed);
+        }
 
         return dest_res;
 }
