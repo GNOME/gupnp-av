@@ -213,6 +213,7 @@ guess_aac_profile (GUPnPDIDLLiteResource *resource)
         } else if (resource->bitrate <= 57600) {
                 return "AAC_ISO";
         }
+        return NULL;
 }
 
 static const char *
