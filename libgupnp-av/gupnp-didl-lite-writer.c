@@ -354,21 +354,33 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                 /* Try guessing */
                 dlna_profile = dlna_guess_profile (res);
 
-        if (dlna_profile == NULL)
+        if (dlna_profile == NULL) {
                 g_string_append_printf (writer->priv->str, ":*\"");
-        else
+        } else {
+                /* omit the CI parameter for non-converted content */
+                if (res->dlna_conversion != GUPNP_DLNA_CONVERSION_NONE) {
+                        g_string_append_printf (writer->priv->str,
+                                                ";DLNA.ORG_CI=%d",
+                                                res->dlna_conversion);
+                }
+
+                /* the OP parameter is only allowed for the "http-get"
+                 * and "rtsp-rtp-udp" protocols
+                 */
+                if (strcmp (res->protocol, "http-get") == 0 ||
+                    strcmp (res->protocol, "rtsp-rtp-udp") == 0) {
+                        g_string_append_printf (writer->priv->str,
+                                                ";DLNA.ORG_OP=%.2x",
+                                                res->dlna_operation);
+                }
+
                 g_string_append_printf (writer->priv->str,
-                                        ":DLNA.ORG_PS=%d"
-                                        ";DLNA.ORG_CI=%d"
-                                        ";DLNA.ORG_OP=%.2x"
                                         ";DLNA.ORG_PN=%s"
                                         ";DLNA.ORG_FLAGS=%.8x%.24x\"",
-                                        res->dlna_play_speed,
-                                        res->dlna_conversion,
-                                        res->dlna_operation,
                                         dlna_profile,
                                         res->dlna_flags,
                                         0);
+        }
 
         if (res->import_uri) {
                 g_string_append (writer->priv->str, " importUri=\"");
