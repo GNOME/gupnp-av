@@ -233,9 +233,9 @@ gupnp_didl_lite_writer_start_container (GUPnPDIDLLiteWriter *writer,
         }
 
         g_string_append (writer->priv->str, "\" restricted=\"");
-        g_string_append (writer->priv->str, restricted ? "true" : "false");
+        g_string_append_c (writer->priv->str, restricted ? '1' : '0');
         g_string_append (writer->priv->str, "\" searchable=\"");
-        g_string_append (writer->priv->str, searchable ? "true" : "false");
+        g_string_append_c (writer->priv->str, searchable ? '1' : '0');
         g_string_append (writer->priv->str, "\">");
 }
 
@@ -296,7 +296,7 @@ gupnp_didl_lite_writer_start_item (GUPnPDIDLLiteWriter *writer,
         }
 
         g_string_append (writer->priv->str, "\" restricted=\"");
-        g_string_append (writer->priv->str, restricted ? "true" : "false");
+        g_string_append_c (writer->priv->str, restricted ? '1' : '0');
         g_string_append (writer->priv->str, "\">");
 }
 
@@ -774,7 +774,7 @@ gupnp_didl_lite_writer_add_boolean (GUPnPDIDLLiteWriter *writer,
 
         begin_property_simple (writer, property, prefix, ns_uri);
 
-        g_string_append (writer->priv->str, value ? "true" : "false");
+        g_string_append_c (writer->priv->str, value ? '1' : '0');
 
         end_property (writer, property, prefix);
 }
