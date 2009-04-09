@@ -696,7 +696,8 @@ gupnp_didl_lite_writer_add_string_with_attrs_valist
 
         attr_name = va_arg (var_args, const char *);
         while (attr_name) {
-                attr_value = va_arg (var_args, const char *);
+                if ((attr_value = va_arg (var_args, const char *)) == NULL)
+                        break;
 
                 g_string_append_c (writer->priv->str, ' ');
                 g_string_append (writer->priv->str, attr_name);
