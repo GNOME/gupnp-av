@@ -365,11 +365,10 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                  * and "rtsp-rtp-udp" protocols
                  */
                 if (strcmp (res->protocol, "http-get") == 0 ||
-                    strcmp (res->protocol, "rtsp-rtp-udp") == 0) {
+                    strcmp (res->protocol, "rtsp-rtp-udp") == 0)
                         g_string_append_printf (writer->priv->str,
                                                 ";DLNA.ORG_OP=%.2x",
                                                 res->dlna_operation);
-                }
 
                 /* Specify PS parameter if list of play speeds is provided */
                 if (res->play_speeds != NULL) {
@@ -383,19 +382,17 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 
                                 g_string_append (writer->priv->str, speed);
 
-                                if (lst->next) {
+                                if (lst->next)
                                         g_string_append_c (writer->priv->str,
                                                            ',');
-                                }
                         }
                 }
 
                 /* omit the CI parameter for non-converted content */
-                if (res->dlna_conversion != GUPNP_DLNA_CONVERSION_NONE) {
+                if (res->dlna_conversion != GUPNP_DLNA_CONVERSION_NONE)
                         g_string_append_printf (writer->priv->str,
                                                 ";DLNA.ORG_CI=%d",
                                                 res->dlna_conversion);
-                }
 
                 g_string_append_printf (writer->priv->str,
                                         ";DLNA.ORG_FLAGS=%.8x%.24x\"",
