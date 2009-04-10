@@ -1,3 +1,26 @@
+0.4
+===
+
+- Watch for empty DIDL-Lite nodes.
+- Escape the URIs before putting them into DIDL-Lite XML.
+- The '.' must be omitted from duration if fraction part is not included.
+- Be more lenient when parsing DIDL-Lite XML fragments.
+- Don't require the DLNA profile string.
+- Try to guess the DLNA Profile if not provided and put "*" in the whole 4th
+  field of protocolInfo if our guess work fails.
+- Make sure 4th field of protocolInfo is completely in compliance with DLNA
+  guidelines. This only implies one change in the API: enum dlna_play_speed is
+  replaced by play_speeds, a GList of allowed play speeds as strings.
+- Use '1' and '0' to express boolean properties in DIDL-Lite XML.
+- Other minor fixes.
+
+All contributors to this release:
+
+Henrique Ferreiro García
+Peter Christensen
+Sven Neumann
+Zeeshan Ali (Khattak)
+
 0.3.1
 =====
 
