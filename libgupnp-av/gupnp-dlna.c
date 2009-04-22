@@ -69,11 +69,11 @@ guess_png_profile (GUPnPDIDLLiteResource *resource)
 static void
 check_int_allowed (int         value,
                    const char *value_name,
-                   int        *allowed_values,
+                   const int  *allowed_values,
                    const char *profile)
 {
         if (value > 0) {
-                int     *allowed_value;
+                const int *allowed_value;
                 gboolean not_allowed = TRUE;
 
             for (allowed_value = allowed_values;
@@ -96,7 +96,7 @@ check_int_allowed (int         value,
 
 static void
 check_frequency (GUPnPDIDLLiteResource *resource,
-                 int                   *allowed_freq,
+                 const int             *allowed_freq,
                  const char            *profile)
 {
         check_int_allowed (resource->sample_freq,
@@ -107,7 +107,7 @@ check_frequency (GUPnPDIDLLiteResource *resource,
 
 static void
 check_bitrate (GUPnPDIDLLiteResource *resource,
-               int                   *allowed_bitrates,
+               const int             *allowed_bitrates,
                const char            *profile)
 {
         check_int_allowed (resource->bitrate,
@@ -118,7 +118,7 @@ check_bitrate (GUPnPDIDLLiteResource *resource,
 
 static void
 check_sample_size (GUPnPDIDLLiteResource *resource,
-                   int                   *allowed_sample_size,
+                   const int             *allowed_sample_size,
                    const char            *profile)
 {
         check_int_allowed (resource->bits_per_sample,
@@ -129,7 +129,7 @@ check_sample_size (GUPnPDIDLLiteResource *resource,
 
 static void
 check_num_channels (GUPnPDIDLLiteResource *resource,
-                    int                   *allowed_num_channels,
+                    const int             *allowed_num_channels,
                     const char            *profile)
 {
         check_int_allowed (resource->n_audio_channels,
@@ -141,7 +141,7 @@ check_num_channels (GUPnPDIDLLiteResource *resource,
 static const char *
 guess_ac3_profile (GUPnPDIDLLiteResource *resource)
 {
-        int allowed_freq[] = { 32000, 41000, 4800, -1 };
+        const int allowed_freq[] = { 32000, 41000, 4800, -1 };
 
         check_frequency (resource, allowed_freq, "AC3");
 
@@ -151,9 +151,9 @@ guess_ac3_profile (GUPnPDIDLLiteResource *resource)
 static const char *
 guess_lpcm_profile (GUPnPDIDLLiteResource *resource)
 {
-        int allowed_freq[] = { 41000, 4800, -1 };
-        int allowed_num_channels[] = { 1, 2, -1 };
-        int allowed_sample_size [] = { 16, -1 };
+        const int allowed_freq[] = { 41000, 4800, -1 };
+        const int allowed_num_channels[] = { 1, 2, -1 };
+        const int allowed_sample_size [] = { 16, -1 };
 
         check_frequency (resource, allowed_freq, "LPCM");
         check_num_channels (resource, allowed_num_channels, "LPCM");
@@ -165,23 +165,23 @@ guess_lpcm_profile (GUPnPDIDLLiteResource *resource)
 static const char *
 guess_mp3_profile (GUPnPDIDLLiteResource *resource)
 {
-        int allowed_freq[] = { 32000, 41000, 48000, -1 };
-        int allowed_num_channels[] = { 1, 2, -1 };
-        int allowed_bitrates[] = { 32000,
-                                   40000,
-                                   48000,
-                                   56000,
-                                   64000,
-                                   80000,
-                                   96000,
-                                   112000,
-                                   128000,
-                                   160000,
-                                   192000,
-                                   224000,
-                                   256000,
-                                   320000,
-                                   -1 };
+        const int allowed_freq[] = { 32000, 44100, 48000, -1 };
+        const int allowed_num_channels[] = { 1, 2, -1 };
+        const int allowed_bitrates[] = { 32000,
+                                         40000,
+                                         48000,
+                                         56000,
+                                         64000,
+                                         80000,
+                                         96000,
+                                         112000,
+                                         128000,
+                                         160000,
+                                         192000,
+                                         224000,
+                                         256000,
+                                         320000,
+                                         -1 };
 
         check_frequency (resource, allowed_freq, "MP3");
         check_num_channels (resource, allowed_num_channels, "MP3");
@@ -193,17 +193,17 @@ guess_mp3_profile (GUPnPDIDLLiteResource *resource)
 static const char *
 guess_aac_profile (GUPnPDIDLLiteResource *resource)
 {
-        int allowed_freq[] = { 8000,
-                               11025,
-                               12000,
-                               16000,
-                               22050,
-                               24000,
-                               32000,
-                               41000,
-                               48000,
-                               -1 };
-        int allowed_num_channels[] = { 1, 2, -1 };
+        const int allowed_freq[] = { 8000,
+                                     11025,
+                                     12000,
+                                     16000,
+                                     22050,
+                                     24000,
+                                     32000,
+                                     44100,
+                                     48000,
+                                     -1 };
+        const int allowed_num_channels[] = { 1, 2, -1 };
 
         check_frequency (resource, allowed_freq, "AAC_ISO");
         check_num_channels (resource, allowed_num_channels, "AAC_ISO");
