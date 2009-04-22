@@ -141,7 +141,7 @@ check_num_channels (GUPnPDIDLLiteResource *resource,
 static const char *
 guess_ac3_profile (GUPnPDIDLLiteResource *resource)
 {
-        const int allowed_freq[] = { 32000, 41000, 4800, -1 };
+        const int allowed_freq[] = { 32000, 44100, 48000, -1 };
 
         check_frequency (resource, allowed_freq, "AC3");
 
@@ -151,7 +151,7 @@ guess_ac3_profile (GUPnPDIDLLiteResource *resource)
 static const char *
 guess_lpcm_profile (GUPnPDIDLLiteResource *resource)
 {
-        const int allowed_freq[] = { 41000, 4800, -1 };
+        const int allowed_freq[] = { 44100, 48000, -1 };
         const int allowed_num_channels[] = { 1, 2, -1 };
         const int allowed_sample_size [] = { 16, -1 };
 
