@@ -70,7 +70,7 @@ gupnp_last_change_parser_class_init (GUPnPLastChangeParserClass *klass)
 
 /* Reads a value of state variable @variable_name to an initialised GValue pair
  * from the InstanceID node of a LastChange xml doc */
-static void
+static gboolean
 read_state_variable (const char *variable_name,
                      GValue     *value,
                      xmlNode    *instance_node)
@@ -83,7 +83,7 @@ read_state_variable (const char *variable_name,
                                               variable_name,
                                               NULL);
         if (!variable_node)
-                return;
+                return FALSE;
 
         val_str = xml_util_get_attribute_content (variable_node, "val");
         if (!val_str) {
@@ -91,12 +91,14 @@ read_state_variable (const char *variable_name,
                            "LastChange event",
                            variable_name);
 
-                return;
+                return FALSE;
         }
 
         gvalue_util_set_value_from_string (value, (char *) val_str);
 
         g_free (val_str);
+
+        return TRUE;
 }
 
 static xmlNode *
@@ -191,9 +193,13 @@ gupnp_last_change_parser_parse_last_change_valist
 
                 g_value_init (&value, variable_type);
 
-                read_state_variable (variable_name, &value, instance_node);
-
-                G_VALUE_LCOPY (&value, var_args, 0, &copy_error);
+                if (read_state_variable (variable_name,
+                                         &value,
+                                         instance_node)) {
+                        G_VALUE_LCOPY (&value, var_args, 0, &copy_error);
+                } else {
+                        va_arg (var_args, gpointer);
+                }
 
                 g_value_unset (&value);
 
