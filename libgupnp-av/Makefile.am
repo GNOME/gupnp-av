@@ -24,7 +24,7 @@ gupnp-av-marshal.h: gupnp-av-marshal.list
 
 BUILT_SOURCES = gupnp-av-marshal.c gupnp-av-marshal.h
 
-libgupnp_av_1_0_la_LDFLAGS = -version-info $(LTVERSION)
+libgupnp_av_1_0_la_LDFLAGS = -version-info $(LTVERSION) -no-undefined
 
 libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-parser.c \
