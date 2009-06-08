@@ -1,3 +1,24 @@
+0.4.1
+=====
+
+Changes in this release:
+
+- Fix typos in allowed frequencies.
+- Fix allowed frequencies in AC-3 and LPCM profiles.
+- Fix pkg-config paths.
+- Don't set the variable if it's value is not provided in the LastChange event.
+
+Bug fixes in this release:
+
+1563 - typos in allowed frequencies for DLNA profiles
+1570 - gupnp doesn't set the pkgconfig lib dir correctly in 64 bit env
+
+All contributors to this release:
+
+Sven Neumann
+Zeeshan Ali (Khattak)
+Ross Burton
+
 0.4
 ===
 
