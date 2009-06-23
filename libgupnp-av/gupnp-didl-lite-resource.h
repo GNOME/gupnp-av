@@ -45,7 +45,7 @@ typedef struct {
         char               *protocol;      /* Required */
         char               *network;
         char               *mime_type;     /* Required */
-        char               *dlna_profile;  /* Required */
+        char               *dlna_profile;
         GList              *play_speeds;   /* GList of strings indicating
                                             * allowed play speeds
                                             */
