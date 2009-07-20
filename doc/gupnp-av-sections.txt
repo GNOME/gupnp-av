@@ -27,6 +27,7 @@ gupnp_didl_lite_parser_new
 gupnp_didl_lite_parser_parse_didl
 GUPnPDIDLLiteParserObjectCallback
 <SUBSECTION Standard>
+GUPnPDIDLLiteParserClass
 GUPNP_TYPE_DIDL_LITE_PARSER
 GUPNP_DIDL_LITE_PARSER
 GUPNP_DIDL_LITE_PARSER_CLASS
@@ -34,13 +35,17 @@ GUPNP_IS_DIDL_LITE_PARSER
 GUPNP_IS_DIDL_LITE_PARSER_CLASS
 GUPNP_DIDL_LITE_PARSER_GET_CLASS
 <SUBSECTION Private>
-GUPnPDeviceInfoPrivate
+GUPnPDIDLLiteParserPrivate
+gupnp_didl_lite_parser_get_type
 </SECTION>
 
 <SECTION>
 <FILE>gupnp-didl-lite-writer</FILE>
 <TITLE>GUPnPDIDLLiteWriter</TITLE>
 GUPnPDIDLLiteWriter
+GUPnPDLNAConversion
+GUPnPDLNAFlags
+GUPnPDLNAOperation
 gupnp_didl_lite_writer_new
 gupnp_didl_lite_writer_start_didl_lite
 gupnp_didl_lite_writer_end_didl_lite
@@ -57,9 +62,11 @@ gupnp_didl_lite_writer_add_boolean
 gupnp_didl_lite_writer_add_int
 gupnp_didl_lite_writer_add_uint
 gupnp_didl_lite_writer_add_long
+gupnp_didl_lite_writer_add_ulong
 gupnp_didl_lite_writer_get_string
 gupnp_didl_lite_writer_reset
 <SUBSECTION Standard>
+GUPnPDIDLLiteWriterClass
 GUPNP_TYPE_DIDL_LITE_WRITER
 GUPNP_DIDL_LITE_WRITER
 GUPNP_DIDL_LITE_WRITER_CLASS
@@ -70,6 +77,8 @@ GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC
 GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP
 <SUBSECTION Private>
 GUPnPDIDLLiteWriterPrivate
+gupnp_didl_lite_writer_get_type
+gupnp_didl_lite_resource_get_type
 </SECTION>
 
 <SECTION>
@@ -91,6 +100,7 @@ gupnp_last_change_parser_new
 gupnp_last_change_parser_parse_last_change_valist
 gupnp_last_change_parser_parse_last_change
 <SUBSECTION Standard>
+GUPnPLastChangeParserClass
 GUPNP_TYPE_LAST_CHANGE_PARSER
 GUPNP_LAST_CHANGE_PARSER
 GUPNP_LAST_CHANGE_PARSER_CLASS
@@ -99,6 +109,7 @@ GUPNP_IS_LAST_CHANGE_PARSER_CLASS
 GUPNP_LAST_CHANGE_PARSER_GET_CLASS
 <SUBSECTION Private>
 GUPnPLastChangeParserPrivate
+gupnp_last_change_parser_get_type
 </SECTION>
 
 <SECTION>
@@ -106,10 +117,10 @@ GUPnPLastChangeParserPrivate
 <TITLE>GUPnPSearchCriteriaParser</TITLE>
 GUPnPSearchCriteriaParser
 GUPnPSearchCriteriaOp
-GUPnPSearchCriteriaParserError
 gupnp_search_criteria_parser_new
 gupnp_search_criteria_parser_parse_text
 <SUBSECTION Standard>
+GUPnPSearchCriteriaParserClass
 GUPNP_TYPE_SEARCH_CRITERIA_PARSER
 GUPNP_SEARCH_CRITERIA_PARSER
 GUPNP_SEARCH_CRITERIA_PARSER_CLASS
@@ -118,5 +129,14 @@ GUPNP_IS_SEARCH_CRITERIA_PARSER_CLASS
 GUPNP_SEARCH_CRITERIA_PARSER_GET_CLASS
 <SUBSECTION Private>
 GUPnPSearchCriteriaParserPrivate
+gupnp_search_criteria_parser_get_type
 </SECTION>
 
+<SECTION>
+<FILE>gupnp-av-error</FILE>
+<TITLE>Error codes</TITLE>
+GUPNP_SEARCH_CRITERIA_PARSER_ERROR
+GUPnPSearchCriteriaParserError
+<SUBSECTION Private>
+gupnp_search_criteria_parser_error_quark
+</SECTION>

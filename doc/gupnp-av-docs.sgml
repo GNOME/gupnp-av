@@ -50,6 +50,14 @@
     <xi:include href="xml/gupnp-didl-lite-resource.xml"/>
     <xi:include href="xml/gupnp-last-change-parser.xml"/>
     <xi:include href="xml/gupnp-search-criteria-parser.xml"/>
+
+  </chapter>
+
+  <chapter>
+    <title>Error Codes</title>
+
+    <xi:include href="xml/gupnp-av-error.xml"/>
+
   </chapter>
 
 </book>

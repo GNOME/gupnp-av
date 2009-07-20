@@ -178,12 +178,11 @@ gupnp_search_criteria_parser_class_init
         object_class->finalize = gupnp_search_criteria_parser_finalize;
 
         /**
-         * GUPnPSearchCriteriaParser::begin_parens
-         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
-         * signal
+         * GUPnPSearchCriteriaParser::begin-parens
+         * @parser: The #GUPnPSearchCriteriaParser that received the signal
          *
-         * The ::begin_parens signal is emitted to mark the beginning
-         * of a parenthetical expression.
+         * The ::begin_parens signal is emitted to mark the beginning of a
+         * parenthetical expression.
          **/
         signals[BEGIN_PARENS] =
                 g_signal_new ("begin-parens",
@@ -198,12 +197,11 @@ gupnp_search_criteria_parser_class_init
                               0);
 
         /**
-         * GUPnPSearchCriteriaParser::end_parens
-         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
-         * signal
+         * GUPnPSearchCriteriaParser::end-parens
+         * @parser: The #GUPnPSearchCriteriaParser that received the signal
          *
-         * The ::end_parens signal is emitted to mark the end
-         * of a parenthetical expression.
+         * The ::end_parens signal is emitted to mark the end of a parenthetical
+         * expression.
          **/
         signals[END_PARENS] =
                 g_signal_new ("end-parens",
@@ -219,11 +217,10 @@ gupnp_search_criteria_parser_class_init
 
         /**
          * GUPnPSearchCriteriaParser::conjunction
-         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
-         * signal
+         * @parser: The #GUPnPSearchCriteriaParser that received the signal
          *
          * The ::conjuction signal is emitted whenever a conjuction marker
-         * (and) is parsed.
+         * &lpar;and&rpar; is parsed.
          **/
         signals[CONJUNCTION] =
                 g_signal_new ("conjunction",
@@ -239,11 +236,10 @@ gupnp_search_criteria_parser_class_init
 
         /**
          * GUPnPSearchCriteriaParser::disjunction
-         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
-         * signal
+         * @parser: The #GUPnPSearchCriteriaParser that received the signal
          *
          * The ::disjuction signal is emitted whenever a disjuction marker
-         * (or) is parsed.
+         * &lpar;or&rpar is parsed.
          **/
         signals[DISJUNCTION] =
                 g_signal_new ("disjunction",
@@ -259,11 +255,14 @@ gupnp_search_criteria_parser_class_init
 
         /**
          * GUPnPSearchCriteriaParser::expression
-         * @parser: The #GUPnPGUPnPSearchCriteriaParser that received the
-         * signal
+         * @parser: The #GUPnPSearchCriteriaParser that received the signal
+         * @property: The property
+         * @op: The operator
+         * @value: The value as string
+         * @error: Place-holder for any possible errors from handler
          *
-         * The ::expression signal is emitted whenever an expression
-         * (or) is parsed. Set @error and return FALSE if an error occurred.
+         * The ::expression signal is emitted whenever an expression is parsed.
+         * Set @error and return %FALSE if an error occurred.
          **/
         signals[EXPRESSION] =
                 g_signal_new ("expression",
