@@ -1,0 +1,7 @@
+#include <libgupnp-av/gupnp-av.h>
+
+gupnp_didl_lite_parser_get_type
+gupnp_didl_lite_writer_get_type
+gupnp_didl_lite_resource_get_type
+gupnp_last_change_parser_get_type
+gupnp_search_criteria_parser_get_type
