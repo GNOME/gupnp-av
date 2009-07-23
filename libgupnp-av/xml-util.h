@@ -57,6 +57,11 @@ xml_util_get_uint_attribute             (xmlNode    *node,
                                          const char *attribute_name,
                                          guint       default_value);
 
+G_GNUC_INTERNAL glong
+xml_util_get_long_attribute             (xmlNode    *node,
+                                         const char *attribute_name,
+                                         glong       default_value);
+
 G_GNUC_INTERNAL char *
 xml_util_get_child_attribute_content    (xmlNode    *node,
                                          const char *child_name,

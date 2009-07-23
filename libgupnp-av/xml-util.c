@@ -201,14 +201,24 @@ xml_util_get_uint_attribute (xmlNode    *node,
                              const char *attribute_name,
                              guint       default_value)
 {
+        return (guint) xml_util_get_long_attribute (node,
+                                                    attribute_name,
+                                                    (glong) default_value);
+}
+
+glong
+xml_util_get_long_attribute (xmlNode    *node,
+                             const char *attribute_name,
+                             glong       default_value)
+{
         xmlChar *content;
-        guint    ret;
+        glong    ret;
 
         content = get_attribute_content (node, attribute_name);
         if (!content)
                 return default_value;
 
-        ret = (guint) atoll ((char *) content);
+        ret = atoll ((char *) content);
 
         xmlFree (content);
 
