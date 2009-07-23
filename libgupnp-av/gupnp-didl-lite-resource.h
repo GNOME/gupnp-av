@@ -72,17 +72,17 @@ typedef struct {
 } GUPnPDIDLLiteResource;
 
 GType
-gupnp_didl_lite_resource_get_type (void);
+gupnp_didl_lite_resource_get_type     (void);
 
 void
-gupnp_didl_lite_resource_reset (GUPnPDIDLLiteResource *res);
+gupnp_didl_lite_resource_reset        (GUPnPDIDLLiteResource *res);
 
 void
-gupnp_didl_lite_resource_destroy             (GUPnPDIDLLiteResource *res);
+gupnp_didl_lite_resource_destroy      (GUPnPDIDLLiteResource *res);
 
 GUPnPDIDLLiteResource*
-gupnp_didl_lite_resource_copy  (const GUPnPDIDLLiteResource *source_res,
-                                GUPnPDIDLLiteResource       *dest_res);
+gupnp_didl_lite_resource_copy         (const GUPnPDIDLLiteResource *source_res,
+                                       GUPnPDIDLLiteResource       *dest_res);
 
 GUPnPDIDLLiteResource *
 gupnp_didl_lite_resource_create_from_xml
