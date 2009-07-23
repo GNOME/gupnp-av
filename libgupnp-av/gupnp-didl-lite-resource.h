@@ -26,6 +26,7 @@
 
 #include <stdarg.h>
 #include <glib-object.h>
+#include <libxml/tree.h>
 
 #include "gupnp-dlna.h"
 
@@ -82,6 +83,10 @@ gupnp_didl_lite_resource_destroy             (GUPnPDIDLLiteResource *res);
 GUPnPDIDLLiteResource*
 gupnp_didl_lite_resource_copy  (const GUPnPDIDLLiteResource *source_res,
                                 GUPnPDIDLLiteResource       *dest_res);
+
+GUPnPDIDLLiteResource *
+gupnp_didl_lite_resource_create_from_xml
+                                      (xmlNode *res_node);
 
 G_END_DECLS
 
