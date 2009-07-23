@@ -23,7 +23,7 @@
 #define __GUPNP_DIDL_LITE_OBJECT_H__
 
 #include <glib.h>
-#include <libxml/tree.h>
+#include "gupnp-didl-lite-resource.h"
 
 G_BEGIN_DECLS
 
@@ -68,6 +68,9 @@ gupnp_didl_lite_object_is_container            (xmlNode        *object_node);
 
 gboolean
 gupnp_didl_lite_object_is_item                 (xmlNode        *object_node);
+
+GList *
+gupnp_didl_lite_object_get_resources           (xmlNode *object_node);
 
 /* DIDL-Lite container Object functions */
 gboolean
