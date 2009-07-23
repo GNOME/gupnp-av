@@ -54,7 +54,8 @@ xml_util_get_boolean_attribute          (xmlNode    *node,
 
 G_GNUC_INTERNAL guint
 xml_util_get_uint_attribute             (xmlNode    *node,
-                                         const char *attribute_name);
+                                         const char *attribute_name,
+                                         guint       default_value);
 
 G_GNUC_INTERNAL char *
 xml_util_get_child_attribute_content    (xmlNode    *node,

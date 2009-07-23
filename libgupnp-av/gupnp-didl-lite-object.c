@@ -295,7 +295,7 @@ gupnp_didl_lite_container_get_child_count (xmlNode *container_node)
 {
         g_return_val_if_fail (container_node != NULL, 0);
 
-        return xml_util_get_uint_attribute (container_node, "childCount");
+        return xml_util_get_uint_attribute (container_node, "childCount", 0);
 }
 
 /**

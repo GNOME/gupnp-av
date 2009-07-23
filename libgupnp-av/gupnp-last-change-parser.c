@@ -112,7 +112,7 @@ get_instance_node (xmlDoc *doc,
              node = node->next) {
                 guint id;
 
-                id = xml_util_get_uint_attribute (node, "val");
+                id = xml_util_get_uint_attribute (node, "val", 0);
                 if (id == instance_id)
                         break;
         }

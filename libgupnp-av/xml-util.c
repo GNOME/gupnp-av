@@ -198,14 +198,15 @@ xml_util_get_boolean_attribute (xmlNode    *node,
 
 guint
 xml_util_get_uint_attribute (xmlNode    *node,
-                             const char *attribute_name)
+                             const char *attribute_name,
+                             guint       default_value)
 {
         xmlChar *content;
         guint    ret;
 
         content = get_attribute_content (node, attribute_name);
         if (!content)
-                return 0;
+                return default_value;
 
         ret = (guint) atoll ((char *) content);
 
