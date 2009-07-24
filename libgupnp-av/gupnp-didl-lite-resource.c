@@ -304,7 +304,7 @@ parse_resolution_info (xmlNode               *res_node,
 
 /**
  * gupnp_didl_lite_resource_create_from_xml
- * @res_node: The pointer to 'res' node in XML document.
+ * @res_node: The pointer to 'res' node in XML document
  *
  * Parses the @res_node and creates a #GUPnPDIDLLiteResource as a result.
  *
