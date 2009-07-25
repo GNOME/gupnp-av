@@ -88,6 +88,11 @@ GUPnPDIDLLiteResource *
 gupnp_didl_lite_resource_create_from_xml
                                       (xmlNode *res_node);
 
+gboolean
+gupnp_didl_lite_resource_protocol_info_compatible
+                                      (GUPnPDIDLLiteResource *resource,
+                                       const char            *protocol_info);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_RESOURCE_H__ */

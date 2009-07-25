@@ -349,6 +349,125 @@ gupnp_didl_lite_resource_create_from_xml (xmlNode *res_node)
         return res;
 }
 
+static gchar *
+get_dlna_pn (const char *additional_info)
+{
+        gchar **tokens;
+        gchar *pn = NULL;
+        gint i;
+
+        tokens = g_strsplit (additional_info, ";", -1);
+        if (tokens == NULL) {
+                return NULL;
+        }
+
+        for (i = 0; tokens[i]; i++) {
+                pn = g_strstr_len (tokens[i],
+                                   strlen (tokens[i]),
+                                   "DLNA.ORG_PN=");
+                if (pn != NULL) {
+                        pn = g_strdup (pn + 12); /* end of "DLNA.ORG_PN=" */
+
+                        break;
+                }
+        }
+
+        g_strfreev (tokens);
+
+        return pn;
+}
+
+static gboolean
+is_transport_compat (GUPnPDIDLLiteResource *resource,
+                     const char            *protocol,
+                     const char            *network)
+{
+        if (protocol[0] != '*' &&
+            g_ascii_strcasecmp (resource->protocol, protocol) != 0)
+                return FALSE;
+        else if (g_ascii_strcasecmp ("internal", protocol) == 0 &&
+                 strcmp (resource->network, network) != 0)
+                /* Host must be the same in case of INTERNAL protocol */
+                return FALSE;
+        else
+                return TRUE;
+}
+
+static gboolean
+is_content_format_compat (GUPnPDIDLLiteResource *resource,
+                          const char            *mime_type)
+{
+        if (mime_type[0] != '*' &&
+            g_ascii_strcasecmp (resource->mime_type, mime_type) != 0)
+                return FALSE;
+        else
+                return TRUE;
+}
+
+static gboolean
+is_additional_info_compat (GUPnPDIDLLiteResource *resource,
+                           const char            *additional_info)
+{
+        gchar *dlna_profile;
+        gboolean ret = FALSE;
+
+        if (additional_info[0] == '*') {
+                return TRUE;
+        }
+
+        dlna_profile = get_dlna_pn (additional_info);
+        if (dlna_profile == NULL) {
+                goto no_profile;
+        }
+
+        if (g_ascii_strcasecmp (dlna_profile, resource->dlna_profile) == 0) {
+                ret = TRUE;
+        }
+
+        g_free (dlna_profile);
+
+no_profile:
+        return ret;
+}
+
+/**
+ * gupnp_didl_lite_resource_protocol_info_compatible
+ * @resource: The #GUPnPDIDLLiteResource
+ * @protocol_info: The protocolInfo string
+ *
+ * Checks if the given protocolInfo string is compatible with @res.
+ *
+ * Return value: #TRUE if @protocol_info is compatible with @resource, otherwise
+ * #FALSE.
+ **/
+gboolean
+gupnp_didl_lite_resource_protocol_info_compatible (
+                                        GUPnPDIDLLiteResource *resource,
+                                        const char            *protocol_info)
+{
+        gchar **tokens;
+        gboolean ret = FALSE;
+
+        tokens = g_strsplit (protocol_info, ":", 4);
+        if (tokens[0] == NULL ||
+            tokens[1] == NULL ||
+            tokens[2] == NULL ||
+            tokens[3] == NULL) {
+                goto return_point;
+        }
+
+        if (is_transport_compat (resource, tokens[0], tokens[1]) &&
+            is_content_format_compat (resource, tokens[2]) &&
+            is_additional_info_compat (resource, tokens[3])) {
+                ret = TRUE;
+        }
+
+return_point:
+        g_strfreev (tokens);
+
+        return ret;
+}
+
 static GUPnPDIDLLiteResource*
 boxed_copy (const GUPnPDIDLLiteResource *res)
 {
