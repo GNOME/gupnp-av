@@ -37,6 +37,28 @@
 #define CONTAINER_CLASS_NAME "object.container"
 #define ITEM_CLASS_NAME      "object.item"
 
+static GUPnPDIDLLiteResource *
+find_compatible_resource (GList *resources, const char *protocol)
+{
+        GList *res;
+        GUPnPDIDLLiteResource *ret = NULL;
+
+        for (res = resources; res != NULL; res = res->next) {
+                GUPnPDIDLLiteResource *resource;
+
+                resource = (GUPnPDIDLLiteResource *) res->data;
+
+                if (gupnp_didl_lite_resource_protocol_info_compatible
+                                                (resource,
+                                                 protocol)) {
+                        ret = resource;
+                        break;
+                }
+        }
+
+        return ret;
+}
+
 /**
  * gupnp_didl_lite_object_is_container
  * @object_node: The object node
@@ -347,28 +369,6 @@ gupnp_didl_lite_object_get_resources (xmlNode *object_node)
         }
 
         g_list_free (resources);
-
-        return ret;
-}
-
-static GUPnPDIDLLiteResource *
-find_compatible_resource (GList *resources, const char *protocol)
-{
-        GList *res;
-        GUPnPDIDLLiteResource *ret = NULL;
-
-        for (res = resources; res != NULL; res = res->next) {
-                GUPnPDIDLLiteResource *resource;
-
-                resource = (GUPnPDIDLLiteResource *) res->data;
-
-                if (gupnp_didl_lite_resource_protocol_info_compatible
-                                                (resource,
-                                                 protocol)) {
-                        ret = resource;
-                        break;
-                }
-        }
 
         return ret;
 }
