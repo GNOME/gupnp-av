@@ -263,8 +263,8 @@ parse_protocol_info (xmlNode               *res_node,
         res->network = tokens[1];
         res->mime_type = tokens[2];
 
-        parse_additional_info (tokens[4], res);
-        g_free (tokens[4]);
+        parse_additional_info (tokens[3], res);
+        g_free (tokens[3]);
 
         /* So that g_strfreev doesn't free strings that we took */
         tokens[0] = NULL;
