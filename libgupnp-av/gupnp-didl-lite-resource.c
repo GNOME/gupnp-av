@@ -35,6 +35,9 @@
 #include "gupnp-didl-lite-resource.h"
 #include "gupnp-didl-lite-object.h"
 
+#define SEC_PER_MIN 60
+#define SEC_PER_HOUR 3600
+
 static void
 parse_additional_info (const char            *additional_info,
                        GUPnPDIDLLiteResource *res)
@@ -276,6 +279,32 @@ no_profile:
         return ret;
 }
 
+static long
+seconds_from_time (const char *time_str)
+{
+        char **tokens;
+        gdouble seconds = -1;
+
+        if (time_str == NULL)
+                return -1;
+
+        tokens = g_strsplit (time_str, ":", -1);
+        if (tokens[0] == NULL ||
+            tokens[1] == NULL ||
+            tokens[2] == NULL) {
+                goto return_point;
+        }
+
+        seconds = g_strtod (tokens[2], NULL);
+        seconds += g_strtod (tokens[1], NULL) * SEC_PER_MIN;
+        seconds += g_strtod (tokens[0], NULL) * SEC_PER_HOUR;
+
+return_point:
+        g_strfreev (tokens);
+
+        return (long) seconds;
+}
+
 static GUPnPDIDLLiteResource*
 boxed_copy (const GUPnPDIDLLiteResource *res)
 {
@@ -412,6 +441,7 @@ GUPnPDIDLLiteResource *
 gupnp_didl_lite_resource_create_from_xml (xmlNode *res_node)
 {
         GUPnPDIDLLiteResource *res;
+        char *duration_str;
 
         res = g_slice_new (GUPnPDIDLLiteResource);
         gupnp_didl_lite_resource_reset (res);
@@ -422,8 +452,12 @@ gupnp_didl_lite_resource_create_from_xml (xmlNode *res_node)
 
         parse_protocol_info (res_node, res);
 
+        duration_str = gupnp_didl_lite_property_get_attribute (res_node,
+                                                               "duration");
+        res->duration = seconds_from_time (duration_str);
+        g_free (duration_str);
+
         res->size = xml_util_get_long_attribute (res_node, "size", -1);
-        res->duration = xml_util_get_long_attribute (res_node, "duration", -1);
         res->bitrate = xml_util_get_long_attribute (res_node, "bitrate", -1);
         res->sample_freq = xml_util_get_long_attribute (res_node,
                                                         "sampleFrequency",
