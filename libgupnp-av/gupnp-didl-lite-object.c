@@ -37,24 +37,23 @@
 #define CONTAINER_CLASS_NAME "object.container"
 #define ITEM_CLASS_NAME      "object.item"
 
-static GUPnPDIDLLiteResource *
-find_compatible_resource (GList *resources, const char *protocol)
+static gboolean
+is_resource_compatible (GUPnPDIDLLiteResource *resource,
+                        const char            *sink_protocol_info)
 {
-        GList *res;
-        GUPnPDIDLLiteResource *ret = NULL;
+        gboolean ret = FALSE;
+        char **protocols;
+        guint8 i;
 
-        for (res = resources; res != NULL; res = res->next) {
-                GUPnPDIDLLiteResource *resource;
+        protocols = g_strsplit (sink_protocol_info, ",", 0);
 
-                resource = (GUPnPDIDLLiteResource *) res->data;
+        for (i = 0; protocols[i] && !ret; i++)
+                if (gupnp_didl_lite_resource_protocol_info_compatible (
+                                                        resource,
+                                                        protocols[i]))
+                        ret = TRUE;
 
-                if (gupnp_didl_lite_resource_protocol_info_compatible
-                                                (resource,
-                                                 protocol)) {
-                        ret = resource;
-                        break;
-                }
-        }
+        g_strfreev (protocols);
 
         return ret;
 }
@@ -400,17 +399,18 @@ gupnp_didl_lite_object_get_compat_resource (xmlNode    *object_node,
         GUPnPDIDLLiteResource *resource = NULL;
         GList  *resources = NULL;
         GList  *res;
-        char **protocols;
-        guint8 i;
 
         g_return_val_if_fail (object_node != NULL, NULL);
         g_return_val_if_fail (sink_protocol_info != NULL, NULL);
 
         resources = gupnp_didl_lite_object_get_resources (object_node);
-        protocols = g_strsplit (sink_protocol_info, ",", 0);
 
-        for (i = 0; protocols[i] && resource == NULL; i++)
-                resource = find_compatible_resource (resources, protocols[i]);
+        for (res = resources; res != NULL && resource == NULL; res = res->next) {
+                resource = (GUPnPDIDLLiteResource *) res->data;
+
+                if (!is_resource_compatible (resource, sink_protocol_info))
+                        resource = NULL;
+        }
 
         if (resource == NULL && lenient)
                 /* Just use the first resource */
@@ -421,8 +421,6 @@ gupnp_didl_lite_object_get_compat_resource (xmlNode    *object_node,
                 if (res->data != resource)
                         g_boxed_free (GUPNP_TYPE_DIDL_LITE_RESOURCE, res->data);
         g_list_free (resources);
-
-        g_strfreev (protocols);
 
         return resource;
 }
