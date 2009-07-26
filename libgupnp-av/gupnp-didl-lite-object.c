@@ -350,3 +350,79 @@ gupnp_didl_lite_object_get_resources (xmlNode *object_node)
 
         return ret;
 }
+
+static GUPnPDIDLLiteResource *
+find_compatible_resource (GList *resources, const char *protocol)
+{
+        GList *res;
+        GUPnPDIDLLiteResource *ret = NULL;
+
+        for (res = resources; res != NULL; res = res->next) {
+                GUPnPDIDLLiteResource *resource;
+
+                resource = (GUPnPDIDLLiteResource *) res->data;
+
+                if (gupnp_didl_lite_resource_protocol_info_compatible
+                                                (resource,
+                                                 protocol)) {
+                        ret = resource;
+                        break;
+                }
+        }
+
+        return ret;
+}
+
+/**
+ * gupnp_didl_lite_object_get_compat_resource
+ * @object_node: The object node
+ * @sink_protocol_info: The SinkProtocolInfo string from MediaRenderer
+ * @lenient: Enable lenient mode
+ *
+ * Use this function to get a resource from the object node that is compatible
+ * with any of the protocols specified in the @sink_protocol_info. The value
+ * of @sink_protocol_info will typically be acquired from 'Sink' argument of
+ * 'GetProtocolInfo' action or 'SinkProtocolInfo' state-variable of a
+ * ConnectionManager service.
+ *
+ * If @lenient is #TRUE, the first resource in the list is returned instead of
+ * %NULL if none of resources and protocols are found to be compatible.
+ *
+ * Return value: The resource belonging to @object_node that is comaptible with
+ * any of the protocols specified in @sink_protocol_info, or %NULL. Destroy it
+ * after usage by calling #g_boxed_free on it.
+ **/
+GUPnPDIDLLiteResource *
+gupnp_didl_lite_object_get_compat_resource (xmlNode    *object_node,
+                                            const char *sink_protocol_info,
+                                            gboolean    lenient)
+{
+        GUPnPDIDLLiteResource *resource = NULL;
+        GList  *resources = NULL;
+        GList  *res;
+        char **protocols;
+        guint8 i;
+
+        g_return_val_if_fail (object_node != NULL, NULL);
+        g_return_val_if_fail (sink_protocol_info != NULL, NULL);
+
+        resources = gupnp_didl_lite_object_get_resources (object_node);
+        protocols = g_strsplit (sink_protocol_info, ",", 0);
+
+        for (i = 0; protocols[i] && resource == NULL; i++)
+                resource = find_compatible_resource (resources, protocols[i]);
+
+        if (resource == NULL && lenient)
+                /* Just use the first resource */
+                resource = (GUPnPDIDLLiteResource *) resources->data;
+
+        /* Free all resources except for the one we just took */
+        for (res = resources; res; res = res->next)
+                if (res->data != resource)
+                        g_boxed_free (GUPNP_TYPE_DIDL_LITE_RESOURCE, res->data);
+        g_list_free (resources);
+
+        g_strfreev (protocols);
+
+        return resource;
+}

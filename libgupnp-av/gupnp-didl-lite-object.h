@@ -72,6 +72,11 @@ gupnp_didl_lite_object_is_item                 (xmlNode        *object_node);
 GList *
 gupnp_didl_lite_object_get_resources           (xmlNode *object_node);
 
+GUPnPDIDLLiteResource *
+gupnp_didl_lite_object_get_compat_resource     (xmlNode    *object_node,
+                                                const char *sink_protocol_info,
+                                                gboolean    lenient);
+
 /* DIDL-Lite container Object functions */
 gboolean
 gupnp_didl_lite_container_get_searchable       (xmlNode     *container_node);
