@@ -482,7 +482,7 @@ gupnp_didl_lite_resource_create_from_xml (xmlNode *res_node)
 
 /**
  * gupnp_didl_lite_resource_protocol_info_compatible
- * @resource: The #GUPnPDIDLLiteResource
+ * @res: The #GUPnPDIDLLiteResource
  * @protocol_info: The protocolInfo string
  *
  * Checks if the given protocolInfo string is compatible with @res.
@@ -492,7 +492,7 @@ gupnp_didl_lite_resource_create_from_xml (xmlNode *res_node)
  **/
 gboolean
 gupnp_didl_lite_resource_protocol_info_compatible (
-                                        GUPnPDIDLLiteResource *resource,
+                                        GUPnPDIDLLiteResource *res,
                                         const char            *protocol_info)
 {
         gchar **tokens;
@@ -506,9 +506,9 @@ gupnp_didl_lite_resource_protocol_info_compatible (
                 goto return_point;
         }
 
-        if (is_transport_compat (resource, tokens[0], tokens[1]) &&
-            is_content_format_compat (resource, tokens[2]) &&
-            is_additional_info_compat (resource, tokens[3])) {
+        if (is_transport_compat (res, tokens[0], tokens[1]) &&
+            is_content_format_compat (res, tokens[2]) &&
+            is_additional_info_compat (res, tokens[3])) {
                 ret = TRUE;
         }
 

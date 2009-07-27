@@ -90,7 +90,7 @@ gupnp_didl_lite_resource_create_from_xml
 
 gboolean
 gupnp_didl_lite_resource_protocol_info_compatible
-                                      (GUPnPDIDLLiteResource *resource,
+                                      (GUPnPDIDLLiteResource *res,
                                        const char            *protocol_info);
 
 G_END_DECLS
