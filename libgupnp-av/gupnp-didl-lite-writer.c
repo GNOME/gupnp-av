@@ -65,7 +65,7 @@ gupnp_didl_lite_writer_finalize (GObject *object)
                 g_string_free (writer->priv->str, TRUE);
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
-        object_class->dispose (object);
+        object_class->finalize (object);
 }
 
 static void
