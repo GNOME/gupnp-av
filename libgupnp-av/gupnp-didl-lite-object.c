@@ -126,7 +126,7 @@ gupnp_didl_lite_object_is_item (xmlNode *object_node)
  * gupnp_didl_lite_object_get_upnp_class
  * @object_node: The object node
  *
- * Return value: The class of @object_node, or %NULL. #g_free() after usage.
+ * Return value: The class of @object_node, or %NULL. #g_free after usage.
  **/
 char *
 gupnp_didl_lite_object_get_upnp_class (xmlNode *object_node)
@@ -141,7 +141,7 @@ gupnp_didl_lite_object_get_upnp_class (xmlNode *object_node)
  * @object_node: The object node
  *
  * Return value: The friendly name of the class of @object_node, or %NULL.
- * #g_free() after usage.
+ * #g_free after usage.
  **/
 char *
 gupnp_didl_lite_object_get_upnp_class_name (xmlNode *object_node)
@@ -157,7 +157,7 @@ gupnp_didl_lite_object_get_upnp_class_name (xmlNode *object_node)
  * gupnp_didl_lite_object_get_id
  * @object_node: The object node
  *
- * Return value: The ID of the @object_node, or %NULL. #g_free() after usage.
+ * Return value: The ID of the @object_node, or %NULL. #g_free after usage.
  **/
 char *
 gupnp_didl_lite_object_get_id (xmlNode *object_node)
@@ -171,7 +171,7 @@ gupnp_didl_lite_object_get_id (xmlNode *object_node)
  * gupnp_didl_lite_object_get_parent_id
  * @object_node: The object node
  *
- * Return value: The ID of parent of the @object_node, or %NULL. #g_free() after
+ * Return value: The ID of parent of the @object_node, or %NULL. #g_free after
  * usage.
  **/
 char *
@@ -191,7 +191,7 @@ gupnp_didl_lite_object_get_parent_id (xmlNode *object_node)
  * Use this function to retreive property nodes by name.
  *
  * Return value: The list of property nodes by the name @property_name
- * belonging to @object_node, or %NULL. #g_list_free() the returned list after
+ * belonging to @object_node, or %NULL. #g_list_free the returned list after
  * usage but do not modify the contents.
  **/
 GList *
@@ -209,7 +209,7 @@ gupnp_didl_lite_object_get_property (xmlNode    *object_node,
  * @property_node: The object property node
  *
  * Return value: The value of the property node @property_node as a string or
- * %NULL. #g_free() after usage.
+ * %NULL. #g_free after usage.
  **/
 char *
 gupnp_didl_lite_property_get_value (xmlNode *property_node)
@@ -225,7 +225,7 @@ gupnp_didl_lite_property_get_value (xmlNode *property_node)
  * Use this function to retreive attributes of object properties.
  *
  * Return value: The value of the attribute @attribute of the property node
- * @property_node as a string or %NULL. #g_free() after usage.
+ * @property_node as a string or %NULL. #g_free after usage.
  **/
 char *
 gupnp_didl_lite_property_get_attribute (xmlNode    *property_node,
@@ -252,7 +252,7 @@ gupnp_didl_lite_object_get_restricted (xmlNode *object_node)
  * gupnp_didl_lite_object_get_title
  * @object_node: The object node
  *
- * Return value: The title of the @object_node, or %NULL. #g_free() after usage.
+ * Return value: The title of the @object_node, or %NULL. #g_free after usage.
  **/
 char *
 gupnp_didl_lite_object_get_title (xmlNode *object_node)
@@ -266,7 +266,7 @@ gupnp_didl_lite_object_get_title (xmlNode *object_node)
  * gupnp_didl_lite_object_get_creator
  * @object_node: The object node
  *
- * Return value: The creator of the @object_node, or %NULL. #g_free() after
+ * Return value: The creator of the @object_node, or %NULL. #g_free after
  * usage.
  **/
 char *
@@ -281,7 +281,7 @@ gupnp_didl_lite_object_get_creator (xmlNode *object_node)
  * gupnp_didl_lite_object_get_write_status
  * @object_node: The object node
  *
- * Return value: The write status of the @object_node, or %NULL. #g_free() after
+ * Return value: The write status of the @object_node, or %NULL. #g_free after
  * usage.
  **/
 char *
@@ -324,7 +324,7 @@ gupnp_didl_lite_container_get_child_count (xmlNode *container_node)
  * gupnp_didl_lite_item_get_ref_id
  * @item_node: The item node
  *
- * Return value: The ref ID of the @item, or %NULL. #g_free() after usage.
+ * Return value: The ref ID of the @item, or %NULL. #g_free after usage.
  **/
 char *
 gupnp_didl_lite_item_get_ref_id (xmlNode *item_node)
@@ -341,7 +341,7 @@ gupnp_didl_lite_item_get_ref_id (xmlNode *item_node)
  * Use this function to retreive resources from the object node.
  *
  * Return value: The list of resources belonging to @object_node, or %NULL.
- * #g_list_free() the returned list after usage and destroy the contents by
+ * #g_list_free the returned list after usage and destroy the contents by
  * calling #g_boxed_free on each resource.
  **/
 GList *
