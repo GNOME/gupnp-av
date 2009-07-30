@@ -38,18 +38,18 @@ typedef enum {
 } GUPnPDLNAOperation;
 
 typedef enum {
-        GUPNP_DLNA_FLAG_SENDER_PACED              = (1 << 31),
-        GUPNP_DLNA_FLAG_TIME_BASED_SEEK           = (1 << 30),
-        GUPNP_DLNA_FLAG_BYTE_BASED_SEEK           = (1 << 29),
-        GUPNP_DLNA_FLAG_PLAY_CONTAINER            = (1 << 28),
-        GUPNP_DLNA_FLAG_S0_INCREASE               = (1 << 27),
-        GUPNP_DLNA_FLAG_SN_INCREASE               = (1 << 26),
-        GUPNP_DLNA_FLAG_RTSP_PAUSE                = (1 << 25),
-        GUPNP_DLNA_FLAG_STREAMING_TRANSFER_MODE   = (1 << 24),
-        GUPNP_DLNA_FLAG_INTERACTIVE_TRANSFER_MODE = (1 << 23),
-        GUPNP_DLNA_FLAG_BACKGROUND_TRANSFER_MODE  = (1 << 22),
-        GUPNP_DLNA_FLAG_CONNECTION_STALL          = (1 << 21),
-        GUPNP_DLNA_FLAG_DLNA_V15                  = (1 << 20)
+        GUPNP_DLNA_FLAGS_SENDER_PACED              = (1 << 31),
+        GUPNP_DLNA_FLAGS_TIME_BASED_SEEK           = (1 << 30),
+        GUPNP_DLNA_FLAGS_BYTE_BASED_SEEK           = (1 << 29),
+        GUPNP_DLNA_FLAGS_PLAY_CONTAINER            = (1 << 28),
+        GUPNP_DLNA_FLAGS_S0_INCREASE               = (1 << 27),
+        GUPNP_DLNA_FLAGS_SN_INCREASE               = (1 << 26),
+        GUPNP_DLNA_FLAGS_RTSP_PAUSE                = (1 << 25),
+        GUPNP_DLNA_FLAGS_STREAMING_TRANSFER_MODE   = (1 << 24),
+        GUPNP_DLNA_FLAGS_INTERACTIVE_TRANSFER_MODE = (1 << 23),
+        GUPNP_DLNA_FLAGS_BACKGROUND_TRANSFER_MODE  = (1 << 22),
+        GUPNP_DLNA_FLAGS_CONNECTION_STALL          = (1 << 21),
+        GUPNP_DLNA_FLAGS_DLNA_V15                  = (1 << 20)
 } GUPnPDLNAFlags;
 
 G_END_DECLS
