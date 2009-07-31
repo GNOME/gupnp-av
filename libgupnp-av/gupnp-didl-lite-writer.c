@@ -132,6 +132,69 @@ append_escaped_text (GUPnPDIDLLiteWriter *writer,
     }
 }
 
+static void
+add_dlna_info_from_resource (GUPnPDIDLLiteWriter   *writer,
+                             GUPnPDIDLLiteResource *res)
+{
+        const char *dlna_profile;
+        const char **speeds;
+        GUPnPDLNAConversion conversion;
+
+        dlna_profile = gupnp_didl_lite_resource_get_dlna_profile (res);
+        if (dlna_profile == NULL)
+                /* Try guessing */
+                dlna_profile = dlna_guess_profile (res);
+
+        if (dlna_profile == NULL) {
+                g_string_append_printf (writer->priv->str, ":*\"");
+
+                return;
+        }
+
+        g_string_append_printf (writer->priv->str,
+                                ":DLNA.ORG_PN=%s",
+                                dlna_profile);
+
+        /* the OP parameter is only allowed for the "http-get"
+         * and "rtsp-rtp-udp" protocols
+         */
+        if (strcmp (gupnp_didl_lite_resource_get_protocol (res),
+                    "http-get") == 0 ||
+            strcmp (gupnp_didl_lite_resource_get_protocol (res),
+                    "rtsp-rtp-udp") == 0)
+                g_string_append_printf
+                        (writer->priv->str,
+                         ";DLNA.ORG_OP=%.2x",
+                         gupnp_didl_lite_resource_get_dlna_operation (res));
+
+        /* Specify PS parameter if list of play speeds is provided */
+        speeds = gupnp_didl_lite_resource_get_play_speeds (res);
+        if (speeds != NULL) {
+                int i;
+
+                g_string_append_printf (writer->priv->str, ";DLNA.ORG_PS=");
+
+                for (i = 0; speeds[i]; i++) {
+                        g_string_append (writer->priv->str, speeds[i]);
+
+                        if (speeds[i + 1])
+                                g_string_append_c (writer->priv->str, ',');
+                }
+        }
+
+        conversion = gupnp_didl_lite_resource_get_dlna_conversion (res);
+        /* omit the CI parameter for non-converted content */
+        if (conversion != GUPNP_DLNA_CONVERSION_NONE)
+                g_string_append_printf (writer->priv->str,
+                                        ";DLNA.ORG_CI=%d",
+                                        conversion);
+
+        g_string_append_printf (writer->priv->str,
+                                ";DLNA.ORG_FLAGS=%.8x%.24x\"",
+                                gupnp_didl_lite_resource_get_dlna_flags (res),
+                                0);
+}
+
 #define DIDL_LITE_HEADER \
         "<DIDL-Lite xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC \
         "=\"http://purl.org/dc/elements/1.1/\" " \
@@ -329,83 +392,40 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 {
         SoupURI *uri;
         char *uri_str;
-        const char *dlna_profile;
+        const char *str;
+        int i;
+        long l;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (res != NULL);
-        g_return_if_fail (res->uri != NULL);
-        g_return_if_fail (res->protocol != NULL);
-        g_return_if_fail (res->mime_type != NULL);
+        g_return_if_fail (gupnp_didl_lite_resource_get_uri (res) != NULL);
+        g_return_if_fail (gupnp_didl_lite_resource_get_protocol (res) != NULL);
+        g_return_if_fail (gupnp_didl_lite_resource_get_mime_type (res) != NULL);
 
         g_string_append (writer->priv->str, "<res protocolInfo=\"");
 
-        g_string_append (writer->priv->str, res->protocol);
+        g_string_append (writer->priv->str,
+                         gupnp_didl_lite_resource_get_protocol (res));
         g_string_append_c (writer->priv->str, ':');
-        if (res->network != NULL)
-                g_string_append (writer->priv->str, res->network);
+        if (gupnp_didl_lite_resource_get_network (res) != NULL)
+                g_string_append (writer->priv->str,
+                                 gupnp_didl_lite_resource_get_network (res));
         else
                 g_string_append (writer->priv->str, "*");
         g_string_append_c (writer->priv->str, ':');
-        g_string_append (writer->priv->str, res->mime_type);
+        g_string_append (writer->priv->str,
+                         gupnp_didl_lite_resource_get_mime_type (res));
 
-        dlna_profile = res->dlna_profile;
-        if (dlna_profile == NULL)
-                /* Try guessing */
-                dlna_profile = dlna_guess_profile (res);
+        add_dlna_info_from_resource (writer, res);
 
-        if (dlna_profile == NULL) {
-                g_string_append_printf (writer->priv->str, ":*\"");
-        } else {
-                g_string_append_printf (writer->priv->str,
-                                        ":DLNA.ORG_PN=%s",
-                                        dlna_profile);
-
-                /* the OP parameter is only allowed for the "http-get"
-                 * and "rtsp-rtp-udp" protocols
-                 */
-                if (strcmp (res->protocol, "http-get") == 0 ||
-                    strcmp (res->protocol, "rtsp-rtp-udp") == 0)
-                        g_string_append_printf (writer->priv->str,
-                                                ";DLNA.ORG_OP=%.2x",
-                                                res->dlna_operation);
-
-                /* Specify PS parameter if list of play speeds is provided */
-                if (res->play_speeds != NULL) {
-                        GList *lst;
-
-                        g_string_append_printf (writer->priv->str,
-                                                ";DLNA.ORG_PS=");
-
-                        for (lst = res->play_speeds; lst; lst = lst->next) {
-                                char *speed = (char *) lst->data;
-
-                                g_string_append (writer->priv->str, speed);
-
-                                if (lst->next)
-                                        g_string_append_c (writer->priv->str,
-                                                           ',');
-                        }
-                }
-
-                /* omit the CI parameter for non-converted content */
-                if (res->dlna_conversion != GUPNP_DLNA_CONVERSION_NONE)
-                        g_string_append_printf (writer->priv->str,
-                                                ";DLNA.ORG_CI=%d",
-                                                res->dlna_conversion);
-
-                g_string_append_printf (writer->priv->str,
-                                        ";DLNA.ORG_FLAGS=%.8x%.24x\"",
-                                        res->dlna_flags,
-                                        0);
-        }
-
-        if (res->import_uri) {
+        str = gupnp_didl_lite_resource_get_import_uri (res);
+        if (str != NULL) {
                 g_string_append (writer->priv->str, " importUri=\"");
 
                 if (writer->priv->url_base || writer->priv->need_escape) {
                         uri = soup_uri_new_with_base (writer->priv->url_base,
-                                                      res->import_uri);
+                                                      str);
                         uri_str = soup_uri_to_string (uri, FALSE);
                         soup_uri_free (uri);
 
@@ -413,68 +433,82 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 
                         g_free (uri_str);
                 } else
-                        g_string_append (writer->priv->str, res->import_uri);
+                        g_string_append (writer->priv->str, str);
 
                 g_string_append_c (writer->priv->str, '"');
         }
 
-        if (res->size >= 0)
-                g_string_append_printf (writer->priv->str,
-                                        " size=\"%ld\"", res->size);
+        if (gupnp_didl_lite_resource_get_size (res) >= 0)
+                g_string_append_printf
+                        (writer->priv->str,
+                         " size=\"%ld\"",
+                         gupnp_didl_lite_resource_get_size (res));
 
-        if (res->duration >= 0)
+        l = gupnp_didl_lite_resource_get_duration (res);
+        if (l >= 0)
                 g_string_append_printf (writer->priv->str,
                                         " duration=\"%ld:%.2ld:%.2ld\"",
-                                        res->duration / (60 * 60),
-                                        (res->duration / 60) % 60,
-                                        res->duration % 60);
+                                        l / (60 * 60),
+                                        (l / 60) % 60,
+                                        l % 60);
 
-        if (res->bitrate >= 0)
-                g_string_append_printf (writer->priv->str,
-                                        " bitrate=\"%d\"", res->bitrate);
+        if (gupnp_didl_lite_resource_get_bitrate (res) >= 0)
+                g_string_append_printf
+                        (writer->priv->str,
+                         " bitrate=\"%d\"",
+                         gupnp_didl_lite_resource_get_bitrate (res));
 
-        if (res->sample_freq >= 0)
-                g_string_append_printf (writer->priv->str,
-                                        " sampleFrequency=\"%d\"",
-                                        res->sample_freq);
+        if (gupnp_didl_lite_resource_get_sample_freq (res) >= 0)
+                g_string_append_printf
+                        (writer->priv->str,
+                         " sampleFrequency=\"%d\"",
+                         gupnp_didl_lite_resource_get_sample_freq (res));
 
-        if (res->bits_per_sample >= 0)
-                g_string_append_printf (writer->priv->str,
-                                        " bitsPerSample=\"%d\"",
-                                        res->bits_per_sample);
+        if (gupnp_didl_lite_resource_get_bits_per_sample (res) >= 0)
+                g_string_append_printf
+                        (writer->priv->str,
+                         " bitsPerSample=\"%d\"",
+                         gupnp_didl_lite_resource_get_bits_per_sample (res));
 
-        if (res->protection) {
+        str = gupnp_didl_lite_resource_get_protection (res);
+        if (str != NULL) {
                 g_string_append (writer->priv->str, " protection=\"");
 
                 if (writer->priv->need_escape)
-                        append_escaped_text (writer, res->protection);
+                        append_escaped_text (writer, str);
                 else
-                        g_string_append (writer->priv->str, res->protection);
+                        g_string_append (writer->priv->str, str);
 
                 g_string_append_c (writer->priv->str, '"');
         }
 
-        if (res->n_audio_channels >= 0)
-                g_string_append_printf (writer->priv->str,
-                                        " nrAudioChannels=\"%d\"",
-                                        res->n_audio_channels);
+        if (gupnp_didl_lite_resource_get_audio_channels (res) >= 0)
+                g_string_append_printf
+                        (writer->priv->str,
+                         " nrAudioChannels=\"%d\"",
+                         gupnp_didl_lite_resource_get_audio_channels (res));
 
-        if (res->width >= 0 && res->height >= 0) {
-                g_string_append_printf (writer->priv->str,
-                                        " resolution=\"%dx%d\"",
-                                        res->width,
-                                        res->height);
+        if (gupnp_didl_lite_resource_get_width (res) >= 0 &&
+            gupnp_didl_lite_resource_get_height (res) >= 0) {
+                g_string_append_printf
+                        (writer->priv->str,
+                         " resolution=\"%dx%d\"",
+                         gupnp_didl_lite_resource_get_width (res),
+                         gupnp_didl_lite_resource_get_height (res));
         }
 
-        if (res->color_depth >= 0)
-                g_string_append_printf (writer->priv->str,
-                                        " colorDepth=\"%d\"",
-                                        res->color_depth);
+        if (gupnp_didl_lite_resource_get_color_depth (res) >= 0)
+                g_string_append_printf
+                        (writer->priv->str,
+                         " colorDepth=\"%d\"",
+                         gupnp_didl_lite_resource_get_color_depth (res));
 
         g_string_append_c (writer->priv->str, '>');
 
         if (writer->priv->url_base || writer->priv->need_escape) {
-                uri = soup_uri_new_with_base (writer->priv->url_base, res->uri);
+                uri = soup_uri_new_with_base
+                                (writer->priv->url_base,
+                                 gupnp_didl_lite_resource_get_uri (res));
                 uri_str = soup_uri_to_string (uri, FALSE);
                 soup_uri_free (uri);
 
@@ -482,7 +516,8 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 
                 g_free (uri_str);
         } else
-                g_string_append (writer->priv->str, res->uri);
+                g_string_append (writer->priv->str,
+                                 gupnp_didl_lite_resource_get_uri (res));
 
         g_string_append (writer->priv->str, "</res>");
 }

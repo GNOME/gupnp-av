@@ -362,7 +362,7 @@ gupnp_didl_lite_object_get_resources (xmlNode *object_node)
                 res_node = (xmlNode *) res->data;
 
                 /* Create a resource struct out of DIDLLite XML */
-                resource = gupnp_didl_lite_resource_create_from_xml (res_node);
+                resource = gupnp_didl_lite_resource_new_from_xml (res_node);
 
                 ret = g_list_append (ret, resource);
         }
@@ -405,7 +405,9 @@ gupnp_didl_lite_object_get_compat_resource (xmlNode    *object_node,
 
         resources = gupnp_didl_lite_object_get_resources (object_node);
 
-        for (res = resources; res != NULL && resource == NULL; res = res->next) {
+        for (res = resources;
+             res != NULL && resource == NULL;
+             res = res->next) {
                 resource = (GUPnPDIDLLiteResource *) res->data;
 
                 if (!is_resource_compatible (resource, sink_protocol_info))

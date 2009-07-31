@@ -26,16 +26,31 @@
 
 G_BEGIN_DECLS
 
+GType
+gupnp_dlna_conversion_get_type (void) G_GNUC_CONST;
+
+#define GUPNP_TYPE_DLNA_CONVERSION (gupnp_dlna_conversion_get_type ())
+
 typedef enum {
         GUPNP_DLNA_CONVERSION_NONE       = 0,
         GUPNP_DLNA_CONVERSION_TRANSCODED = 1
 } GUPnPDLNAConversion;
+
+GType
+gupnp_dlna_operation_get_type (void) G_GNUC_CONST;
+
+#define GUPNP_TYPE_DLNA_OPERATION (gupnp_dlna_operation_get_type ())
 
 typedef enum {
         GUPNP_DLNA_OPERATION_NONE     = 0x00,
         GUPNP_DLNA_OPERATION_RANGE    = 0x01,
         GUPNP_DLNA_OPERATION_TIMESEEK = 0x10
 } GUPnPDLNAOperation;
+
+GType
+gupnp_dlna_flags_get_type (void) G_GNUC_CONST;
+
+#define GUPNP_TYPE_DLNA_FLAGS (gupnp_dlna_flags_get_type ())
 
 typedef enum {
         GUPNP_DLNA_FLAGS_SENDER_PACED              = (1 << 31),
