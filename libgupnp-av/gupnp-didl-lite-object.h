@@ -1,7 +1,10 @@
 /*
- * Copyright (C) 2007 Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+ * Copyright (C) 2009 Nokia Corporation.
+ * Copyright (C) 2007, 2008 OpenedHand Ltd.
  *
- * Authors: Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+ * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
+ *                                <zeeshanak@gnome.org>
+ *          Jorn Baayen <jorn@openedhand.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,71 +25,97 @@
 #ifndef __GUPNP_DIDL_LITE_OBJECT_H__
 #define __GUPNP_DIDL_LITE_OBJECT_H__
 
-#include <glib.h>
+#include <stdarg.h>
+#include <glib-object.h>
+#include <libxml/tree.h>
+
 #include "gupnp-didl-lite-resource.h"
 
 G_BEGIN_DECLS
 
-/* DIDL-Lite Generic Object related functions */
+GType
+gupnp_didl_lite_object_get_type (void) G_GNUC_CONST;
+
+#define GUPNP_TYPE_DIDL_LITE_OBJECT \
+                (gupnp_didl_lite_object_get_type ())
+#define GUPNP_DIDL_LITE_OBJECT(obj) \
+                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
+                 GUPNP_TYPE_DIDL_LITE_OBJECT, \
+                 GUPnPDIDLLiteObject))
+#define GUPNP_DIDL_LITE_OBJECT_CLASS(obj) \
+                (G_TYPE_CHECK_CLASS_CAST ((obj), \
+                 GUPNP_TYPE_DIDL_LITE_OBJECT, \
+                 GUPnPDIDLLiteObjectClass))
+#define GUPNP_IS_DIDL_LITE_OBJECT(obj) \
+                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
+                 GUPNP_TYPE_DIDL_LITE_OBJECT))
+#define GUPNP_IS_DIDL_LITE_OBJECT_CLASS(obj) \
+                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
+                 GUPNP_TYPE_DIDL_LITE_OBJECT))
+#define GUPNP_DIDL_LITE_OBJECT_GET_CLASS(obj) \
+                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
+                 GUPNP_TYPE_DIDL_LITE_OBJECT, \
+                 GUPnPDIDLLiteObjectClass))
+
+typedef struct _GUPnPDIDLLiteObjectPrivate GUPnPDIDLLiteObjectPrivate;
+
+typedef struct {
+        GObject parent;
+
+        GUPnPDIDLLiteObjectPrivate *priv;
+} GUPnPDIDLLiteObject;
+
+typedef struct {
+        GObjectClass parent_class;
+
+        /* future padding */
+        void (* _gupnp_reserved1) (void);
+        void (* _gupnp_reserved2) (void);
+        void (* _gupnp_reserved3) (void);
+        void (* _gupnp_reserved4) (void);
+} GUPnPDIDLLiteObjectClass;
+
+xmlNode *
+gupnp_didl_lite_object_get_xml_node     (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_upnp_class   (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_upnp_class_name
+                                        (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_id           (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_parent_id    (GUPnPDIDLLiteObject *object);
+
 GList *
-gupnp_didl_lite_object_get_property            (xmlNode         *object_node,
-                                                const char      *property_name);
-
-char *
-gupnp_didl_lite_property_get_value             (xmlNode         *property_node);
-
-char *
-gupnp_didl_lite_property_get_attribute         (xmlNode         *property_node,
-                                                const char      *attribute);
-
-char *
-gupnp_didl_lite_object_get_id                  (xmlNode        *object_node);
-
-char *
-gupnp_didl_lite_object_get_parent_id           (xmlNode        *object_node);
+gupnp_didl_lite_object_get_properties   (GUPnPDIDLLiteObject *object,
+                                         const char          *name);
 
 gboolean
-gupnp_didl_lite_object_get_restricted          (xmlNode        *object_node);
+gupnp_didl_lite_object_get_restricted   (GUPnPDIDLLiteObject *object);
 
 char *
-gupnp_didl_lite_object_get_title               (xmlNode        *object_node);
+gupnp_didl_lite_object_get_title        (GUPnPDIDLLiteObject *object);
 
 char *
-gupnp_didl_lite_object_get_creator             (xmlNode        *object_node);
+gupnp_didl_lite_object_get_creator      (GUPnPDIDLLiteObject *object);
 
 char *
-gupnp_didl_lite_object_get_write_status        (xmlNode        *object_node);
-
-char *
-gupnp_didl_lite_object_get_upnp_class          (xmlNode        *object_node);
-
-char *
-gupnp_didl_lite_object_get_upnp_class_name     (xmlNode        *object_node);
-
-gboolean
-gupnp_didl_lite_object_is_container            (xmlNode        *object_node);
-
-gboolean
-gupnp_didl_lite_object_is_item                 (xmlNode        *object_node);
+gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object);
 
 GList *
-gupnp_didl_lite_object_get_resources           (xmlNode *object_node);
+gupnp_didl_lite_object_get_resources    (GUPnPDIDLLiteObject *object);
 
 GUPnPDIDLLiteResource *
-gupnp_didl_lite_object_get_compat_resource     (xmlNode    *object_node,
-                                                const char *sink_protocol_info,
-                                                gboolean    lenient);
-
-/* DIDL-Lite container Object functions */
-gboolean
-gupnp_didl_lite_container_get_searchable       (xmlNode     *container_node);
-
-guint
-gupnp_didl_lite_container_get_child_count      (xmlNode     *container_node);
-
-/* DIDL-Lite item Object functions */
-char *
-gupnp_didl_lite_item_get_ref_id                (xmlNode          *item_node);
+gupnp_didl_lite_object_get_compat_resource
+                                        (GUPnPDIDLLiteObject *object,
+                                         const char
+                                         *sink_protocol_info,
+                                         gboolean             lenient);
 
 G_END_DECLS
 

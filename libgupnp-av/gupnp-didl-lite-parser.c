@@ -29,7 +29,8 @@
 
 #include <string.h>
 #include "gupnp-didl-lite-parser.h"
-#include "gupnp-didl-lite-object.h"
+#include "gupnp-didl-lite-container.h"
+#include "gupnp-didl-lite-item.h"
 #include "xml-util.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteParser,
@@ -95,8 +96,9 @@ gupnp_didl_lite_parser_parse_didl
                                gpointer                          user_data,
                                GError                          **error)
 {
-        xmlDoc  *doc;
-        xmlNode *element;
+        xmlDoc             *doc;
+        xmlNode            *element;
+        GUPnPXMLDocWrapper *wrapper;
 
         doc = xmlRecoverMemory (didl, strlen (didl));
 	if (doc == NULL) {
@@ -132,16 +134,32 @@ gupnp_didl_lite_parser_parse_didl
                 return FALSE;
         }
 
+        wrapper = gupnp_xml_doc_wrapper_new (doc);
+        g_object_ref_sink (wrapper);
+
         for (element = element->children; element; element = element->next) {
+                GUPnPDIDLLiteObject *object = NULL;
                 const char *name = (const char *) element->name;
 
-                if (g_ascii_strcasecmp (name, "container") == 0 ||
-                    g_ascii_strcasecmp (name, "item") == 0) {
-                        callback (parser, element, user_data);
+                if (g_ascii_strcasecmp (name, "container") == 0)
+                        object = g_object_new (GUPNP_TYPE_DIDL_LITE_CONTAINER,
+                                               "xml-node", element,
+                                               "xml-doc", wrapper,
+                                               NULL);
+                else if (g_ascii_strcasecmp (name, "item") == 0)
+                        object = g_object_new (GUPNP_TYPE_DIDL_LITE_ITEM,
+                                               "xml-node", element,
+                                               "xml-doc", wrapper,
+                                               NULL);
+
+                if (object != NULL) {
+                        callback (parser, object, user_data);
+
+                        g_object_unref (object);
                 }
         }
 
-        xmlFreeDoc (doc);
+        g_object_unref (wrapper);
 
         return TRUE;
 }

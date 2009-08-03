@@ -22,6 +22,8 @@
  */
 
 #include "gupnp-didl-lite-object.h"
+#include "gupnp-didl-lite-container.h"
+#include "gupnp-didl-lite-item.h"
 #include "gupnp-didl-lite-parser.h"
 #include "gupnp-didl-lite-resource.h"
 #include "gupnp-didl-lite-writer.h"

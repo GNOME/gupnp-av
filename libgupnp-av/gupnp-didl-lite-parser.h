@@ -23,6 +23,7 @@
 #define __GUPNP_DIDL_LITE_PARSER_H__
 
 #include <libgupnp/gupnp.h>
+#include "gupnp-didl-lite-object.h"
 
 G_BEGIN_DECLS
 
@@ -69,12 +70,12 @@ typedef struct {
 /**
  * GUPnPDIDLLiteParserObjectCallback:
  * @parser: The #GUPnPDIDLLiteParser the notification originates from
- * @object_node: The now available DIDL object
+ * @object: The now available #GUPnPDIDLLiteObject
  * @user_data: User data
  **/
 typedef void (* GUPnPDIDLLiteParserObjectCallback) (
                                  GUPnPDIDLLiteParser *parser,
-                                 xmlNode             *object_node,
+                                 GUPnPDIDLLiteObject *object,
                                  gpointer             user_data);
 
 GUPnPDIDLLiteParser *
