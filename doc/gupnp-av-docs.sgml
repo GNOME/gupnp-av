@@ -50,6 +50,8 @@
 
     <xi:include href="xml/gupnp-didl-lite-parser.xml"/>
     <xi:include href="xml/gupnp-didl-lite-object.xml"/>
+    <xi:include href="xml/gupnp-didl-lite-container.xml"/>
+    <xi:include href="xml/gupnp-didl-lite-item.xml"/>
     <xi:include href="xml/gupnp-didl-lite-writer.xml"/>
     <xi:include href="xml/gupnp-didl-lite-resource.xml"/>
     <xi:include href="xml/gupnp-last-change-parser.xml"/>

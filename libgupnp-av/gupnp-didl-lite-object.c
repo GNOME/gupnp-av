@@ -389,6 +389,8 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
  * gupnp_didl_lite_object_get_xml_node
  * @object: The #GUPnPDIDLLiteObject
  *
+ * Get the pointer to object node in XML document.
+ *
  * Return value: The pointer to object node in XML document.
  **/
 xmlNode *
@@ -403,6 +405,8 @@ gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_upnp_class
  * @object: The #GUPnPDIDLLiteObject
+ *
+ * Get the UPnP class of the @object.
  *
  * Return value: The class of @object, or %NULL. #g_free after usage.
  **/
@@ -419,6 +423,8 @@ gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_upnp_class_name
  * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the friendly name of the class of the @object.
  *
  * Return value: The friendly name of the class of @object, or %NULL.
  * #g_free after usage.
@@ -438,6 +444,8 @@ gupnp_didl_lite_object_get_upnp_class_name (GUPnPDIDLLiteObject *object)
  * gupnp_didl_lite_object_get_id
  * @object: #GUPnPDIDLLiteObject
  *
+ * Get the ID of the @object.
+ *
  * Return value: The ID of the @object, or %NULL. #g_free after usage.
  **/
 char *
@@ -452,6 +460,8 @@ gupnp_didl_lite_object_get_id (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_parent_id
  * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the ID of the parent of the @object.
  *
  * Return value: The ID of parent of the @object, or %NULL. #g_free after
  * usage.
@@ -493,6 +503,8 @@ gupnp_didl_lite_object_get_properties (GUPnPDIDLLiteObject *object,
  * gupnp_didl_lite_object_get_restricted
  * @object: #GUPnPDIDLLiteObject
  *
+ * Whether the @object is restricted or not.
+ *
  * Return value: #TRUE if @object is restricted.
  **/
 gboolean
@@ -508,6 +520,8 @@ gupnp_didl_lite_object_get_restricted (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_title
  * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the title of the @object.
  *
  * Return value: The title of the @object, or %NULL. #g_free after usage.
  **/
@@ -525,6 +539,8 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
  * gupnp_didl_lite_object_get_creator
  * @object: #GUPnPDIDLLiteObject
  *
+ * Get the creator of the @object.
+ *
  * Return value: The creator of the @object, or %NULL. #g_free after
  * usage.
  **/
@@ -541,6 +557,8 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_write_status
  * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the write status of the @object.
  *
  * Return value: The write status of the @object, or %NULL. #g_free after
  * usage.

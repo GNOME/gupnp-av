@@ -1,9 +1,7 @@
 <SECTION>
 <FILE>gupnp-didl-lite-object</FILE>
-<TITLE>UPnP AV DIDLLite Object handling</TITLE>
-gupnp_didl_lite_object_get_property
-gupnp_didl_lite_property_get_value
-gupnp_didl_lite_property_get_attribute
+<TITLE>GUPnPDIDLLiteObject</TITLE>
+gupnp_didl_lite_object_get_properties
 gupnp_didl_lite_object_get_id
 gupnp_didl_lite_object_get_parent_id
 gupnp_didl_lite_object_get_restricted
@@ -12,13 +10,54 @@ gupnp_didl_lite_object_get_creator
 gupnp_didl_lite_object_get_write_status
 gupnp_didl_lite_object_get_upnp_class
 gupnp_didl_lite_object_get_upnp_class_name
-gupnp_didl_lite_object_is_container
-gupnp_didl_lite_object_is_item
 gupnp_didl_lite_object_get_resources
 gupnp_didl_lite_object_get_compat_resource
+<SUBSECTION Standard>
+GUPnPDIDLLiteObjectClass
+GUPNP_TYPE_DIDL_LITE_OBJECT
+GUPNP_DIDL_LITE_OBJECT
+GUPNP_DIDL_LITE_OBJECT_CLASS
+GUPNP_IS_DIDL_LITE_OBJECT
+GUPNP_IS_DIDL_LITE_OBJECT_CLASS
+GUPNP_DIDL_LITE_OBJECT_GET_CLASS
+<SUBSECTION Private>
+GUPnPDIDLLiteObjectPrivate
+gupnp_didl_lite_object_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gupnp-didl-lite-container</FILE>
+<TITLE>GUPnPDIDLLiteContainer</TITLE>
 gupnp_didl_lite_container_get_searchable
 gupnp_didl_lite_container_get_child_count
+<SUBSECTION Standard>
+GUPnPDIDLLiteContainerClass
+GUPNP_TYPE_DIDL_LITE_CONTAINER
+GUPNP_DIDL_LITE_CONTAINER
+GUPNP_DIDL_LITE_CONTAINER_CLASS
+GUPNP_IS_DIDL_LITE_CONTAINER
+GUPNP_IS_DIDL_LITE_CONTAINER_CLASS
+GUPNP_DIDL_LITE_CONTAINER_GET_CLASS
+<SUBSECTION Private>
+GUPnPDIDLLiteContainerPrivate
+gupnp_didl_lite_container_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gupnp-didl-lite-item</FILE>
+<TITLE>GUPnPDIDLLiteItem</TITLE>
 gupnp_didl_lite_item_get_ref_id
+<SUBSECTION Standard>
+GUPnPDIDLLiteItemClass
+GUPNP_TYPE_DIDL_LITE_ITEM
+GUPNP_DIDL_LITE_ITEM
+GUPNP_DIDL_LITE_ITEM_CLASS
+GUPNP_IS_DIDL_LITE_ITEM
+GUPNP_IS_DIDL_LITE_ITEM_CLASS
+GUPNP_DIDL_LITE_ITEM_GET_CLASS
+<SUBSECTION Private>
+GUPnPDIDLLiteItemPrivate
+gupnp_didl_lite_item_get_type
 </SECTION>
 
 <SECTION>
