@@ -156,7 +156,7 @@ gupnp_didl_lite_object_get_property (GObject    *object,
 static void
 gupnp_didl_lite_object_dispose (GObject *object)
 {
-        GObjectClass                 *object_class;
+        GObjectClass               *object_class;
         GUPnPDIDLLiteObjectPrivate *priv;
 
         priv = GUPNP_DIDL_LITE_OBJECT (object)->priv;
@@ -167,7 +167,7 @@ gupnp_didl_lite_object_dispose (GObject *object)
         }
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_object_parent_class);
-        object_class->dispose(object);
+        object_class->dispose (object);
 }
 
 static void
