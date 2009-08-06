@@ -66,7 +66,6 @@ gupnp_didl_lite_item_get_type
 GUPnPDIDLLiteParser
 gupnp_didl_lite_parser_new
 gupnp_didl_lite_parser_parse_didl
-GUPnPDIDLLiteParserObjectCallback
 <SUBSECTION Standard>
 GUPnPDIDLLiteParserClass
 GUPNP_TYPE_DIDL_LITE_PARSER

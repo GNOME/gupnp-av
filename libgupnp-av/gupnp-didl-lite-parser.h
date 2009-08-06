@@ -23,7 +23,8 @@
 #define __GUPNP_DIDL_LITE_PARSER_H__
 
 #include <libgupnp/gupnp.h>
-#include "gupnp-didl-lite-object.h"
+#include "gupnp-didl-lite-container.h"
+#include "gupnp-didl-lite-item.h"
 
 G_BEGIN_DECLS
 
@@ -60,34 +61,29 @@ typedef struct {
 typedef struct {
         GObjectClass parent_class;
 
+        /* signals */
+        void (* object_available)    (GUPnPDIDLLiteParser    *parser,
+                                      GUPnPDIDLLiteObject    *object);
+        void (* item_available)      (GUPnPDIDLLiteParser    *parser,
+                                      GUPnPDIDLLiteItem      *item);
+        void (* container_available) (GUPnPDIDLLiteParser    *parser,
+                                      GUPnPDIDLLiteContainer *container);
+
         /* future padding */
         void (* _gupnp_reserved1) (void);
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
+        void (* _gupnp_reserved5) (void);
 } GUPnPDIDLLiteParserClass;
 
-/**
- * GUPnPDIDLLiteParserObjectCallback:
- * @parser: The #GUPnPDIDLLiteParser the notification originates from
- * @object: The now available #GUPnPDIDLLiteObject
- * @user_data: User data
- **/
-typedef void (* GUPnPDIDLLiteParserObjectCallback) (
-                                 GUPnPDIDLLiteParser *parser,
-                                 GUPnPDIDLLiteObject *object,
-                                 gpointer             user_data);
-
 GUPnPDIDLLiteParser *
-gupnp_didl_lite_parser_new    (void);
+gupnp_didl_lite_parser_new              (void);
 
 gboolean
-gupnp_didl_lite_parser_parse_didl
-                              (GUPnPDIDLLiteParser              *parser,
-                               const char                       *didl,
-                               GUPnPDIDLLiteParserObjectCallback callback,
-                               gpointer                          user_data,
-                               GError                          **error);
+gupnp_didl_lite_parser_parse_didl       (GUPnPDIDLLiteParser *parser,
+                                         const char          *didl,
+                                         GError             **error);
 
 G_END_DECLS
 

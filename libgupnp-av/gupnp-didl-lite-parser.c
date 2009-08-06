@@ -37,6 +37,15 @@ G_DEFINE_TYPE (GUPnPDIDLLiteParser,
                gupnp_didl_lite_parser,
                G_TYPE_OBJECT);
 
+enum {
+        OBJECT_AVAILABLE,
+        ITEM_AVAILABLE,
+        CONTAINER_AVAILABLE,
+        SIGNAL_LAST
+};
+
+static guint signals[SIGNAL_LAST];
+
 static void
 gupnp_didl_lite_parser_init (GUPnPDIDLLiteParser *parser)
 {
@@ -62,6 +71,69 @@ gupnp_didl_lite_parser_class_init (GUPnPDIDLLiteParserClass *klass)
         object_class = G_OBJECT_CLASS (klass);
 
         object_class->dispose = gupnp_didl_lite_parser_dispose;
+
+        /**
+         * GUPnPDIDLLiteParser::object-available
+         * @parser: The #GUPnPDIDLLiteParser that received the signal
+         * @object: The now available #GUPnPDIDLLiteObject
+         *
+         * The ::object-available signal is emitted each time an object is
+         * found in the DIDL-Lite XML being parsed.
+         **/
+        signals[OBJECT_AVAILABLE] =
+                g_signal_new ("object-available",
+                              GUPNP_TYPE_DIDL_LITE_PARSER,
+                              G_SIGNAL_RUN_LAST,
+                              G_STRUCT_OFFSET (GUPnPDIDLLiteParserClass,
+                                               object_available),
+                              NULL,
+                              NULL,
+                              g_cclosure_marshal_VOID__OBJECT,
+                              G_TYPE_NONE,
+                              1,
+                              GUPNP_TYPE_DIDL_LITE_OBJECT);
+
+        /**
+         * GUPnPDIDLLiteParser::item-available
+         * @parser: The #GUPnPDIDLLiteParser that received the signal
+         * @item: The now available #GUPnPDIDLLiteItem
+         *
+         * The ::item-available signal is emitted each time an item is found in
+         * the DIDL-Lite XML being parsed.
+         **/
+        signals[ITEM_AVAILABLE] =
+                g_signal_new ("item-available",
+                              GUPNP_TYPE_DIDL_LITE_PARSER,
+                              G_SIGNAL_RUN_LAST,
+                              G_STRUCT_OFFSET (GUPnPDIDLLiteParserClass,
+                                               item_available),
+                              NULL,
+                              NULL,
+                              g_cclosure_marshal_VOID__OBJECT,
+                              G_TYPE_NONE,
+                              1,
+                              GUPNP_TYPE_DIDL_LITE_ITEM);
+
+        /**
+         * GUPnPDIDLLiteParser::container-available
+         * @parser: The #GUPnPDIDLLiteParser that received the signal
+         * @container: The now available #GUPnPDIDLLiteContainer
+         *
+         * The ::container-available signal is emitted each time a container is
+         * found in the DIDL-Lite XML being parsed.
+         **/
+        signals[CONTAINER_AVAILABLE] =
+                g_signal_new ("container-available",
+                              GUPNP_TYPE_DIDL_LITE_PARSER,
+                              G_SIGNAL_RUN_LAST,
+                              G_STRUCT_OFFSET (GUPnPDIDLLiteParserClass,
+                                               container_available),
+                              NULL,
+                              NULL,
+                              g_cclosure_marshal_VOID__OBJECT,
+                              G_TYPE_NONE,
+                              1,
+                              GUPNP_TYPE_DIDL_LITE_CONTAINER);
 }
 
 /**
@@ -89,12 +161,9 @@ gupnp_didl_lite_parser_new (void)
  * Return value: TRUE on success.
  **/
 gboolean
-gupnp_didl_lite_parser_parse_didl
-                              (GUPnPDIDLLiteParser              *parser,
-                               const char                       *didl,
-                               GUPnPDIDLLiteParserObjectCallback callback,
-                               gpointer                          user_data,
-                               GError                          **error)
+gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
+                                   const char          *didl,
+                                   GError             **error)
 {
         xmlDoc             *doc;
         xmlNode            *element;
@@ -141,19 +210,31 @@ gupnp_didl_lite_parser_parse_didl
                 GUPnPDIDLLiteObject *object = NULL;
                 const char *name = (const char *) element->name;
 
-                if (g_ascii_strcasecmp (name, "container") == 0)
+                if (g_ascii_strcasecmp (name, "container") == 0) {
                         object = g_object_new (GUPNP_TYPE_DIDL_LITE_CONTAINER,
                                                "xml-node", element,
                                                "xml-doc", wrapper,
                                                NULL);
-                else if (g_ascii_strcasecmp (name, "item") == 0)
+                        g_signal_emit (parser,
+                                       signals[CONTAINER_AVAILABLE],
+                                       0,
+                                       object);
+                } else if (g_ascii_strcasecmp (name, "item") == 0) {
                         object = g_object_new (GUPNP_TYPE_DIDL_LITE_ITEM,
                                                "xml-node", element,
                                                "xml-doc", wrapper,
                                                NULL);
+                        g_signal_emit (parser,
+                                       signals[ITEM_AVAILABLE],
+                                       0,
+                                       object);
+                }
 
                 if (object != NULL) {
-                        callback (parser, object, user_data);
+                        g_signal_emit (parser,
+                                       signals[OBJECT_AVAILABLE],
+                                       0,
+                                       object);
 
                         g_object_unref (object);
                 }
