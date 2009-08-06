@@ -42,6 +42,9 @@ G_DEFINE_ABSTRACT_TYPE (GUPnPDIDLLiteObject,
 struct _GUPnPDIDLLiteObjectPrivate {
         xmlNode            *xml_node;
         GUPnPXMLDocWrapper *xml_doc;
+
+        xmlNs              *upnp_ns;
+        xmlNs              *dc_ns;
 };
 
 enum {
@@ -154,6 +157,66 @@ gupnp_didl_lite_object_get_property (GObject    *object,
 }
 
 static void
+gupnp_didl_lite_object_constructed (GObject *object)
+{
+        GObjectClass               *object_class;
+        GUPnPDIDLLiteObjectPrivate *priv;
+        xmlNs                     **ns_list;
+        short                       i;
+
+        priv = GUPNP_DIDL_LITE_OBJECT (object)->priv;
+
+        if (priv->xml_doc == NULL) {
+                xmlDoc  *doc;
+
+                doc = xmlNewDoc ((unsigned char *) "1.0");
+                priv->xml_doc = gupnp_xml_doc_wrapper_new (doc);
+        }
+
+        if (priv->xml_node == NULL) {
+                xmlNode *root_node;
+
+                root_node = xmlNewDocNode (priv->xml_doc->doc,
+                                           NULL,
+                                           (unsigned char *) "DIDL-Lite",
+                                           NULL);
+                xmlDocSetRootElement (priv->xml_doc->doc, root_node);
+                xmlNewNs (root_node,
+                          (unsigned char *) "http://purl.org/dc/elements/1.1/",
+                          (unsigned char *) "dc");
+                xmlNewNs (root_node,
+                          (unsigned char *) "urn:schemas-upnp-org:"
+                                            "metadata-1-0/upnp/",
+                          (unsigned char *) "upnp");
+                xmlNewNs (root_node,
+                          (unsigned char *) "urn:schemas-upnp-org:"
+                                            "metadata-1-0/DIDL-Lite/",
+                          NULL);
+                /* Subclasses must override the name of the node */
+                priv->xml_node = xmlNewNode (NULL, (unsigned char *) "object");
+                xmlAddChild (root_node, priv->xml_node);
+        }
+
+        ns_list = xmlGetNsList (priv->xml_doc->doc,
+                                xmlDocGetRootElement (priv->xml_doc->doc));
+        for (i = 0; ns_list[i] != NULL; i++) {
+                if (ns_list[i]->prefix == NULL)
+                        continue;
+
+                if (g_ascii_strcasecmp ((char *) ns_list[i]->prefix,
+                                        (char *) "upnp") == 0)
+                        priv->upnp_ns = ns_list[i];
+                else if (g_ascii_strcasecmp ((char *) ns_list[i]->prefix,
+                                             (char *) "dc") == 0)
+                        priv->dc_ns = ns_list[i];
+        }
+
+        object_class = G_OBJECT_CLASS (gupnp_didl_lite_object_parent_class);
+        if (object_class->constructed != NULL)
+                object_class->constructed (object);
+}
+
+static void
 gupnp_didl_lite_object_dispose (GObject *object)
 {
         GObjectClass               *object_class;
@@ -179,6 +242,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
 
         object_class->set_property = gupnp_didl_lite_object_set_property;
         object_class->get_property = gupnp_didl_lite_object_get_property;
+        object_class->constructed = gupnp_didl_lite_object_constructed;
         object_class->dispose = gupnp_didl_lite_object_dispose;
 
         g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteObjectPrivate));
