@@ -74,6 +74,16 @@ guint
 gupnp_didl_lite_container_get_child_count
                                         (GUPnPDIDLLiteContainer *container);
 
+void
+gupnp_didl_lite_container_set_searchable
+                                        (GUPnPDIDLLiteContainer *container,
+                                         gboolean                searchable);
+
+void
+gupnp_didl_lite_container_set_child_count
+                                        (GUPnPDIDLLiteContainer *container,
+                                         guint                   child_count);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_CONTAINER_H__ */

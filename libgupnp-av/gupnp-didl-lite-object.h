@@ -117,6 +117,39 @@ gupnp_didl_lite_object_get_compat_resource
                                          *sink_protocol_info,
                                          gboolean             lenient);
 
+void
+gupnp_didl_lite_object_set_upnp_class   (GUPnPDIDLLiteObject *object,
+                                         const char          *upnp_class);
+
+void
+gupnp_didl_lite_object_set_upnp_class_name
+                                        (GUPnPDIDLLiteObject *object,
+                                         const char          *class_name);
+
+void
+gupnp_didl_lite_object_set_id           (GUPnPDIDLLiteObject *object,
+                                         const char          *id);
+
+void
+gupnp_didl_lite_object_set_parent_id    (GUPnPDIDLLiteObject *object,
+                                         const char          *parent_id);
+
+void
+gupnp_didl_lite_object_set_restricted   (GUPnPDIDLLiteObject *object,
+                                         gboolean             restricted);
+
+void
+gupnp_didl_lite_object_set_title        (GUPnPDIDLLiteObject *object,
+                                         const char          *title);
+
+void
+gupnp_didl_lite_object_set_creator      (GUPnPDIDLLiteObject *object,
+                                         const char          *creator);
+
+void
+gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
+                                         const char          *write_status);
+
 char *
 gupnp_didl_lite_object_to_string      (GUPnPDIDLLiteObject *object);
 

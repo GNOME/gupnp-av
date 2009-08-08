@@ -732,6 +732,167 @@ gupnp_didl_lite_object_get_compat_resource
 }
 
 /**
+ * gupnp_didl_lite_object_set_upnp_class
+ * @object: The #GUPnPDIDLLiteObject
+ *
+ * Set the UPnP class of the @object to @upnp_class.
+ **/
+void
+gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
+                                       const char          *upnp_class)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->upnp_ns,
+                            "class",
+                            upnp_class);
+}
+
+/**
+ * gupnp_didl_lite_object_set_upnp_class_name
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Set the friendly name of the class of the @object to @class_name.
+ **/
+void
+gupnp_didl_lite_object_set_upnp_class_name (GUPnPDIDLLiteObject *object,
+                                            const char          *class_name)
+{
+        xmlNode *node;
+
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        node = xml_util_get_element (object->priv->xml_node,
+                                     "class",
+                                     NULL);
+        if (node != NULL)
+                xmlSetProp (node,
+                            (unsigned char *) "name",
+                            (unsigned char *) class_name);
+}
+
+/**
+ * gupnp_didl_lite_object_set_id
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Set the ID of the @object to @id.
+ **/
+void
+gupnp_didl_lite_object_set_id (GUPnPDIDLLiteObject *object,
+                               const char          *id)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xmlSetProp (object->priv->xml_node,
+                    (unsigned char *) "id",
+                    (unsigned char *) id);
+}
+
+/**
+ * gupnp_didl_lite_object_set_parent_id
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Set the ID of the parent of the @object to @parent_id.
+ **/
+void
+gupnp_didl_lite_object_set_parent_id (GUPnPDIDLLiteObject *object,
+                                      const char          *parent_id)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xmlSetProp (object->priv->xml_node,
+                    (unsigned char *) "parentID",
+                    (unsigned char *) parent_id);
+}
+
+/**
+ * gupnp_didl_lite_object_set_restricted
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Set the restricted status of @object to @restricted.
+ **/
+void
+gupnp_didl_lite_object_set_restricted (GUPnPDIDLLiteObject *object,
+                                       gboolean             restricted)
+{
+        const char *str;
+
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        if (restricted)
+                str = "1";
+        else
+                str = "0";
+        xmlSetProp (object->priv->xml_node,
+                    (unsigned char *) "restricted",
+                    (unsigned char *) str);
+}
+
+/**
+ * gupnp_didl_lite_object_set_title
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Set the title of the @object to @title.
+ **/
+void
+gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
+                                  const char          *title)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->dc_ns,
+                            "title",
+                            title);
+}
+
+/**
+ * gupnp_didl_lite_object_set_creator
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Set the creator of the @object to @creator.
+ **/
+void
+gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
+                                    const char          *creator)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->dc_ns,
+                            "creator",
+                            creator);
+}
+
+/**
+ * gupnp_didl_lite_object_set_write_status
+ * @object: #GUPnPDIDLLiteObject
+ * @write_status: The write status string
+ *
+ * Set the write status of the @object to @write_status.
+ **/
+void
+gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
+                                         const char          *write_status)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->dc_ns,
+                            "writeStatus",
+                            write_status);
+}
+
+/**
  * gupnp_didl_lite_object_to_string
  * @object: #GUPnPDIDLLiteObject
  *

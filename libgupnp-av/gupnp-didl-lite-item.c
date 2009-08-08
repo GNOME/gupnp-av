@@ -135,3 +135,26 @@ gupnp_didl_lite_item_get_ref_id (GUPnPDIDLLiteItem *item)
 
         return xml_util_get_attribute_content (xml_node, "refID");
 }
+
+/**
+ * gupnp_didl_lite_item_set_ref_id
+ * @item: #GUPnPDIDLLiteItem
+ *
+ * Set the ref ID of the @item.
+ **/
+void
+gupnp_didl_lite_item_set_ref_id (GUPnPDIDLLiteItem *item,
+                                 const char        *ref_id)
+{
+        xmlNode *xml_node;
+
+        g_return_if_fail (item != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_ITEM (item));
+
+        xml_node = gupnp_didl_lite_object_get_xml_node
+                                (GUPNP_DIDL_LITE_OBJECT (item));
+
+        xmlSetProp (xml_node,
+                    (unsigned char *) "childCount",
+                    (unsigned char *) ref_id);
+}

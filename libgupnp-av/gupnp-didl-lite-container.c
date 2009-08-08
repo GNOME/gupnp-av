@@ -182,3 +182,57 @@ gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
 
         return xml_util_get_uint_attribute (xml_node, "childCount", 0);
 }
+
+/**
+ * gupnp_didl_lite_container_set_searchable
+ * @container: #GUPnPDIDLLiteContainer
+ *
+ * (Un)set the searchibility of @container.
+ **/
+void
+gupnp_didl_lite_container_set_searchable (GUPnPDIDLLiteContainer *container,
+                                          gboolean                searchable)
+{
+        xmlNode *xml_node;
+        const char *str;
+
+        g_return_if_fail (container != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container));
+
+        xml_node = gupnp_didl_lite_object_get_xml_node
+                                (GUPNP_DIDL_LITE_OBJECT (container));
+
+        if (searchable)
+                str = "1";
+        else
+                str = "0";
+        xmlSetProp (xml_node,
+                    (unsigned char *) "searchable",
+                    (unsigned char *) searchable);
+}
+
+/**
+ * gupnp_didl_lite_container_set_child_count
+ * @container: #GUPnPDIDLLiteContainer
+ *
+ * Set the child count of the @container.
+ **/
+void
+gupnp_didl_lite_container_set_child_count (GUPnPDIDLLiteContainer *container,
+                                           guint                   child_count)
+{
+        xmlNode *xml_node;
+        char *str;
+
+        g_return_if_fail (container != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container));
+
+        xml_node = gupnp_didl_lite_object_get_xml_node
+                                (GUPNP_DIDL_LITE_OBJECT (container));
+
+        str = g_strdup_printf ("%u\n", child_count);
+        xmlSetProp (xml_node,
+                    (unsigned char *) "childCount",
+                    (unsigned char *) str);
+        g_free (str);
+}

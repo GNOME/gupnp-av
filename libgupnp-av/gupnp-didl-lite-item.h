@@ -69,6 +69,10 @@ typedef struct {
 char *
 gupnp_didl_lite_item_get_ref_id         (GUPnPDIDLLiteItem *item);
 
+void
+gupnp_didl_lite_item_set_ref_id         (GUPnPDIDLLiteItem *item,
+                                         const char        *ref_id);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_ITEM_H__ */
