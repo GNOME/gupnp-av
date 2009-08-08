@@ -65,6 +65,7 @@ enum {
         PROP_ALBUM_ART,
         PROP_DESCRIPTION,
         PROP_DATE,
+        PROP_TRACK_NUMBER,
 };
 
 static void
@@ -168,6 +169,11 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                                         (didl_object,
                                          g_value_get_string (value));
                 break;
+        case PROP_TRACK_NUMBER:
+                gupnp_didl_lite_object_set_track_number
+                                        (didl_object,
+                                         g_value_get_int (value));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -262,6 +268,11 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_date (didl_object));
+                break;
+        case PROP_TRACK_NUMBER:
+                g_value_set_int
+                        (value,
+                         gupnp_didl_lite_object_get_track_number (didl_object));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -640,6 +651,23 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:tracker-number
+         *
+         * The original tracker number of this object.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_TRACK_NUMBER,
+                 g_param_spec_int ("tracker-number",
+                                   "TrackNumber",
+                                   "The original track number of this  object.",
+                                   -1, G_MAXINT, -1,
+                                   G_PARAM_READWRITE |
+                                   G_PARAM_STATIC_NAME |
+                                   G_PARAM_STATIC_NICK |
+                                   G_PARAM_STATIC_BLURB));
 }
 
 static gboolean
@@ -992,6 +1020,34 @@ gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "date",
                                                    NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_get_track_number
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the original track number of the @object.
+ *
+ * Return value: The original track number of the @object, or -1.
+ **/
+int
+gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
+{
+        char *str;
+        int ret;
+
+        g_return_val_if_fail (object != NULL, FALSE);
+
+        str = xml_util_get_child_element_content (object->priv->xml_node,
+                                                  "originalTrackNumber",
+                                                  NULL);
+        if (str) {
+                ret = atoi (str);
+                g_free (str);
+        } else
+                ret = -1;
+
+        return ret;
 }
 
 /**
@@ -1402,6 +1458,31 @@ gupnp_didl_lite_object_set_date (GUPnPDIDLLiteObject *object,
                             "date",
                             date,
                             NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_set_track_number
+ * @object: #GUPnPDIDLLiteObject
+ * @track_number: The original track number
+ *
+ * Set the original track number of the @object to @track_number.
+ **/
+void
+gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
+                                         int                  track_number)
+{
+        char *str;
+
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        str = g_strdup_printf ("%d", track_number);
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->upnp_ns,
+                            "originalTrackNumber",
+                            str,
+                            NULL);
+        g_free (str);
 }
 
 /**
