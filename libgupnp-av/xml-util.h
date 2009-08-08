@@ -67,4 +67,10 @@ xml_util_get_child_attribute_content    (xmlNode    *node,
                                          const char *child_name,
                                          const char *attribute_name);
 
+G_GNUC_INTERNAL void
+xml_util_set_child                      (xmlNode    *parent_node,
+                                         xmlNs      *namespace,
+                                         const char *name,
+                                         const char *value);
+
 #endif /* __XML_UTIL_H__ */

@@ -242,3 +242,21 @@ xml_util_get_child_attribute_content (xmlNode    *node,
         return xml_util_get_attribute_content (child_node, attribute_name);
 }
 
+void
+xml_util_set_child (xmlNode    *parent_node,
+                    xmlNs      *namespace,
+                    const char *name,
+                    const char *value)
+{
+        xmlNode *node;
+
+        node = xml_util_get_element (parent_node, name, NULL);
+        if (node == NULL) {
+                node = xmlNewNode (NULL, (unsigned char *) name);
+                xmlSetNs (node, namespace);
+                xmlAddChild (parent_node, node);
+        }
+
+        xmlNodeSetContent (node, (unsigned char *) value);
+}
+
