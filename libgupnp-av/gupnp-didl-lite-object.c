@@ -63,6 +63,7 @@ enum {
         PROP_WRITE_STATUS,
         PROP_ALBUM,
         PROP_ALBUM_ART,
+        PROP_DESCRIPTION,
 };
 
 static void
@@ -156,6 +157,11 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                                         (didl_object,
                                          g_value_get_string (value));
                 break;
+        case PROP_DESCRIPTION:
+                gupnp_didl_lite_object_set_description
+                                        (didl_object,
+                                         g_value_get_string (value));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -240,6 +246,11 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_album_art (didl_object));
+                break;
+        case PROP_DESCRIPTION:
+                g_value_set_string
+                        (value,
+                         gupnp_didl_lite_object_get_description (didl_object));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -584,6 +595,23 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:description
+         *
+         * The description of this object.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_DESCRIPTION,
+                 g_param_spec_string ("description",
+                                      "Description",
+                                      "The description of this object.",
+                                      NULL,
+                                      G_PARAM_READWRITE |
+                                      G_PARAM_STATIC_NAME |
+                                      G_PARAM_STATIC_NICK |
+                                      G_PARAM_STATIC_BLURB));
 }
 
 static gboolean
@@ -897,6 +925,25 @@ gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "albumArtURI",
+                                                   NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_get_description
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the description of the @object.
+ *
+ * Return value: The description of the @object, or %NULL. #g_free after
+ * usage.
+ **/
+char *
+gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (object != NULL, FALSE);
+
+        return xml_util_get_child_element_content (object->priv->xml_node,
+                                                   "description",
                                                    NULL);
 }
 
@@ -1265,6 +1312,27 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
                             object->priv->upnp_ns,
                             "albumArtURI",
                             album_art,
+                            NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_set_description
+ * @object: #GUPnPDIDLLiteObject
+ * @description: The description string
+ *
+ * Set the description of the @object to @description.
+ **/
+void
+gupnp_didl_lite_object_set_description (GUPnPDIDLLiteObject *object,
+                                        const char          *description)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->dc_ns,
+                            "description",
+                            description,
                             NULL);
 }
 
