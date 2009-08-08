@@ -497,13 +497,11 @@ gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object,
         g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
-        if (friendly_name != NULL)
-                *friendly_name = xml_util_get_child_attribute_content
-                                                (object->priv->xml_node,
-                                                 "class",
-                                                 "name");
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "class");
+                                                   "class",
+                                                   "name",
+                                                   friendly_name,
+                                                   NULL);
 }
 
 /**
@@ -598,7 +596,8 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "title");
+                                                   "title",
+                                                   NULL);
 }
 
 /**
@@ -617,7 +616,8 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "creator");
+                                                   "creator",
+                                                   NULL);
 }
 
 /**
@@ -635,7 +635,8 @@ gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (object != NULL, FALSE);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "writeStatus");
+                                                   "writeStatus",
+                                                   NULL);
 }
 
 /**
@@ -746,23 +747,16 @@ gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
                                        const char          *upnp_class,
                                        const char          *friendly_name)
 {
-        xmlNode *node;
-
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
                             "class",
-                            upnp_class);
-
-        node = xml_util_get_element (object->priv->xml_node,
-                                     "class",
-                                     NULL);
-        if (friendly_name != NULL)
-                xmlSetProp (node,
-                            (unsigned char *) "name",
-                            (unsigned char *) friendly_name);
+                            upnp_class,
+                            "name",
+                            friendly_name,
+                            NULL);
 }
 
 /**
@@ -845,7 +839,8 @@ gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
                             "title",
-                            title);
+                            title,
+                            NULL);
 }
 
 /**
@@ -865,7 +860,8 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
                             "creator",
-                            creator);
+                            creator,
+                            NULL);
 }
 
 /**
@@ -885,7 +881,8 @@ gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
                             "writeStatus",
-                            write_status);
+                            write_status,
+                            NULL);
 }
 
 /**

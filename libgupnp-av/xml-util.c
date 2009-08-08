@@ -75,21 +75,6 @@ xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
        return children;
 }
 
-static xmlChar *
-get_child_element_content (xmlNode    *node,
-                           const char *child_name)
-{
-        xmlNode *child_node;
-
-        child_node = xml_util_get_element (node,
-                                           child_name,
-                                           NULL);
-        if (!child_node)
-                return NULL;
-
-        return xmlNodeGetContent (child_node);
-}
-
 char *
 xml_util_get_element_content (xmlNode *node)
 {
@@ -109,17 +94,40 @@ xml_util_get_element_content (xmlNode *node)
 
 char *
 xml_util_get_child_element_content (xmlNode    *node,
-                                    const char *child_name)
+                                    const char *child_name,
+                                    ...)
 {
+        xmlNode *child_node;
+        va_list  var_args;
         xmlChar *content;
-        char *copy;
+        char    *copy;
 
-        content = get_child_element_content (node, child_name);
+        child_node = xml_util_get_element (node, child_name, NULL);
+        if (!child_node)
+                return NULL;
+
+        content = xmlNodeGetContent (child_node);
         if (!content)
                 return NULL;
 
-        copy = g_strdup ((char *) content);
+        /* Get the attributes */
+        va_start (var_args, child_name);
+        while (TRUE) {
+                const char *name;
+                char **value;
 
+                name = va_arg (var_args, const char *);
+                if (!name)
+                        break;
+                value = va_arg (var_args, char **);
+                if (!value)
+                        break;
+
+                *value = xml_util_get_attribute_content (child_node, name);
+        }
+        va_end (var_args);
+
+        copy = g_strdup ((char *) content);
         xmlFree (content);
 
         return copy;
@@ -225,30 +233,15 @@ xml_util_get_long_attribute (xmlNode    *node,
         return ret;
 }
 
-char *
-xml_util_get_child_attribute_content (xmlNode    *node,
-                                      const char *child_name,
-                                      const char *attribute_name)
-{
-        xmlNode *child_node;
-
-        child_node = xml_util_get_element (node,
-                                           child_name,
-                                           NULL);
-        if (!child_node) {
-                return NULL;
-        }
-
-        return xml_util_get_attribute_content (child_node, attribute_name);
-}
-
 void
 xml_util_set_child (xmlNode    *parent_node,
                     xmlNs      *namespace,
                     const char *name,
-                    const char *value)
+                    const char *value,
+                    ...)
 {
         xmlNode *node;
+        va_list  var_args;
 
         node = xml_util_get_element (parent_node, name, NULL);
         if (node == NULL) {
@@ -258,5 +251,22 @@ xml_util_set_child (xmlNode    *parent_node,
         }
 
         xmlNodeSetContent (node, (unsigned char *) value);
+
+        /* Set the attributes */
+        va_start (var_args, value);
+        while (TRUE) {
+                unsigned char *name;
+                unsigned char *value;
+
+                name = va_arg (var_args, unsigned char *);
+                if (!name)
+                        break;
+                value = va_arg (var_args, unsigned char *);
+                if (!value)
+                        break;
+
+                xmlSetProp (node, name, value);
+        }
+        va_end (var_args);
 }
 
