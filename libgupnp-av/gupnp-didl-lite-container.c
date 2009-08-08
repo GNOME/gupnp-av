@@ -215,6 +215,7 @@ gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
 /**
  * gupnp_didl_lite_container_set_searchable
  * @container: #GUPnPDIDLLiteContainer
+ * @searchable: The searchibility
  *
  * (Un)set the searchibility of @container.
  **/
@@ -243,6 +244,7 @@ gupnp_didl_lite_container_set_searchable (GUPnPDIDLLiteContainer *container,
 /**
  * gupnp_didl_lite_container_set_child_count
  * @container: #GUPnPDIDLLiteContainer
+ * @child_count: The child count
  *
  * Set the child count of the @container.
  **/

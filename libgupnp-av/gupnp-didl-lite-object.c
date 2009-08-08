@@ -768,6 +768,7 @@ gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
 /**
  * gupnp_didl_lite_object_set_id
  * @object: #GUPnPDIDLLiteObject
+ * @id: The ID
  *
  * Set the ID of the @object to @id.
  **/
@@ -786,6 +787,7 @@ gupnp_didl_lite_object_set_id (GUPnPDIDLLiteObject *object,
 /**
  * gupnp_didl_lite_object_set_parent_id
  * @object: #GUPnPDIDLLiteObject
+ * @parent_id: The parent ID
  *
  * Set the ID of the parent of the @object to @parent_id.
  **/
@@ -804,6 +806,7 @@ gupnp_didl_lite_object_set_parent_id (GUPnPDIDLLiteObject *object,
 /**
  * gupnp_didl_lite_object_set_restricted
  * @object: #GUPnPDIDLLiteObject
+ * @restricted: The restricted status
  *
  * Set the restricted status of @object to @restricted.
  **/
@@ -828,6 +831,7 @@ gupnp_didl_lite_object_set_restricted (GUPnPDIDLLiteObject *object,
 /**
  * gupnp_didl_lite_object_set_title
  * @object: #GUPnPDIDLLiteObject
+ * @title: The title
  *
  * Set the title of the @object to @title.
  **/
@@ -847,6 +851,7 @@ gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
 /**
  * gupnp_didl_lite_object_set_creator
  * @object: #GUPnPDIDLLiteObject
+ * @creator: The creator
  *
  * Set the creator of the @object to @creator.
  **/
