@@ -59,6 +59,7 @@ enum {
         PROP_CREATOR,
         PROP_ARTIST,
         PROP_AUTHOR,
+        PROP_GENRE,
         PROP_WRITE_STATUS
 };
 
@@ -131,6 +132,13 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                                          g_value_get_string (value),
                                          NULL);
                 break;
+        case PROP_GENRE:
+                gupnp_didl_lite_object_set_genre
+                                        (didl_object,
+                                         g_value_get_string (value),
+                                         NULL,
+                                         NULL);
+                break;
         case PROP_WRITE_STATUS:
                 gupnp_didl_lite_object_set_write_status
                                         (didl_object,
@@ -198,6 +206,13 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_author (didl_object, NULL));
+                break;
+        case PROP_GENRE:
+                g_value_set_string
+                        (value,
+                         gupnp_didl_lite_object_get_genre (didl_object,
+                                                           NULL,
+                                                           NULL));
                 break;
         case PROP_WRITE_STATUS:
                 g_value_set_string
@@ -481,6 +496,23 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
+         * GUPnPDIDLLiteObject:genre
+         *
+         * The genre of this object.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_GENRE,
+                 g_param_spec_string ("genre",
+                                      "Genre",
+                                      "The genre of this object.",
+                                      NULL,
+                                      G_PARAM_READWRITE |
+                                      G_PARAM_STATIC_NAME |
+                                      G_PARAM_STATIC_NICK |
+                                      G_PARAM_STATIC_BLURB));
+
+        /**
          * GUPnPDIDLLiteObject:write-status
          *
          * The write status of the this object.
@@ -723,6 +755,35 @@ gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object,
                                                    "author",
                                                    "role",
                                                    role,
+                                                   NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_get_genre
+ * @object: #GUPnPDIDLLiteObject
+ * @id: Location to put the ID string (if any) into, or %NULL
+ * @extended: Location to put the extended genre string (if any) into, or %NULL
+ *
+ * Get the genre of the @object. If @id is not %NULL, it is set to the ID
+ * of the genre if available that must be freed (using #gfree) after usage. The
+ * same goes for @extended.
+ *
+ * Return value: The genre of the @object, or %NULL. #g_free after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object,
+                                  char               **id,
+                                  char               **extended)
+{
+        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return xml_util_get_child_element_content (object->priv->xml_node,
+                                                   "genre",
+                                                   "id",
+                                                   id,
+                                                   "extended",
+                                                   extended,
                                                    NULL);
 }
 
@@ -1017,6 +1078,36 @@ gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
                             author,
                             "role",
                             role,
+                            NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_set_genre
+ * @object: The #GUPnPDIDLLiteObject
+ * @genre: The Genre
+ * @id: The role of the Genre or %NULL
+ * @extended: A string containing CSV list of sub-genre names or %NULL
+ *
+ * Set the Author of the @object to @author, id to @id and extended genre list
+ * to @extended.
+ **/
+void
+gupnp_didl_lite_object_set_genre (GUPnPDIDLLiteObject *object,
+                                  const char          *genre,
+                                  const char          *id,
+                                  const char          *extended)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->dc_ns,
+                            "genre",
+                            genre,
+                            "id",
+                            id,
+                            "extended",
+                            extended,
                             NULL);
 }
 

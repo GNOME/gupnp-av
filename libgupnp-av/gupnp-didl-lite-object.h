@@ -110,6 +110,11 @@ gupnp_didl_lite_object_get_author       (GUPnPDIDLLiteObject *object,
                                          char               **role);
 
 char *
+gupnp_didl_lite_object_get_genre        (GUPnPDIDLLiteObject *object,
+                                         char               **id,
+                                         char               **extended);
+
+char *
 gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object);
 
 GList *
@@ -156,6 +161,12 @@ void
 gupnp_didl_lite_object_set_author       (GUPnPDIDLLiteObject *object,
                                          const char          *author,
                                          const char          *role);
+
+void
+gupnp_didl_lite_object_set_genre        (GUPnPDIDLLiteObject *object,
+                                         const char          *genre,
+                                         const char          *id,
+                                         const char          *extended);
 
 void
 gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
