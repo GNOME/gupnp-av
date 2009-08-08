@@ -76,6 +76,34 @@ gupnp_didl_lite_container_get_property (GObject    *object,
 }
 
 static void
+gupnp_didl_lite_container_set_property (GObject      *object,
+                                        guint         property_id,
+                                        const GValue *value,
+                                        GParamSpec   *pspec)
+
+{
+        GUPnPDIDLLiteContainer *container;
+
+        container = GUPNP_DIDL_LITE_CONTAINER (object);
+
+        switch (property_id) {
+        case PROP_SEARCHABLE:
+                gupnp_didl_lite_container_set_searchable
+                                        (container,
+                                         g_value_get_boolean (value));
+                break;
+        case PROP_CHILD_COUNT:
+                gupnp_didl_lite_container_set_child_count
+                                        (container,
+                                         g_value_get_uint (value));
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+                break;
+        }
+}
+
+static void
 gupnp_didl_lite_container_constructed (GObject *object)
 {
         GObjectClass *object_class;
@@ -100,6 +128,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
         object_class = G_OBJECT_CLASS (klass);
 
         object_class->get_property = gupnp_didl_lite_container_get_property;
+        object_class->set_property = gupnp_didl_lite_container_set_property;
         object_class->constructed = gupnp_didl_lite_container_constructed;
 
         /**
@@ -114,7 +143,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
                                        "Searchable",
                                        "Whether this container is searchable.",
                                        FALSE,
-                                       G_PARAM_READABLE |
+                                       G_PARAM_READWRITE |
                                        G_PARAM_STATIC_NAME |
                                        G_PARAM_STATIC_NICK |
                                        G_PARAM_STATIC_BLURB));
@@ -133,7 +162,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
                                     0,
                                     G_MAXUINT,
                                     0,
-                                    G_PARAM_READABLE |
+                                    G_PARAM_READWRITE |
                                     G_PARAM_STATIC_NAME |
                                     G_PARAM_STATIC_NICK |
                                     G_PARAM_STATIC_BLURB));

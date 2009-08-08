@@ -75,17 +75,57 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                                      guint         property_id,
                                      const GValue *value,
                                      GParamSpec   *pspec)
-{
-        GUPnPDIDLLiteObjectPrivate *priv;
 
-        priv = GUPNP_DIDL_LITE_OBJECT (object)->priv;
+{
+        GUPnPDIDLLiteObject *didl_object;
+
+        didl_object = GUPNP_DIDL_LITE_OBJECT (object);
 
         switch (property_id) {
         case PROP_XML_NODE:
-                priv->xml_node = g_value_get_pointer (value);
+                didl_object->priv->xml_node = g_value_get_pointer (value);
                 break;
         case PROP_XML_DOC:
-                priv->xml_doc = g_value_dup_object (value);
+                didl_object->priv->xml_doc = g_value_dup_object (value);
+                break;
+        case PROP_ID:
+                gupnp_didl_lite_object_set_id (didl_object,
+                                               g_value_get_string (value));
+                break;
+        case PROP_PARENT_ID:
+                gupnp_didl_lite_object_set_parent_id
+                                        (didl_object,
+                                         g_value_get_string (value));
+                break;
+        case PROP_RESTRICTED:
+                gupnp_didl_lite_object_set_restricted
+                                        (didl_object,
+                                         g_value_get_boolean (value));
+                break;
+        case PROP_TITLE:
+                gupnp_didl_lite_object_set_title
+                                        (didl_object,
+                                         g_value_get_string (value));
+                break;
+        case PROP_UPNP_CLASS:
+                gupnp_didl_lite_object_set_upnp_class
+                                        (didl_object,
+                                         g_value_get_string (value));
+                break;
+        case PROP_UPNP_CLASS_NAME:
+                gupnp_didl_lite_object_set_upnp_class_name
+                                        (didl_object,
+                                         g_value_get_string (value));
+                break;
+        case PROP_CREATOR:
+                gupnp_didl_lite_object_set_creator
+                                        (didl_object,
+                                         g_value_get_string (value));
+                break;
+        case PROP_WRITE_STATUS:
+                gupnp_didl_lite_object_set_write_status
+                                        (didl_object,
+                                         g_value_get_string (value));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -301,7 +341,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       "ID",
                                       "The ID of this object.",
                                       NULL,
-                                      G_PARAM_READABLE |
+                                      G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
@@ -319,7 +359,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       "The ID of the parent container of"
                                       " this object.",
                                       NULL,
-                                      G_PARAM_READABLE |
+                                      G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
@@ -336,7 +376,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       "Restricted",
                                       "Whether this object is restricted.",
                                       NULL,
-                                      G_PARAM_READABLE |
+                                      G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
@@ -353,7 +393,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       "Title",
                                       "The title of this object.",
                                       NULL,
-                                      G_PARAM_READABLE |
+                                      G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
@@ -370,7 +410,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       "UPnPClassName",
                                       "The UPnP class of this object.",
                                       NULL,
-                                      G_PARAM_READABLE |
+                                      G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
@@ -388,7 +428,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       "The friendly name of the class of"
                                       " this object.",
                                       NULL,
-                                      G_PARAM_READABLE |
+                                      G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
@@ -405,7 +445,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       "Creator",
                                       "The creator of this object.",
                                       NULL,
-                                      G_PARAM_READABLE |
+                                      G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
@@ -422,7 +462,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       "WriteStatus",
                                       "The write status of the this object.",
                                       NULL,
-                                      G_PARAM_READABLE |
+                                      G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
