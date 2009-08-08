@@ -261,7 +261,7 @@ gupnp_didl_lite_container_set_child_count (GUPnPDIDLLiteContainer *container,
         xml_node = gupnp_didl_lite_object_get_xml_node
                                 (GUPNP_DIDL_LITE_OBJECT (container));
 
-        str = g_strdup_printf ("%u\n", child_count);
+        str = g_strdup_printf ("%u", child_count);
         xmlSetProp (xml_node,
                     (unsigned char *) "childCount",
                     (unsigned char *) str);
