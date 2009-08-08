@@ -64,6 +64,7 @@ enum {
         PROP_ALBUM,
         PROP_ALBUM_ART,
         PROP_DESCRIPTION,
+        PROP_DATE,
 };
 
 static void
@@ -162,6 +163,11 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                                         (didl_object,
                                          g_value_get_string (value));
                 break;
+        case PROP_DATE:
+                gupnp_didl_lite_object_set_date
+                                        (didl_object,
+                                         g_value_get_string (value));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -251,6 +257,11 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_description (didl_object));
+                break;
+        case PROP_DATE:
+                g_value_set_string
+                        (value,
+                         gupnp_didl_lite_object_get_date (didl_object));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -612,6 +623,23 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:date
+         *
+         * The date of this object.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_DATE,
+                 g_param_spec_string ("date",
+                                      "Date",
+                                      "The date of this object.",
+                                      NULL,
+                                      G_PARAM_READWRITE |
+                                      G_PARAM_STATIC_NAME |
+                                      G_PARAM_STATIC_NICK |
+                                      G_PARAM_STATIC_BLURB));
 }
 
 static gboolean
@@ -944,6 +972,25 @@ gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "description",
+                                                   NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_get_date
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the date of the @object.
+ *
+ * Return value: The date of the @object, or %NULL. #g_free after
+ * usage.
+ **/
+char *
+gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (object != NULL, FALSE);
+
+        return xml_util_get_child_element_content (object->priv->xml_node,
+                                                   "date",
                                                    NULL);
 }
 
@@ -1333,6 +1380,27 @@ gupnp_didl_lite_object_set_description (GUPnPDIDLLiteObject *object,
                             object->priv->dc_ns,
                             "description",
                             description,
+                            NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_set_date
+ * @object: #GUPnPDIDLLiteObject
+ * @date: The date string
+ *
+ * Set the date of the @object to @date.
+ **/
+void
+gupnp_didl_lite_object_set_date (GUPnPDIDLLiteObject *object,
+                                 const char          *date)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->dc_ns,
+                            "date",
+                            date,
                             NULL);
 }
 

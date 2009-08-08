@@ -126,6 +126,9 @@ gupnp_didl_lite_object_get_album_art    (GUPnPDIDLLiteObject *object);
 char *
 gupnp_didl_lite_object_get_description  (GUPnPDIDLLiteObject *object);
 
+char *
+gupnp_didl_lite_object_get_date         (GUPnPDIDLLiteObject *object);
+
 GList *
 gupnp_didl_lite_object_get_resources    (GUPnPDIDLLiteObject *object);
 
@@ -192,6 +195,10 @@ gupnp_didl_lite_object_set_album_art    (GUPnPDIDLLiteObject *object,
 void
 gupnp_didl_lite_object_set_description (GUPnPDIDLLiteObject *object,
                                         const char          *description);
+
+void
+gupnp_didl_lite_object_set_date        (GUPnPDIDLLiteObject *object,
+                                        const char          *date);
 
 char *
 gupnp_didl_lite_object_to_string      (GUPnPDIDLLiteObject *object);
