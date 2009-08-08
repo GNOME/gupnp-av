@@ -102,6 +102,10 @@ char *
 gupnp_didl_lite_object_get_creator      (GUPnPDIDLLiteObject *object);
 
 char *
+gupnp_didl_lite_object_get_artist       (GUPnPDIDLLiteObject *object,
+                                         char               **role);
+
+char *
 gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object);
 
 GList *
@@ -139,6 +143,10 @@ void
 gupnp_didl_lite_object_set_creator      (GUPnPDIDLLiteObject *object,
                                          const char          *creator);
 
+void
+gupnp_didl_lite_object_set_artist       (GUPnPDIDLLiteObject *object,
+                                         const char          *artist,
+                                         const char          *role);
 void
 gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
                                          const char          *write_status);

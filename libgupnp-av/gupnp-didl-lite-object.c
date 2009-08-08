@@ -57,6 +57,7 @@ enum {
         PROP_TITLE,
         PROP_UPNP_CLASS,
         PROP_CREATOR,
+        PROP_ARTIST,
         PROP_WRITE_STATUS
 };
 
@@ -117,6 +118,12 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                                         (didl_object,
                                          g_value_get_string (value));
                 break;
+        case PROP_ARTIST:
+                gupnp_didl_lite_object_set_artist
+                                        (didl_object,
+                                         g_value_get_string (value),
+                                         NULL);
+                break;
         case PROP_WRITE_STATUS:
                 gupnp_didl_lite_object_set_write_status
                                         (didl_object,
@@ -174,6 +181,11 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_creator (didl_object));
+                break;
+        case PROP_ARTIST:
+                g_value_set_string
+                        (value,
+                         gupnp_didl_lite_object_get_artist (didl_object, NULL));
                 break;
         case PROP_WRITE_STATUS:
                 g_value_set_string
@@ -423,6 +435,23 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
+         * GUPnPDIDLLiteObject:artist
+         *
+         * The artist of this object.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_ARTIST,
+                 g_param_spec_string ("artist",
+                                      "Artist",
+                                      "The artist of this object.",
+                                      NULL,
+                                      G_PARAM_READWRITE |
+                                      G_PARAM_STATIC_NAME |
+                                      G_PARAM_STATIC_NICK |
+                                      G_PARAM_STATIC_BLURB));
+
+        /**
          * GUPnPDIDLLiteObject:write-status
          *
          * The write status of the this object.
@@ -617,6 +646,30 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "creator",
+                                                   NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_get_artist
+ * @object: #GUPnPDIDLLiteObject
+ * @role: Location to put the role string (if any) into, or %NULL
+ *
+ * Get the artist of the @object. If role is not %NULL, it is set to the role
+ * of the artist if available that must be freed (using #gfree) after usage.
+ *
+ * Return value: The artist of the @object, or %NULL. #g_free after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object,
+                                   char               **role)
+{
+        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return xml_util_get_child_element_content (object->priv->xml_node,
+                                                   "artist",
+                                                   "role",
+                                                   role,
                                                    NULL);
 }
 
@@ -861,6 +914,31 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
                             object->priv->dc_ns,
                             "creator",
                             creator,
+                            NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_set_artist
+ * @object: The #GUPnPDIDLLiteObject
+ * @artist: The Artist
+ * @role: The role of the Artist or %NULL
+ *
+ * Set the Artist of the @object to @artist and her/his role to @role.
+ **/
+void
+gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
+                                   const char          *artist,
+                                   const char          *role)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->upnp_ns,
+                            "artist",
+                            artist,
+                            "role",
+                            role,
                             NULL);
 }
 
