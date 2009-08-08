@@ -56,7 +56,6 @@ enum {
         PROP_RESTRICTED,
         PROP_TITLE,
         PROP_UPNP_CLASS,
-        PROP_UPNP_CLASS_NAME,
         PROP_CREATOR,
         PROP_WRITE_STATUS
 };
@@ -110,12 +109,8 @@ gupnp_didl_lite_object_set_property (GObject      *object,
         case PROP_UPNP_CLASS:
                 gupnp_didl_lite_object_set_upnp_class
                                         (didl_object,
-                                         g_value_get_string (value));
-                break;
-        case PROP_UPNP_CLASS_NAME:
-                gupnp_didl_lite_object_set_upnp_class_name
-                                        (didl_object,
-                                         g_value_get_string (value));
+                                         g_value_get_string (value),
+                                         NULL);
                 break;
         case PROP_CREATOR:
                 gupnp_didl_lite_object_set_creator
@@ -172,13 +167,8 @@ gupnp_didl_lite_object_get_property (GObject    *object,
         case PROP_UPNP_CLASS:
                 g_value_set_string
                         (value,
-                         gupnp_didl_lite_object_get_upnp_class (didl_object));
-                break;
-        case PROP_UPNP_CLASS_NAME:
-                g_value_set_string
-                        (value,
-                         gupnp_didl_lite_object_get_upnp_class_name
-                                                        (didl_object));
+                         gupnp_didl_lite_object_get_upnp_class
+                                                        (didl_object, NULL));
                 break;
         case PROP_CREATOR:
                 g_value_set_string
@@ -416,24 +406,6 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:upnp-class-name
-         *
-         * The friendly name of the class of this object.
-         **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_UPNP_CLASS_NAME,
-                 g_param_spec_string ("upnp-class-name",
-                                      "UPnPClassName",
-                                      "The friendly name of the class of"
-                                      " this object.",
-                                      NULL,
-                                      G_PARAM_READWRITE |
-                                      G_PARAM_STATIC_NAME |
-                                      G_PARAM_STATIC_NICK |
-                                      G_PARAM_STATIC_BLURB));
-
-        /**
          * GUPnPDIDLLiteObject:creator
          *
          * The creator of this object.
@@ -509,39 +481,29 @@ gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_upnp_class
  * @object: The #GUPnPDIDLLiteObject
+ * @friendly_name: Location to put the friendly name of the UPnP class into, or
+ * %NULL
  *
- * Get the UPnP class of the @object.
+ * Get the UPnP class of the @object. If @friendly_name is not %NULL, the
+ * friendly name of the UPnP class is put there that must be freed (using
+ * #gfree) after usage.
  *
  * Return value: The class of @object, or %NULL. #g_free after usage.
  **/
 char *
-gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object)
+gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object,
+                                       char               **friendly_name)
 {
         g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
+        if (friendly_name != NULL)
+                *friendly_name = xml_util_get_child_attribute_content
+                                                (object->priv->xml_node,
+                                                 "class",
+                                                 "name");
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "class");
-}
-
-/**
- * gupnp_didl_lite_object_get_upnp_class_name
- * @object: #GUPnPDIDLLiteObject
- *
- * Get the friendly name of the class of the @object.
- *
- * Return value: The friendly name of the class of @object, or %NULL.
- * #g_free after usage.
- **/
-char *
-gupnp_didl_lite_object_get_upnp_class_name (GUPnPDIDLLiteObject *object)
-{
-        g_return_val_if_fail (object != NULL, NULL);
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-
-        return xml_util_get_child_attribute_content (object->priv->xml_node,
-                                                     "class",
-                                                     "name");
 }
 
 /**
@@ -774,13 +736,18 @@ gupnp_didl_lite_object_get_compat_resource
 /**
  * gupnp_didl_lite_object_set_upnp_class
  * @object: The #GUPnPDIDLLiteObject
+ * @upnp_class: The UPnP class
+ * @friendly_name: The friendly name of the UPnP class
  *
  * Set the UPnP class of the @object to @upnp_class.
  **/
 void
 gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
-                                       const char          *upnp_class)
+                                       const char          *upnp_class,
+                                       const char          *friendly_name)
 {
+        xmlNode *node;
+
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
 
@@ -788,30 +755,14 @@ gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
                             object->priv->upnp_ns,
                             "class",
                             upnp_class);
-}
-
-/**
- * gupnp_didl_lite_object_set_upnp_class_name
- * @object: #GUPnPDIDLLiteObject
- *
- * Set the friendly name of the class of the @object to @class_name.
- **/
-void
-gupnp_didl_lite_object_set_upnp_class_name (GUPnPDIDLLiteObject *object,
-                                            const char          *class_name)
-{
-        xmlNode *node;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
 
         node = xml_util_get_element (object->priv->xml_node,
                                      "class",
                                      NULL);
-        if (node != NULL)
+        if (friendly_name != NULL)
                 xmlSetProp (node,
                             (unsigned char *) "name",
-                            (unsigned char *) class_name);
+                            (unsigned char *) friendly_name);
 }
 
 /**

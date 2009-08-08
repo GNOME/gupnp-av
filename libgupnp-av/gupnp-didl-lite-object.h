@@ -79,11 +79,8 @@ xmlNode *
 gupnp_didl_lite_object_get_xml_node     (GUPnPDIDLLiteObject *object);
 
 char *
-gupnp_didl_lite_object_get_upnp_class   (GUPnPDIDLLiteObject *object);
-
-char *
-gupnp_didl_lite_object_get_upnp_class_name
-                                        (GUPnPDIDLLiteObject *object);
+gupnp_didl_lite_object_get_upnp_class   (GUPnPDIDLLiteObject *object,
+                                         char               **friendly_name);
 
 char *
 gupnp_didl_lite_object_get_id           (GUPnPDIDLLiteObject *object);
@@ -119,12 +116,8 @@ gupnp_didl_lite_object_get_compat_resource
 
 void
 gupnp_didl_lite_object_set_upnp_class   (GUPnPDIDLLiteObject *object,
-                                         const char          *upnp_class);
-
-void
-gupnp_didl_lite_object_set_upnp_class_name
-                                        (GUPnPDIDLLiteObject *object,
-                                         const char          *class_name);
+                                         const char          *upnp_class,
+                                         const char          *friendly_name);
 
 void
 gupnp_didl_lite_object_set_id           (GUPnPDIDLLiteObject *object,
