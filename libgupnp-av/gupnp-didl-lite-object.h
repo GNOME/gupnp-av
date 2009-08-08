@@ -117,6 +117,9 @@ gupnp_didl_lite_object_get_compat_resource
                                          *sink_protocol_info,
                                          gboolean             lenient);
 
+char *
+gupnp_didl_lite_object_to_string      (GUPnPDIDLLiteObject *object);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_OBJECT_H__ */
