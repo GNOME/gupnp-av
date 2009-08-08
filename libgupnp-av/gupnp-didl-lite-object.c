@@ -62,6 +62,7 @@ enum {
         PROP_GENRE,
         PROP_WRITE_STATUS,
         PROP_ALBUM,
+        PROP_ALBUM_ART,
 };
 
 static void
@@ -150,6 +151,11 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                                         (didl_object,
                                          g_value_get_string (value));
                 break;
+        case PROP_ALBUM_ART:
+                gupnp_didl_lite_object_set_album_art
+                                        (didl_object,
+                                         g_value_get_string (value));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -229,6 +235,11 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_album (didl_object));
+                break;
+        case PROP_ALBUM_ART:
+                g_value_set_string
+                        (value,
+                         gupnp_didl_lite_object_get_album_art (didl_object));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -556,6 +567,23 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:album-art
+         *
+         * The URI to album art of this object.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_ALBUM_ART,
+                 g_param_spec_string ("album-art",
+                                      "AlbumArt",
+                                      "The URI to album art of this object.",
+                                      NULL,
+                                      G_PARAM_READWRITE |
+                                      G_PARAM_STATIC_NAME |
+                                      G_PARAM_STATIC_NICK |
+                                      G_PARAM_STATIC_BLURB));
 }
 
 static gboolean
@@ -850,6 +878,25 @@ gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "album",
+                                                   NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_get_album_art
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the URI to album art of the @object.
+ *
+ * Return value: The URI to album art of the @object, or %NULL. #g_free after
+ * usage.
+ **/
+char *
+gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (object != NULL, FALSE);
+
+        return xml_util_get_child_element_content (object->priv->xml_node,
+                                                   "albumArtURI",
                                                    NULL);
 }
 
@@ -1197,6 +1244,27 @@ gupnp_didl_lite_object_set_album (GUPnPDIDLLiteObject *object,
                             object->priv->upnp_ns,
                             "album",
                             album,
+                            NULL);
+}
+
+/**
+ * gupnp_didl_lite_object_set_album_art
+ * @object: #GUPnPDIDLLiteObject
+ * @album_art: The URI of album art
+ *
+ * Set the URI to album art of the @object to @album_art.
+ **/
+void
+gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
+                                      const char          *album_art)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->upnp_ns,
+                            "albumArtURI",
+                            album_art,
                             NULL);
 }
 

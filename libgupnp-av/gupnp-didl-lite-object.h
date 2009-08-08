@@ -120,6 +120,9 @@ gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object);
 char *
 gupnp_didl_lite_object_get_album        (GUPnPDIDLLiteObject *object);
 
+char *
+gupnp_didl_lite_object_get_album_art    (GUPnPDIDLLiteObject *object);
+
 GList *
 gupnp_didl_lite_object_get_resources    (GUPnPDIDLLiteObject *object);
 
@@ -178,6 +181,10 @@ gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
 void
 gupnp_didl_lite_object_set_album        (GUPnPDIDLLiteObject *object,
                                          const char          *album);
+
+void
+gupnp_didl_lite_object_set_album_art    (GUPnPDIDLLiteObject *object,
+                                         const char          *album_art);
 
 char *
 gupnp_didl_lite_object_to_string      (GUPnPDIDLLiteObject *object);
