@@ -515,14 +515,14 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
         /**
          * GUPnPDIDLLiteObject:write-status
          *
-         * The write status of the this object.
+         * The write status of this object.
          **/
         g_object_class_install_property
                 (object_class,
                  PROP_WRITE_STATUS,
                  g_param_spec_string ("write-status",
                                       "WriteStatus",
-                                      "The write status of the this object.",
+                                      "The write status of this object.",
                                       NULL,
                                       G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
