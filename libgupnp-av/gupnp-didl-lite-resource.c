@@ -1764,7 +1764,7 @@ gupnp_didl_lite_resource_set_audio_channels (GUPnPDIDLLiteResource *resource,
 
         resource->priv->n_audio_channels = n_channels;
 
-        g_object_notify (G_OBJECT (resource), "height");
+        g_object_notify (G_OBJECT (resource), "audio-channels");
 }
 
 /**
