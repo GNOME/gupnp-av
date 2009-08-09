@@ -239,6 +239,8 @@ gupnp_didl_lite_container_set_searchable (GUPnPDIDLLiteContainer *container,
         xmlSetProp (xml_node,
                     (unsigned char *) "searchable",
                     (unsigned char *) searchable);
+
+        g_object_notify (G_OBJECT (container), "searchable");
 }
 
 /**
@@ -266,4 +268,6 @@ gupnp_didl_lite_container_set_child_count (GUPnPDIDLLiteContainer *container,
                     (unsigned char *) "childCount",
                     (unsigned char *) str);
         g_free (str);
+
+        g_object_notify (G_OBJECT (container), "child-count");
 }

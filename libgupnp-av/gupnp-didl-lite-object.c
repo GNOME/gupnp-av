@@ -1168,6 +1168,8 @@ gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
                             "name",
                             friendly_name,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "upnp-class");
 }
 
 /**
@@ -1187,6 +1189,8 @@ gupnp_didl_lite_object_set_id (GUPnPDIDLLiteObject *object,
         xmlSetProp (object->priv->xml_node,
                     (unsigned char *) "id",
                     (unsigned char *) id);
+
+        g_object_notify (G_OBJECT (object), "id");
 }
 
 /**
@@ -1206,6 +1210,8 @@ gupnp_didl_lite_object_set_parent_id (GUPnPDIDLLiteObject *object,
         xmlSetProp (object->priv->xml_node,
                     (unsigned char *) "parentID",
                     (unsigned char *) parent_id);
+
+        g_object_notify (G_OBJECT (object), "parent-id");
 }
 
 /**
@@ -1231,6 +1237,8 @@ gupnp_didl_lite_object_set_restricted (GUPnPDIDLLiteObject *object,
         xmlSetProp (object->priv->xml_node,
                     (unsigned char *) "restricted",
                     (unsigned char *) str);
+
+        g_object_notify (G_OBJECT (object), "restricted");
 }
 
 /**
@@ -1252,6 +1260,8 @@ gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
                             "title",
                             title,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "title");
 }
 
 /**
@@ -1273,6 +1283,8 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
                             "creator",
                             creator,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "creator");
 }
 
 /**
@@ -1298,6 +1310,8 @@ gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
                             "role",
                             role,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "artist");
 }
 
 /**
@@ -1323,6 +1337,8 @@ gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
                             "role",
                             role,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "author");
 }
 
 /**
@@ -1353,6 +1369,8 @@ gupnp_didl_lite_object_set_genre (GUPnPDIDLLiteObject *object,
                             "extended",
                             extended,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "genre");
 }
 
 /**
@@ -1374,6 +1392,8 @@ gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
                             "writeStatus",
                             write_status,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "write-status");
 }
 
 /**
@@ -1395,6 +1415,8 @@ gupnp_didl_lite_object_set_album (GUPnPDIDLLiteObject *object,
                             "album",
                             album,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "album");
 }
 
 /**
@@ -1416,6 +1438,8 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
                             "albumArtURI",
                             album_art,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "album-art");
 }
 
 /**
@@ -1437,6 +1461,8 @@ gupnp_didl_lite_object_set_description (GUPnPDIDLLiteObject *object,
                             "description",
                             description,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "description");
 }
 
 /**
@@ -1458,6 +1484,8 @@ gupnp_didl_lite_object_set_date (GUPnPDIDLLiteObject *object,
                             "date",
                             date,
                             NULL);
+
+        g_object_notify (G_OBJECT (object), "date");
 }
 
 /**
@@ -1483,6 +1511,8 @@ gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
                             str,
                             NULL);
         g_free (str);
+
+        g_object_notify (G_OBJECT (object), "track-number");
 }
 
 /**

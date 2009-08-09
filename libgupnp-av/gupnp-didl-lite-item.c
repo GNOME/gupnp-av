@@ -181,4 +181,6 @@ gupnp_didl_lite_item_set_ref_id (GUPnPDIDLLiteItem *item,
         xmlSetProp (xml_node,
                     (unsigned char *) "childCount",
                     (unsigned char *) ref_id);
+
+        g_object_notify (G_OBJECT (item), "ref-id");
 }
