@@ -27,6 +27,7 @@
 #include "gupnp-didl-lite-parser.h"
 #include "gupnp-didl-lite-resource.h"
 #include "gupnp-didl-lite-writer.h"
+#include "gupnp-protocol-info.h"
 #include "gupnp-search-criteria-parser.h"
 #include "gupnp-last-change-parser.h"
 #include "gupnp-dlna.h"

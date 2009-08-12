@@ -680,11 +680,20 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
 
         protocols = g_strsplit (sink_protocol_info, ",", 0);
 
-        for (i = 0; protocols[i] && !ret; i++)
-                if (gupnp_didl_lite_resource_protocol_info_compatible (
-                                                        resource,
-                                                        protocols[i]))
-                        ret = TRUE;
+        for (i = 0; protocols[i] && !ret; i++) {
+                GUPnPProtocolInfo *info;
+                GUPnPProtocolInfo *res_info;
+
+                info = gupnp_protocol_info_new_from_string (protocols[i], NULL);
+                if (info == NULL)
+                        continue;
+
+                res_info = gupnp_didl_lite_resource_get_protocol_info
+                                                        (resource);
+                ret = gupnp_protocol_info_is_compatible (info, res_info);
+
+                g_object_unref (info);
+        }
 
         g_strfreev (protocols);
 
@@ -1074,11 +1083,22 @@ gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
         for (res = resources; res; res = res->next) {
                 GUPnPDIDLLiteResource *resource;
                 xmlNode *res_node;
+                GError *error;
 
                 res_node = (xmlNode *) res->data;
 
+                error = NULL;
                 /* Create a resource struct out of DIDLLite XML */
-                resource = gupnp_didl_lite_resource_new_from_xml (res_node);
+                resource = gupnp_didl_lite_resource_new_from_xml (res_node,
+                                                                  &error);
+                if (resources == NULL) {
+                        g_warning ("Error parsing a 'res' node: %s",
+                                   error->message);
+
+                        g_error_free (error);
+
+                        continue;
+                }
 
                 ret = g_list_append (ret, resource);
         }

@@ -30,6 +30,7 @@
 #include <libxml/tree.h>
 
 #include "gupnp-dlna.h"
+#include "gupnp-protocol-info.h"
 
 G_BEGIN_DECLS
 
@@ -79,12 +80,8 @@ GUPnPDIDLLiteResource *
 gupnp_didl_lite_resource_new            (const char *uri);
 
 GUPnPDIDLLiteResource *
-gupnp_didl_lite_resource_new_from_xml   (xmlNode *res_node);
-
-gboolean
-gupnp_didl_lite_resource_protocol_info_compatible
-                                        (GUPnPDIDLLiteResource *resource,
-                                         const char            *protocol_info);
+gupnp_didl_lite_resource_new_from_xml   (xmlNode *res_node,
+                                         GError **error);
 
 void
 gupnp_didl_lite_resource_set_uri        (GUPnPDIDLLiteResource *resource,
@@ -95,40 +92,9 @@ gupnp_didl_lite_resource_set_import_uri (GUPnPDIDLLiteResource *resource,
                                          const char            *import_uri);
 
 void
-gupnp_didl_lite_resource_set_protocol   (GUPnPDIDLLiteResource *resource,
-                                         const char            *protocol);
-
-void
-gupnp_didl_lite_resource_set_network    (GUPnPDIDLLiteResource *resource,
-                                         const char            *network);
-
-void
-gupnp_didl_lite_resource_set_mime_type  (GUPnPDIDLLiteResource *resource,
-                                        const char            *mime_type);
-
-void
-gupnp_didl_lite_resource_set_dlna_profile
+gupnp_didl_lite_resource_set_protocol_info
                                         (GUPnPDIDLLiteResource *resource,
-                                         const char            *profile);
-
-void
-gupnp_didl_lite_resource_set_play_speeds
-                                        (GUPnPDIDLLiteResource *resource,
-                                         const char           **speeds);
-
-void
-gupnp_didl_lite_resource_set_dlna_conversion
-                                        (GUPnPDIDLLiteResource *resource,
-                                         GUPnPDLNAConversion    conversion);
-
-void
-gupnp_didl_lite_resource_set_dlna_operation
-                                        (GUPnPDIDLLiteResource *resource,
-                                         GUPnPDLNAOperation     operation);
-
-void
-gupnp_didl_lite_resource_set_dlna_flags (GUPnPDIDLLiteResource *resource,
-                                         GUPnPDLNAFlags         flags);
+                                         GUPnPProtocolInfo     *info);
 
 void
 gupnp_didl_lite_resource_set_size       (GUPnPDIDLLiteResource *resource,
@@ -180,33 +146,9 @@ gupnp_didl_lite_resource_get_uri        (GUPnPDIDLLiteResource *resource);
 const char *
 gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource);
 
-const char *
-gupnp_didl_lite_resource_get_protocol   (GUPnPDIDLLiteResource *resource);
-
-const char *
-gupnp_didl_lite_resource_get_network    (GUPnPDIDLLiteResource *resource);
-
-const char *
-gupnp_didl_lite_resource_get_mime_type  (GUPnPDIDLLiteResource *resource);
-
-const char *
-gupnp_didl_lite_resource_get_dlna_profile
+GUPnPProtocolInfo *
+gupnp_didl_lite_resource_get_protocol_info
                                         (GUPnPDIDLLiteResource *resource);
-
-const char **
-gupnp_didl_lite_resource_get_play_speeds
-                                        (GUPnPDIDLLiteResource *resource);
-
-GUPnPDLNAConversion
-gupnp_didl_lite_resource_get_dlna_conversion
-                                        (GUPnPDIDLLiteResource *resource);
-
-GUPnPDLNAOperation
-gupnp_didl_lite_resource_get_dlna_operation
-                                        (GUPnPDIDLLiteResource *resource);
-
-GUPnPDLNAFlags
-gupnp_didl_lite_resource_get_dlna_flags (GUPnPDIDLLiteResource *resource);
 
 long
 gupnp_didl_lite_resource_get_size       (GUPnPDIDLLiteResource *resource);

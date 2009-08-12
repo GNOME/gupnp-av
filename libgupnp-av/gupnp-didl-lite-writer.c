@@ -134,13 +134,14 @@ append_escaped_text (GUPnPDIDLLiteWriter *writer,
 
 static void
 add_dlna_info_from_resource (GUPnPDIDLLiteWriter   *writer,
-                             GUPnPDIDLLiteResource *res)
+                             GUPnPDIDLLiteResource *res,
+                             GUPnPProtocolInfo     *info)
 {
         const char *dlna_profile;
         const char **speeds;
         GUPnPDLNAConversion conversion;
 
-        dlna_profile = gupnp_didl_lite_resource_get_dlna_profile (res);
+        dlna_profile = gupnp_protocol_info_get_dlna_profile (info);
         if (dlna_profile == NULL)
                 /* Try guessing */
                 dlna_profile = dlna_guess_profile (res);
@@ -158,17 +159,17 @@ add_dlna_info_from_resource (GUPnPDIDLLiteWriter   *writer,
         /* the OP parameter is only allowed for the "http-get"
          * and "rtsp-rtp-udp" protocols
          */
-        if (strcmp (gupnp_didl_lite_resource_get_protocol (res),
+        if (strcmp (gupnp_protocol_info_get_protocol (info),
                     "http-get") == 0 ||
-            strcmp (gupnp_didl_lite_resource_get_protocol (res),
+            strcmp (gupnp_protocol_info_get_protocol (info),
                     "rtsp-rtp-udp") == 0)
                 g_string_append_printf
                         (writer->priv->str,
                          ";DLNA.ORG_OP=%.2x",
-                         gupnp_didl_lite_resource_get_dlna_operation (res));
+                         gupnp_protocol_info_get_dlna_operation (info));
 
         /* Specify PS parameter if list of play speeds is provided */
-        speeds = gupnp_didl_lite_resource_get_play_speeds (res);
+        speeds = gupnp_protocol_info_get_play_speeds (info);
         if (speeds != NULL) {
                 int i;
 
@@ -182,7 +183,7 @@ add_dlna_info_from_resource (GUPnPDIDLLiteWriter   *writer,
                 }
         }
 
-        conversion = gupnp_didl_lite_resource_get_dlna_conversion (res);
+        conversion = gupnp_protocol_info_get_dlna_conversion (info);
         /* omit the CI parameter for non-converted content */
         if (conversion != GUPNP_DLNA_CONVERSION_NONE)
                 g_string_append_printf (writer->priv->str,
@@ -190,8 +191,8 @@ add_dlna_info_from_resource (GUPnPDIDLLiteWriter   *writer,
                                         conversion);
 
         g_string_append_printf (writer->priv->str,
-                                ";DLNA.ORG_FLAGS=%.8x%.24x\"",
-                                gupnp_didl_lite_resource_get_dlna_flags (res),
+                                ";DLNA.ORG_FLAGS=%.8x%.24x",
+                                gupnp_protocol_info_get_dlna_flags (info),
                                 0);
 }
 
@@ -393,31 +394,36 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         SoupURI *uri;
         char *uri_str;
         const char *str;
-        int i;
         long l;
+        GUPnPProtocolInfo *info;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
         g_return_if_fail (res != NULL);
         g_return_if_fail (gupnp_didl_lite_resource_get_uri (res) != NULL);
-        g_return_if_fail (gupnp_didl_lite_resource_get_protocol (res) != NULL);
-        g_return_if_fail (gupnp_didl_lite_resource_get_mime_type (res) != NULL);
+
+        info = gupnp_didl_lite_resource_get_protocol_info (res);
+
+        g_return_if_fail (info != NULL);
+        g_return_if_fail (gupnp_protocol_info_get_protocol (info) != NULL);
+        g_return_if_fail (gupnp_protocol_info_get_mime_type (info) != NULL);
 
         g_string_append (writer->priv->str, "<res protocolInfo=\"");
 
         g_string_append (writer->priv->str,
-                         gupnp_didl_lite_resource_get_protocol (res));
+                         gupnp_protocol_info_get_protocol (info));
         g_string_append_c (writer->priv->str, ':');
-        if (gupnp_didl_lite_resource_get_network (res) != NULL)
+        if (gupnp_protocol_info_get_network (info) != NULL)
                 g_string_append (writer->priv->str,
-                                 gupnp_didl_lite_resource_get_network (res));
+                                 gupnp_protocol_info_get_network (info));
         else
                 g_string_append (writer->priv->str, "*");
         g_string_append_c (writer->priv->str, ':');
         g_string_append (writer->priv->str,
-                         gupnp_didl_lite_resource_get_mime_type (res));
+                         gupnp_protocol_info_get_mime_type (info));
 
-        add_dlna_info_from_resource (writer, res);
+        add_dlna_info_from_resource (writer, res, info);
+        g_string_append_c (writer->priv->str, '"');
 
         str = gupnp_didl_lite_resource_get_import_uri (res);
         if (str != NULL) {

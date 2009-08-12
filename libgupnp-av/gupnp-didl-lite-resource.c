@@ -44,15 +44,8 @@ G_DEFINE_TYPE (GUPnPDIDLLiteResource,
 struct _GUPnPDIDLLiteResourcePrivate {
         char  *uri;
         char  *import_uri;
-        char  *protocol;
-        char  *network;
-        char  *mime_type;
-        char  *dlna_profile;
-        char **play_speeds;
 
-        GUPnPDLNAConversion dlna_conversion;
-        GUPnPDLNAOperation  dlna_operation;
-        GUPnPDLNAFlags      dlna_flags;
+        GUPnPProtocolInfo *protocol_info;
 
         /* Stream data */
         long  size;
@@ -75,15 +68,8 @@ enum {
         PROP_0,
         PROP_URI,
         PROP_IMPORT_URI,
-        PROP_PROTOCOL,
-        PROP_NETWORK,
-        PROP_MIME_TYPE,
-        PROP_DLNA_PROFILE,
-        PROP_PLAY_SPEEDS,
 
-        PROP_DLNA_CONVERSION,
-        PROP_DLNA_OPERATION,
-        PROP_DLNA_FLAGS,
+        PROP_PROTOCOL_INFO,
 
         PROP_SIZE,
         PROP_DURATION,
@@ -97,135 +83,6 @@ enum {
         PROP_HEIGHT,
         PROP_COLOR_DEPTH
 };
-
-static void
-parse_additional_info (const char            *additional_info,
-                       GUPnPDIDLLiteResource *resource)
-{
-        GUPnPDIDLLiteResourcePrivate *priv;
-        char **tokens = NULL;
-        short i;
-
-        priv = resource->priv;
-
-        if (strcmp (additional_info, "*") == 0)
-                return;
-
-        tokens = g_strsplit (additional_info, ";", -1);
-        if (tokens == NULL) {
-                g_warning ("Invalid additional info in DIDL-Lite resource: %s",
-                           additional_info);
-
-                return;
-        }
-
-        for (i = 0; tokens[i]; i++) {
-                char *p;
-
-                p = g_strstr_len (tokens[i],
-                                  strlen (tokens[i]),
-                                  "DLNA.ORG_PN=");
-                if (p != NULL) {
-                        p += 12; /* end of "DLNA.ORG_PN=" */
-                        gupnp_didl_lite_resource_set_dlna_profile (resource, p);
-
-                        continue;
-                }
-
-                p = g_strstr_len (tokens[i],
-                                  strlen (tokens[i]),
-                                  "DLNA.ORG_PS=");
-                if (p != NULL) {
-                        char **play_speeds;
-
-                        p += 12; /* end of "DLNA.ORG_PS=" */
-
-                        play_speeds = g_strsplit (p, ",", -1);
-                        gupnp_didl_lite_resource_set_play_speeds
-                                                (resource,
-                                                 (const char **) play_speeds);
-                        g_strfreev (play_speeds);
-
-                        continue;
-                }
-
-                p = g_strstr_len (tokens[i],
-                                  strlen (tokens[i]),
-                                  "DLNA.ORG_CI=");
-                if (p != NULL) {
-                        p += 12; /* end of "DLNA.ORG_CI=" */
-
-                        gupnp_didl_lite_resource_set_dlna_conversion (resource,
-                                                                      atoi (p));
-
-                        continue;
-                }
-
-                p = g_strstr_len (tokens[i],
-                                  strlen (tokens[i]),
-                                  "DLNA.ORG_OP=");
-                if (p != NULL) {
-                        p += 12; /* end of "DLNA.ORG_OP=" */
-
-                        gupnp_didl_lite_resource_set_dlna_operation
-                                                        (resource,
-                                                         strtol (p, NULL, 16));
-
-                        continue;
-                }
-
-                p = g_strstr_len (tokens[i],
-                                  strlen (tokens[i]),
-                                  "DLNA.ORG_FLAGS=");
-                if (p != NULL) {
-                        p += 15; /* end of "DLNA.ORG_FLAGS=" */
-
-                        p[8] = '\0';
-                        gupnp_didl_lite_resource_set_dlna_flags
-                                                        (resource,
-                                                         strtol (p, NULL, 16));
-
-                        continue;
-                }
-        }
-
-        g_strfreev (tokens);
-}
-
-static void
-parse_protocol_info (xmlNode               *res_node,
-                     GUPnPDIDLLiteResource *resource)
-{
-        char **tokens = NULL;
-        char *protocol_info;
-
-        protocol_info = xml_util_get_attribute_content (res_node,
-                                                        "protocolInfo");
-        if (protocol_info == NULL) {
-                g_warning ("Attribute 'protocolInfo' missing in DIDL-Lite "
-                           "resource");
-
-                goto return_point;
-        }
-
-        tokens = g_strsplit (protocol_info, ":", 4);
-        if (tokens == NULL ||
-            tokens[0] == NULL ||
-            tokens[1] == NULL ||
-            tokens[2] == NULL ||
-            tokens[3] == NULL)
-                goto return_point;
-
-        gupnp_didl_lite_resource_set_protocol (resource, tokens[0]);
-        gupnp_didl_lite_resource_set_network (resource, tokens[1]);
-        gupnp_didl_lite_resource_set_mime_type (resource, tokens[2]);
-
-        parse_additional_info (tokens[3], resource);
-
-return_point:
-        g_free (protocol_info);
-        g_strfreev (tokens);
-}
 
 static void
 parse_resolution_info (xmlNode               *res_node,
@@ -250,90 +107,6 @@ parse_resolution_info (xmlNode               *res_node,
 
         g_free (resolution);
         g_strfreev (tokens);
-}
-
-static gchar *
-get_dlna_pn (const char *additional_info)
-{
-        gchar **tokens;
-        gchar *pn = NULL;
-        gint i;
-
-        tokens = g_strsplit (additional_info, ";", -1);
-        if (tokens == NULL)
-                return NULL;
-
-        for (i = 0; tokens[i]; i++) {
-                pn = g_strstr_len (tokens[i],
-                                   strlen (tokens[i]),
-                                   "DLNA.ORG_PN=");
-                if (pn != NULL) {
-                        pn = g_strdup (pn + 12); /* end of "DLNA.ORG_PN=" */
-
-                        break;
-                }
-        }
-
-        g_strfreev (tokens);
-
-        return pn;
-}
-
-static gboolean
-is_transport_compat (GUPnPDIDLLiteResource *resource,
-                     const char            *protocol,
-                     const char            *network)
-{
-        if (protocol[0] != '*' &&
-            g_ascii_strcasecmp
-                        (gupnp_didl_lite_resource_get_protocol (resource),
-                         protocol) != 0)
-                return FALSE;
-        else if (g_ascii_strcasecmp ("internal", protocol) == 0 &&
-                 strcmp (gupnp_didl_lite_resource_get_network (resource),
-                         network) != 0)
-                /* Host must be the same in case of INTERNAL protocol */
-                return FALSE;
-        else
-                return TRUE;
-}
-
-static gboolean
-is_content_format_compat (GUPnPDIDLLiteResource *resource,
-                          const char            *mime_type)
-{
-        if (mime_type[0] != '*' &&
-            g_ascii_strcasecmp
-                        (gupnp_didl_lite_resource_get_mime_type (resource),
-                         mime_type) != 0)
-                return FALSE;
-        else
-                return TRUE;
-}
-
-static gboolean
-is_additional_info_compat (GUPnPDIDLLiteResource *resource,
-                           const char            *additional_info)
-{
-        gchar *dlna_profile;
-        gboolean ret = FALSE;
-
-        if (additional_info[0] == '*')
-                return TRUE;
-
-        dlna_profile = get_dlna_pn (additional_info);
-        if (dlna_profile == NULL)
-                goto no_profile;
-
-        if (g_ascii_strcasecmp
-                        (gupnp_didl_lite_resource_get_dlna_profile (resource),
-                         dlna_profile) == 0)
-                ret = TRUE;
-
-        g_free (dlna_profile);
-
-no_profile:
-        return ret;
 }
 
 static long
@@ -369,10 +142,6 @@ gupnp_didl_lite_resource_init (GUPnPDIDLLiteResource *resource)
                                          GUPNP_TYPE_DIDL_LITE_RESOURCE,
                                          GUPnPDIDLLiteResourcePrivate);
 
-        resource->priv->dlna_conversion = GUPNP_DLNA_CONVERSION_NONE;
-        resource->priv->dlna_operation  = GUPNP_DLNA_OPERATION_NONE;
-        resource->priv->dlna_flags      = GUPNP_DLNA_FLAGS_DLNA_V15;
-
         resource->priv->size             = -1;
         resource->priv->duration         = -1;
         resource->priv->bitrate          = -1;
@@ -404,45 +173,10 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                                 (resource,
                                  g_value_get_string (value));
                 break;
-        case PROP_PROTOCOL:
-                gupnp_didl_lite_resource_set_protocol
+        case PROP_PROTOCOL_INFO:
+                gupnp_didl_lite_resource_set_protocol_info
                                 (resource,
-                                 g_value_get_string (value));
-                break;
-        case PROP_NETWORK:
-                gupnp_didl_lite_resource_set_network
-                                (resource,
-                                 g_value_get_string (value));
-                break;
-        case PROP_MIME_TYPE:
-                gupnp_didl_lite_resource_set_mime_type
-                                (resource,
-                                 g_value_get_string (value));
-                break;
-        case PROP_DLNA_PROFILE:
-                gupnp_didl_lite_resource_set_dlna_profile
-                                (resource,
-                                 g_value_get_string (value));
-                break;
-        case PROP_PLAY_SPEEDS:
-                gupnp_didl_lite_resource_set_play_speeds
-                                (resource,
-                                 g_value_get_boxed (value));
-                break;
-        case PROP_DLNA_CONVERSION:
-                gupnp_didl_lite_resource_set_dlna_conversion
-                                (resource,
-                                 g_value_get_flags (value));
-                break;
-        case PROP_DLNA_OPERATION:
-                gupnp_didl_lite_resource_set_dlna_operation
-                                (resource,
-                                 g_value_get_flags (value));
-                break;
-        case PROP_DLNA_FLAGS:
-                gupnp_didl_lite_resource_set_dlna_flags
-                                (resource,
-                                 g_value_get_flags (value));
+                                 g_value_get_object (value));
                 break;
         case PROP_SIZE:
                 gupnp_didl_lite_resource_set_size (resource,
@@ -512,47 +246,10 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
                         (value,
                          gupnp_didl_lite_resource_get_import_uri (resource));
                 break;
-        case PROP_PROTOCOL:
-                g_value_set_string
+        case PROP_PROTOCOL_INFO:
+                g_value_set_object
                         (value,
-                         gupnp_didl_lite_resource_get_protocol (resource));
-                break;
-        case PROP_NETWORK:
-                g_value_set_string
-                        (value,
-                         gupnp_didl_lite_resource_get_network (resource));
-                break;
-        case PROP_MIME_TYPE:
-                g_value_set_string
-                        (value,
-                         gupnp_didl_lite_resource_get_mime_type (resource));
-                break;
-        case PROP_DLNA_PROFILE:
-                g_value_set_string
-                        (value,
-                         gupnp_didl_lite_resource_get_dlna_profile (resource));
-                break;
-        case PROP_PLAY_SPEEDS:
-                g_value_set_boxed
-                        (value,
-                         gupnp_didl_lite_resource_get_play_speeds (resource));
-                break;
-        case PROP_DLNA_CONVERSION:
-                g_value_set_flags
-                        (value,
-                         gupnp_didl_lite_resource_get_dlna_conversion
-                                                                (resource));
-                break;
-        case PROP_DLNA_OPERATION:
-                g_value_set_flags
-                        (value,
-                         gupnp_didl_lite_resource_get_dlna_operation
-                                                                (resource));
-                break;
-        case PROP_DLNA_FLAGS:
-                g_value_set_flags
-                        (value,
-                         gupnp_didl_lite_resource_get_dlna_flags (resource));
+                         gupnp_didl_lite_resource_get_protocol_info (resource));
                 break;
         case PROP_SIZE:
                 g_value_set_long (value,
@@ -616,18 +313,6 @@ gupnp_didl_lite_resource_finalize (GObject *object)
                 g_free (priv->uri);
         if (priv->import_uri)
                 g_free (priv->import_uri);
-        if (priv->protocol)
-                g_free (priv->protocol);
-        if (priv->network)
-                g_free (priv->network);
-        if (priv->mime_type)
-                g_free (priv->mime_type);
-        if (priv->dlna_profile)
-                g_free (priv->dlna_profile);
-        if (priv->protection)
-                g_free (priv->protection);
-        if (priv->play_speeds)
-                g_strfreev (priv->play_speeds);
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_resource_parent_class);
         object_class->finalize (object);
@@ -683,147 +368,22 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteResource:protocol
+         * GUPnPDIDLLiteResource:protocol-info
          *
-         * The protocol of this resource.
+         * The protocol info associated with this resource.
          **/
         g_object_class_install_property
                 (object_class,
-                 PROP_PROTOCOL,
-                 g_param_spec_string ("protocol",
-                                      "Protocol",
-                                      "The protocol of this resource.",
-                                      NULL,
+                 PROP_PROTOCOL_INFO,
+                 g_param_spec_object ("protocol-info",
+                                      "ProtocolInfo",
+                                      "The protocol info associated with this"
+                                      " resource",
+                                      GUPNP_TYPE_PROTOCOL_INFO,
                                       G_PARAM_READWRITE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
-
-        /**
-         * GUPnPDIDLLiteResource:network
-         *
-         * The network this resource is associated with.
-         **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_NETWORK,
-                 g_param_spec_string ("network",
-                                      "Network",
-                                      "The network this resource is associated"
-                                      " with.",
-                                      NULL,
-                                      G_PARAM_READWRITE |
-                                      G_PARAM_STATIC_NAME |
-                                      G_PARAM_STATIC_NICK |
-                                      G_PARAM_STATIC_BLURB));
-
-        /**
-         * GUPnPDIDLLiteResource:mime-type
-         *
-         * The MIME-type of this resource.
-         **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_MIME_TYPE,
-                 g_param_spec_string ("mime-type",
-                                      "MIMEType",
-                                      "The MIME-type of this resource.",
-                                      NULL,
-                                      G_PARAM_READWRITE |
-                                      G_PARAM_STATIC_NAME |
-                                      G_PARAM_STATIC_NICK |
-                                      G_PARAM_STATIC_BLURB));
-
-        /**
-         * GUPnPDIDLLiteResource:dlna-profile
-         *
-         * The DLNA profile of this resource.
-         **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_DLNA_PROFILE,
-                 g_param_spec_string ("dlna-profile",
-                                      "DLNAProfile",
-                                      "The DLNA profile of this resource.",
-                                      NULL,
-                                      G_PARAM_READWRITE |
-                                      G_PARAM_STATIC_NAME |
-                                      G_PARAM_STATIC_NICK |
-                                      G_PARAM_STATIC_BLURB));
-
-        /**
-         * GUPnPDIDLLiteResource:play-speeds
-         *
-         * The allowed play speeds on this resource in the form of array of
-         * strings.
-         **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_PLAY_SPEEDS,
-                 g_param_spec_boxed ("play-speeds",
-                                     "PlaySpeeds",
-                                     "The allowed play speeds on this"
-                                     " resource in the form of array of"
-                                     " strings.",
-                                     G_TYPE_STRV,
-                                     G_PARAM_READWRITE |
-                                     G_PARAM_STATIC_NAME |
-                                     G_PARAM_STATIC_NICK |
-                                     G_PARAM_STATIC_BLURB));
-
-        /**
-         * GUPnPDIDLLiteResource:dlna-conversion
-         *
-         * The DLNA conversion flags.
-         **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_DLNA_CONVERSION,
-                 g_param_spec_flags ("dlna-conversion",
-                                     "DLNAConversion",
-                                     "The DLNA conversion flags.",
-                                     GUPNP_TYPE_DLNA_CONVERSION,
-                                     GUPNP_DLNA_CONVERSION_NONE,
-                                     G_PARAM_READWRITE |
-                                     G_PARAM_STATIC_NAME |
-                                     G_PARAM_STATIC_NICK |
-                                     G_PARAM_STATIC_BLURB));
-
-        /**
-         * GUPnPDIDLLiteResource:dlna-operation
-         *
-         * The DLNA operation flags.
-         **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_DLNA_OPERATION,
-                 g_param_spec_flags ("dlna-operation",
-                                     "DLNAOperation",
-                                     "The DLNA operation flags.",
-                                     GUPNP_TYPE_DLNA_OPERATION,
-                                     GUPNP_DLNA_OPERATION_NONE,
-                                     G_PARAM_READWRITE |
-                                     G_PARAM_STATIC_NAME |
-                                     G_PARAM_STATIC_NICK |
-                                     G_PARAM_STATIC_BLURB));
-
-        /**
-         * GUPnPDIDLLiteResource:dlna-flags
-         *
-         * Various generic DLNA flags.
-         **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_DLNA_FLAGS,
-                 g_param_spec_flags ("dlna-flags",
-                                     "DLNAFlags",
-                                     "Various generic DLNA flags.",
-                                     GUPNP_TYPE_DLNA_FLAGS,
-                                     GUPNP_DLNA_FLAGS_DLNA_V15,
-                                     G_PARAM_READWRITE |
-                                     G_PARAM_STATIC_NAME |
-                                     G_PARAM_STATIC_NICK |
-                                     G_PARAM_STATIC_BLURB));
 
         /**
          * GUPnPDIDLLiteResource:size
@@ -1015,21 +575,41 @@ gupnp_didl_lite_resource_new (const char *uri)
 /**
  * gupnp_didl_lite_resource_new_from_xml
  * @res_node: The pointer to 'res' node in XML document
+ * @error: The location where to store any error, or NULL
  *
  * Parses the @res_node and creates a new #GUPnPDIDLLiteResource as a result.
  *
  * Return value: A new #GUPnPDIDLLiteResource object. Unref after usage.
  **/
 GUPnPDIDLLiteResource *
-gupnp_didl_lite_resource_new_from_xml (xmlNode *res_node)
+gupnp_didl_lite_resource_new_from_xml (xmlNode *res_node,
+                                       GError **error)
 {
         GUPnPDIDLLiteResource *resource;
         char *uri;
         char *duration_str;
+        char *protocol_info;
 
         uri = xml_util_get_element_content (res_node);
         resource = gupnp_didl_lite_resource_new (uri);
         g_free (uri);
+
+        protocol_info = xml_util_get_attribute_content (res_node,
+                                                        "protocolInfo");
+        if (protocol_info != NULL) {
+                GUPnPProtocolInfo *info;
+
+                info = gupnp_protocol_info_new_from_string (protocol_info,
+                                                            error);
+                if (info == NULL) {
+                        g_object_unref (resource);
+
+                        return NULL;
+                }
+
+                gupnp_didl_lite_resource_set_protocol_info (resource, info);
+                g_object_unref (info);
+        }
 
         gupnp_didl_lite_resource_set_import_uri
                         (resource,
@@ -1073,7 +653,6 @@ gupnp_didl_lite_resource_new_from_xml (xmlNode *res_node)
                                                       "colorDepth",
                                                       -1));
 
-        parse_protocol_info (res_node, resource);
         parse_resolution_info (res_node, resource);
 
         return resource;
@@ -1112,138 +691,19 @@ gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource)
 }
 
 /**
- * gupnp_didl_lite_resource_get_protocol
+ * gupnp_didl_lite_resource_get_protocol_info
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the protocol of this resource.
+ * Get the protocol info associated with this resource.
  *
- * Return value: The protocol of this resource or %NULL. This string should not
- * be freed.
+ * Return value: The protocol info associated with this resource or %NULL.
  **/
-const char *
-gupnp_didl_lite_resource_get_protocol (GUPnPDIDLLiteResource *resource)
+GUPnPProtocolInfo *
+gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
 
-        return resource->priv->protocol;
-}
-
-/**
- * gupnp_didl_lite_resource_get_network
- * @resource: A #GUPnPDIDLLiteResource
- *
- * Get the network this resource is associated with.
- *
- * Return value: The network string or %NULL. This string should not be freed.
- **/
-const char *
-gupnp_didl_lite_resource_get_network (GUPnPDIDLLiteResource *resource)
-{
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
-
-        return resource->priv->network;
-}
-
-/**
- * gupnp_didl_lite_resource_get_mime_type
- * @resource: A #GUPnPDIDLLiteResource
- *
- * Get the MIME-type of this resource.
- *
- * Return value: The MIME-type of this resource or %NULL. This string should not
- * be freed.
- **/
-const char *
-gupnp_didl_lite_resource_get_mime_type (GUPnPDIDLLiteResource *resource)
-{
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
-
-        return resource->priv->mime_type;
-}
-
-/**
- * gupnp_didl_lite_resource_get_dlna_profile
- * @resource: A #GUPnPDIDLLiteResource
- *
- * Get the DLNA profile of this resource.
- *
- * Return value: The DLNA profile of this resource or %NULL. This string should
- * not be freed.
- **/
-const char *
-gupnp_didl_lite_resource_get_dlna_profile (GUPnPDIDLLiteResource *resource)
-{
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
-
-        return resource->priv->dlna_profile;
-}
-
-/**
- * gupnp_didl_lite_resource_get_play_speeds
- * @resource: A #GUPnPDIDLLiteResource
- *
- * Get the allowed play speeds on this resource in the form of array of strings.
- *
- * Return value: The allowed play speeds as array of strings or %NULL. This
- * return array and it's content must not be modified or freed.
- **/
-const char **
-gupnp_didl_lite_resource_get_play_speeds (GUPnPDIDLLiteResource *resource)
-{
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
-
-        return (const char **) resource->priv->play_speeds;
-}
-
-/**
- * gupnp_didl_lite_resource_get_dlna_conversion
- * @resource: A #GUPnPDIDLLiteResource
- *
- * Get the DLNA conversion flags.
- *
- * Return value: The DLNA conversion flags.
- **/
-GUPnPDLNAConversion
-gupnp_didl_lite_resource_get_dlna_conversion (GUPnPDIDLLiteResource *resource)
-{
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource),
-                              GUPNP_DLNA_CONVERSION_NONE);
-
-        return resource->priv->dlna_conversion;
-}
-
-/**
- * gupnp_didl_lite_resource_get_dlna_operation
- * @resource: A #GUPnPDIDLLiteResource
- *
- * Get the DLNA operation flags.
- *
- * Return value: The DLNA operation flags.
- **/
-GUPnPDLNAOperation
-gupnp_didl_lite_resource_get_dlna_operation (GUPnPDIDLLiteResource *resource)
-{
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource),
-                              GUPNP_DLNA_OPERATION_NONE);
-
-        return resource->priv->dlna_operation;
-}
-
-/**
- * gupnp_didl_lite_resource_get_dlna_flags
- * @resource: A #GUPnPDIDLLiteResource
- *
- * Get the gereric DLNA flags.
- *
- * Return value: The generic DLNA flags.
- **/
-GUPnPDLNAFlags
-gupnp_didl_lite_resource_get_dlna_flags (GUPnPDIDLLiteResource *resource)
-{
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource),
-                              GUPNP_DLNA_FLAGS_DLNA_V15);
-
-        return resource->priv->dlna_flags;
+        return resource->priv->protocol_info;
 }
 
 /**
@@ -1454,174 +914,25 @@ gupnp_didl_lite_resource_set_import_uri (GUPnPDIDLLiteResource *resource,
 }
 
 /**
- * gupnp_didl_lite_resource_set_protocol
+ * gupnp_didl_lite_resource_set_protocol_info
  * @resource: A #GUPnPDIDLLiteResource
  * @protocol: The protocol string
  *
- * Set the protocol of this resource.
+ * Set the protocol info associated with this resource.
  *
  * Return value: None.
  **/
 void
-gupnp_didl_lite_resource_set_protocol (GUPnPDIDLLiteResource *resource,
-                                       const char            *protocol)
+gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
+                                            GUPnPProtocolInfo     *info)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
-        if (resource->priv->protocol)
-                g_free (resource->priv->protocol);
-        resource->priv->protocol = g_strdup (protocol);
+        if (resource->priv->protocol_info)
+                g_object_unref (resource->priv->protocol_info);
+        resource->priv->protocol_info = g_object_ref (info);
 
-        g_object_notify (G_OBJECT (resource), "protocol");
-}
-
-/**
- * gupnp_didl_lite_resource_set_network
- * @resource: A #GUPnPDIDLLiteResource
- * @network: The network string
- *
- * Set the network this resource is associated with.
- *
- * Return value: None.
- **/
-void
-gupnp_didl_lite_resource_set_network (GUPnPDIDLLiteResource *resource,
-                                      const char            *network)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
-
-        if (resource->priv->network)
-                g_free (resource->priv->network);
-        resource->priv->network = g_strdup (network);
-
-        g_object_notify (G_OBJECT (resource), "network");
-}
-
-/**
- * gupnp_didl_lite_resource_set_mime_type
- * @resource: A #GUPnPDIDLLiteResource
- * @mime_type: The MIME-type string
- *
- * Set the MIME-type of this resource.
- *
- * Return value: None.
- **/
-void
-gupnp_didl_lite_resource_set_mime_type (GUPnPDIDLLiteResource *resource,
-                                        const char            *mime_type)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
-
-        if (resource->priv->mime_type)
-                g_free (resource->priv->mime_type);
-        resource->priv->mime_type = g_strdup (mime_type);
-
-        g_object_notify (G_OBJECT (resource), "mime-type");
-}
-
-/**
- * gupnp_didl_lite_resource_set_dlna_profile
- * @resource: A #GUPnPDIDLLiteResource
- * @profile: The DLNA profile string
- *
- * Set the DLNA profile of this resource.
- *
- * Return value: None.
- **/
-void
-gupnp_didl_lite_resource_set_dlna_profile (GUPnPDIDLLiteResource *resource,
-                                           const char            *profile)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
-
-        if (resource->priv->dlna_profile)
-                g_free (resource->priv->dlna_profile);
-        resource->priv->dlna_profile = g_strdup (profile);
-
-        g_object_notify (G_OBJECT (resource), "dlna-profile");
-}
-
-/**
- * gupnp_didl_lite_resource_set_play_speeds
- * @resource: A #GUPnPDIDLLiteResource
- * @speeds: The allowed play speeds
- *
- * Set the allowed play speeds on this resource in the form of array of strings.
- *
- * Return value: None.
- **/
-void
-gupnp_didl_lite_resource_set_play_speeds (GUPnPDIDLLiteResource *resource,
-                                          const char           **speeds)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
-
-        if (resource->priv->play_speeds)
-                g_strfreev (resource->priv->play_speeds);
-        resource->priv->play_speeds = (char **) g_boxed_copy (G_TYPE_STRV,
-                                                              speeds);
-
-        g_object_notify (G_OBJECT (resource), "play-speeds");
-}
-
-/**
- * gupnp_didl_lite_resource_set_dlna_conversion
- * @resource: A #GUPnPDIDLLiteResource
- * @conversion: The bitwise OR of one or more DLNA conversion flags
- *
- * Set the DLNA conversion flags.
- *
- * Return value: None.
- **/
-void
-gupnp_didl_lite_resource_set_dlna_conversion (GUPnPDIDLLiteResource *resource,
-                                              GUPnPDLNAConversion    conversion)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
-
-        resource->priv->dlna_conversion = conversion;
-
-        g_object_notify (G_OBJECT (resource), "dlna-conversion");
-}
-
-/**
- * gupnp_didl_lite_resource_set_dlna_operation
- * @resource: A #GUPnPDIDLLiteResource
- * @operation: The bitwise OR of one or more DLNA operation flags
- *
- * Set the DLNA operation flags.
- *
- * Return value: None.
- **/
-void
-gupnp_didl_lite_resource_set_dlna_operation (GUPnPDIDLLiteResource *resource,
-                                             GUPnPDLNAOperation     operation)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
-
-        resource->priv->dlna_operation = operation;
-
-        g_object_notify (G_OBJECT (resource), "dlna-operation");
-}
-
-/**
- * gupnp_didl_lite_resource_set_dlna_flags
- * @resource: A #GUPnPDIDLLiteResource
- * @flags: The bitwise OR of one or more generic DLNA flags
- *
- * Set the gereric DLNA flags.
- *
- * Return value: None.
- **/
-void
-gupnp_didl_lite_resource_set_dlna_flags (GUPnPDIDLLiteResource *resource,
-                                         GUPnPDLNAFlags         flags)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
-
-        resource->priv->dlna_flags = flags;
-
-        g_object_notify (G_OBJECT (resource), "dlna-flags");
+        g_object_notify (G_OBJECT (resource), "protocol-info");
 }
 
 /**
@@ -1825,46 +1136,5 @@ gupnp_didl_lite_resource_set_color_depth (GUPnPDIDLLiteResource *resource,
         resource->priv->color_depth = color_depth;
 
         g_object_notify (G_OBJECT (resource), "color-depth");
-}
-
-/**
- * gupnp_didl_lite_resource_protocol_info_compatible
- * @resource: The #GUPnPDIDLLiteResource
- * @protocol_info: The protocolInfo string
- *
- * Checks if the given protocolInfo string is compatible with @resource.
- *
- * Return value: #TRUE if @protocol_info is compatible with @resource, otherwise
- * #FALSE.
- **/
-gboolean
-gupnp_didl_lite_resource_protocol_info_compatible
-                                        (GUPnPDIDLLiteResource *resource,
-                                         const char            *protocol_info)
-{
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), FALSE);
-        g_return_val_if_fail (protocol_info != NULL, FALSE);
-
-        gchar **tokens;
-        gboolean ret = FALSE;
-
-        tokens = g_strsplit (protocol_info, ":", 4);
-        if (tokens[0] == NULL ||
-            tokens[1] == NULL ||
-            tokens[2] == NULL ||
-            tokens[3] == NULL) {
-                goto return_point;
-        }
-
-        if (is_transport_compat (resource, tokens[0], tokens[1]) &&
-            is_content_format_compat (resource, tokens[2]) &&
-            is_additional_info_compat (resource, tokens[3])) {
-                ret = TRUE;
-        }
-
-return_point:
-        g_strfreev (tokens);
-
-        return ret;
 }
 

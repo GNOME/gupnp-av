@@ -394,8 +394,10 @@ const char *
 dlna_guess_profile (GUPnPDIDLLiteResource *resource)
 {
         const char *mime_type;
+        GUPnPProtocolInfo *info;
 
-        mime_type = gupnp_didl_lite_resource_get_mime_type (resource);
+        info = gupnp_didl_lite_resource_get_protocol_info (resource);
+        mime_type = gupnp_protocol_info_get_mime_type (info);
 
         if (g_str_has_prefix (mime_type, "image/jpeg")) {
                 return guess_jpeg_profile (resource);

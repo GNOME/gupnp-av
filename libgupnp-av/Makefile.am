@@ -12,6 +12,7 @@ libgupnp_av_inc_HEADERS = gupnp-didl-lite-object.h \
 			  gupnp-didl-lite-parser.h \
 			  gupnp-didl-lite-resource.h \
 			  gupnp-didl-lite-writer.h \
+			  gupnp-protocol-info.h \
 		          gupnp-search-criteria-parser.h \
 			  gupnp-last-change-parser.h \
 			  gupnp-dlna.h \
@@ -34,6 +35,7 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-parser.c \
 			     gupnp-didl-lite-resource.c \
 			     gupnp-didl-lite-writer.c \
+			     gupnp-protocol-info.c \
 			     gupnp-search-criteria-parser.c \
 			     gupnp-last-change-parser.c \
 			     gupnp-dlna-private.h \
