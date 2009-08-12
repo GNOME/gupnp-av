@@ -417,7 +417,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
                 g_string_append (writer->priv->str,
                                  gupnp_protocol_info_get_network (info));
         else
-                g_string_append (writer->priv->str, "*");
+                g_string_append_c (writer->priv->str, '*');
         g_string_append_c (writer->priv->str, ':');
         g_string_append (writer->priv->str,
                          gupnp_protocol_info_get_mime_type (info));
