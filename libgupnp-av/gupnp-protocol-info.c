@@ -218,6 +218,61 @@ is_additional_info_compat (GUPnPProtocolInfo *info1,
 }
 
 static void
+add_dlna_info (GString           *str,
+               GUPnPProtocolInfo *info)
+{
+        const char *dlna_profile;
+        const char **speeds;
+        GUPnPDLNAConversion conversion;
+
+        dlna_profile = gupnp_protocol_info_get_dlna_profile (info);
+        if (dlna_profile == NULL) {
+                g_string_append_printf (str, ":*\"");
+
+                return;
+        }
+
+        g_string_append_printf (str, ":DLNA.ORG_PN=%s", dlna_profile);
+
+        /* the OP parameter is only allowed for the "http-get"
+         * and "rtsp-rtp-udp" protocols
+         */
+        if (strcmp (gupnp_protocol_info_get_protocol (info),
+                    "http-get") == 0 ||
+            strcmp (gupnp_protocol_info_get_protocol (info),
+                    "rtsp-rtp-udp") == 0)
+                g_string_append_printf
+                        (str,
+                         ";DLNA.ORG_OP=%.2x",
+                         gupnp_protocol_info_get_dlna_operation (info));
+
+        /* Specify PS parameter if list of play speeds is provided */
+        speeds = gupnp_protocol_info_get_play_speeds (info);
+        if (speeds != NULL) {
+                int i;
+
+                g_string_append_printf (str, ";DLNA.ORG_PS=");
+
+                for (i = 0; speeds[i]; i++) {
+                        g_string_append (str, speeds[i]);
+
+                        if (speeds[i + 1])
+                                g_string_append_c (str, ',');
+                }
+        }
+
+        conversion = gupnp_protocol_info_get_dlna_conversion (info);
+        /* omit the CI parameter for non-converted content */
+        if (conversion != GUPNP_DLNA_CONVERSION_NONE)
+                g_string_append_printf (str, ";DLNA.ORG_CI=%d", conversion);
+
+        g_string_append_printf (str,
+                                ";DLNA.ORG_FLAGS=%.8x%.24x",
+                                gupnp_protocol_info_get_dlna_flags (info),
+                                0);
+}
+
+static void
 gupnp_protocol_info_init (GUPnPProtocolInfo *info)
 {
         info->priv = G_TYPE_INSTANCE_GET_PRIVATE
@@ -575,6 +630,47 @@ gupnp_protocol_info_new_from_string (const char *protocol_info,
         g_strfreev (tokens);
 
         return info;
+}
+
+/**
+ * gupnp_protocol_info_to_string
+ * @info: The #GUPnPProtocolInfo
+ *
+ * Provides the string representation of @info.
+ *
+ * Return value: String representation of @info. #g_free after usage.
+ **/
+char *
+gupnp_protocol_info_to_string (GUPnPProtocolInfo *info)
+{
+        GString *str;
+        const char *protocol;
+        const char *mime_type;
+        const char *network;
+
+        g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info), NULL);
+
+        protocol = gupnp_protocol_info_get_protocol (info);
+        mime_type = gupnp_protocol_info_get_mime_type (info);
+        network = gupnp_protocol_info_get_network (info);
+
+        g_return_val_if_fail (protocol != NULL, NULL);
+        g_return_val_if_fail (mime_type != NULL, NULL);
+
+        str = g_string_new ("");
+
+        g_string_append (str, protocol);
+        g_string_append_c (str, ':');
+        if (network != NULL)
+                g_string_append (str, network);
+        else
+                g_string_append_c (str, '*');
+        g_string_append_c (str, ':');
+        g_string_append (str, mime_type);
+
+        add_dlna_info (str, info);
+
+        return g_string_free (str, FALSE);
 }
 
 /**

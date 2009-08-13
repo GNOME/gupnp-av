@@ -132,66 +132,6 @@ append_escaped_text (GUPnPDIDLLiteWriter *writer,
     }
 }
 
-static void
-add_dlna_info_from_resource (GUPnPDIDLLiteWriter   *writer,
-                             GUPnPDIDLLiteResource *res,
-                             GUPnPProtocolInfo     *info)
-{
-        const char *dlna_profile;
-        const char **speeds;
-        GUPnPDLNAConversion conversion;
-
-        dlna_profile = gupnp_protocol_info_get_dlna_profile (info);
-        if (dlna_profile == NULL) {
-                g_string_append_printf (writer->priv->str, ":*\"");
-
-                return;
-        }
-
-        g_string_append_printf (writer->priv->str,
-                                ":DLNA.ORG_PN=%s",
-                                dlna_profile);
-
-        /* the OP parameter is only allowed for the "http-get"
-         * and "rtsp-rtp-udp" protocols
-         */
-        if (strcmp (gupnp_protocol_info_get_protocol (info),
-                    "http-get") == 0 ||
-            strcmp (gupnp_protocol_info_get_protocol (info),
-                    "rtsp-rtp-udp") == 0)
-                g_string_append_printf
-                        (writer->priv->str,
-                         ";DLNA.ORG_OP=%.2x",
-                         gupnp_protocol_info_get_dlna_operation (info));
-
-        /* Specify PS parameter if list of play speeds is provided */
-        speeds = gupnp_protocol_info_get_play_speeds (info);
-        if (speeds != NULL) {
-                int i;
-
-                g_string_append_printf (writer->priv->str, ";DLNA.ORG_PS=");
-
-                for (i = 0; speeds[i]; i++) {
-                        g_string_append (writer->priv->str, speeds[i]);
-
-                        if (speeds[i + 1])
-                                g_string_append_c (writer->priv->str, ',');
-                }
-        }
-
-        conversion = gupnp_protocol_info_get_dlna_conversion (info);
-        /* omit the CI parameter for non-converted content */
-        if (conversion != GUPNP_DLNA_CONVERSION_NONE)
-                g_string_append_printf (writer->priv->str,
-                                        ";DLNA.ORG_CI=%d",
-                                        conversion);
-
-        g_string_append_printf (writer->priv->str,
-                                ";DLNA.ORG_FLAGS=%.8x%.24x",
-                                gupnp_protocol_info_get_dlna_flags (info),
-                                0);
-}
-
 #define DIDL_LITE_HEADER \
         "<DIDL-Lite xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC \
         "=\"http://purl.org/dc/elements/1.1/\" " \
@@ -392,6 +332,7 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
         const char *str;
         long l;
         GUPnPProtocolInfo *info;
+        char *protocol_info;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str);
@@ -400,25 +341,11 @@ gupnp_didl_lite_writer_add_res (GUPnPDIDLLiteWriter   *writer,
 
         info = gupnp_didl_lite_resource_get_protocol_info (res);
 
-        g_return_if_fail (info != NULL);
-        g_return_if_fail (gupnp_protocol_info_get_protocol (info) != NULL);
-        g_return_if_fail (gupnp_protocol_info_get_mime_type (info) != NULL);
-
+        protocol_info = gupnp_protocol_info_to_string (info);
+        g_return_if_fail (protocol_info != NULL);
         g_string_append (writer->priv->str, "<res protocolInfo=\"");
-
-        g_string_append (writer->priv->str,
-                         gupnp_protocol_info_get_protocol (info));
-        g_string_append_c (writer->priv->str, ':');
-        if (gupnp_protocol_info_get_network (info) != NULL)
-                g_string_append (writer->priv->str,
-                                 gupnp_protocol_info_get_network (info));
-        else
-                g_string_append_c (writer->priv->str, '*');
-        g_string_append_c (writer->priv->str, ':');
-        g_string_append (writer->priv->str,
-                         gupnp_protocol_info_get_mime_type (info));
-
-        add_dlna_info_from_resource (writer, res, info);
+        g_string_append (writer->priv->str, protocol_info);
+        g_free (protocol_info);
         g_string_append_c (writer->priv->str, '"');
 
         str = gupnp_didl_lite_resource_get_import_uri (res);

@@ -81,6 +81,9 @@ GUPnPProtocolInfo *
 gupnp_protocol_info_new_from_string     (const char        *protocol_info,
                                          GError           **error);
 
+char *
+gupnp_protocol_info_to_string           (GUPnPProtocolInfo *info);
+
 gboolean
 gupnp_protocol_info_is_compatible       (GUPnPProtocolInfo *info1,
                                          GUPnPProtocolInfo *info2);
