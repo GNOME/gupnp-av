@@ -1083,22 +1083,13 @@ gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
         for (res = resources; res; res = res->next) {
                 GUPnPDIDLLiteResource *resource;
                 xmlNode *res_node;
-                GError *error;
 
                 res_node = (xmlNode *) res->data;
 
-                error = NULL;
                 /* Create a resource struct out of DIDLLite XML */
-                resource = gupnp_didl_lite_resource_new_from_xml (res_node,
-                                                                  &error);
-                if (resources == NULL) {
-                        g_warning ("Error parsing a 'res' node: %s",
-                                   error->message);
-
-                        g_error_free (error);
-
-                        continue;
-                }
+                resource = gupnp_didl_lite_resource_new_from_xml
+                                        (res_node,
+                                         object->priv->xml_doc);
 
                 ret = g_list_append (ret, resource);
         }

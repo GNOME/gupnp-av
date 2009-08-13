@@ -28,6 +28,7 @@
 #include <stdarg.h>
 #include <glib-object.h>
 #include <libxml/tree.h>
+#include <libgupnp/gupnp.h>
 
 #include "gupnp-dlna.h"
 #include "gupnp-protocol-info.h"
@@ -77,11 +78,11 @@ typedef struct {
 } GUPnPDIDLLiteResourceClass;
 
 GUPnPDIDLLiteResource *
-gupnp_didl_lite_resource_new            (const char *uri);
+gupnp_didl_lite_resource_new            (void);
 
 GUPnPDIDLLiteResource *
-gupnp_didl_lite_resource_new_from_xml   (xmlNode *res_node,
-                                         GError **error);
+gupnp_didl_lite_resource_new_from_xml   (xmlNode            *xml_node,
+                                         GUPnPXMLDocWrapper *xml_doc);
 
 void
 gupnp_didl_lite_resource_set_uri        (GUPnPDIDLLiteResource *resource,
@@ -140,10 +141,13 @@ gupnp_didl_lite_resource_set_color_depth
                                         (GUPnPDIDLLiteResource *resource,
                                          int                    color_depth);
 
-const char *
+xmlNode *
+gupnp_didl_lite_resource_get_xml_node   (GUPnPDIDLLiteResource *resource);
+
+char *
 gupnp_didl_lite_resource_get_uri        (GUPnPDIDLLiteResource *resource);
 
-const char *
+char *
 gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource);
 
 GUPnPProtocolInfo *
@@ -167,7 +171,7 @@ int
 gupnp_didl_lite_resource_get_bits_per_sample
                                         (GUPnPDIDLLiteResource *resource);
 
-const char *
+char *
 gupnp_didl_lite_resource_get_protection (GUPnPDIDLLiteResource *resource);
 
 int
