@@ -676,9 +676,9 @@ gupnp_didl_lite_resource_get_xml_node (GUPnPDIDLLiteResource *resource)
  * gupnp_didl_lite_resource_get_uri
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the URI associated with this resource.
+ * Get the URI associated with the @resource.
  *
- * Return value: The of URI this resource or %NULL. #g_free this string after
+ * Return value: The of URI the @resource or %NULL. #g_free this string after
  * usage.
  **/
 char *
@@ -693,7 +693,7 @@ gupnp_didl_lite_resource_get_uri (GUPnPDIDLLiteResource *resource)
  * gupnp_didl_lite_resource_get_import_uri
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the import URI associated with this resource.
+ * Get the import URI associated with the @resource.
  *
  * Return value: The import URI or %NULL. #g_free this string after usage.
  **/
@@ -710,9 +710,9 @@ gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource)
  * gupnp_didl_lite_resource_get_protocol_info
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the protocol info associated with this resource.
+ * Get the protocol info associated with the @resource.
  *
- * Return value: The protocol info associated with this resource or %NULL.
+ * Return value: The protocol info associated with the @resource or %NULL.
  **/
 GUPnPProtocolInfo *
 gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
@@ -756,9 +756,9 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
  * gupnp_didl_lite_resource_get_size
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the size (in bytes) of this resource.
+ * Get the size (in bytes) of the @resource.
  *
- * Return value: The size (in bytes) of this resource or -1.
+ * Return value: The size (in bytes) of the @resource or -1.
  **/
 long
 gupnp_didl_lite_resource_get_size (GUPnPDIDLLiteResource *resource)
@@ -774,9 +774,9 @@ gupnp_didl_lite_resource_get_size (GUPnPDIDLLiteResource *resource)
  * gupnp_didl_lite_resource_get_duration
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the duration (in seconds) of this resource.
+ * Get the duration (in seconds) of the @resource.
  *
- * Return value: The duration (in seconds) of this resource or -1.
+ * Return value: The duration (in seconds) of the @resource or -1.
  **/
 long
 gupnp_didl_lite_resource_get_duration (GUPnPDIDLLiteResource *resource)
@@ -798,9 +798,9 @@ gupnp_didl_lite_resource_get_duration (GUPnPDIDLLiteResource *resource)
  * gupnp_didl_lite_resource_get_bitrate
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the bitrate (in bytes per second) of this resource.
+ * Get the bitrate (in bytes per second) of the @resource.
  *
- * Return value: The bitrate (in bytes per second) of this resource or -1.
+ * Return value: The bitrate (in bytes per second) of the @resource or -1.
  **/
 int
 gupnp_didl_lite_resource_get_bitrate (GUPnPDIDLLiteResource *resource)
@@ -816,9 +816,9 @@ gupnp_didl_lite_resource_get_bitrate (GUPnPDIDLLiteResource *resource)
  * gupnp_didl_lite_resource_get_sample_freq
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the sample frequency of this resource.
+ * Get the sample frequency of the @resource.
  *
- * Return value: The sample frequency of this resource or -1.
+ * Return value: The sample frequency of the @resource or -1.
  **/
 int
 gupnp_didl_lite_resource_get_sample_freq (GUPnPDIDLLiteResource *resource)
@@ -834,13 +834,12 @@ gupnp_didl_lite_resource_get_sample_freq (GUPnPDIDLLiteResource *resource)
  * gupnp_didl_lite_resource_get_bits_per_sample
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Set the sample size of this resource.
+ * Get the sample size of the @resource.
  *
- * Return value: The number of bits per sample of this resource or -1.
+ * Return value: The number of bits per sample of the @resource or -1.
  **/
 int
-gupnp_didl_lite_resource_get_bits_per_sample
-                                        (GUPnPDIDLLiteResource *resource)
+gupnp_didl_lite_resource_get_bits_per_sample (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
 
@@ -853,9 +852,9 @@ gupnp_didl_lite_resource_get_bits_per_sample
  * gupnp_didl_lite_resource_get_protection
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the protection system used by this resource.
+ * Get the protection system used by the @resource.
  *
- * Return value: The protection system in use by this resource or %NULL.
+ * Return value: The protection system in use by the @resource or %NULL.
  * #g_free this string after usage.
  **/
 char *
@@ -871,9 +870,9 @@ gupnp_didl_lite_resource_get_protection (GUPnPDIDLLiteResource *resource)
  * gupnp_didl_lite_resource_get_audio_channels
  * @resource: A #GUPnPDIDLLiteResource
  *
- * Get the number of audio channels in this resource.
+ * Get the number of audio channels in the @resource.
  *
- * Return value: The number of audio channels in this resource or -1.
+ * Return value: The number of audio channels in the @resource or -1.
  **/
 int
 gupnp_didl_lite_resource_get_audio_channels (GUPnPDIDLLiteResource *resource)
@@ -911,7 +910,7 @@ gupnp_didl_lite_resource_get_width (GUPnPDIDLLiteResource *resource)
  *
  * Get the height of this image/video resource.
  *
- * Return value: The height of this resource or -1.
+ * Return value: The height of the @resource or -1.
  **/
 int
 gupnp_didl_lite_resource_get_height (GUPnPDIDLLiteResource *resource)
@@ -931,7 +930,7 @@ gupnp_didl_lite_resource_get_height (GUPnPDIDLLiteResource *resource)
  *
  * Get the color-depth of this image/video resource.
  *
- * Return value: The color depth of this resource or -1.
+ * Return value: The color depth of the @resource or -1.
  **/
 int
 gupnp_didl_lite_resource_get_color_depth (GUPnPDIDLLiteResource *resource)
@@ -948,7 +947,7 @@ gupnp_didl_lite_resource_get_color_depth (GUPnPDIDLLiteResource *resource)
  * @resource: A #GUPnPDIDLLiteResource
  * @uri: The URI as string
  *
- * Set the URI associated with this resource.
+ * Set the URI associated with the @resource.
  *
  * Return value: None.
  **/
@@ -970,7 +969,7 @@ gupnp_didl_lite_resource_set_uri (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @import_uri: The URI as string
  *
- * Set the import URI associated with this resource.
+ * Set the import URI associated with the @resource.
  *
  * Return value: None.
  **/
@@ -992,7 +991,7 @@ gupnp_didl_lite_resource_set_import_uri (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @protocol: The protocol string
  *
- * Set the protocol info associated with this resource.
+ * Set the protocol info associated with the @resource.
  *
  * Return value: None.
  **/
@@ -1018,7 +1017,7 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @size: The size (in bytes)
  *
- * Set the size (in bytes) of this resource.
+ * Set the size (in bytes) of the @resource.
  *
  * Return value: None.
  **/
@@ -1044,7 +1043,7 @@ gupnp_didl_lite_resource_set_size (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @duration: The duration (in seconds)
  *
- * Set the duration (in seconds) of this resource.
+ * Set the duration (in seconds) of the @resource.
  *
  * Return value: None.
  **/
@@ -1073,7 +1072,7 @@ gupnp_didl_lite_resource_set_duration (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @bitrate: The bitrate
  *
- * Set the bitrate (in bytes per second) of this resource.
+ * Set the bitrate (in bytes per second) of the @resource.
  *
  * Return value: None.
  **/
@@ -1099,7 +1098,7 @@ gupnp_didl_lite_resource_set_bitrate (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @sample_freq: The sample frequency
  *
- * Set the sample frequency of this resource.
+ * Set the sample frequency of the @resource.
  *
  * Return value: None.
  **/
@@ -1125,7 +1124,7 @@ gupnp_didl_lite_resource_set_sample_freq (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @sample_size: The number of bits per sample
  *
- * Set the sample size of this resource.
+ * Set the sample size of the @resource.
  *
  * Return value: None.
  **/
@@ -1152,7 +1151,7 @@ gupnp_didl_lite_resource_set_bits_per_sample
  * @resource: A #GUPnPDIDLLiteResource
  * @protection: The protection system identifier as string
  *
- * Set the protection system used by this resource.
+ * Set the protection system used by the @resource.
  *
  * Return value: None.
  **/
@@ -1174,9 +1173,9 @@ gupnp_didl_lite_resource_set_protection (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @n_channels: The number of channels
  *
- * Set the number of audio channels in this resource.
+ * Set the number of audio channels in the @resource.
  *
- * Return value: The number of audio channels in this resource or -1.
+ * Return value: The number of audio channels in the @resource or -1.
  **/
 void
 gupnp_didl_lite_resource_set_audio_channels (GUPnPDIDLLiteResource *resource,
