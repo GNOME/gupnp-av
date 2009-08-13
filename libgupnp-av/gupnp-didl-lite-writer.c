@@ -142,10 +142,6 @@ add_dlna_info_from_resource (GUPnPDIDLLiteWriter   *writer,
         GUPnPDLNAConversion conversion;
 
         dlna_profile = gupnp_protocol_info_get_dlna_profile (info);
-        if (dlna_profile == NULL)
-                /* Try guessing */
-                dlna_profile = dlna_guess_profile (res);
-
         if (dlna_profile == NULL) {
                 g_string_append_printf (writer->priv->str, ":*\"");
 

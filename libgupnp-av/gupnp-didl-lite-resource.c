@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include "gupnp-didl-lite-resource.h"
+#include "gupnp-dlna-private.h"
 #include "xml-util.h"
 
 #define SEC_PER_MIN 60
@@ -931,6 +932,14 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
         if (resource->priv->protocol_info)
                 g_object_unref (resource->priv->protocol_info);
         resource->priv->protocol_info = g_object_ref (info);
+
+        /* Try guessing the DLNA profile if not available */
+        if (gupnp_protocol_info_get_dlna_profile (info) == NULL) {
+                const char * dlna_profile;
+
+                dlna_profile = dlna_guess_profile (resource);
+                gupnp_protocol_info_set_dlna_profile (info, dlna_profile);
+        }
 
         g_object_notify (G_OBJECT (resource), "protocol-info");
 }
