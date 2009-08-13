@@ -197,12 +197,12 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                          gupnp_didl_lite_object_get_xml_node (didl_object));
                 break;
         case PROP_ID:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_id (didl_object));
                 break;
         case PROP_PARENT_ID:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_parent_id (didl_object));
                 break;
@@ -212,60 +212,60 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                          gupnp_didl_lite_object_get_restricted (didl_object));
                 break;
         case PROP_TITLE:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_title (didl_object));
                 break;
         case PROP_UPNP_CLASS:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_upnp_class
                                                         (didl_object, NULL));
                 break;
         case PROP_CREATOR:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_creator (didl_object));
                 break;
         case PROP_ARTIST:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_artist (didl_object, NULL));
                 break;
         case PROP_AUTHOR:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_author (didl_object, NULL));
                 break;
         case PROP_GENRE:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_genre (didl_object,
                                                            NULL,
                                                            NULL));
                 break;
         case PROP_WRITE_STATUS:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_write_status (didl_object));
                 break;
         case PROP_ALBUM:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_album (didl_object));
                 break;
         case PROP_ALBUM_ART:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_album_art (didl_object));
                 break;
         case PROP_DESCRIPTION:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_description (didl_object));
                 break;
         case PROP_DATE:
-                g_value_set_string
+                g_value_take_string
                         (value,
                          gupnp_didl_lite_object_get_date (didl_object));
                 break;
