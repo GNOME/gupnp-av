@@ -712,7 +712,6 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
 xmlNode *
 gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return object->priv->xml_node;
@@ -734,7 +733,6 @@ char *
 gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object,
                                        char               **friendly_name)
 {
-        g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
@@ -755,7 +753,6 @@ gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object,
 char *
 gupnp_didl_lite_object_get_id (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_attribute_content (object->priv->xml_node, "id");
@@ -773,7 +770,6 @@ gupnp_didl_lite_object_get_id (GUPnPDIDLLiteObject *object)
 char *
 gupnp_didl_lite_object_get_parent_id (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_attribute_content (object->priv->xml_node,
@@ -795,9 +791,8 @@ GList *
 gupnp_didl_lite_object_get_properties (GUPnPDIDLLiteObject *object,
                                        const char          *name)
 {
-        g_return_val_if_fail (object != NULL, NULL);
-        g_return_val_if_fail (name != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        g_return_val_if_fail (name != NULL, NULL);
 
         return xml_util_get_child_elements_by_name (object->priv->xml_node,
                                                     name);
@@ -814,7 +809,6 @@ gupnp_didl_lite_object_get_properties (GUPnPDIDLLiteObject *object,
 gboolean
 gupnp_didl_lite_object_get_restricted (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), FALSE);
 
         return xml_util_get_boolean_attribute (object->priv->xml_node,
@@ -832,7 +826,6 @@ gupnp_didl_lite_object_get_restricted (GUPnPDIDLLiteObject *object)
 char *
 gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
@@ -852,7 +845,6 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
 char *
 gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
@@ -874,7 +866,6 @@ char *
 gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object,
                                    char               **role)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
@@ -898,7 +889,6 @@ char *
 gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object,
                                    char               **role)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
@@ -925,7 +915,6 @@ gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object,
                                   char               **id,
                                   char               **extended)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
@@ -949,7 +938,7 @@ gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object,
 char *
 gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "writeStatus",
@@ -968,7 +957,7 @@ gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
 char *
 gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "album",
@@ -987,7 +976,7 @@ gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
 char *
 gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "albumArtURI",
@@ -1006,7 +995,7 @@ gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
 char *
 gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "description",
@@ -1025,7 +1014,7 @@ gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
 char *
 gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
 {
-        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "date",
@@ -1046,7 +1035,7 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
         char *str;
         int ret;
 
-        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), -1);
 
         str = xml_util_get_child_element_content (object->priv->xml_node,
                                                   "originalTrackNumber",
@@ -1076,7 +1065,6 @@ gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
         GList *res = NULL;
         GList *ret = NULL;
 
-        g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         resources = gupnp_didl_lite_object_get_properties (object, "res");
@@ -1129,7 +1117,6 @@ gupnp_didl_lite_object_get_compat_resource
         GList  *resources = NULL;
         GList  *res;
 
-        g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
         g_return_val_if_fail (sink_protocol_info != NULL, NULL);
 
@@ -1540,7 +1527,6 @@ gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
 {
         xmlNode *res_node;
 
-        g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         res_node = xmlNewNode (NULL, (unsigned char *) "res");
@@ -1565,7 +1551,6 @@ gupnp_didl_lite_object_to_string (GUPnPDIDLLiteObject *object)
         xmlBuffer *buffer;
         char      *ret;
 
-        g_return_val_if_fail (object != NULL, FALSE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         buffer = xmlBufferCreate ();
