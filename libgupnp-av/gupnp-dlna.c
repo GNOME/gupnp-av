@@ -423,4 +423,6 @@ dlna_guess_profile (GUPnPDIDLLiteResource *resource)
         } else {
                 return NULL;
         }
+
+        g_object_unref (info);
 }

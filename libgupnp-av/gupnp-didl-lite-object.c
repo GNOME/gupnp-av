@@ -693,6 +693,7 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
                 ret = gupnp_protocol_info_is_compatible (info, res_info);
 
                 g_object_unref (info);
+                g_object_unref (res_info);
         }
 
         g_strfreev (protocols);
