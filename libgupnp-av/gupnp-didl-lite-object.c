@@ -1528,6 +1528,29 @@ gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
 }
 
 /**
+ * gupnp_didl_lite_object_add_resource
+ * @object: A #GUPnPDIDLLiteObject
+ *
+ * Creates a new resource, attaches it to @object and returns it.
+ *
+ * Return value: A new #GUPnPDIDLLiteResource object. Unref after usage.
+ **/
+GUPnPDIDLLiteResource *
+gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
+{
+        xmlNode *res_node;
+
+        g_return_val_if_fail (object != NULL, NULL);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        res_node = xmlNewNode (NULL, (unsigned char *) "res");
+        xmlAddChild (object->priv->xml_node, res_node);
+
+        return gupnp_didl_lite_resource_new_from_xml (res_node,
+                                                      object->priv->xml_doc);
+}
+
+/**
  * gupnp_didl_lite_object_to_string
  * @object: #GUPnPDIDLLiteObject
  *

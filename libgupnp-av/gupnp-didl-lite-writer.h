@@ -111,10 +111,6 @@ void
 gupnp_didl_lite_writer_end_item            (GUPnPDIDLLiteWriter *writer);
 
 void
-gupnp_didl_lite_writer_add_res               (GUPnPDIDLLiteWriter   *writer,
-                                              GUPnPDIDLLiteResource *res);
-
-void
 gupnp_didl_lite_writer_add_desc              (GUPnPDIDLLiteWriter   *writer,
                                               const char            *desc,
                                               const char            *id,

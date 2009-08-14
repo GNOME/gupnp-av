@@ -142,6 +142,9 @@ gupnp_didl_lite_object_get_compat_resource
                                          *sink_protocol_info,
                                          gboolean             lenient);
 
+GUPnPDIDLLiteResource *
+gupnp_didl_lite_object_add_resource     (GUPnPDIDLLiteObject *object);
+
 void
 gupnp_didl_lite_object_set_upnp_class   (GUPnPDIDLLiteObject *object,
                                          const char          *upnp_class,
