@@ -208,7 +208,7 @@ gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
                                          int                  track_number);
 
 char *
-gupnp_didl_lite_object_to_string      (GUPnPDIDLLiteObject *object);
+gupnp_didl_lite_object_to_string        (GUPnPDIDLLiteObject *object);
 
 G_END_DECLS
 
