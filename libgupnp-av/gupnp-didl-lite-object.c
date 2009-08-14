@@ -1,10 +1,8 @@
 /*
  * Copyright (C) 2009 Nokia Corporation.
- * Copyright (C) 2007, 2008 OpenedHand Ltd.
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
- *          Jorn Baayen <jorn@openedhand.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -1534,6 +1532,28 @@ gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
 
         return gupnp_didl_lite_resource_new_from_xml (res_node,
                                                       object->priv->xml_doc);
+}
+
+/**
+ * gupnp_didl_lite_object_add_descriptor
+ * @object: A #GUPnPDIDLLiteObject
+ *
+ * Creates a new descriptor, attaches it to @object and returns it.
+ *
+ * Return value: A new #GUPnPDIDLLiteDescriptor object. Unref after usage.
+ **/
+GUPnPDIDLLiteDescriptor *
+gupnp_didl_lite_object_add_descriptor (GUPnPDIDLLiteObject *object)
+{
+        xmlNode *desc_node;
+
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        desc_node = xmlNewNode (NULL, (unsigned char *) "desc");
+        xmlAddChild (object->priv->xml_node, desc_node);
+
+        return gupnp_didl_lite_descriptor_new_from_xml (desc_node,
+                                                        object->priv->xml_doc);
 }
 
 /**

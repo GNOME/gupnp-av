@@ -29,6 +29,7 @@
 
 #include "gupnp-dlna.h"
 #include "gupnp-didl-lite-resource.h"
+#include "gupnp-didl-lite-descriptor.h"
 
 G_BEGIN_DECLS
 
@@ -111,11 +112,9 @@ void
 gupnp_didl_lite_writer_end_item            (GUPnPDIDLLiteWriter *writer);
 
 void
-gupnp_didl_lite_writer_add_desc              (GUPnPDIDLLiteWriter   *writer,
-                                              const char            *desc,
-                                              const char            *id,
-                                              const char            *type,
-                                              const char            *ns_uri);
+gupnp_didl_lite_writer_add_descriptor      (GUPnPDIDLLiteWriter    *writer,
+                                            GUPnPDIDLLiteDescriptor
+                                                                   *descriptor);
 
 void
 gupnp_didl_lite_writer_add_string            (GUPnPDIDLLiteWriter   *writer,

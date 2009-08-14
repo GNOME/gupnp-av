@@ -316,77 +316,28 @@ gupnp_didl_lite_writer_end_item (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
- * gupnp_didl_lite_writer_add_desc
+ * gupnp_didl_lite_writer_add_descriptor
  * @writer: A #GUPnPDIDLLiteWriter
- * @desc: The description text
- * @id: The object ID
- * @type: The description type, or NULL
- * @ns_uri: The namespace of (possible) child elements, or NULL
+ * @descriptor: The #GUPnPDIDLLiteDescriptor to add
  *
- * Adds a new desc (description) element.
+ * Adds the @descriptor to element.
  **/
 void
-gupnp_didl_lite_writer_add_desc (GUPnPDIDLLiteWriter *writer,
-                                 const char          *desc,
-                                 const char          *id,
-                                 const char          *type,
-                                 const char          *ns_uri)
+gupnp_didl_lite_writer_add_desc (GUPnPDIDLLiteWriter     *writer,
+                                 GUPnPDIDLLiteDescriptor *descriptor)
 {
+        char *desc;
+
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (id != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor));
         g_return_if_fail (writer->priv->str);
 
-        g_string_append (writer->priv->str, "<desc id=\"");
+        desc = gupnp_didl_lite_descriptor_to_string (descriptor);
+        g_return_if_fail (desc != NULL);
 
-        if (writer->priv->need_escape)
-                append_escaped_text (writer, id);
-        else
-                g_string_append (writer->priv->str, id);
+        g_string_append (writer->priv->str, desc);
 
-        g_string_append_c (writer->priv->str, '"');
-
-        if (type) {
-                g_string_append (writer->priv->str, " type=\"");
-
-                if (writer->priv->need_escape)
-                        append_escaped_text (writer, type);
-                else
-                        g_string_append (writer->priv->str, type);
-
-                g_string_append_c (writer->priv->str, '"');
-        }
-
-        if (ns_uri) {
-                g_string_append (writer->priv->str, " nameSpace=\"");
-
-                if (writer->priv->url_base || writer->priv->need_escape) {
-                        SoupURI *uri;
-                        char *uri_str;
-
-                        uri = soup_uri_new_with_base (writer->priv->url_base,
-                                                      ns_uri);
-                        uri_str = soup_uri_to_string (uri, FALSE);
-                        soup_uri_free (uri);
-
-                        g_string_append (writer->priv->str, uri_str);
-
-                        g_free (uri_str);
-                } else
-                        g_string_append (writer->priv->str, ns_uri);
-
-                g_string_append_c (writer->priv->str, '"');
-        }
-
-        g_string_append_c (writer->priv->str, '>');
-
-        if (desc) {
-                if (writer->priv->need_escape)
-                        append_escaped_text (writer, desc);
-                else
-                        g_string_append (writer->priv->str, desc);
-        }
-
-        g_string_append (writer->priv->str, "</desc>");
+        g_free (desc);
 }
 
 static void

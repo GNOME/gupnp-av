@@ -30,6 +30,7 @@
 #include <libxml/tree.h>
 
 #include "gupnp-didl-lite-resource.h"
+#include "gupnp-didl-lite-descriptor.h"
 
 G_BEGIN_DECLS
 
@@ -144,6 +145,9 @@ gupnp_didl_lite_object_get_compat_resource
 
 GUPnPDIDLLiteResource *
 gupnp_didl_lite_object_add_resource     (GUPnPDIDLLiteObject *object);
+
+GUPnPDIDLLiteDescriptor *
+gupnp_didl_lite_object_add_descriptor   (GUPnPDIDLLiteObject *object);
 
 void
 gupnp_didl_lite_object_set_upnp_class   (GUPnPDIDLLiteObject *object,
