@@ -31,6 +31,8 @@
 #include <libgupnp/gupnp.h>
 
 #include "gupnp-didl-lite-object.h"
+#include "gupnp-didl-lite-container.h"
+#include "gupnp-didl-lite-item.h"
 #include "xml-util.h"
 
 G_DEFINE_ABSTRACT_TYPE (GUPnPDIDLLiteObject,
@@ -697,6 +699,35 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
         g_strfreev (protocols);
 
         return ret;
+}
+
+/**
+ * gupnp_didl_lite_object_new_from_xml
+ * @xml_node: The pointer to 'res' node in XML document
+ * @xml_doc: The reference to XML document containing this object
+ *
+ * Creates a new #GUPnPDIDLLiteObject for the @xml_node.
+ *
+ * Return value: A new #GUPnPDIDLLiteObject object. Unref after usage.
+ **/
+GUPnPDIDLLiteObject *
+gupnp_didl_lite_object_new_from_xml (xmlNode            *xml_node,
+                                     GUPnPXMLDocWrapper *xml_doc)
+{
+        g_return_val_if_fail (xml_node != NULL, NULL);
+        g_return_val_if_fail (xml_node->name != NULL, NULL);
+        g_return_val_if_fail (GUPNP_IS_XML_DOC_WRAPPER (xml_doc), NULL);
+
+        if (g_ascii_strcasecmp ((char *) xml_node->name, "container") == 0)
+                return g_object_new (GUPNP_TYPE_DIDL_LITE_CONTAINER,
+                                     "xml-node", xml_node,
+                                     "xml-doc", xml_doc,
+                                     NULL);
+        else if (g_ascii_strcasecmp ((char *) xml_node->name, "item") == 0)
+                return g_object_new (GUPNP_TYPE_DIDL_LITE_ITEM,
+                                     "xml-node", xml_node,
+                                     "xml-doc", xml_doc,
+                                     NULL);
 }
 
 /**

@@ -207,37 +207,30 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
         g_object_ref_sink (wrapper);
 
         for (element = element->children; element; element = element->next) {
-                GUPnPDIDLLiteObject *object = NULL;
-                const char *name = (const char *) element->name;
+                GUPnPDIDLLiteObject *object;
 
-                if (g_ascii_strcasecmp (name, "container") == 0) {
-                        object = g_object_new (GUPNP_TYPE_DIDL_LITE_CONTAINER,
-                                               "xml-node", element,
-                                               "xml-doc", wrapper,
-                                               NULL);
-                        g_signal_emit (parser,
-                                       signals[CONTAINER_AVAILABLE],
-                                       0,
-                                       object);
-                } else if (g_ascii_strcasecmp (name, "item") == 0) {
-                        object = g_object_new (GUPNP_TYPE_DIDL_LITE_ITEM,
-                                               "xml-node", element,
-                                               "xml-doc", wrapper,
-                                               NULL);
-                        g_signal_emit (parser,
-                                       signals[ITEM_AVAILABLE],
-                                       0,
-                                       object);
-                }
+                object = gupnp_didl_lite_object_new_from_xml (element, wrapper);
 
-                if (object != NULL) {
-                        g_signal_emit (parser,
-                                       signals[OBJECT_AVAILABLE],
-                                       0,
-                                       object);
+                if (object == NULL)
+                        continue;
 
-                        g_object_unref (object);
-                }
+                if (GUPNP_IS_DIDL_LITE_CONTAINER (object))
+                        g_signal_emit (parser,
+                                        signals[CONTAINER_AVAILABLE],
+                                        0,
+                                        object);
+                else if (GUPNP_IS_DIDL_LITE_ITEM (object))
+                        g_signal_emit (parser,
+                                        signals[ITEM_AVAILABLE],
+                                        0,
+                                        object);
+
+                g_signal_emit (parser,
+                                signals[OBJECT_AVAILABLE],
+                                0,
+                                object);
+
+                g_object_unref (object);
         }
 
         g_object_unref (wrapper);

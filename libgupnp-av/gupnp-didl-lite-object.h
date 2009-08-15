@@ -76,6 +76,10 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteObjectClass;
 
+GUPnPDIDLLiteObject *
+gupnp_didl_lite_object_new_from_xml     (xmlNode            *xml_node,
+                                         GUPnPXMLDocWrapper *xml_doc);
+
 xmlNode *
 gupnp_didl_lite_object_get_xml_node     (GUPnPDIDLLiteObject *object);
 

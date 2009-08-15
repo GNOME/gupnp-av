@@ -66,6 +66,9 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteItemClass;
 
+GUPnPDIDLLiteItem *
+gupnp_didl_lite_item_new                (void);
+
 char *
 gupnp_didl_lite_item_get_ref_id         (GUPnPDIDLLiteItem *item);
 
