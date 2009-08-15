@@ -40,6 +40,13 @@ G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
 
 struct _GUPnPDIDLLiteWriterPrivate {
         GString *str;
+
+        char *language;
+};
+
+enum {
+        PROP_0,
+        PROP_LANGUAGE,
 };
 
 static void
@@ -48,6 +55,48 @@ gupnp_didl_lite_writer_init (GUPnPDIDLLiteWriter *writer)
         writer->priv = G_TYPE_INSTANCE_GET_PRIVATE (writer,
                                                     GUPNP_TYPE_DIDL_LITE_WRITER,
                                                     GUPnPDIDLLiteWriterPrivate);
+}
+
+static void
+gupnp_didl_lite_writer_set_property (GObject      *object,
+                                     guint         property_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+
+{
+        GUPnPDIDLLiteWriter *writer;
+
+        writer = GUPNP_DIDL_LITE_WRITER (object);
+
+        switch (property_id) {
+        case PROP_LANGUAGE:
+                writer->priv->language = g_value_dup_string (value);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+                break;
+        }
+}
+
+static void
+gupnp_didl_lite_writer_get_property (GObject    *object,
+                                     guint       property_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+        GUPnPDIDLLiteWriter *writer;
+
+        writer = GUPNP_DIDL_LITE_WRITER (object);
+
+        switch (property_id) {
+        case PROP_LANGUAGE:
+                g_value_take_string
+                        (value, gupnp_didl_lite_writer_get_language (writer));
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+                break;
+        }
 }
 
 static void
@@ -61,6 +110,9 @@ gupnp_didl_lite_writer_finalize (GObject *object)
         if (writer->priv->str)
                 g_string_free (writer->priv->str, TRUE);
 
+        if (writer->priv->language)
+                g_free (writer->priv->language);
+
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
         object_class->finalize (object);
 }
@@ -72,20 +124,45 @@ gupnp_didl_lite_writer_class_init (GUPnPDIDLLiteWriterClass *klass)
 
         object_class = G_OBJECT_CLASS (klass);
 
+        object_class->set_property = gupnp_didl_lite_writer_set_property;
+        object_class->get_property = gupnp_didl_lite_writer_get_property;
         object_class->finalize = gupnp_didl_lite_writer_finalize;
 
         g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteWriterPrivate));
+
+        /**
+         * GUPnPDIDLLiteWriter:language
+         *
+         * The language the DIDL-Lite fragment is in.
+         *
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_LANGUAGE,
+                 g_param_spec_string ("language",
+                                      "Language",
+                                      "The language the DIDL-Lite fragment"
+                                      " is in.",
+                                      NULL,
+                                      G_PARAM_CONSTRUCT_ONLY |
+                                      G_PARAM_READWRITE |
+                                      G_PARAM_STATIC_NAME |
+                                      G_PARAM_STATIC_NICK |
+                                      G_PARAM_STATIC_BLURB));
 }
 
 /**
  * gupnp_didl_lite_writer_new
+ * @language: The language the DIDL-Lite fragment is in, or NULL
  *
  * Return value: A new #GUPnPDIDLLiteWriter object.
  **/
 GUPnPDIDLLiteWriter *
-gupnp_didl_lite_writer_new (void)
+gupnp_didl_lite_writer_new (const char *language)
 {
-        return g_object_new (GUPNP_TYPE_DIDL_LITE_WRITER, NULL);
+        return g_object_new (GUPNP_TYPE_DIDL_LITE_WRITER,
+                             "language", language,
+                             NULL);
 }
 
 #define DIDL_LITE_HEADER \
@@ -98,13 +175,11 @@ gupnp_didl_lite_writer_new (void)
 /**
  * gupnp_didl_lite_writer_start_didl_lite
  * @writer: A #GUPnPDIDLLiteWriter
- * @lang: The language the DIDL-Lite fragment is in, or NULL
  *
  * Starts the DIDL-Lite element.
  **/
 void
-gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
-                                        const char          *lang)
+gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str == NULL);
@@ -113,9 +188,9 @@ gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
 
         g_string_append (writer->priv->str, DIDL_LITE_HEADER);
 
-        if (lang) {
+        if (writer->priv->language) {
                 g_string_append (writer->priv->str, " lang=\"");
-                g_string_append (writer->priv->str, lang);
+                g_string_append (writer->priv->str, writer->priv->language);
                 g_string_append_c (writer->priv->str, '"');
         }
 
@@ -198,4 +273,21 @@ gupnp_didl_lite_writer_get_string (GUPnPDIDLLiteWriter *writer)
         g_return_val_if_fail (writer->priv->str, NULL);
 
         return writer->priv->str->str;
+}
+
+/**
+ * gupnp_didl_lite_writer_get_language
+ * @writer: #GUPnPDIDLLiteWriter
+ *
+ * Get the language the DIDL-Lite fragment is in.
+ *
+ * Return value: The language of the @writer, or %NULL. #g_free after
+ * usage.
+ **/
+char *
+gupnp_didl_lite_writer_get_language (GUPnPDIDLLiteWriter *writer)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
+
+        return g_strdup (writer->priv->language);
 }

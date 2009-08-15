@@ -80,11 +80,10 @@ typedef struct {
 #define GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP "upnp"
 
 GUPnPDIDLLiteWriter *
-gupnp_didl_lite_writer_new                 (void);
+gupnp_didl_lite_writer_new                 (const char *language);
 
 void
-gupnp_didl_lite_writer_start_didl_lite     (GUPnPDIDLLiteWriter *writer,
-                                            const char          *lang);
+gupnp_didl_lite_writer_start_didl_lite     (GUPnPDIDLLiteWriter *writer);
 
 void
 gupnp_didl_lite_writer_end_didl_lite       (GUPnPDIDLLiteWriter *writer);
@@ -100,6 +99,9 @@ gupnp_didl_lite_writer_add_descriptor      (GUPnPDIDLLiteWriter    *writer,
 
 const char *
 gupnp_didl_lite_writer_get_string            (GUPnPDIDLLiteWriter   *writer);
+
+char *
+gupnp_didl_lite_writer_get_language          (GUPnPDIDLLiteWriter   *writer);
 
 G_END_DECLS
 
