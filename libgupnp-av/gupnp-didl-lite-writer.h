@@ -100,70 +100,8 @@ gupnp_didl_lite_writer_add_descriptor      (GUPnPDIDLLiteWriter    *writer,
                                             GUPnPDIDLLiteDescriptor
                                                                    *descriptor);
 
-void
-gupnp_didl_lite_writer_add_string            (GUPnPDIDLLiteWriter   *writer,
-                                              const char            *property,
-                                              const char            *prefix,
-                                              const char            *ns_uri,
-                                              const char            *value);
-
-void
-gupnp_didl_lite_writer_add_string_with_attrs (GUPnPDIDLLiteWriter   *writer,
-                                              const char            *property,
-                                              const char            *prefix,
-                                              const char            *ns_uri,
-                                              const char            *value,
-                                              ...) G_GNUC_NULL_TERMINATED;
-
-void
-gupnp_didl_lite_writer_add_string_with_attrs_valist
-                                             (GUPnPDIDLLiteWriter   *writer,
-                                              const char            *property,
-                                              const char            *prefix,
-                                              const char            *ns_uri,
-                                              const char            *value,
-                                              va_list                var_args);
-
-void
-gupnp_didl_lite_writer_add_boolean           (GUPnPDIDLLiteWriter   *writer,
-                                              const char            *property,
-                                              const char            *prefix,
-                                              const char            *ns_uri,
-                                              gboolean               value);
-
-void
-gupnp_didl_lite_writer_add_int               (GUPnPDIDLLiteWriter   *writer,
-                                              const char            *property,
-                                              const char            *prefix,
-                                              const char            *ns_uri,
-                                              int                    value);
-
-void
-gupnp_didl_lite_writer_add_uint              (GUPnPDIDLLiteWriter   *writer,
-                                              const char            *property,
-                                              const char            *prefix,
-                                              const char            *ns_uri,
-                                              guint                  value);
-
-void
-gupnp_didl_lite_writer_add_long              (GUPnPDIDLLiteWriter   *writer,
-                                              const char            *property,
-                                              const char            *prefix,
-                                              const char            *ns_uri,
-                                              long                   value);
-
-void
-gupnp_didl_lite_writer_add_ulong             (GUPnPDIDLLiteWriter   *writer,
-                                              const char            *property,
-                                              const char            *prefix,
-                                              const char            *ns_uri,
-                                              gulong                 value);
-
 const char *
 gupnp_didl_lite_writer_get_string            (GUPnPDIDLLiteWriter   *writer);
-
-void
-gupnp_didl_lite_writer_reset                 (GUPnPDIDLLiteWriter   *writer);
 
 G_END_DECLS
 
