@@ -40,10 +40,6 @@ G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
 
 struct _GUPnPDIDLLiteWriterPrivate {
         GString *str;
-
-        SoupURI *url_base;
-
-        gboolean need_escape;
 };
 
 static void
@@ -103,23 +99,15 @@ gupnp_didl_lite_writer_new (void)
  * gupnp_didl_lite_writer_start_didl_lite
  * @writer: A #GUPnPDIDLLiteWriter
  * @lang: The language the DIDL-Lite fragment is in, or NULL
- * @url_base: A #SoupURI specifying the URI relative to which incoming URI
- * are resolved, or NULL
- * @need_escape: TRUE to force @writer to escape incoming string data
  *
  * Starts the DIDL-Lite element.
  **/
 void
 gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer,
-                                        const char          *lang,
-                                        SoupURI             *url_base,
-                                        gboolean             need_escape)
+                                        const char          *lang)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (writer->priv->str == NULL);
-
-        writer->priv->url_base    = url_base;
-        writer->priv->need_escape = need_escape;
 
         writer->priv->str = g_string_sized_new (INITIAL_STRING_SIZE);
 
