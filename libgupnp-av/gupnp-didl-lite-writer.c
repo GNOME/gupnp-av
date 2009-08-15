@@ -190,129 +190,24 @@ gupnp_didl_lite_writer_end_didl_lite (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
- * gupnp_didl_lite_writer_start_container
+ * gupnp_didl_lite_writer_add_object
  * @writer: A #GUPnPDIDLLiteWriter
- * @id: The object ID
- * @parent_id: The parent object ID
- * @child_count: The number of children or -1
- * @restricted: TRUE if this container is restricted
- * @searchable: TRUE if this container is searchable
+ * @object: A #GUPnPDIDLLiteObject
  *
- * Starts a new container element.
+ * Adds @object to element.
  **/
 void
-gupnp_didl_lite_writer_start_container (GUPnPDIDLLiteWriter *writer,
-                                        const char          *id,
-                                        const char          *parent_id,
-                                        int                  child_count,
-                                        gboolean             restricted,
-                                        gboolean             searchable)
+gupnp_didl_lite_writer_add_object (GUPnPDIDLLiteWriter *writer,
+                                   GUPnPDIDLLiteObject *object)
 {
+        char *str;
+
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (writer->priv->str);
-        g_return_if_fail (id != NULL);
-        g_return_if_fail (parent_id != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
 
-        g_string_append (writer->priv->str, "<container id=\"");
-
-        if (writer->priv->need_escape)
-                append_escaped_text (writer, id);
-        else
-                g_string_append (writer->priv->str, id);
-
-        g_string_append (writer->priv->str, "\" parentID=\"");
-
-        if (writer->priv->need_escape)
-                append_escaped_text (writer, parent_id);
-        else
-                g_string_append (writer->priv->str, parent_id);
-
-        if (child_count >= 0) {
-                g_string_append_printf
-                        (writer->priv->str, "\" childCount=\"%d", child_count);
-        }
-
-        g_string_append (writer->priv->str, "\" restricted=\"");
-        g_string_append_c (writer->priv->str, restricted ? '1' : '0');
-        g_string_append (writer->priv->str, "\" searchable=\"");
-        g_string_append_c (writer->priv->str, searchable ? '1' : '0');
-        g_string_append (writer->priv->str, "\">");
-}
-
-/**
- * gupnp_didl_lite_writer_end_container
- * @writer: A #GUPnPDIDLLiteWriter
- *
- * Closes the current container element.
- **/
-void
-gupnp_didl_lite_writer_end_container (GUPnPDIDLLiteWriter *writer)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (writer->priv->str);
-
-        g_string_append (writer->priv->str, "</container>");
-}
-
-/**
- * gupnp_didl_lite_writer_start_item
- * @writer: A #GUPnPDIDLLiteWriter
- * @id: The object ID
- * @parent_id: The parent object ID
- * @ref_id: The RefID, or NULL
- * @restricted: TRUE if this item is restricted
- *
- * Starts a new item element.
- **/
-void
-gupnp_didl_lite_writer_start_item (GUPnPDIDLLiteWriter *writer,
-                                   const char          *id,
-                                   const char          *parent_id,
-                                   const char          *ref_id,
-                                   gboolean             restricted)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (writer->priv->str);
-        g_return_if_fail (id != NULL);
-        g_return_if_fail (parent_id != NULL);
-
-        g_string_append (writer->priv->str, "<item id=\"");
-
-        if (writer->priv->need_escape)
-                append_escaped_text (writer, id);
-        else
-                g_string_append (writer->priv->str, id);
-
-        g_string_append (writer->priv->str, "\" parentID=\"");
-
-        if (writer->priv->need_escape)
-                append_escaped_text (writer, parent_id);
-        else
-                g_string_append (writer->priv->str, parent_id);
-
-        if (ref_id) {
-                g_string_append (writer->priv->str, "\" refID=\"");
-                g_string_append (writer->priv->str, ref_id);
-        }
-
-        g_string_append (writer->priv->str, "\" restricted=\"");
-        g_string_append_c (writer->priv->str, restricted ? '1' : '0');
-        g_string_append (writer->priv->str, "\">");
-}
-
-/**
- * gupnp_didl_lite_writer_end_item
- * @writer: A #GUPnPDIDLLiteWriter
- *
- * Closes the current item element.
- **/
-void
-gupnp_didl_lite_writer_end_item (GUPnPDIDLLiteWriter *writer)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (writer->priv->str);
-
-        g_string_append (writer->priv->str, "</item>");
+        str = gupnp_didl_lite_object_to_string (object);
+        g_string_append (writer->priv->str, str);
+        g_free (str);
 }
 
 /**

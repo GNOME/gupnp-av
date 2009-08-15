@@ -28,6 +28,7 @@
 #include <libsoup/soup-uri.h>
 
 #include "gupnp-dlna.h"
+#include "gupnp-didl-lite-object.h"
 #include "gupnp-didl-lite-resource.h"
 #include "gupnp-didl-lite-descriptor.h"
 
@@ -91,25 +92,8 @@ void
 gupnp_didl_lite_writer_end_didl_lite       (GUPnPDIDLLiteWriter *writer);
 
 void
-gupnp_didl_lite_writer_start_container     (GUPnPDIDLLiteWriter *writer,
-                                            const char          *id,
-                                            const char          *parent_id,
-                                            int                  child_count,
-                                            gboolean             restricted,
-                                            gboolean             searchable);
-
-void
-gupnp_didl_lite_writer_end_container       (GUPnPDIDLLiteWriter *writer);
-
-void
-gupnp_didl_lite_writer_start_item          (GUPnPDIDLLiteWriter *writer,
-                                            const char          *id,
-                                            const char          *parent_id,
-                                            const char          *ref_id,
-                                            gboolean             restricted);
-
-void
-gupnp_didl_lite_writer_end_item            (GUPnPDIDLLiteWriter *writer);
+gupnp_didl_lite_writer_add_object          (GUPnPDIDLLiteWriter *writer,
+                                            GUPnPDIDLLiteObject *object);
 
 void
 gupnp_didl_lite_writer_add_descriptor      (GUPnPDIDLLiteWriter    *writer,
