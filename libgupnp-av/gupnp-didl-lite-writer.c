@@ -138,9 +138,10 @@ gupnp_didl_lite_writer_constructed (GObject *object)
                   "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/",
                   NULL);
 
-        xmlSetProp (priv->xml_node,
-                    (unsigned char *) "lang",
-                    (unsigned char *) priv->language);
+        if (priv->language)
+                xmlSetProp (priv->xml_node,
+                            (unsigned char *) "lang",
+                            (unsigned char *) priv->language);
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
         if (object_class->constructed != NULL)
