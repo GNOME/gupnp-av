@@ -405,7 +405,6 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
                                       "The URI associated with this resource",
                                       NULL,
                                       G_PARAM_READWRITE |
-                                      G_PARAM_CONSTRUCT |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
