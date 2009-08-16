@@ -28,7 +28,8 @@
 #include <libsoup/soup-uri.h>
 
 #include "gupnp-dlna.h"
-#include "gupnp-didl-lite-object.h"
+#include "gupnp-didl-lite-item.h"
+#include "gupnp-didl-lite-container.h"
 #include "gupnp-didl-lite-resource.h"
 #include "gupnp-didl-lite-descriptor.h"
 
@@ -80,28 +81,25 @@ typedef struct {
 #define GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP "upnp"
 
 GUPnPDIDLLiteWriter *
-gupnp_didl_lite_writer_new                 (const char *language);
+gupnp_didl_lite_writer_new              (const char *language);
 
-void
-gupnp_didl_lite_writer_start_didl_lite     (GUPnPDIDLLiteWriter *writer);
+GUPnPDIDLLiteItem *
+gupnp_didl_lite_writer_add_item         (GUPnPDIDLLiteWriter *writer);
 
-void
-gupnp_didl_lite_writer_end_didl_lite       (GUPnPDIDLLiteWriter *writer);
+GUPnPDIDLLiteContainer *
+gupnp_didl_lite_writer_add_container    (GUPnPDIDLLiteWriter *writer);
 
-void
-gupnp_didl_lite_writer_add_object          (GUPnPDIDLLiteWriter *writer,
-                                            GUPnPDIDLLiteObject *object);
+GUPnPDIDLLiteDescriptor *
+gupnp_didl_lite_writer_add_descriptor   (GUPnPDIDLLiteWriter *writer);
 
-void
-gupnp_didl_lite_writer_add_descriptor      (GUPnPDIDLLiteWriter    *writer,
-                                            GUPnPDIDLLiteDescriptor
-                                                                   *descriptor);
-
-const char *
-gupnp_didl_lite_writer_get_string            (GUPnPDIDLLiteWriter   *writer);
+xmlNode *
+gupnp_didl_lite_writer_get_xml_node     (GUPnPDIDLLiteWriter   *writer);
 
 char *
-gupnp_didl_lite_writer_get_language          (GUPnPDIDLLiteWriter   *writer);
+gupnp_didl_lite_writer_get_string       (GUPnPDIDLLiteWriter   *writer);
+
+char *
+gupnp_didl_lite_writer_get_language     (GUPnPDIDLLiteWriter   *writer);
 
 G_END_DECLS
 

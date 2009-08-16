@@ -36,16 +36,19 @@ G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
                gupnp_didl_lite_writer,
                G_TYPE_OBJECT);
 
-#define INITIAL_STRING_SIZE 200
-
 struct _GUPnPDIDLLiteWriterPrivate {
-        GString *str;
+        xmlNode            *xml_node;
+        GUPnPXMLDocWrapper *xml_doc;
 
-        char *language;
+        xmlNs              *upnp_ns;
+        xmlNs              *dc_ns;
+
+        char               *language;
 };
 
 enum {
         PROP_0,
+        PROP_XML_NODE,
         PROP_LANGUAGE,
 };
 
@@ -89,6 +92,10 @@ gupnp_didl_lite_writer_get_property (GObject    *object,
         writer = GUPNP_DIDL_LITE_WRITER (object);
 
         switch (property_id) {
+        case PROP_XML_NODE:
+                g_value_set_pointer
+                        (value, gupnp_didl_lite_writer_get_xml_node (writer));
+                break;
         case PROP_LANGUAGE:
                 g_value_take_string
                         (value, gupnp_didl_lite_writer_get_language (writer));
@@ -100,18 +107,73 @@ gupnp_didl_lite_writer_get_property (GObject    *object,
 }
 
 static void
+gupnp_didl_lite_writer_constructed (GObject *object)
+{
+        GObjectClass               *object_class;
+        GUPnPDIDLLiteWriterPrivate *priv;
+        xmlDoc                     *doc;
+
+        priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
+
+        doc = xmlNewDoc ((unsigned char *) "1.0");
+        priv->xml_doc = gupnp_xml_doc_wrapper_new (doc);
+
+        priv->xml_node = xmlNewDocNode (priv->xml_doc->doc,
+                                        NULL,
+                                        (unsigned char *) "DIDL-Lite",
+                                        NULL);
+        xmlDocSetRootElement (priv->xml_doc->doc, priv->xml_node);
+        priv->dc_ns = xmlNewNs (priv->xml_node,
+                                (unsigned char *)
+                                "http://purl.org/dc/elements/1.1/",
+                                (unsigned char *)
+                                GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC);
+        priv->upnp_ns = xmlNewNs (priv->xml_node,
+                                  (unsigned char *)
+                                  "urn:schemas-upnp-org:metadata-1-0/upnp/",
+                                  (unsigned char *)
+                                  GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP);
+        xmlNewNs (priv->xml_node,
+                  (unsigned char *)
+                  "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/",
+                  NULL);
+
+        xmlSetProp (priv->xml_node,
+                    (unsigned char *) "lang",
+                    (unsigned char *) priv->language);
+
+        object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
+        if (object_class->constructed != NULL)
+                object_class->constructed (object);
+}
+
+static void
+gupnp_didl_lite_writer_dispose (GObject *object)
+{
+        GObjectClass               *object_class;
+        GUPnPDIDLLiteWriterPrivate *priv;
+
+        priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
+
+        if (priv->xml_doc) {
+                g_object_unref (priv->xml_doc);
+                priv->xml_doc = NULL;
+        }
+
+        object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
+        object_class->dispose (object);
+}
+
+static void
 gupnp_didl_lite_writer_finalize (GObject *object)
 {
-        GObjectClass        *object_class;
-        GUPnPDIDLLiteWriter *writer;
+        GObjectClass               *object_class;
+        GUPnPDIDLLiteWriterPrivate *priv;
 
-        writer = GUPNP_DIDL_LITE_WRITER (object);
+        priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
 
-        if (writer->priv->str)
-                g_string_free (writer->priv->str, TRUE);
-
-        if (writer->priv->language)
-                g_free (writer->priv->language);
+        if (priv->language)
+                g_free (priv->language);
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
         object_class->finalize (object);
@@ -126,9 +188,28 @@ gupnp_didl_lite_writer_class_init (GUPnPDIDLLiteWriterClass *klass)
 
         object_class->set_property = gupnp_didl_lite_writer_set_property;
         object_class->get_property = gupnp_didl_lite_writer_get_property;
+        object_class->constructed = gupnp_didl_lite_writer_constructed;
+        object_class->dispose = gupnp_didl_lite_writer_dispose;
         object_class->finalize = gupnp_didl_lite_writer_finalize;
 
         g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteWriterPrivate));
+
+        /**
+         * GUPnPDIDLLiteWriter:xml-node
+         *
+         * The pointer to root node in XML document.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_XML_NODE,
+                 g_param_spec_pointer ("xml-node",
+                                       "XMLNode",
+                                       "The pointer to root node in XML"
+                                       " document.",
+                                       G_PARAM_READABLE |
+                                       G_PARAM_STATIC_NAME |
+                                       G_PARAM_STATIC_NICK |
+                                       G_PARAM_STATIC_BLURB));
 
         /**
          * GUPnPDIDLLiteWriter:language
@@ -165,114 +246,119 @@ gupnp_didl_lite_writer_new (const char *language)
                              NULL);
 }
 
-#define DIDL_LITE_HEADER \
-        "<DIDL-Lite xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC \
-        "=\"http://purl.org/dc/elements/1.1/\" " \
-        "xmlns:" GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP \
-        "=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
-        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
-
 /**
- * gupnp_didl_lite_writer_start_didl_lite
+ * gupnp_didl_lite_writer_add_item
  * @writer: A #GUPnPDIDLLiteWriter
  *
- * Starts the DIDL-Lite element.
+ * Creates a new item, attaches it to @writer and returns it.
+ *
+ * Return value: A new #GUPnPDIDLLiteItem object. Unref after usage.
  **/
-void
-gupnp_didl_lite_writer_start_didl_lite (GUPnPDIDLLiteWriter *writer)
+GUPnPDIDLLiteItem *
+gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
 {
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (writer->priv->str == NULL);
+        xmlNode *item_node;
+        GUPnPDIDLLiteObject *object;
 
-        writer->priv->str = g_string_sized_new (INITIAL_STRING_SIZE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
-        g_string_append (writer->priv->str, DIDL_LITE_HEADER);
+        item_node = xmlNewNode (NULL, (unsigned char *) "item");
+        xmlAddChild (writer->priv->xml_node, item_node);
 
-        if (writer->priv->language) {
-                g_string_append (writer->priv->str, " lang=\"");
-                g_string_append (writer->priv->str, writer->priv->language);
-                g_string_append_c (writer->priv->str, '"');
-        }
-
-        g_string_append_c (writer->priv->str, '>');
+        object = gupnp_didl_lite_object_new_from_xml (item_node,
+                                                      writer->priv->xml_doc);
+        return GUPNP_DIDL_LITE_ITEM (object);
 }
 
 /**
- * gupnp_didl_lite_writer_end_didl_lite
+ * gupnp_didl_lite_writer_add_container
  * @writer: A #GUPnPDIDLLiteWriter
  *
- * Closes the DIDL-Lite element.
- **/
-void
-gupnp_didl_lite_writer_end_didl_lite (GUPnPDIDLLiteWriter *writer)
-{
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (writer->priv->str);
-
-        g_string_append (writer->priv->str, "</DIDL-Lite>");
-}
-
-/**
- * gupnp_didl_lite_writer_add_object
- * @writer: A #GUPnPDIDLLiteWriter
- * @object: A #GUPnPDIDLLiteObject
+ * Creates a new container, attaches it to @writer and returns it.
  *
- * Adds @object to element.
+ * Return value: A new #GUPnPDIDLLiteContainer object. Unref after usage.
  **/
-void
-gupnp_didl_lite_writer_add_object (GUPnPDIDLLiteWriter *writer,
-                                   GUPnPDIDLLiteObject *object)
+GUPnPDIDLLiteContainer *
+gupnp_didl_lite_writer_add_container (GUPnPDIDLLiteWriter *writer)
 {
-        char *str;
+        xmlNode *container_node;
+        GUPnPDIDLLiteObject *object;
 
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
-        str = gupnp_didl_lite_object_to_string (object);
-        g_string_append (writer->priv->str, str);
-        g_free (str);
+        container_node = xmlNewNode (NULL, (unsigned char *) "container");
+        xmlAddChild (writer->priv->xml_node, container_node);
+
+        object = gupnp_didl_lite_object_new_from_xml (container_node,
+                                                      writer->priv->xml_doc);
+        return GUPNP_DIDL_LITE_CONTAINER (object);
 }
 
 /**
  * gupnp_didl_lite_writer_add_descriptor
  * @writer: A #GUPnPDIDLLiteWriter
- * @descriptor: The #GUPnPDIDLLiteDescriptor to add
  *
- * Adds the @descriptor to element.
+ * Creates a new descriptor, attaches it to @object and returns it.
+ *
+ * Return value: A new #GUPnPDIDLLiteDescriptor object. Unref after usage.
  **/
-void
-gupnp_didl_lite_writer_add_desc (GUPnPDIDLLiteWriter     *writer,
-                                 GUPnPDIDLLiteDescriptor *descriptor)
+GUPnPDIDLLiteDescriptor *
+gupnp_didl_lite_writer_add_descriptor (GUPnPDIDLLiteWriter *writer)
 {
-        char *desc;
+        xmlNode *desc_node;
 
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor));
-        g_return_if_fail (writer->priv->str);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
-        desc = gupnp_didl_lite_descriptor_to_string (descriptor);
-        g_return_if_fail (desc != NULL);
+        desc_node = xmlNewNode (NULL, (unsigned char *) "desc");
+        xmlAddChild (writer->priv->xml_node, desc_node);
 
-        g_string_append (writer->priv->str, desc);
-
-        g_free (desc);
+        return gupnp_didl_lite_descriptor_new_from_xml (desc_node,
+                                                        writer->priv->xml_doc);
 }
 
 /**
  * gupnp_didl_lite_writer_get_string
  * @writer: A #GUPnPDIDLLiteWriter
  *
- * Returns a pointer the generated DIDL-Lite string.
+ * Creates a string representation of the DIDL-Lite XML document.
  *
- * Return value: The generated DIDL-Lite string.
+ * Return value: The DIDL-Lite XML string, or %NULL. #g_free after usage.
  **/
-const char *
+char *
 gupnp_didl_lite_writer_get_string (GUPnPDIDLLiteWriter *writer)
 {
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
-        g_return_val_if_fail (writer->priv->str, NULL);
+        xmlBuffer *buffer;
+        char      *ret;
 
-        return writer->priv->str->str;
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
+
+        buffer = xmlBufferCreate ();
+        xmlNodeDump (buffer,
+                     writer->priv->xml_doc->doc,
+                     writer->priv->xml_node,
+                     0,
+                     0);
+        ret = g_strndup ((char *) xmlBufferContent (buffer),
+                         xmlBufferLength (buffer));
+        xmlBufferFree (buffer);
+
+        return ret;
+}
+
+/**
+ * gupnp_didl_lite_writer_get_xml_node
+ * @writer: The #GUPnPDIDLLiteWriter
+ *
+ * Get the pointer to root node in XML document.
+ *
+ * Return value: The pointer to root node in XML document.
+ **/
+xmlNode *
+gupnp_didl_lite_writer_get_xml_node (GUPnPDIDLLiteWriter *writer)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
+
+        return writer->priv->xml_node;
 }
 
 /**
