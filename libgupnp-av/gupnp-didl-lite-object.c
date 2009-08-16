@@ -1587,33 +1587,3 @@ gupnp_didl_lite_object_add_descriptor (GUPnPDIDLLiteObject *object)
                                                         object->priv->xml_doc);
 }
 
-/**
- * gupnp_didl_lite_object_to_string
- * @object: #GUPnPDIDLLiteObject
- *
- * Creates an XML string representation of @object.
- *
- * Return value: The XML string representation of @object, or %NULL.
- * #g_free after usage.
- **/
-char *
-gupnp_didl_lite_object_to_string (GUPnPDIDLLiteObject *object)
-{
-        xmlBuffer *buffer;
-        char      *ret;
-
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-
-        buffer = xmlBufferCreate ();
-        xmlNodeDump (buffer,
-                     object->priv->xml_doc->doc,
-                     object->priv->xml_node,
-                     0,
-                     0);
-        ret = g_strndup ((char *) xmlBufferContent (buffer),
-                         xmlBufferLength (buffer));
-        xmlBufferFree (buffer);
-
-        return ret;
-}
-

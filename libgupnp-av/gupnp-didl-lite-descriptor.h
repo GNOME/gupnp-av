@@ -114,9 +114,6 @@ gupnp_didl_lite_descriptor_set_name_space
                                         (GUPnPDIDLLiteDescriptor *descriptor,
                                          const char              *name_space);
 
-char *
-gupnp_didl_lite_descriptor_to_string    (GUPnPDIDLLiteDescriptor *descriptor);
-
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_DESCRIPTOR_H__ */

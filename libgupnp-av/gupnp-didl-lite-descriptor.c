@@ -532,34 +532,3 @@ gupnp_didl_lite_descriptor_set_name_space (GUPnPDIDLLiteDescriptor *descriptor,
 
         g_object_notify (G_OBJECT (descriptor), "name-space");
 }
-
-/**
- * gupnp_didl_lite_descriptor_to_string
- * @descriptor: #GUPnPDIDLLiteDescriptor
- *
- * Creates an XML string representation of @descriptor.
- *
- * Return value: The XML string representation of @descriptor, or %NULL.
- * #g_free after usage.
- **/
-char *
-gupnp_didl_lite_descriptor_to_string (GUPnPDIDLLiteDescriptor *descriptor)
-{
-        xmlBuffer *buffer;
-        char      *ret;
-
-        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);
-
-        buffer = xmlBufferCreate ();
-        xmlNodeDump (buffer,
-                     descriptor->priv->xml_doc->doc,
-                     descriptor->priv->xml_node,
-                     0,
-                     0);
-        ret = g_strndup ((char *) xmlBufferContent (buffer),
-                         xmlBufferLength (buffer));
-        xmlBufferFree (buffer);
-
-        return ret;
-}
-
