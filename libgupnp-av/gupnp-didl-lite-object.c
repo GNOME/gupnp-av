@@ -197,12 +197,12 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                          gupnp_didl_lite_object_get_xml_node (didl_object));
                 break;
         case PROP_ID:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_id (didl_object));
                 break;
         case PROP_PARENT_ID:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_parent_id (didl_object));
                 break;
@@ -212,60 +212,60 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                          gupnp_didl_lite_object_get_restricted (didl_object));
                 break;
         case PROP_TITLE:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_title (didl_object));
                 break;
         case PROP_UPNP_CLASS:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_upnp_class
                                                         (didl_object, NULL));
                 break;
         case PROP_CREATOR:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_creator (didl_object));
                 break;
         case PROP_ARTIST:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_artist (didl_object, NULL));
                 break;
         case PROP_AUTHOR:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_author (didl_object, NULL));
                 break;
         case PROP_GENRE:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_genre (didl_object,
                                                            NULL,
                                                            NULL));
                 break;
         case PROP_WRITE_STATUS:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_write_status (didl_object));
                 break;
         case PROP_ALBUM:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_album (didl_object));
                 break;
         case PROP_ALBUM_ART:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_album_art (didl_object));
                 break;
         case PROP_DESCRIPTION:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_description (didl_object));
                 break;
         case PROP_DATE:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_object_get_date (didl_object));
                 break;
@@ -758,11 +758,11 @@ gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
  * friendly name of the UPnP class is put there that must be freed (using
  * #gfree) after usage.
  *
- * Return value: The class of @object, or %NULL. #g_free after usage.
+ * Return value: The class of @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object,
-                                       char               **friendly_name)
+                                       const char         **friendly_name)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
@@ -779,9 +779,9 @@ gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object,
  *
  * Get the ID of the @object.
  *
- * Return value: The ID of the @object, or %NULL. #g_free after usage.
+ * Return value: The ID of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_id (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -798,7 +798,7 @@ gupnp_didl_lite_object_get_id (GUPnPDIDLLiteObject *object)
  * Return value: The ID of parent of the @object, or %NULL. #g_free after
  * usage.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_parent_id (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -852,9 +852,9 @@ gupnp_didl_lite_object_get_restricted (GUPnPDIDLLiteObject *object)
  *
  * Get the title of the @object.
  *
- * Return value: The title of the @object, or %NULL. #g_free after usage.
+ * Return value: The title of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -870,10 +870,9 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
  *
  * Get the creator of the @object.
  *
- * Return value: The creator of the @object, or %NULL. #g_free after
- * usage.
+ * Return value: The creator of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -889,13 +888,13 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
  * @role: Location to put the role string (if any) into, or %NULL
  *
  * Get the artist of the @object. If role is not %NULL, it is set to the role
- * of the artist if available that must be freed (using #gfree) after usage.
+ * of the artist if available.
  *
- * Return value: The artist of the @object, or %NULL. #g_free after usage.
+ * Return value: The artist of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object,
-                                   char               **role)
+                                   const char         **role)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
@@ -912,13 +911,13 @@ gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object,
  * @role: Location to put the role string (if any) into, or %NULL
  *
  * Get the author of the @object. If role is not %NULL, it is set to the role
- * of the author if available that must be freed (using #gfree) after usage.
+ * of the author if available.
  *
- * Return value: The author of the @object, or %NULL. #g_free after usage.
+ * Return value: The author of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object,
-                                   char               **role)
+                                   const char         **role)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
@@ -936,15 +935,14 @@ gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object,
  * @extended: Location to put the extended genre string (if any) into, or %NULL
  *
  * Get the genre of the @object. If @id is not %NULL, it is set to the ID
- * of the genre if available that must be freed (using #gfree) after usage. The
- * same goes for @extended.
+ * of the genre if available. The same goes for @extended.
  *
- * Return value: The genre of the @object, or %NULL. #g_free after usage.
+ * Return value: The genre of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object,
-                                  char               **id,
-                                  char               **extended)
+                                  const char         **id,
+                                  const char         **extended)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
@@ -963,10 +961,9 @@ gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object,
  *
  * Get the write status of the @object.
  *
- * Return value: The write status of the @object, or %NULL. #g_free after
- * usage.
+ * Return value: The write status of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -982,10 +979,9 @@ gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
  *
  * Get the album of the @object.
  *
- * Return value: The album of the @object, or %NULL. #g_free after
- * usage.
+ * Return value: The album of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -1001,10 +997,9 @@ gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
  *
  * Get the URI to album art of the @object.
  *
- * Return value: The URI to album art of the @object, or %NULL. #g_free after
- * usage.
+ * Return value: The URI to album art of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -1020,10 +1015,9 @@ gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
  *
  * Get the description of the @object.
  *
- * Return value: The description of the @object, or %NULL. #g_free after
- * usage.
+ * Return value: The description of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -1039,10 +1033,9 @@ gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
  *
  * Get the date of the @object.
  *
- * Return value: The date of the @object, or %NULL. #g_free after
- * usage.
+ * Return value: The date of the @object, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -1063,21 +1056,17 @@ gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
 int
 gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
 {
-        char *str;
-        int ret;
+        const char *str;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), -1);
 
         str = xml_util_get_child_element_content (object->priv->xml_node,
                                                   "originalTrackNumber",
                                                   NULL);
-        if (str) {
-                ret = atoi (str);
-                g_free (str);
-        } else
-                ret = -1;
+        if (str == NULL)
+                return -1;
 
-        return ret;
+        return atoi (str);
 }
 
 /**

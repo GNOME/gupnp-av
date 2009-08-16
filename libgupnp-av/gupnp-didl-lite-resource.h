@@ -144,10 +144,10 @@ gupnp_didl_lite_resource_set_color_depth
 xmlNode *
 gupnp_didl_lite_resource_get_xml_node   (GUPnPDIDLLiteResource *resource);
 
-char *
+const char *
 gupnp_didl_lite_resource_get_uri        (GUPnPDIDLLiteResource *resource);
 
-char *
+const char *
 gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource);
 
 GUPnPProtocolInfo *
@@ -171,7 +171,7 @@ int
 gupnp_didl_lite_resource_get_bits_per_sample
                                         (GUPnPDIDLLiteResource *resource);
 
-char *
+const char *
 gupnp_didl_lite_resource_get_protection (GUPnPDIDLLiteResource *resource);
 
 int

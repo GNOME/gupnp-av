@@ -154,9 +154,9 @@ gupnp_didl_lite_item_new (void)
  *
  * Get the ref ID of the @item.
  *
- * Return value: The ref ID of the @item, or %NULL. #g_free after usage.
+ * Return value: The ref ID of the @item, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_item_get_ref_id (GUPnPDIDLLiteItem *item)
 {
         xmlNode *xml_node;

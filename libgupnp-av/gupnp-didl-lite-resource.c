@@ -75,7 +75,7 @@ get_resolution_info (GUPnPDIDLLiteResource *resource,
                      int                   *width,
                      int                   *height)
 {
-        char *resolution;
+        const char *resolution;
         char **tokens;
 
         resolution = xml_util_get_attribute_content (resource->priv->xml_node,
@@ -95,7 +95,6 @@ get_resolution_info (GUPnPDIDLLiteResource *resource,
         if (height)
                 *height = atoi (tokens[1]);
 
-        g_free (resolution);
         g_strfreev (tokens);
 }
 
@@ -228,12 +227,12 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
                          gupnp_didl_lite_resource_get_xml_node (resource));
                 break;
         case PROP_URI:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_resource_get_uri (resource));
                 break;
         case PROP_IMPORT_URI:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_resource_get_import_uri (resource));
                 break;
@@ -262,7 +261,7 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
                          gupnp_didl_lite_resource_get_sample_freq (resource));
                 break;
         case PROP_PROTECTION:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_resource_get_protection (resource));
                 break;
@@ -678,15 +677,14 @@ gupnp_didl_lite_resource_get_xml_node (GUPnPDIDLLiteResource *resource)
  *
  * Get the URI associated with the @resource.
  *
- * Return value: The of URI the @resource or %NULL. #g_free this string after
- * usage.
+ * Return value: The of URI the @resource or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_resource_get_uri (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
 
-        return xml_util_get_element_content (resource->priv->xml_node);
+        return (const char *) resource->priv->xml_node->content;
 }
 
 /**
@@ -695,9 +693,9 @@ gupnp_didl_lite_resource_get_uri (GUPnPDIDLLiteResource *resource)
  *
  * Get the import URI associated with the @resource.
  *
- * Return value: The import URI or %NULL. #g_free this string after usage.
+ * Return value: The import URI or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
@@ -713,12 +711,13 @@ gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource)
  * Get the protocol info associated with the @resource.
  *
  * Return value: The protocol info associated with the @resource or %NULL.
+ * Unref after usage.
  **/
 GUPnPProtocolInfo *
 gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
 {
         GUPnPProtocolInfo *info;
-        char *protocol_info;
+        const char *protocol_info;
         GError *error;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
@@ -746,8 +745,6 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
                                         dlna_profile);
                 }
         }
-
-        g_free (protocol_info);
 
         return info;
 }
@@ -781,7 +778,7 @@ gupnp_didl_lite_resource_get_size (GUPnPDIDLLiteResource *resource)
 long
 gupnp_didl_lite_resource_get_duration (GUPnPDIDLLiteResource *resource)
 {
-        char *duration_str;
+        const char *duration_str;
         long duration;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
@@ -789,7 +786,6 @@ gupnp_didl_lite_resource_get_duration (GUPnPDIDLLiteResource *resource)
         duration_str = xml_util_get_attribute_content (resource->priv->xml_node,
                                                        "duration");
         duration = seconds_from_time (duration_str);
-        g_free (duration_str);
 
         return duration;
 }
@@ -855,9 +851,8 @@ gupnp_didl_lite_resource_get_bits_per_sample (GUPnPDIDLLiteResource *resource)
  * Get the protection system used by the @resource.
  *
  * Return value: The protection system in use by the @resource or %NULL.
- * #g_free this string after usage.
  **/
-char *
+const char *
 gupnp_didl_lite_resource_get_protection (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);

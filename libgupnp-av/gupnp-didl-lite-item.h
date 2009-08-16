@@ -69,7 +69,7 @@ typedef struct {
 GUPnPDIDLLiteItem *
 gupnp_didl_lite_item_new                (void);
 
-char *
+const char *
 gupnp_didl_lite_item_get_ref_id         (GUPnPDIDLLiteItem *item);
 
 void

@@ -37,15 +37,12 @@ G_GNUC_INTERNAL GList *
 xml_util_get_child_elements_by_name     (xmlNode *node,
                                          const char *name);
 
-G_GNUC_INTERNAL char *
-xml_util_get_element_content            (xmlNode    *node);
-
-G_GNUC_INTERNAL char *
+G_GNUC_INTERNAL const char *
 xml_util_get_child_element_content      (xmlNode    *node,
                                          const char *child_name,
                                          ...) G_GNUC_NULL_TERMINATED;
 
-G_GNUC_INTERNAL char *
+G_GNUC_INTERNAL const char *
 xml_util_get_attribute_content          (xmlNode    *node,
                                          const char *attribute_name);
 

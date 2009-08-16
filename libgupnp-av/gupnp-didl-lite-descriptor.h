@@ -82,17 +82,17 @@ gupnp_didl_lite_descriptor_new_from_xml (xmlNode            *xml_node,
 xmlNode *
 gupnp_didl_lite_descriptor_get_xml_node (GUPnPDIDLLiteDescriptor *descriptor);
 
-char *
+const char *
 gupnp_didl_lite_descriptor_get_content  (GUPnPDIDLLiteDescriptor *descriptor);
 
-char *
+const char *
 gupnp_didl_lite_descriptor_get_id       (GUPnPDIDLLiteDescriptor *descriptor);
 
-char *
+const char *
 gupnp_didl_lite_descriptor_get_metadata_type
                                         (GUPnPDIDLLiteDescriptor *descriptor);
 
-char *
+const char *
 gupnp_didl_lite_descriptor_get_name_space
                                         (GUPnPDIDLLiteDescriptor *descriptor);
 

@@ -75,8 +75,8 @@ read_state_variable (const char *variable_name,
                      GValue     *value,
                      xmlNode    *instance_node)
 {
-        xmlNode *variable_node;
-        char    *val_str;
+        xmlNode    *variable_node;
+        const char *val_str;
 
         variable_node = xml_util_get_element (instance_node,
                                               "InstanceID",
@@ -94,9 +94,7 @@ read_state_variable (const char *variable_name,
                 return FALSE;
         }
 
-        gvalue_util_set_value_from_string (value, (char *) val_str);
-
-        g_free (val_str);
+        gvalue_util_set_value_from_string (value, val_str);
 
         return TRUE;
 }

@@ -75,38 +75,20 @@ xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
        return children;
 }
 
-char *
-xml_util_get_element_content (xmlNode *node)
-{
-        xmlChar *content;
-        char    *copy;
-
-        content = xmlNodeGetContent (node);
-        if (!content)
-                return NULL;
-
-        copy = g_strdup ((char *) content);
-
-        xmlFree (content);
-
-        return copy;
-}
-
-char *
+const char *
 xml_util_get_child_element_content (xmlNode    *node,
                                     const char *child_name,
                                     ...)
 {
         xmlNode *child_node;
         va_list  var_args;
-        xmlChar *content;
-        char    *copy;
+        const char *content;
 
         child_node = xml_util_get_element (node, child_name, NULL);
         if (!child_node)
                 return NULL;
 
-        content = xmlNodeGetContent (child_node);
+        content = (const char *) child_node->content;
         if (!content)
                 return NULL;
 
@@ -114,12 +96,12 @@ xml_util_get_child_element_content (xmlNode    *node,
         va_start (var_args, child_name);
         while (TRUE) {
                 const char *name;
-                char **value;
+                const char **value;
 
                 name = va_arg (var_args, const char *);
                 if (!name)
                         break;
-                value = va_arg (var_args, char **);
+                value = va_arg (var_args, const char **);
                 if (!value)
                         break;
 
@@ -127,15 +109,12 @@ xml_util_get_child_element_content (xmlNode    *node,
         }
         va_end (var_args);
 
-        copy = g_strdup ((char *) content);
-        xmlFree (content);
-
-        return copy;
+        return content;
 }
 
-static xmlChar *
-get_attribute_content (xmlNode    *node,
-                       const char *attribute_name)
+const char *
+xml_util_get_attribute_content (xmlNode    *node,
+                                const char *attribute_name)
 {
         xmlAttr *attribute;
 
@@ -150,38 +129,20 @@ get_attribute_content (xmlNode    *node,
         }
 
         if (attribute)
-                return xmlNodeGetContent (attribute->children);
+                return (const char *) attribute->children->content;
         else
                 return NULL;
-}
-
-char *
-xml_util_get_attribute_content (xmlNode    *node,
-                                const char *attribute_name)
-{
-        xmlChar *content;
-        char    *copy;
-
-        content = get_attribute_content (node, attribute_name);
-        if (!content)
-                return NULL;
-
-        copy = g_strdup ((char *) content);
-
-        xmlFree (content);
-
-        return copy;
 }
 
 gboolean
 xml_util_get_boolean_attribute (xmlNode    *node,
                                 const char *attribute_name)
 {
-        xmlChar *content;
+        const char *content;
         gchar   *str;
         gboolean ret;
 
-        content = get_attribute_content (node, attribute_name);
+        content = xml_util_get_attribute_content (node, attribute_name);
         if (!content)
                 return FALSE;
 
@@ -198,8 +159,6 @@ xml_util_get_boolean_attribute (xmlNode    *node,
                 i = atoi (str);
                 ret = i ? TRUE : FALSE;
         }
-
-        xmlFree (content);
 
         return ret;
 }
@@ -219,18 +178,13 @@ xml_util_get_long_attribute (xmlNode    *node,
                              const char *attribute_name,
                              glong       default_value)
 {
-        xmlChar *content;
-        glong    ret;
+        const char *content;
 
-        content = get_attribute_content (node, attribute_name);
+        content = xml_util_get_attribute_content (node, attribute_name);
         if (!content)
                 return default_value;
 
-        ret = atoll ((char *) content);
-
-        xmlFree (content);
-
-        return ret;
+        return atoll (content);
 }
 
 void

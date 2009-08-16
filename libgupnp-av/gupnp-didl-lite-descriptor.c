@@ -122,24 +122,24 @@ gupnp_didl_lite_descriptor_get_property (GObject    *object,
                          gupnp_didl_lite_descriptor_get_xml_node (descriptor));
                 break;
         case PROP_ID:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_descriptor_get_id (descriptor));
                 break;
         case PROP_METADATA_TYPE:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_descriptor_get_metadata_type
                                                                 (descriptor));
                 break;
         case PROP_NAME_SPACE:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_descriptor_get_name_space
                                                                 (descriptor));
                 break;
         case PROP_CONTENT:
-                g_value_take_string
+                g_value_set_string
                         (value,
                          gupnp_didl_lite_descriptor_get_content (descriptor));
                 break;
@@ -378,15 +378,14 @@ gupnp_didl_lite_descriptor_get_xml_node (GUPnPDIDLLiteDescriptor *descriptor)
  *
  * Get the content of the @descriptor.
  *
- * Return value: The content of the @descriptor or %NULL. #g_free this string
- * after usage.
+ * Return value: The content of the @descriptor or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_descriptor_get_content (GUPnPDIDLLiteDescriptor *descriptor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);
 
-        return xml_util_get_element_content (descriptor->priv->xml_node);
+        return (const char *) descriptor->priv->xml_node;
 }
 
 /*
@@ -395,9 +394,9 @@ gupnp_didl_lite_descriptor_get_content (GUPnPDIDLLiteDescriptor *descriptor)
  *
  * Get the ID of the @descriptor.
  *
- * Return value: The ID string or %NULL. #g_free this string after usage.
+ * Return value: The ID string or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_descriptor_get_id (GUPnPDIDLLiteDescriptor *descriptor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);
@@ -412,9 +411,9 @@ gupnp_didl_lite_descriptor_get_id (GUPnPDIDLLiteDescriptor *descriptor)
  *
  * Get the metadata type of the @descriptor.
  *
- * Return value: The type as string or %NULL. #g_free this string after usage.
+ * Return value: The type as string or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_descriptor_get_metadata_type
                                         (GUPnPDIDLLiteDescriptor *descriptor)
 {
@@ -430,9 +429,9 @@ gupnp_didl_lite_descriptor_get_metadata_type
  *
  * Get the name space associated with the @descriptor.
  *
- * Return value: The name space or %NULL. #g_free this string after usage.
+ * Return value: The name space or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_descriptor_get_name_space (GUPnPDIDLLiteDescriptor *descriptor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);

@@ -83,14 +83,14 @@ gupnp_didl_lite_object_new_from_xml     (xmlNode            *xml_node,
 xmlNode *
 gupnp_didl_lite_object_get_xml_node     (GUPnPDIDLLiteObject *object);
 
-char *
+const char *
 gupnp_didl_lite_object_get_upnp_class   (GUPnPDIDLLiteObject *object,
-                                         char               **friendly_name);
+                                         const char         **friendly_name);
 
-char *
+const char *
 gupnp_didl_lite_object_get_id           (GUPnPDIDLLiteObject *object);
 
-char *
+const char *
 gupnp_didl_lite_object_get_parent_id    (GUPnPDIDLLiteObject *object);
 
 GList *
@@ -100,38 +100,38 @@ gupnp_didl_lite_object_get_properties   (GUPnPDIDLLiteObject *object,
 gboolean
 gupnp_didl_lite_object_get_restricted   (GUPnPDIDLLiteObject *object);
 
-char *
+const char *
 gupnp_didl_lite_object_get_title        (GUPnPDIDLLiteObject *object);
 
-char *
+const char *
 gupnp_didl_lite_object_get_creator      (GUPnPDIDLLiteObject *object);
 
-char *
+const char *
 gupnp_didl_lite_object_get_artist       (GUPnPDIDLLiteObject *object,
-                                         char               **role);
+                                         const char         **role);
 
-char *
+const char *
 gupnp_didl_lite_object_get_author       (GUPnPDIDLLiteObject *object,
-                                         char               **role);
+                                         const char         **role);
 
-char *
+const char *
 gupnp_didl_lite_object_get_genre        (GUPnPDIDLLiteObject *object,
-                                         char               **id,
-                                         char               **extended);
+                                         const char         **id,
+                                         const char         **extended);
 
-char *
+const char *
 gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object);
 
-char *
+const char *
 gupnp_didl_lite_object_get_album        (GUPnPDIDLLiteObject *object);
 
-char *
+const char *
 gupnp_didl_lite_object_get_album_art    (GUPnPDIDLLiteObject *object);
 
-char *
+const char *
 gupnp_didl_lite_object_get_description  (GUPnPDIDLLiteObject *object);
 
-char *
+const char *
 gupnp_didl_lite_object_get_date         (GUPnPDIDLLiteObject *object);
 
 int

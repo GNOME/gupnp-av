@@ -97,7 +97,7 @@ gupnp_didl_lite_writer_get_property (GObject    *object,
                         (value, gupnp_didl_lite_writer_get_xml_node (writer));
                 break;
         case PROP_LANGUAGE:
-                g_value_take_string
+                g_value_set_string
                         (value, gupnp_didl_lite_writer_get_language (writer));
                 break;
         default:
@@ -368,13 +368,12 @@ gupnp_didl_lite_writer_get_xml_node (GUPnPDIDLLiteWriter *writer)
  *
  * Get the language the DIDL-Lite fragment is in.
  *
- * Return value: The language of the @writer, or %NULL. #g_free after
- * usage.
+ * Return value: The language of the @writer, or %NULL.
  **/
-char *
+const char *
 gupnp_didl_lite_writer_get_language (GUPnPDIDLLiteWriter *writer)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
-        return g_strdup (writer->priv->language);
+        return writer->priv->language;
 }

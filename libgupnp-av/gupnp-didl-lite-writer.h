@@ -98,7 +98,7 @@ gupnp_didl_lite_writer_get_xml_node     (GUPnPDIDLLiteWriter   *writer);
 char *
 gupnp_didl_lite_writer_get_string       (GUPnPDIDLLiteWriter   *writer);
 
-char *
+const char *
 gupnp_didl_lite_writer_get_language     (GUPnPDIDLLiteWriter   *writer);
 
 G_END_DECLS
