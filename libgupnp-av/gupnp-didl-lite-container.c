@@ -272,7 +272,7 @@ gupnp_didl_lite_container_set_searchable (GUPnPDIDLLiteContainer *container,
                 str = "0";
         xmlSetProp (xml_node,
                     (unsigned char *) "searchable",
-                    (unsigned char *) searchable);
+                    (unsigned char *) str);
 
         g_object_notify (G_OBJECT (container), "searchable");
 }
