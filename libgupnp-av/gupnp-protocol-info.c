@@ -227,7 +227,7 @@ add_dlna_info (GString           *str,
 
         dlna_profile = gupnp_protocol_info_get_dlna_profile (info);
         if (dlna_profile == NULL) {
-                g_string_append_printf (str, ":*\"");
+                g_string_append_printf (str, ":*");
 
                 return;
         }
