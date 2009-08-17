@@ -171,8 +171,8 @@ gupnp_didl_lite_container_new (void)
  * Return value: A new #GUPnPDIDLLiteContainer object. Unref after usage.
  **/
 GUPnPDIDLLiteContainer *
-gupnp_didl_lite_container_new_from_xml (xmlNode            *xml_node,
-                                        GUPnPXMLDocWrapper *xml_doc)
+gupnp_didl_lite_container_new_from_xml (xmlNode     *xml_node,
+                                        GUPnPXMLDoc *xml_doc)
 {
         GUPnPDIDLLiteContainer *container;
 

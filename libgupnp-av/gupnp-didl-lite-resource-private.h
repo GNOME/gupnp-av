@@ -30,8 +30,8 @@
 G_BEGIN_DECLS
 
 GUPnPDIDLLiteResource *
-gupnp_didl_lite_resource_new_from_xml   (xmlNode            *xml_node,
-                                         GUPnPXMLDocWrapper *xml_doc);
+gupnp_didl_lite_resource_new_from_xml   (xmlNode     *xml_node,
+                                         GUPnPXMLDoc *xml_doc);
 
 G_END_DECLS
 

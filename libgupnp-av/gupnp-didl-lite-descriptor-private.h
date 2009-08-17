@@ -31,8 +31,8 @@
 G_BEGIN_DECLS
 
 GUPnPDIDLLiteDescriptor *
-gupnp_didl_lite_descriptor_new_from_xml (xmlNode            *xml_node,
-                                         GUPnPXMLDocWrapper *xml_doc);
+gupnp_didl_lite_descriptor_new_from_xml (xmlNode     *xml_node,
+                                         GUPnPXMLDoc *xml_doc);
 
 G_END_DECLS
 

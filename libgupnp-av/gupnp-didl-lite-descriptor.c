@@ -38,8 +38,8 @@ G_DEFINE_TYPE (GUPnPDIDLLiteDescriptor,
                G_TYPE_OBJECT);
 
 struct _GUPnPDIDLLiteDescriptorPrivate {
-        xmlNode            *xml_node;
-        GUPnPXMLDocWrapper *xml_doc;
+        xmlNode     *xml_node;
+        GUPnPXMLDoc *xml_doc;
 };
 
 enum {
@@ -214,7 +214,7 @@ gupnp_didl_lite_descriptor_class_init (GUPnPDIDLLiteDescriptorClass *klass)
                                       "XMLDoc",
                                       "The reference to XML document"
                                       " containing this object.",
-                                      GUPNP_TYPE_XML_DOC_WRAPPER,
+                                      GUPNP_TYPE_XML_DOC,
                                       G_PARAM_WRITABLE |
                                       G_PARAM_CONSTRUCT_ONLY |
                                       G_PARAM_PRIVATE |
@@ -314,8 +314,8 @@ gupnp_didl_lite_descriptor_new (void)
  * Return value: A new #GUPnPDIDLLiteDescriptor object. Unref after usage.
  **/
 GUPnPDIDLLiteDescriptor *
-gupnp_didl_lite_descriptor_new_from_xml (xmlNode          *xml_node,
-                                         GUPnPXMLDocWrapper *xml_doc)
+gupnp_didl_lite_descriptor_new_from_xml (xmlNode     *xml_node,
+                                         GUPnPXMLDoc *xml_doc)
 {
         GUPnPDIDLLiteDescriptor *descriptor;
 

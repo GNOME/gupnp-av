@@ -43,8 +43,8 @@ G_DEFINE_ABSTRACT_TYPE (GUPnPDIDLLiteObject,
                         G_TYPE_OBJECT);
 
 struct _GUPnPDIDLLiteObjectPrivate {
-        xmlNode            *xml_node;
-        GUPnPXMLDocWrapper *xml_doc;
+        xmlNode     *xml_node;
+        GUPnPXMLDoc *xml_doc;
 
         xmlNs              *upnp_ns;
         xmlNs              *dc_ns;
@@ -369,7 +369,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       "XMLDoc",
                                       "The reference to XML document"
                                       " containing this object.",
-                                      GUPNP_TYPE_XML_DOC_WRAPPER,
+                                      GUPNP_TYPE_XML_DOC,
                                       G_PARAM_WRITABLE |
                                       G_PARAM_CONSTRUCT_ONLY |
                                       G_PARAM_PRIVATE |
@@ -675,12 +675,12 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
  * Return value: A new #GUPnPDIDLLiteObject object. Unref after usage.
  **/
 GUPnPDIDLLiteObject *
-gupnp_didl_lite_object_new_from_xml (xmlNode            *xml_node,
-                                     GUPnPXMLDocWrapper *xml_doc)
+gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
+                                     GUPnPXMLDoc *xml_doc)
 {
         g_return_val_if_fail (xml_node != NULL, NULL);
         g_return_val_if_fail (xml_node->name != NULL, NULL);
-        g_return_val_if_fail (GUPNP_IS_XML_DOC_WRAPPER (xml_doc), NULL);
+        g_return_val_if_fail (GUPNP_IS_XML_DOC (xml_doc), NULL);
 
         if (g_ascii_strcasecmp ((char *) xml_node->name, "container") == 0)
                 return g_object_new (GUPNP_TYPE_DIDL_LITE_CONTAINER,

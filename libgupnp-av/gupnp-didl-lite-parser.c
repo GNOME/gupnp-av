@@ -166,9 +166,9 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                                    const char          *didl,
                                    GError             **error)
 {
-        xmlDoc             *doc;
-        xmlNode            *element;
-        GUPnPXMLDocWrapper *wrapper;
+        xmlDoc      *doc;
+        xmlNode     *element;
+        GUPnPXMLDoc *xml_doc;
 
         doc = xmlRecoverMemory (didl, strlen (didl));
 	if (doc == NULL) {
@@ -204,13 +204,13 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                 return FALSE;
         }
 
-        wrapper = gupnp_xml_doc_wrapper_new (doc);
-        g_object_ref_sink (wrapper);
+        xml_doc = gupnp_xml_doc_new (doc);
+        g_object_ref_sink (xml_doc);
 
         for (element = element->children; element; element = element->next) {
                 GUPnPDIDLLiteObject *object;
 
-                object = gupnp_didl_lite_object_new_from_xml (element, wrapper);
+                object = gupnp_didl_lite_object_new_from_xml (element, xml_doc);
 
                 if (object == NULL)
                         continue;
@@ -234,7 +234,7 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                 g_object_unref (object);
         }
 
-        g_object_unref (wrapper);
+        g_object_unref (xml_doc);
 
         return TRUE;
 }
