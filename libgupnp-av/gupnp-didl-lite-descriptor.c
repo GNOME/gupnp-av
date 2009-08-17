@@ -150,34 +150,6 @@ gupnp_didl_lite_descriptor_get_property (GObject    *object,
 }
 
 static void
-gupnp_didl_lite_descriptor_constructed (GObject *object)
-{
-        GObjectClass                 *object_class;
-        GUPnPDIDLLiteDescriptorPrivate *priv;
-
-        priv = GUPNP_DIDL_LITE_DESCRIPTOR (object)->priv;
-
-        if (priv->xml_doc == NULL) {
-                xmlDoc  *doc;
-
-                doc = xmlNewDoc ((unsigned char *) "1.0");
-                priv->xml_doc = gupnp_xml_doc_wrapper_new (doc);
-        }
-
-        if (priv->xml_node == NULL) {
-                priv->xml_node = xmlNewDocNode (priv->xml_doc->doc,
-                                                NULL,
-                                                (unsigned char *) "desc",
-                                                NULL);
-                xmlDocSetRootElement (priv->xml_doc->doc, priv->xml_node);
-        }
-
-        object_class = G_OBJECT_CLASS (gupnp_didl_lite_descriptor_parent_class);
-        if (object_class->constructed != NULL)
-                object_class->constructed (object);
-}
-
-static void
 gupnp_didl_lite_descriptor_dispose (GObject *object)
 {
         GObjectClass                 *object_class;
@@ -204,7 +176,6 @@ gupnp_didl_lite_descriptor_class_init (GUPnPDIDLLiteDescriptorClass *klass)
         object_class->set_property = gupnp_didl_lite_descriptor_set_property;
         object_class->get_property = gupnp_didl_lite_descriptor_get_property;
         object_class->dispose = gupnp_didl_lite_descriptor_dispose;
-        object_class->constructed = gupnp_didl_lite_descriptor_constructed;
 
         g_type_class_add_private (klass,
                                   sizeof (GUPnPDIDLLiteDescriptorPrivate));

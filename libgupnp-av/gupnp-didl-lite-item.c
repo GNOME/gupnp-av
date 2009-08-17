@@ -92,23 +92,6 @@ gupnp_didl_lite_item_set_property (GObject      *object,
 }
 
 static void
-gupnp_didl_lite_item_constructed (GObject *object)
-{
-        GObjectClass *object_class;
-        xmlNode      *node;
-
-        /* Chain-up first */
-        object_class = G_OBJECT_CLASS (gupnp_didl_lite_item_parent_class);
-        if (object_class->constructed != NULL)
-                object_class->constructed (object);
-
-        /* Now override the root element name */
-        node = gupnp_didl_lite_object_get_xml_node
-                                        (GUPNP_DIDL_LITE_OBJECT (object));
-        xmlNodeSetName (node, (unsigned char *) "item");
-}
-
-static void
 gupnp_didl_lite_item_class_init (GUPnPDIDLLiteItemClass *klass)
 {
         GObjectClass *object_class;
@@ -117,7 +100,6 @@ gupnp_didl_lite_item_class_init (GUPnPDIDLLiteItemClass *klass)
 
         object_class->get_property = gupnp_didl_lite_item_get_property;
         object_class->set_property = gupnp_didl_lite_item_set_property;
-        object_class->constructed = gupnp_didl_lite_item_constructed;
 
         /**
          * GUPnPDIDLLiteItem:ref-id

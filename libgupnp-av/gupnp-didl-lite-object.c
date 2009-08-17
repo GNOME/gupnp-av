@@ -293,37 +293,6 @@ gupnp_didl_lite_object_constructed (GObject *object)
 
         priv = GUPNP_DIDL_LITE_OBJECT (object)->priv;
 
-        if (priv->xml_doc == NULL) {
-                xmlDoc  *doc;
-
-                doc = xmlNewDoc ((unsigned char *) "1.0");
-                priv->xml_doc = gupnp_xml_doc_wrapper_new (doc);
-        }
-
-        if (priv->xml_node == NULL) {
-                xmlNode *root_node;
-
-                root_node = xmlNewDocNode (priv->xml_doc->doc,
-                                           NULL,
-                                           (unsigned char *) "DIDL-Lite",
-                                           NULL);
-                xmlDocSetRootElement (priv->xml_doc->doc, root_node);
-                xmlNewNs (root_node,
-                          (unsigned char *) "http://purl.org/dc/elements/1.1/",
-                          (unsigned char *) "dc");
-                xmlNewNs (root_node,
-                          (unsigned char *) "urn:schemas-upnp-org:"
-                                            "metadata-1-0/upnp/",
-                          (unsigned char *) "upnp");
-                xmlNewNs (root_node,
-                          (unsigned char *) "urn:schemas-upnp-org:"
-                                            "metadata-1-0/DIDL-Lite/",
-                          NULL);
-                /* Subclasses must override the name of the node */
-                priv->xml_node = xmlNewNode (NULL, (unsigned char *) "object");
-                xmlAddChild (root_node, priv->xml_node);
-        }
-
         ns_list = xmlGetNsList (priv->xml_doc->doc,
                                 xmlDocGetRootElement (priv->xml_doc->doc));
         for (i = 0; ns_list[i] != NULL; i++) {
