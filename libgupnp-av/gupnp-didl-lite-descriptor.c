@@ -356,7 +356,7 @@ gupnp_didl_lite_descriptor_get_content (GUPnPDIDLLiteDescriptor *descriptor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);
 
-        return (const char *) descriptor->priv->xml_node;
+        return (const char *) descriptor->priv->xml_node->children;
 }
 
 /*
