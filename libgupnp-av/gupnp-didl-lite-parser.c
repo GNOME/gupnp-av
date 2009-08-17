@@ -205,7 +205,6 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
         }
 
         xml_doc = gupnp_xml_doc_new (doc);
-        g_object_ref_sink (xml_doc);
 
         for (element = element->children; element; element = element->next) {
                 GUPnPDIDLLiteObject *object;
