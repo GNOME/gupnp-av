@@ -29,6 +29,7 @@
 
 #include <string.h>
 #include "gupnp-didl-lite-parser.h"
+#include "gupnp-didl-lite-object-private.h"
 #include "gupnp-didl-lite-container.h"
 #include "gupnp-didl-lite-item.h"
 #include "xml-util.h"

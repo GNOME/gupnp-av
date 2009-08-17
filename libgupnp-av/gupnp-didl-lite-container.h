@@ -66,9 +66,6 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteContainerClass;
 
-GUPnPDIDLLiteContainer *
-gupnp_didl_lite_container_new           (void);
-
 gboolean
 gupnp_didl_lite_container_get_searchable
                                         (GUPnPDIDLLiteContainer *container);
