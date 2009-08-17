@@ -62,6 +62,7 @@ xml_util_get_long_attribute             (xmlNode    *node,
 G_GNUC_INTERNAL void
 xml_util_set_child                      (xmlNode    *parent_node,
                                          xmlNs      *namespace,
+                                         xmlDoc     *doc,
                                          const char *name,
                                          const char *value);
 

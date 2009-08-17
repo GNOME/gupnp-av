@@ -920,11 +920,15 @@ void
 gupnp_didl_lite_resource_set_uri (GUPnPDIDLLiteResource *resource,
                                   const char            *uri)
 {
+        xmlChar *escaped;
+
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
         g_return_if_fail (uri != NULL);
 
-        xmlNodeSetContent (resource->priv->xml_node,
-                           (const unsigned char *) uri);
+        escaped = xmlEncodeSpecialChars (resource->priv->xml_doc->doc,
+                                         (const unsigned char *) uri);
+        xmlNodeSetContent (resource->priv->xml_node, escaped);
+        xmlFree (escaped);
 
         g_object_notify (G_OBJECT (resource), "uri");
 }

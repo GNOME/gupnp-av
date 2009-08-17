@@ -171,10 +171,12 @@ xml_util_get_long_attribute (xmlNode    *node,
 void
 xml_util_set_child (xmlNode    *parent_node,
                     xmlNs      *namespace,
+                    xmlDoc     *doc,
                     const char *name,
                     const char *value)
 {
         xmlNode *node;
+        xmlChar *escaped;
 
         node = xml_util_get_element (parent_node, name, NULL);
         if (node == NULL) {
@@ -183,6 +185,8 @@ xml_util_set_child (xmlNode    *parent_node,
                 xmlAddChild (parent_node, node);
         }
 
-        xmlNodeSetContent (node, (unsigned char *) value);
+        escaped = xmlEncodeSpecialChars (doc, (const unsigned char *) value);
+        xmlNodeSetContent (node, escaped);
+        xmlFree (escaped);
 }
 

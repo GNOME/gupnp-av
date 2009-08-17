@@ -1112,6 +1112,7 @@ gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
+                            object->priv->xml_doc->doc,
                             "class",
                             upnp_class);
 
@@ -1203,6 +1204,7 @@ gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
+                            object->priv->xml_doc->doc,
                             "title",
                             title);
 
@@ -1225,6 +1227,7 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
+                            object->priv->xml_doc->doc,
                             "creator",
                             creator);
 
@@ -1247,6 +1250,7 @@ gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
+                            object->priv->xml_doc->doc,
                             "artist",
                             artist);
 
@@ -1269,6 +1273,7 @@ gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
+                            object->priv->xml_doc->doc,
                             "author",
                             author);
 
@@ -1291,6 +1296,7 @@ gupnp_didl_lite_object_set_genre (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
+                            object->priv->xml_doc->doc,
                             "genre",
                             genre);
 
@@ -1313,6 +1319,7 @@ gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
+                            object->priv->xml_doc->doc,
                             "writeStatus",
                             write_status);
 
@@ -1335,6 +1342,7 @@ gupnp_didl_lite_object_set_album (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
+                            object->priv->xml_doc->doc,
                             "album",
                             album);
 
@@ -1357,6 +1365,7 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
+                            object->priv->xml_doc->doc,
                             "albumArtURI",
                             album_art);
 
@@ -1379,6 +1388,7 @@ gupnp_didl_lite_object_set_description (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
+                            object->priv->xml_doc->doc,
                             "description",
                             description);
 
@@ -1401,6 +1411,7 @@ gupnp_didl_lite_object_set_date (GUPnPDIDLLiteObject *object,
 
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
+                            object->priv->xml_doc->doc,
                             "date",
                             date);
 
@@ -1426,6 +1437,7 @@ gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
         str = g_strdup_printf ("%d", track_number);
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
+                            object->priv->xml_doc->doc,
                             "originalTrackNumber",
                             str);
         g_free (str);

@@ -424,11 +424,15 @@ void
 gupnp_didl_lite_descriptor_set_content (GUPnPDIDLLiteDescriptor *descriptor,
                                         const char              *content)
 {
+        xmlChar *escaped;
+
         g_return_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor));
         g_return_if_fail (content != NULL);
 
-        xmlNodeSetContent (descriptor->priv->xml_node,
-                           (const unsigned char *) content);
+        escaped = xmlEncodeSpecialChars (descriptor->priv->xml_doc->doc,
+                                         (const unsigned char *) content);
+        xmlNodeSetContent (descriptor->priv->xml_node, escaped);
+        xmlFree (escaped);
 
         g_object_notify (G_OBJECT (descriptor), "content");
 }
