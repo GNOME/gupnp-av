@@ -120,8 +120,7 @@ gupnp_didl_lite_object_set_property (GObject      *object,
         case PROP_UPNP_CLASS:
                 gupnp_didl_lite_object_set_upnp_class
                                         (didl_object,
-                                         g_value_get_string (value),
-                                         NULL);
+                                         g_value_get_string (value));
                 break;
         case PROP_CREATOR:
                 gupnp_didl_lite_object_set_creator
@@ -131,21 +130,17 @@ gupnp_didl_lite_object_set_property (GObject      *object,
         case PROP_ARTIST:
                 gupnp_didl_lite_object_set_artist
                                         (didl_object,
-                                         g_value_get_string (value),
-                                         NULL);
+                                         g_value_get_string (value));
                 break;
         case PROP_AUTHOR:
                 gupnp_didl_lite_object_set_author
                                         (didl_object,
-                                         g_value_get_string (value),
-                                         NULL);
+                                         g_value_get_string (value));
                 break;
         case PROP_GENRE:
                 gupnp_didl_lite_object_set_genre
                                         (didl_object,
-                                         g_value_get_string (value),
-                                         NULL,
-                                         NULL);
+                                         g_value_get_string (value));
                 break;
         case PROP_WRITE_STATUS:
                 gupnp_didl_lite_object_set_write_status
@@ -222,8 +217,7 @@ gupnp_didl_lite_object_get_property (GObject    *object,
         case PROP_UPNP_CLASS:
                 g_value_set_string
                         (value,
-                         gupnp_didl_lite_object_get_upnp_class
-                                                        (didl_object, NULL));
+                         gupnp_didl_lite_object_get_upnp_class (didl_object));
                 break;
         case PROP_CREATOR:
                 g_value_set_string
@@ -233,19 +227,17 @@ gupnp_didl_lite_object_get_property (GObject    *object,
         case PROP_ARTIST:
                 g_value_set_string
                         (value,
-                         gupnp_didl_lite_object_get_artist (didl_object, NULL));
+                         gupnp_didl_lite_object_get_artist (didl_object));
                 break;
         case PROP_AUTHOR:
                 g_value_set_string
                         (value,
-                         gupnp_didl_lite_object_get_author (didl_object, NULL));
+                         gupnp_didl_lite_object_get_author (didl_object));
                 break;
         case PROP_GENRE:
                 g_value_set_string
                         (value,
-                         gupnp_didl_lite_object_get_genre (didl_object,
-                                                           NULL,
-                                                           NULL));
+                         gupnp_didl_lite_object_get_genre (didl_object));
                 break;
         case PROP_WRITE_STATUS:
                 g_value_set_string
@@ -723,26 +715,18 @@ gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_upnp_class
  * @object: The #GUPnPDIDLLiteObject
- * @friendly_name: Location to put the friendly name of the UPnP class into, or
- * %NULL
  *
- * Get the UPnP class of the @object. If @friendly_name is not %NULL, the
- * friendly name of the UPnP class is put there that must be freed (using
- * #gfree) after usage.
+ * Get the UPnP class of the @object.
  *
  * Return value: The class of @object, or %NULL.
  **/
 const char *
-gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object,
-                                       const char         **friendly_name)
+gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "class",
-                                                   "name",
-                                                   friendly_name,
-                                                   NULL);
+                                                   "class");
 }
 
 /**
@@ -832,8 +816,7 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "title",
-                                                   NULL);
+                                                   "title");
 }
 
 /**
@@ -850,8 +833,7 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "creator",
-                                                   NULL);
+                                                   "creator");
 }
 
 /**
@@ -865,16 +847,12 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
  * Return value: The artist of the @object, or %NULL.
  **/
 const char *
-gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object,
-                                   const char         **role)
+gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "artist",
-                                                   "role",
-                                                   role,
-                                                   NULL);
+                                                   "artist");
 }
 
 /**
@@ -888,16 +866,12 @@ gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object,
  * Return value: The author of the @object, or %NULL.
  **/
 const char *
-gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object,
-                                   const char         **role)
+gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "author",
-                                                   "role",
-                                                   role,
-                                                   NULL);
+                                                   "author");
 }
 
 /**
@@ -912,19 +886,12 @@ gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object,
  * Return value: The genre of the @object, or %NULL.
  **/
 const char *
-gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object,
-                                  const char         **id,
-                                  const char         **extended)
+gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "genre",
-                                                   "id",
-                                                   id,
-                                                   "extended",
-                                                   extended,
-                                                   NULL);
+                                                   "genre");
 }
 
 /**
@@ -941,8 +908,7 @@ gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "writeStatus",
-                                                   NULL);
+                                                   "writeStatus");
 }
 
 /**
@@ -959,8 +925,7 @@ gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "album",
-                                                   NULL);
+                                                   "album");
 }
 
 /**
@@ -977,8 +942,7 @@ gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "albumArtURI",
-                                                   NULL);
+                                                   "albumArtURI");
 }
 
 /**
@@ -995,8 +959,7 @@ gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "description",
-                                                   NULL);
+                                                   "description");
 }
 
 /**
@@ -1013,8 +976,7 @@ gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return xml_util_get_child_element_content (object->priv->xml_node,
-                                                   "date",
-                                                   NULL);
+                                                   "date");
 }
 
 /**
@@ -1033,8 +995,7 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), -1);
 
         str = xml_util_get_child_element_content (object->priv->xml_node,
-                                                  "originalTrackNumber",
-                                                  NULL);
+                                                  "originalTrackNumber");
         if (str == NULL)
                 return -1;
 
@@ -1139,15 +1100,12 @@ gupnp_didl_lite_object_get_compat_resource
 /**
  * gupnp_didl_lite_object_set_upnp_class
  * @object: The #GUPnPDIDLLiteObject
- * @upnp_class: The UPnP class
- * @friendly_name: The friendly name of the UPnP class
  *
  * Set the UPnP class of the @object to @upnp_class.
  **/
 void
 gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
-                                       const char          *upnp_class,
-                                       const char          *friendly_name)
+                                       const char          *upnp_class)
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
@@ -1155,10 +1113,7 @@ gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
                             "class",
-                            upnp_class,
-                            "name",
-                            friendly_name,
-                            NULL);
+                            upnp_class);
 
         g_object_notify (G_OBJECT (object), "upnp-class");
 }
@@ -1249,8 +1204,7 @@ gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
                             "title",
-                            title,
-                            NULL);
+                            title);
 
         g_object_notify (G_OBJECT (object), "title");
 }
@@ -1272,8 +1226,7 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
                             "creator",
-                            creator,
-                            NULL);
+                            creator);
 
         g_object_notify (G_OBJECT (object), "creator");
 }
@@ -1282,14 +1235,12 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
  * gupnp_didl_lite_object_set_artist
  * @object: The #GUPnPDIDLLiteObject
  * @artist: The Artist
- * @role: The role of the Artist or %NULL
  *
- * Set the Artist of the @object to @artist and her/his role to @role.
+ * Set the Artist of the @object to @artist.
  **/
 void
 gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
-                                   const char          *artist,
-                                   const char          *role)
+                                   const char          *artist)
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
@@ -1297,10 +1248,7 @@ gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
                             "artist",
-                            artist,
-                            "role",
-                            role,
-                            NULL);
+                            artist);
 
         g_object_notify (G_OBJECT (object), "artist");
 }
@@ -1309,14 +1257,12 @@ gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
  * gupnp_didl_lite_object_set_author
  * @object: The #GUPnPDIDLLiteObject
  * @author: The Author
- * @role: The role of the Author or %NULL
  *
- * Set the Author of the @object to @author and her/his role to @role.
+ * Set the Author of the @object to @author.
  **/
 void
 gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
-                                   const char          *author,
-                                   const char          *role)
+                                   const char          *author)
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
@@ -1324,10 +1270,7 @@ gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
                             "author",
-                            author,
-                            "role",
-                            role,
-                            NULL);
+                            author);
 
         g_object_notify (G_OBJECT (object), "author");
 }
@@ -1336,17 +1279,12 @@ gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
  * gupnp_didl_lite_object_set_genre
  * @object: The #GUPnPDIDLLiteObject
  * @genre: The Genre
- * @id: The role of the Genre or %NULL
- * @extended: A string containing CSV list of sub-genre names or %NULL
  *
- * Set the Author of the @object to @author, id to @id and extended genre list
- * to @extended.
+ * Set the genre of the @object to @genre.
  **/
 void
 gupnp_didl_lite_object_set_genre (GUPnPDIDLLiteObject *object,
-                                  const char          *genre,
-                                  const char          *id,
-                                  const char          *extended)
+                                  const char          *genre)
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
@@ -1354,12 +1292,7 @@ gupnp_didl_lite_object_set_genre (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
                             "genre",
-                            genre,
-                            "id",
-                            id,
-                            "extended",
-                            extended,
-                            NULL);
+                            genre);
 
         g_object_notify (G_OBJECT (object), "genre");
 }
@@ -1381,8 +1314,7 @@ gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
                             "writeStatus",
-                            write_status,
-                            NULL);
+                            write_status);
 
         g_object_notify (G_OBJECT (object), "write-status");
 }
@@ -1404,8 +1336,7 @@ gupnp_didl_lite_object_set_album (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
                             "album",
-                            album,
-                            NULL);
+                            album);
 
         g_object_notify (G_OBJECT (object), "album");
 }
@@ -1427,8 +1358,7 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
                             "albumArtURI",
-                            album_art,
-                            NULL);
+                            album_art);
 
         g_object_notify (G_OBJECT (object), "album-art");
 }
@@ -1450,8 +1380,7 @@ gupnp_didl_lite_object_set_description (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
                             "description",
-                            description,
-                            NULL);
+                            description);
 
         g_object_notify (G_OBJECT (object), "description");
 }
@@ -1473,8 +1402,7 @@ gupnp_didl_lite_object_set_date (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->dc_ns,
                             "date",
-                            date,
-                            NULL);
+                            date);
 
         g_object_notify (G_OBJECT (object), "date");
 }
@@ -1499,8 +1427,7 @@ gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
                             "originalTrackNumber",
-                            str,
-                            NULL);
+                            str);
         g_free (str);
 
         g_object_notify (G_OBJECT (object), "track-number");

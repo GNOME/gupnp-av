@@ -77,37 +77,18 @@ xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
 
 const char *
 xml_util_get_child_element_content (xmlNode    *node,
-                                    const char *child_name,
-                                    ...)
+                                    const char *child_name)
 {
         xmlNode *child_node;
-        va_list  var_args;
         const char *content;
 
         child_node = xml_util_get_element (node, child_name, NULL);
         if (!child_node)
                 return NULL;
 
-        content = (const char *) child_node->content;
+        content = (const char *) child_node->children->content;
         if (!content)
                 return NULL;
-
-        /* Get the attributes */
-        va_start (var_args, child_name);
-        while (TRUE) {
-                const char *name;
-                const char **value;
-
-                name = va_arg (var_args, const char *);
-                if (!name)
-                        break;
-                value = va_arg (var_args, const char **);
-                if (!value)
-                        break;
-
-                *value = xml_util_get_attribute_content (child_node, name);
-        }
-        va_end (var_args);
 
         return content;
 }
@@ -191,11 +172,9 @@ void
 xml_util_set_child (xmlNode    *parent_node,
                     xmlNs      *namespace,
                     const char *name,
-                    const char *value,
-                    ...)
+                    const char *value)
 {
         xmlNode *node;
-        va_list  var_args;
 
         node = xml_util_get_element (parent_node, name, NULL);
         if (node == NULL) {
@@ -205,22 +184,5 @@ xml_util_set_child (xmlNode    *parent_node,
         }
 
         xmlNodeSetContent (node, (unsigned char *) value);
-
-        /* Set the attributes */
-        va_start (var_args, value);
-        while (TRUE) {
-                unsigned char *name;
-                unsigned char *value;
-
-                name = va_arg (var_args, unsigned char *);
-                if (!name)
-                        break;
-                value = va_arg (var_args, unsigned char *);
-                if (!value)
-                        break;
-
-                xmlSetProp (node, name, value);
-        }
-        va_end (var_args);
 }
 

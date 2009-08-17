@@ -80,8 +80,7 @@ xmlNode *
 gupnp_didl_lite_object_get_xml_node     (GUPnPDIDLLiteObject *object);
 
 const char *
-gupnp_didl_lite_object_get_upnp_class   (GUPnPDIDLLiteObject *object,
-                                         const char         **friendly_name);
+gupnp_didl_lite_object_get_upnp_class   (GUPnPDIDLLiteObject *object);
 
 const char *
 gupnp_didl_lite_object_get_id           (GUPnPDIDLLiteObject *object);
@@ -103,17 +102,13 @@ const char *
 gupnp_didl_lite_object_get_creator      (GUPnPDIDLLiteObject *object);
 
 const char *
-gupnp_didl_lite_object_get_artist       (GUPnPDIDLLiteObject *object,
-                                         const char         **role);
+gupnp_didl_lite_object_get_artist       (GUPnPDIDLLiteObject *object);
 
 const char *
-gupnp_didl_lite_object_get_author       (GUPnPDIDLLiteObject *object,
-                                         const char         **role);
+gupnp_didl_lite_object_get_author       (GUPnPDIDLLiteObject *object);
 
 const char *
-gupnp_didl_lite_object_get_genre        (GUPnPDIDLLiteObject *object,
-                                         const char         **id,
-                                         const char         **extended);
+gupnp_didl_lite_object_get_genre        (GUPnPDIDLLiteObject *object);
 
 const char *
 gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object);
@@ -151,8 +146,7 @@ gupnp_didl_lite_object_add_descriptor   (GUPnPDIDLLiteObject *object);
 
 void
 gupnp_didl_lite_object_set_upnp_class   (GUPnPDIDLLiteObject *object,
-                                         const char          *upnp_class,
-                                         const char          *friendly_name);
+                                         const char          *upnp_class);
 
 void
 gupnp_didl_lite_object_set_id           (GUPnPDIDLLiteObject *object,
@@ -176,19 +170,15 @@ gupnp_didl_lite_object_set_creator      (GUPnPDIDLLiteObject *object,
 
 void
 gupnp_didl_lite_object_set_artist       (GUPnPDIDLLiteObject *object,
-                                         const char          *artist,
-                                         const char          *role);
+                                         const char          *artist);
 
 void
 gupnp_didl_lite_object_set_author       (GUPnPDIDLLiteObject *object,
-                                         const char          *author,
-                                         const char          *role);
+                                         const char          *author);
 
 void
 gupnp_didl_lite_object_set_genre        (GUPnPDIDLLiteObject *object,
-                                         const char          *genre,
-                                         const char          *id,
-                                         const char          *extended);
+                                         const char          *genre);
 
 void
 gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
