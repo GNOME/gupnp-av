@@ -72,13 +72,6 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteDescriptorClass;
 
-GUPnPDIDLLiteDescriptor *
-gupnp_didl_lite_descriptor_new (void);
-
-GUPnPDIDLLiteDescriptor *
-gupnp_didl_lite_descriptor_new_from_xml (xmlNode            *xml_node,
-                                         GUPnPXMLDocWrapper *xml_doc);
-
 xmlNode *
 gupnp_didl_lite_descriptor_get_xml_node (GUPnPDIDLLiteDescriptor *descriptor);
 

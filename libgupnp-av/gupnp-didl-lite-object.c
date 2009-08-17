@@ -32,6 +32,8 @@
 
 #include "gupnp-didl-lite-object.h"
 #include "gupnp-didl-lite-object-private.h"
+#include "gupnp-didl-lite-resource-private.h"
+#include "gupnp-didl-lite-descriptor-private.h"
 #include "gupnp-didl-lite-container.h"
 #include "gupnp-didl-lite-item.h"
 #include "xml-util.h"

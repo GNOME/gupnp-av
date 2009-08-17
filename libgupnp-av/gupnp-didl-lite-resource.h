@@ -77,13 +77,6 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteResourceClass;
 
-GUPnPDIDLLiteResource *
-gupnp_didl_lite_resource_new            (void);
-
-GUPnPDIDLLiteResource *
-gupnp_didl_lite_resource_new_from_xml   (xmlNode            *xml_node,
-                                         GUPnPXMLDocWrapper *xml_doc);
-
 void
 gupnp_didl_lite_resource_set_uri        (GUPnPDIDLLiteResource *resource,
                                          const char            *uri);
