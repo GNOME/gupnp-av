@@ -63,7 +63,14 @@ compare_prop (const char *a, const char *b)
                 return strcmp (a, b);
 }
 
-/* FIXME: Need to make sure required props are never unset */
+static gboolean
+is_standard_prop (const char *name)
+{
+        return strcmp (name, "id") == 0 ||
+               strcmp (name, "parentID") == 0 ||
+               strcmp (name, "restricted") == 0;
+}
+
 static void
 filter_node (xmlNode             *node,
              GList               *allowed,
@@ -75,7 +82,8 @@ filter_node (xmlNode             *node,
 
         /* Find disallowed properties */
         for (attr = node->properties; attr != NULL; attr = attr->next)
-                if (g_list_find_custom (allowed,
+                if (!is_standard_prop (attr->name) &&
+                    g_list_find_custom (allowed,
                                         attr->name,
                                         (GCompareFunc) compare_prop) == NULL)
                         disallowed = g_list_append (disallowed, attr);
