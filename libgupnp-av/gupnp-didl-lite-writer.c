@@ -72,13 +72,42 @@ is_attribute_disallowed (xmlAttr *attr,
                                    (GCompareFunc) compare_prop) == NULL;
 }
 
-static gboolean
-is_node_disallowed (xmlNode *node,
-                    GList   *allowed)
+static int
+compare_node_name (const char *a, const char *b)
 {
-        return g_list_find_custom (allowed,
-                                   node->name,
-                                   (GCompareFunc) compare_prop) == NULL;
+        const char *p;
+        int len;
+
+        p = strstr (a, "@");
+        if (p != NULL) {
+                len = p - a;
+        } else {
+                len = strlen (a);
+        }
+
+        return strncmp (a, b, len);
+}
+
+static gboolean
+is_node_disallowed (xmlNode    *node,
+                    GList      *allowed,
+                    const char *ns)
+{
+        char *name;
+        gboolean ret;
+
+        if (ns != NULL)
+                name = g_strjoin (":", ns, node->name, NULL);
+        else
+                name = g_strdup ((const char *) node->name);
+
+        ret = g_list_find_custom (allowed,
+                                  name,
+                                  (GCompareFunc) compare_node_name) == NULL;
+
+        g_free (name);
+
+        return ret;
 }
 
 static gboolean
@@ -135,7 +164,7 @@ filter_node (xmlNode             *node,
                         ns = (const char *) child->ns->prefix;
 
                 if (!is_standard_prop ((const char *) child->name, ns) &&
-                    is_node_disallowed (child, allowed))
+                    is_node_disallowed (child, allowed, ns))
                         disallowed = g_list_append (disallowed, child);
         }
 
