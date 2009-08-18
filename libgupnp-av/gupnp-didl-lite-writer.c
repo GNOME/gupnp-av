@@ -64,6 +64,24 @@ compare_prop (const char *a, const char *b)
 }
 
 static gboolean
+is_attribute_disallowed (xmlAttr *attr,
+                         GList   *allowed)
+{
+        return g_list_find_custom (allowed,
+                                   attr->name,
+                                   (GCompareFunc) compare_prop) == NULL;
+}
+
+static gboolean
+is_node_disallowed (xmlNode *node,
+                    GList   *allowed)
+{
+        return g_list_find_custom (allowed,
+                                   node->name,
+                                   (GCompareFunc) compare_prop) == NULL;
+}
+
+static gboolean
 is_standard_prop (const char *name,
                   const char *namespace)
 {
@@ -88,9 +106,7 @@ filter_attributes (xmlNode             *node,
         /* Find disallowed properties */
         for (attr = node->properties; attr != NULL; attr = attr->next)
                 if (!is_standard_prop ((const char *) attr->name, NULL) &&
-                    g_list_find_custom (allowed,
-                                        attr->name,
-                                        (GCompareFunc) compare_prop) == NULL)
+                    is_attribute_disallowed (attr, allowed))
                         disallowed = g_list_append (disallowed, attr);
 
         /* Now unset disallowed properties */
@@ -119,9 +135,7 @@ filter_node (xmlNode             *node,
                         ns = (const char *) child->ns->prefix;
 
                 if (!is_standard_prop ((const char *) child->name, ns) &&
-                    g_list_find_custom (allowed,
-                                        child->name,
-                                        (GCompareFunc) compare_prop) == NULL)
+                    is_node_disallowed (child, allowed))
                         disallowed = g_list_append (disallowed, child);
         }
 
