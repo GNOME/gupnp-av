@@ -101,6 +101,10 @@ gupnp_didl_lite_writer_get_string       (GUPnPDIDLLiteWriter   *writer);
 const char *
 gupnp_didl_lite_writer_get_language     (GUPnPDIDLLiteWriter   *writer);
 
+void
+gupnp_didl_lite_writer_filter           (GUPnPDIDLLiteWriter   *writer,
+                                         const char            *filter);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_WRITER_H__ */

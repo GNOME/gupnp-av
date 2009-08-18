@@ -54,6 +54,39 @@ enum {
         PROP_LANGUAGE,
 };
 
+static int
+compare_prop (const char *a, const char *b)
+{
+        if (a[0] == '@')
+                return strcmp (a + 1, b); /* Top-level property */
+        else
+                return strcmp (a, b);
+}
+
+/* FIXME: Need to make sure required props are never unset */
+static void
+filter_node (xmlNode             *node,
+             GList               *allowed,
+             GUPnPDIDLLiteWriter *writer)
+{
+        xmlAttr *attr;
+        GList   *disallowed = NULL;
+        GList   *l;
+
+        /* Find disallowed properties */
+        for (attr = node->properties; attr != NULL; attr = attr->next)
+                if (g_list_find_custom (allowed,
+                                        attr->name,
+                                        (GCompareFunc) compare_prop) == NULL)
+                        disallowed = g_list_append (disallowed, attr);
+
+        /* Now unset disallowed properties */
+        for (l = disallowed; l != NULL; l = l->next)
+                xmlRemoveProp ((xmlAttr *) l->data);
+
+        g_list_free (disallowed);
+}
+
 static void
 gupnp_didl_lite_writer_init (GUPnPDIDLLiteWriter *writer)
 {
@@ -378,4 +411,47 @@ gupnp_didl_lite_writer_get_language (GUPnPDIDLLiteWriter *writer)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
         return writer->priv->language;
+}
+
+/**
+ * gupnp_didl_lite_writer_filter
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @filter: A filter string
+ *
+ * Clears the DIDL-Lite XML document of the properties not specified in the
+ * @filter. The passed filter string would typically come from the 'Filter'
+ * argument of Browse or Search actions from a ContentDirectory control point.
+ * Please refer to Section 2.3.15 of UPnP AV ContentDirectory version 3
+ * specification for details on this string.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_writer_filter (GUPnPDIDLLiteWriter *writer,
+                               const char          *filter)
+{
+        char **tokens;
+        GList *allowed = NULL;
+        unsigned short i;
+        xmlNode *node;
+
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
+        g_return_if_fail (filter != NULL);
+
+        if (filter[0] == '*')
+                return;         /* Wildcard */
+
+        tokens = g_strsplit (filter, ",", -1);
+        g_return_if_fail (tokens != NULL);
+
+        for (i = 0; tokens[i] != NULL; i++)
+                allowed = g_list_append (allowed, tokens[i]);
+
+        for (node = writer->priv->xml_node->children;
+             node != NULL;
+             node = node->next)
+                filter_node (node, allowed, writer);
+
+        g_list_free (allowed);
+        g_strfreev (tokens);
 }
