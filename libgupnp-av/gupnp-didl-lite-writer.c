@@ -77,12 +77,11 @@ is_standard_prop (const char *name,
 }
 
 static void
-filter_node (xmlNode             *node,
-             GList               *allowed,
-             GUPnPDIDLLiteWriter *writer)
+filter_attributes (xmlNode             *node,
+                   GList               *allowed,
+                   GUPnPDIDLLiteWriter *writer)
 {
         xmlAttr *attr;
-        xmlNode *child;
         GList   *disallowed = NULL;
         GList   *l;
 
@@ -99,6 +98,18 @@ filter_node (xmlNode             *node,
                 xmlRemoveProp ((xmlAttr *) l->data);
 
         g_list_free (disallowed);
+}
+
+static void
+filter_node (xmlNode             *node,
+             GList               *allowed,
+             GUPnPDIDLLiteWriter *writer)
+{
+        xmlNode *child;
+        GList   *disallowed = NULL;
+        GList   *l;
+
+        filter_attributes (node, allowed, writer);
 
         disallowed = NULL;
         for (child = node->children; child != NULL; child = child->next) {
@@ -125,6 +136,11 @@ filter_node (xmlNode             *node,
         }
 
         g_list_free (disallowed);
+
+        /* Recurse */
+        for (child = node->children; child != NULL; child = child->next)
+                if (!xmlNodeIsText (child->children))
+                        filter_node (child, allowed, writer);
 }
 
 static void
