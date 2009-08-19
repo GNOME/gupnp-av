@@ -160,6 +160,9 @@ filter_node (xmlNode             *node,
         for (child = node->children; child != NULL; child = child->next) {
                 const char *ns = NULL;
 
+                if (xmlNodeIsText (child))
+                        continue;
+
                 if (child->ns != NULL)
                         ns = (const char *) child->ns->prefix;
 
@@ -182,7 +185,7 @@ filter_node (xmlNode             *node,
 
         /* Recurse */
         for (child = node->children; child != NULL; child = child->next)
-                if (!xmlNodeIsText (child->children))
+                if (!xmlNodeIsText (child))
                         filter_node (child, allowed, writer);
 }
 
