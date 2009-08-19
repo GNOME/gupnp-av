@@ -282,8 +282,8 @@ gupnp_didl_lite_descriptor_class_init (GUPnPDIDLLiteDescriptorClass *klass)
         g_object_class_install_property
                 (object_class,
                  PROP_CONTENT,
-                 g_param_spec_string ("content ",
-                                      "Content ",
+                 g_param_spec_string ("content",
+                                      "Content",
                                       "The content of this descriptor",
                                       NULL,
                                       G_PARAM_READWRITE |
