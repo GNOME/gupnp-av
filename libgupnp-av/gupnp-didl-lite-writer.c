@@ -125,7 +125,8 @@ is_node_disallowed (xmlNode    *node,
 
 static gboolean
 is_standard_prop (const char *name,
-                  const char *namespace)
+                  const char *namespace,
+                  const char *parent_name)
 {
         return strcmp (name, "id") == 0 ||
                strcmp (name, "parentID") == 0 ||
@@ -133,7 +134,9 @@ is_standard_prop (const char *name,
                (g_strcmp0 (namespace, "dc") == 0 &&
                 strcmp (name, "title") == 0) ||
                (g_strcmp0 (namespace, "upnp") == 0 &&
-                strcmp (name, "class") == 0);
+                strcmp (name, "class") == 0) ||
+               (g_strcmp0 (parent_name, "res") == 0 &&
+                strcmp (name, "protocolInfo") == 0);
 }
 
 static void
@@ -147,7 +150,9 @@ filter_attributes (xmlNode             *node,
 
         /* Find disallowed properties */
         for (attr = node->properties; attr != NULL; attr = attr->next)
-                if (!is_standard_prop ((const char *) attr->name, NULL) &&
+                if (!is_standard_prop ((const char *) attr->name,
+                                        NULL,
+                                        (const char *) attr->parent->name) &&
                     is_attribute_disallowed (attr, allowed))
                         disallowed = g_list_append (disallowed, attr);
 
@@ -179,7 +184,7 @@ filter_node (xmlNode             *node,
                 if (child->ns != NULL)
                         ns = (const char *) child->ns->prefix;
 
-                if (!is_standard_prop ((const char *) child->name, ns) &&
+                if (!is_standard_prop ((const char *) child->name, ns, NULL) &&
                     is_node_disallowed (child, allowed, ns))
                         disallowed = g_list_append (disallowed, child);
         }
