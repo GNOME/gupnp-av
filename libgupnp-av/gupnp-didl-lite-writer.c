@@ -77,8 +77,8 @@ compare_prop (const char *a, xmlAttr *attr)
 }
 
 static gboolean
-is_attribute_disallowed (xmlAttr *attr,
-                         GList   *allowed)
+is_attribute_forbidden (xmlAttr *attr,
+                        GList   *allowed)
 {
         return g_list_find_custom (allowed,
                                    attr,
@@ -102,7 +102,7 @@ compare_node_name (const char *a, const char *b)
 }
 
 static gboolean
-is_node_disallowed (xmlNode    *node,
+is_node_forbidden (xmlNode     *node,
                     GList      *allowed,
                     const char *ns)
 {
@@ -145,22 +145,22 @@ filter_attributes (xmlNode             *node,
                    GUPnPDIDLLiteWriter *writer)
 {
         xmlAttr *attr;
-        GList   *disallowed = NULL;
+        GList   *forbidden = NULL;
         GList   *l;
 
-        /* Find disallowed properties */
+        /* Find forbidden properties */
         for (attr = node->properties; attr != NULL; attr = attr->next)
                 if (!is_standard_prop ((const char *) attr->name,
                                         NULL,
                                         (const char *) attr->parent->name) &&
-                    is_attribute_disallowed (attr, allowed))
-                        disallowed = g_list_append (disallowed, attr);
+                    is_attribute_forbidden (attr, allowed))
+                        forbidden = g_list_append (forbidden, attr);
 
-        /* Now unset disallowed properties */
-        for (l = disallowed; l != NULL; l = l->next)
+        /* Now unset forbidden properties */
+        for (l = forbidden; l != NULL; l = l->next)
                 xmlRemoveProp ((xmlAttr *) l->data);
 
-        g_list_free (disallowed);
+        g_list_free (forbidden);
 }
 
 static void
@@ -169,12 +169,12 @@ filter_node (xmlNode             *node,
              GUPnPDIDLLiteWriter *writer)
 {
         xmlNode *child;
-        GList   *disallowed = NULL;
+        GList   *forbidden = NULL;
         GList   *l;
 
         filter_attributes (node, allowed, writer);
 
-        disallowed = NULL;
+        forbidden = NULL;
         for (child = node->children; child != NULL; child = child->next) {
                 const char *ns = NULL;
 
@@ -185,12 +185,12 @@ filter_node (xmlNode             *node,
                         ns = (const char *) child->ns->prefix;
 
                 if (!is_standard_prop ((const char *) child->name, ns, NULL) &&
-                    is_node_disallowed (child, allowed, ns))
-                        disallowed = g_list_append (disallowed, child);
+                    is_node_forbidden (child, allowed, ns))
+                        forbidden = g_list_append (forbidden, child);
         }
 
-        /* Now remove the disallowed nodes */
-        for (l = disallowed; l != NULL; l = l->next) {
+        /* Now remove the forbidden nodes */
+        for (l = forbidden; l != NULL; l = l->next) {
                 xmlNode *n;
 
                 n = (xmlNode *) l->data;
@@ -199,7 +199,7 @@ filter_node (xmlNode             *node,
                 xmlFreeNode (n);
         }
 
-        g_list_free (disallowed);
+        g_list_free (forbidden);
 
         /* Recurse */
         for (child = node->children; child != NULL; child = child->next)
