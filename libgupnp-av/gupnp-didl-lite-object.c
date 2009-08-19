@@ -617,14 +617,14 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:tracker-number
+         * GUPnPDIDLLiteObject:track-number
          *
-         * The original tracker number of this object.
+         * The original track number of this object.
          **/
         g_object_class_install_property
                 (object_class,
                  PROP_TRACK_NUMBER,
-                 g_param_spec_int ("tracker-number",
+                 g_param_spec_int ("track-number",
                                    "TrackNumber",
                                    "The original track number of this  object.",
                                    -1, G_MAXINT, -1,
