@@ -913,8 +913,7 @@ gupnp_protocol_info_set_play_speeds (GUPnPProtocolInfo *info,
 
         if (info->priv->play_speeds)
                 g_strfreev (info->priv->play_speeds);
-        info->priv->play_speeds = (char **) g_boxed_copy (G_TYPE_STRV,
-                                                              speeds);
+        info->priv->play_speeds = (char **) g_boxed_copy (G_TYPE_STRV, speeds);
 
         g_object_notify (G_OBJECT (info), "play-speeds");
 }
