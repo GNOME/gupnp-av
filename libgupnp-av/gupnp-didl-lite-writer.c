@@ -55,12 +55,25 @@ enum {
 };
 
 static int
-compare_prop (const char *a, const char *b)
+compare_prop (const char *a, xmlAttr *attr)
 {
-        if (a[0] == '@')
-                return strcmp (a + 1, b); /* Top-level property */
+        const char *p;
+        const char *attr_name;
+        const char *parent_name;
+
+        attr_name = (const char *) attr->name;
+        parent_name = (const char *) attr->parent->name;
+
+        p = strstr (a, "@");
+        if (p)
+                if (p == a)
+                        /* Top-level property */
+                        return strcmp (a + 1, attr_name);
+                else
+                        return strncmp (a, parent_name, p - a) ||
+                               strcmp (p + 1, attr_name);
         else
-                return strcmp (a, b);
+                return strcmp (a, attr_name);
 }
 
 static gboolean
@@ -68,7 +81,7 @@ is_attribute_disallowed (xmlAttr *attr,
                          GList   *allowed)
 {
         return g_list_find_custom (allowed,
-                                   attr->name,
+                                   attr,
                                    (GCompareFunc) compare_prop) == NULL;
 }
 
