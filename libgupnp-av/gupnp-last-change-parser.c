@@ -34,6 +34,7 @@
 #include <gobject/gvaluecollector.h>
 
 #include "gupnp-last-change-parser.h"
+#include "gupnp-av-error.h"
 #include "gvalue-util.h"
 #include "xml-util.h"
 
@@ -162,8 +163,8 @@ gupnp_last_change_parser_parse_last_change_valist
         doc = xmlParseDoc ((const xmlChar *) last_change_xml);
         if (doc == NULL) {
                 g_set_error (error,
-                             GUPNP_SERVER_ERROR,
-                             GUPNP_SERVER_ERROR_INVALID_RESPONSE,
+                             GUPNP_XML_ERROR,
+                             GUPNP_XML_ERROR_PARSE,
                              "Could not parse LastChange xml");
 
                 return FALSE;

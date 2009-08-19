@@ -28,10 +28,8 @@
  */
 
 #include <string.h>
-#include "gupnp-didl-lite-parser.h"
+#include "gupnp-av.h"
 #include "gupnp-didl-lite-object-private.h"
-#include "gupnp-didl-lite-container.h"
-#include "gupnp-didl-lite-item.h"
 #include "xml-util.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteParser,
@@ -173,8 +171,8 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
         doc = xmlRecoverMemory (didl, strlen (didl));
 	if (doc == NULL) {
                 g_set_error (error,
-                             GUPNP_SERVER_ERROR,
-                             GUPNP_SERVER_ERROR_INVALID_RESPONSE,
+                             GUPNP_XML_ERROR,
+                             GUPNP_XML_ERROR_PARSE,
                              "Could not parse DIDL-Lite XML:\n%s", didl);
 
                 return FALSE;
@@ -186,8 +184,8 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                                         NULL);
         if (element == NULL) {
                 g_set_error (error,
-                             GUPNP_SERVER_ERROR,
-                             GUPNP_SERVER_ERROR_INVALID_RESPONSE,
+                             GUPNP_XML_ERROR,
+                             GUPNP_XML_ERROR_NO_NODE,
                              "No 'DIDL-Lite' node in the DIDL-Lite XML:\n%s",
                              didl);
 
@@ -196,8 +194,8 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
 
         if (element->children == NULL) {
                 g_set_error (error,
-                             GUPNP_SERVER_ERROR,
-                             GUPNP_SERVER_ERROR_INVALID_RESPONSE,
+                             GUPNP_XML_ERROR,
+                             GUPNP_XML_ERROR_EMPTY_NODE,
                              "Empty 'DIDL-Lite' node in the DIDL-Lite XML:\n%s",
                              didl);
 

@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <libgupnp/gupnp.h>
 #include "gupnp-protocol-info.h"
+#include "gupnp-av-error.h"
 
 G_DEFINE_TYPE (GUPnPProtocolInfo,
                gupnp_protocol_info,
@@ -607,10 +608,9 @@ gupnp_protocol_info_new_from_string (const char *protocol_info,
             tokens[1] == NULL ||
             tokens[2] == NULL ||
             tokens[3] == NULL) {
-                /* FIXME: We should be setting proper error here */
                 g_set_error (error,
-                             GUPNP_SERVER_ERROR,
-                             GUPNP_SERVER_ERROR_INVALID_RESPONSE,
+                             GUPNP_PROTOCOL_ERROR,
+                             GUPNP_PROTOCOL_ERROR_INVALID_SYNTAX,
                              "Failed to parse protocolInfo string: \n%s",
                              protocol_info);
 
