@@ -210,12 +210,14 @@ is_additional_info_compat (GUPnPProtocolInfo *info1,
         profile1 = gupnp_protocol_info_get_dlna_profile (info1);
         profile2 = gupnp_protocol_info_get_dlna_profile (info2);
 
-        if (profile1 [0] != '*' &&
-            profile2 [0] != '*' &&
-            g_ascii_strcasecmp (profile1, profile2) != 0)
-                return FALSE;
-        else
+        if (profile1 == NULL ||
+            profile2 == NULL ||
+            profile1 [0] == '*' ||
+            profile2 [0] == '*' ||
+            g_ascii_strcasecmp (profile1, profile2) == 0)
                 return TRUE;
+        else
+                return FALSE;
 }
 
 static void
