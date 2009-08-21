@@ -391,14 +391,9 @@ guess_mpeg_ts_profile (GUPnPDIDLLiteResource *resource)
 }
 
 const char *
-dlna_guess_profile (GUPnPDIDLLiteResource *resource)
+dlna_guess_profile (GUPnPDIDLLiteResource *resource,
+                    const char            *mime_type)
 {
-        const char *mime_type;
-        GUPnPProtocolInfo *info;
-
-        info = gupnp_didl_lite_resource_get_protocol_info (resource);
-        mime_type = gupnp_protocol_info_get_mime_type (info);
-
         if (g_str_has_prefix (mime_type, "image/jpeg")) {
                 return guess_jpeg_profile (resource);
         } else if (g_str_has_prefix (mime_type, "image/png")) {
@@ -423,6 +418,4 @@ dlna_guess_profile (GUPnPDIDLLiteResource *resource)
         } else {
                 return NULL;
         }
-
-        g_object_unref (info);
 }

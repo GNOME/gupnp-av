@@ -29,7 +29,8 @@
 G_BEGIN_DECLS
 
 G_GNUC_INTERNAL const char *
-dlna_guess_profile                      (GUPnPDIDLLiteResource *resource);
+dlna_guess_profile                      (GUPnPDIDLLiteResource *resource,
+                                         const char            *mime_type);
 
 G_END_DECLS
 

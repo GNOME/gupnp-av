@@ -708,11 +708,14 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
         } else {
                 /* Try guessing the DLNA profile if not available */
                 if (gupnp_protocol_info_get_dlna_profile (info) == NULL) {
-                        const char * dlna_profile;
+                        const char *dlna_profile;
+                        const char *mime_type;
 
-                        dlna_profile = dlna_guess_profile (resource);
+                        mime_type = gupnp_protocol_info_get_mime_type (info);
+                        dlna_profile = dlna_guess_profile (resource, mime_type);
+
                         gupnp_protocol_info_set_dlna_profile (info,
-                                        dlna_profile);
+                                                              dlna_profile);
                 }
         }
 
