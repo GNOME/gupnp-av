@@ -986,6 +986,7 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
         char *str;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
 
         str = gupnp_protocol_info_to_string (info);
         xmlSetProp (resource->priv->xml_node,
