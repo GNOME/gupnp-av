@@ -45,6 +45,8 @@ G_DEFINE_TYPE (GUPnPDIDLLiteResource,
 struct _GUPnPDIDLLiteResourcePrivate {
         xmlNode     *xml_node;
         GUPnPXMLDoc *xml_doc;
+
+        GUPnPProtocolInfo *protocol_info;
 };
 
 enum {
@@ -237,7 +239,7 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
                          gupnp_didl_lite_resource_get_import_uri (resource));
                 break;
         case PROP_PROTOCOL_INFO:
-                g_value_take_object
+                g_value_set_object
                         (value,
                          gupnp_didl_lite_resource_get_protocol_info (resource));
                 break;
@@ -302,6 +304,11 @@ gupnp_didl_lite_resource_dispose (GObject *object)
         if (priv->xml_doc) {
                 g_object_unref (priv->xml_doc);
                 priv->xml_doc = NULL;
+        }
+
+        if (priv->protocol_info != NULL) {
+                g_object_unref (priv->protocol_info);
+                priv->protocol_info = NULL;
         }
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_resource_parent_class);
@@ -680,8 +687,8 @@ gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource)
  *
  * Get the protocol info associated with the @resource.
  *
- * Return value: The protocol info associated with the @resource or %NULL.
- * Unref after usage.
+ * Return value: The protocol info associated with the @resource or %NULL. The
+ * returned object must not be unrefed.
  **/
 GUPnPProtocolInfo *
 gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
@@ -691,6 +698,9 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
         GError *error;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+
+        if (resource->priv->protocol_info != NULL)
+                return resource->priv->protocol_info;
 
         protocol_info = xml_util_get_attribute_content
                                         (resource->priv->xml_node,
@@ -718,6 +728,8 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
                                                               dlna_profile);
                 }
         }
+
+        resource->priv->protocol_info = info;
 
         return info;
 }
@@ -980,6 +992,12 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
                     (unsigned char *) "protocolInfo",
                     (unsigned char *) str);
         g_free (str);
+
+        /* Get a ref first in case it's the same object that we already have */
+        g_object_ref (info);
+        if (resource->priv->protocol_info != NULL)
+                g_object_unref (resource->priv->protocol_info);
+        resource->priv->protocol_info = info;
 
         g_object_notify (G_OBJECT (resource), "protocol-info");
 }
