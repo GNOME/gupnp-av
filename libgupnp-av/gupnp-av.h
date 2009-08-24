@@ -31,5 +31,4 @@
 #include "gupnp-search-criteria-parser.h"
 #include "gupnp-last-change-parser.h"
 #include "gupnp-dlna.h"
-#include "gupnp-av-error.h"
 

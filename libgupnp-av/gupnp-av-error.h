@@ -30,28 +30,6 @@
 G_BEGIN_DECLS
 
 GQuark
-gupnp_xml_error_quark (void) G_GNUC_CONST;
-
-#define GUPNP_XML_ERROR (gupnp_xml_error_quark ())
-
-/**
- * GUPnPXMLError:
- * @GUPNP_XML_ERROR_PARSE: Generic XML parsing error.
- * @GUPNP_XML_ERROR_NO_NODE: A required XML node was not found.
- * @GUPNP_XML_ERROR_EMPTY_NODE: An XML node is unexpectedly empty.
- * @GUPNP_XML_ERROR_OTHER: Unknown/unhandled XML related errors.
- *
- * #GError codes used for errors in the #GUPNP_XML_ERROR domain, during
- * processing of XML data.
- */
-typedef enum {
-        GUPNP_XML_ERROR_PARSE,
-        GUPNP_XML_ERROR_NO_NODE,
-        GUPNP_XML_ERROR_EMPTY_NODE,
-        GUPNP_XML_ERROR_OTHER
-} GUPnPXMLError;
-
-GQuark
 gupnp_protocol_error_quark (void) G_GNUC_CONST;
 
 #define GUPNP_PROTOCOL_ERROR (gupnp_protocol_error_quark ())

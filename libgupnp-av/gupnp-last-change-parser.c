@@ -34,7 +34,6 @@
 #include <gobject/gvaluecollector.h>
 
 #include "gupnp-last-change-parser.h"
-#include "gupnp-av-error.h"
 #include "gvalue-util.h"
 #include "xml-util.h"
 

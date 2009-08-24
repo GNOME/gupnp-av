@@ -30,24 +30,6 @@
  */
 
 /**
- * GUPNP_XML_ERROR:
- *
- * The #GQuark uniquely used by GUPnP AV XML processing errors.
- *
- * Returns: a #GQuark uniquely used by GUPnP AV XML processing errors.
- **/
-GQuark
-gupnp_xml_error_quark (void)
-{
-        static GQuark quark = 0;
-
-        if (!quark)
-                quark = g_quark_from_static_string ("gupnp-xml-error");
-
-        return quark;
-}
-
-/**
  * GUPNP_PROTOCOL_ERROR:
  *
  * The #GQuark uniquely used by GUPnP AV protocol related errors.
