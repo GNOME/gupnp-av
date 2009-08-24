@@ -126,6 +126,16 @@ return_point:
 }
 
 static void
+on_protocol_info_changed (GUPnPProtocolInfo *info,
+                          GParamSpec        *pspec,
+                          gpointer           user_data)
+{
+        GUPnPDIDLLiteResource *resource = GUPNP_DIDL_LITE_RESOURCE (user_data);
+
+        gupnp_didl_lite_resource_set_protocol_info (resource, info);
+}
+
+static void
 gupnp_didl_lite_resource_init (GUPnPDIDLLiteResource *resource)
 {
         resource->priv = G_TYPE_INSTANCE_GET_PRIVATE
@@ -999,6 +1009,14 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
         if (resource->priv->protocol_info != NULL)
                 g_object_unref (resource->priv->protocol_info);
         resource->priv->protocol_info = info;
+
+        /* We need to listen to changes to properties so we update the
+         * corresponding xml property.
+         */
+        g_signal_connect (info,
+                          "notify",
+                          G_CALLBACK (on_protocol_info_changed),
+                          resource);
 
         g_object_notify (G_OBJECT (resource), "protocol-info");
 }
