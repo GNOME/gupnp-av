@@ -63,6 +63,7 @@ enum {
         PROP_DURATION,
         PROP_BITRATE,
         PROP_SAMPLE_FREQ,
+        PROP_BITS_PER_SAMPLE,
         PROP_PROTECTION,
 
         PROP_AUDIO_CHANNELS,
@@ -193,6 +194,11 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                                 (resource,
                                  g_value_get_int (value));
                 break;
+        case PROP_BITS_PER_SAMPLE:
+                gupnp_didl_lite_resource_set_bits_per_sample
+                                (resource,
+                                 g_value_get_int (value));
+                break;
         case PROP_PROTECTION:
                 gupnp_didl_lite_resource_set_protection
                                 (resource,
@@ -266,6 +272,12 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
                 g_value_set_int
                         (value,
                          gupnp_didl_lite_resource_get_bitrate (resource));
+                break;
+        case PROP_BITS_PER_SAMPLE:
+                g_value_set_int
+                        (value,
+                         gupnp_didl_lite_resource_get_bits_per_sample
+                                                                (resource));
                 break;
         case PROP_SAMPLE_FREQ:
                 g_value_set_int
@@ -502,6 +514,25 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
                  g_param_spec_int ("sample-freq",
                                    "SampleFrequency",
                                    "The sample frequency of this resource.",
+                                   -1,
+                                   G_MAXINT,
+                                   -1,
+                                   G_PARAM_READWRITE |
+                                   G_PARAM_STATIC_NAME |
+                                   G_PARAM_STATIC_NICK |
+                                   G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteResource:bits-per-sample
+         *
+         * The sample size of this resource.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_BITS_PER_SAMPLE,
+                 g_param_spec_int ("bits-per-sample",
+                                   "BitsPerSample",
+                                   "The sample size of this resource.",
                                    -1,
                                    G_MAXINT,
                                    -1,
