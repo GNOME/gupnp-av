@@ -11,7 +11,7 @@ AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 AC_FUNC_MMAP
 
-PKG_CHECK_MODULES(LIBGUPNP, gupnp-1.0 >= 0.8.99)
+PKG_CHECK_MODULES(LIBGUPNP, gupnp-1.0 >= 0.13)
 
 # glib-genmarshal
 GLIB_GENMARSHAL=`pkg-config --variable=glib_genmarshal glib-2.0`
