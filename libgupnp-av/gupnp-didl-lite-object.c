@@ -420,14 +420,14 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
         g_object_class_install_property
                 (object_class,
                  PROP_RESTRICTED,
-                 g_param_spec_string ("restricted",
-                                      "Restricted",
-                                      "Whether this object is restricted.",
-                                      NULL,
-                                      G_PARAM_READWRITE |
-                                      G_PARAM_STATIC_NAME |
-                                      G_PARAM_STATIC_NICK |
-                                      G_PARAM_STATIC_BLURB));
+                 g_param_spec_boolean ("restricted",
+                                       "Restricted",
+                                       "Whether this object is restricted.",
+                                       FALSE,
+                                       G_PARAM_READWRITE |
+                                       G_PARAM_STATIC_NAME |
+                                       G_PARAM_STATIC_NICK |
+                                       G_PARAM_STATIC_BLURB));
 
         /**
          * GUPnPDIDLLiteObject:title
