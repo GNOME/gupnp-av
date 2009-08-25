@@ -418,8 +418,10 @@ gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
-        item_node = xmlNewNode (NULL, (unsigned char *) "item");
-        xmlAddChild (writer->priv->xml_node, item_node);
+        item_node = xmlNewChild (writer->priv->xml_node,
+                                NULL,
+                                (unsigned char *) "item",
+                                NULL);
 
         object = gupnp_didl_lite_object_new_from_xml (item_node,
                                                       writer->priv->xml_doc);
@@ -442,8 +444,10 @@ gupnp_didl_lite_writer_add_container (GUPnPDIDLLiteWriter *writer)
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
-        container_node = xmlNewNode (NULL, (unsigned char *) "container");
-        xmlAddChild (writer->priv->xml_node, container_node);
+        container_node = xmlNewChild (writer->priv->xml_node,
+                                      NULL,
+                                      (unsigned char *) "container",
+                                      NULL);
 
         object = gupnp_didl_lite_object_new_from_xml (container_node,
                                                       writer->priv->xml_doc);
@@ -465,8 +469,10 @@ gupnp_didl_lite_writer_add_descriptor (GUPnPDIDLLiteWriter *writer)
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
-        desc_node = xmlNewNode (NULL, (unsigned char *) "desc");
-        xmlAddChild (writer->priv->xml_node, desc_node);
+        desc_node = xmlNewChild (writer->priv->xml_node,
+                                 NULL,
+                                 (unsigned char *) "desc",
+                                 NULL);
 
         return gupnp_didl_lite_descriptor_new_from_xml (desc_node,
                                                         writer->priv->xml_doc);

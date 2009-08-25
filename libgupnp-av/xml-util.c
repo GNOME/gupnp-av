@@ -180,9 +180,10 @@ xml_util_set_child (xmlNode    *parent_node,
 
         node = xml_util_get_element (parent_node, name, NULL);
         if (node == NULL) {
-                node = xmlNewNode (NULL, (unsigned char *) name);
-                xmlSetNs (node, namespace);
-                xmlAddChild (parent_node, node);
+                node = xmlNewChild (parent_node,
+                                    namespace,
+                                    (unsigned char *) name,
+                                    NULL);
         }
 
         escaped = xmlEncodeSpecialChars (doc, (const unsigned char *) value);

@@ -1459,8 +1459,10 @@ gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
-        res_node = xmlNewNode (NULL, (unsigned char *) "res");
-        xmlAddChild (object->priv->xml_node, res_node);
+        res_node = xmlNewChild (object->priv->xml_node,
+                                NULL,
+                                (unsigned char *) "res",
+                                NULL);
 
         return gupnp_didl_lite_resource_new_from_xml (res_node,
                                                       object->priv->xml_doc);
@@ -1481,8 +1483,10 @@ gupnp_didl_lite_object_add_descriptor (GUPnPDIDLLiteObject *object)
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
-        desc_node = xmlNewNode (NULL, (unsigned char *) "desc");
-        xmlAddChild (object->priv->xml_node, desc_node);
+        desc_node = xmlNewChild (object->priv->xml_node,
+                                NULL,
+                                (unsigned char *) "desc",
+                                NULL);
 
         return gupnp_didl_lite_descriptor_new_from_xml (desc_node,
                                                         object->priv->xml_doc);
