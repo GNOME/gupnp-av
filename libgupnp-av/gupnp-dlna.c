@@ -300,20 +300,20 @@ guess_mp3_profile (GUPnPDIDLLiteResource *resource)
 {
         const int allowed_freq[] = { 32000, 44100, 48000, -1 };
         const int allowed_num_channels[] = { 1, 2, -1 };
-        const int allowed_bitrates[] = { 32000,
+        const int allowed_bitrates[] = { 4000,
+                                         5000,
+                                         6000,
+                                         7000,
+                                         8000,
+                                         10000,
+                                         12000,
+                                         14000,
+                                         16000,
+                                         20000,
+                                         24000,
+                                         28000,
+                                         32000,
                                          40000,
-                                         48000,
-                                         56000,
-                                         64000,
-                                         80000,
-                                         96000,
-                                         112000,
-                                         128000,
-                                         160000,
-                                         192000,
-                                         224000,
-                                         256000,
-                                         320000,
                                          -1 };
 
         check_frequency (resource, allowed_freq, "MP3");
@@ -343,9 +343,9 @@ guess_aac_profile (GUPnPDIDLLiteResource *resource)
         check_num_channels (resource, allowed_num_channels, "AAC_ISO");
 
         bitrate = gupnp_didl_lite_resource_get_bitrate (resource);
-        if (bitrate > 0 && bitrate <=  32000) {
+        if (bitrate > 0 && bitrate <= 4000) {
                 return "AAC_ISO_320";
-        } else if (bitrate <= 57600) {
+        } else if (bitrate <= 7200) {
                 return "AAC_ISO";
         }
         return "*";
@@ -364,7 +364,7 @@ guess_wma_profile (GUPnPDIDLLiteResource *resource)
 
         if (sample_freq > 0 && channels > 0 &&
             sample_freq <= 48000 && channels <= 2) {
-                if (bitrate > 0 && bitrate <=  192999) {
+                if (bitrate > 0 && bitrate <=  24125) {
                         return "WMABASE";
                 } else {
                         return "WMAFULL";
