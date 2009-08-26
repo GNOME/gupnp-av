@@ -1016,7 +1016,9 @@ gupnp_didl_lite_resource_set_import_uri (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @protocol: The protocol string
  *
- * Set the protocol info associated with the @resource.
+ * Set the protocol info associated with the @resource. If the
+ * #GUPnPProtocolInfo:dlna-profile of @info is not set, an attempt will be made 
+ * to guess it for you.
  *
  * Return value: None.
  **/
@@ -1028,6 +1030,17 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+
+        /* Try guessing the DLNA profile if not available */
+        if (gupnp_protocol_info_get_dlna_profile (info) == NULL) {
+                const char *dlna_profile;
+                const char *mime_type;
+
+                mime_type = gupnp_protocol_info_get_mime_type (info);
+                dlna_profile = dlna_guess_profile (resource, mime_type);
+
+                gupnp_protocol_info_set_dlna_profile (info, dlna_profile);
+        }
 
         str = gupnp_protocol_info_to_string (info);
         xmlSetProp (resource->priv->xml_node,
