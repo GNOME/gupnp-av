@@ -1044,6 +1044,9 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
         /* We need to listen to changes to properties so we update the
          * corresponding xml property.
          */
+        g_signal_handlers_disconnect_by_func (info,
+                                              on_protocol_info_changed,
+                                              resource);
         g_signal_connect (info,
                           "notify",
                           G_CALLBACK (on_protocol_info_changed),
