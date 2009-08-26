@@ -1057,7 +1057,8 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @size: The size (in bytes)
  *
- * Set the size (in bytes) of the @resource.
+ * Set the size (in bytes) of the @resource. Passing a negative number will
+ * unset this property.
  *
  * Return value: None.
  **/
@@ -1065,15 +1066,20 @@ void
 gupnp_didl_lite_resource_set_size (GUPnPDIDLLiteResource *resource,
                                    long                   size)
 {
-        char *str;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
-        str = g_strdup_printf ("%ld", size);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "size",
-                    (unsigned char *) str);
-        g_free (str);
+        if (size < 0)
+                xmlUnsetProp (resource->priv->xml_node,
+                              (unsigned char *) "size");
+        else {
+                char *str;
+
+                str = g_strdup_printf ("%ld", size);
+                xmlSetProp (resource->priv->xml_node,
+                            (unsigned char *) "size",
+                            (unsigned char *) str);
+                g_free (str);
+        }
 
         g_object_notify (G_OBJECT (resource), "size");
 }
@@ -1083,7 +1089,8 @@ gupnp_didl_lite_resource_set_size (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @duration: The duration (in seconds)
  *
- * Set the duration (in seconds) of the @resource.
+ * Set the duration (in seconds) of the @resource. Passing a negative number
+ * will unset this property.
  *
  * Return value: None.
  **/
@@ -1091,18 +1098,23 @@ void
 gupnp_didl_lite_resource_set_duration (GUPnPDIDLLiteResource *resource,
                                        long                   duration)
 {
-        char *str;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
-        str = g_strdup_printf ("%ld:%.2ld:%.2ld",
-                               duration / (60 * 60),
-                               (duration / 60) % 60,
-                               duration % 60);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "duration",
-                    (unsigned char *) str);
-        g_free (str);
+        if (duration < 0)
+                xmlUnsetProp (resource->priv->xml_node,
+                              (unsigned char *) "duration");
+        else {
+                char *str;
+
+                str = g_strdup_printf ("%ld:%.2ld:%.2ld",
+                                       duration / (60 * 60),
+                                       (duration / 60) % 60,
+                                       duration % 60);
+                xmlSetProp (resource->priv->xml_node,
+                            (unsigned char *) "duration",
+                            (unsigned char *) str);
+                g_free (str);
+        }
 
         g_object_notify (G_OBJECT (resource), "duration");
 }
@@ -1112,7 +1124,8 @@ gupnp_didl_lite_resource_set_duration (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @bitrate: The bitrate
  *
- * Set the bitrate (in bytes per second) of the @resource.
+ * Set the bitrate (in bytes per second) of the @resource. Passing a negative
+ * number will unset this property.
  *
  * Return value: None.
  **/
@@ -1120,15 +1133,20 @@ void
 gupnp_didl_lite_resource_set_bitrate (GUPnPDIDLLiteResource *resource,
                                       int                    bitrate)
 {
-        char *str;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
-        str = g_strdup_printf ("%d", bitrate);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "bitrate",
-                    (unsigned char *) str);
-        g_free (str);
+        if (bitrate < 0)
+                xmlUnsetProp (resource->priv->xml_node,
+                              (unsigned char *) "bitrate");
+        else {
+                char *str;
+
+                str = g_strdup_printf ("%d", bitrate);
+                xmlSetProp (resource->priv->xml_node,
+                            (unsigned char *) "bitrate",
+                            (unsigned char *) str);
+                g_free (str);
+        }
 
         g_object_notify (G_OBJECT (resource), "bitrate");
 }
@@ -1138,7 +1156,8 @@ gupnp_didl_lite_resource_set_bitrate (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @sample_freq: The sample frequency
  *
- * Set the sample frequency of the @resource.
+ * Set the sample frequency of the @resource. Passing a negative number will
+ * unset this property.
  *
  * Return value: None.
  **/
@@ -1146,15 +1165,20 @@ void
 gupnp_didl_lite_resource_set_sample_freq (GUPnPDIDLLiteResource *resource,
                                           int                    sample_freq)
 {
-        char *str;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
-        str = g_strdup_printf ("%d", sample_freq);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "sampleFrequency",
-                    (unsigned char *) str);
-        g_free (str);
+        if (sample_freq < 0)
+                xmlUnsetProp (resource->priv->xml_node,
+                              (unsigned char *) "sampleFrequency");
+        else {
+                char *str;
+
+                str = g_strdup_printf ("%d", sample_freq);
+                xmlSetProp (resource->priv->xml_node,
+                            (unsigned char *) "sampleFrequency",
+                            (unsigned char *) str);
+                g_free (str);
+        }
 
         g_object_notify (G_OBJECT (resource), "sample-freq");
 }
@@ -1164,7 +1188,8 @@ gupnp_didl_lite_resource_set_sample_freq (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @sample_size: The number of bits per sample
  *
- * Set the sample size of the @resource.
+ * Set the sample size of the @resource. Passing a negative number will unset
+ * this property.
  *
  * Return value: None.
  **/
@@ -1173,15 +1198,20 @@ gupnp_didl_lite_resource_set_bits_per_sample
                                         (GUPnPDIDLLiteResource *resource,
                                          int                    sample_size)
 {
-        char *str;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
-        str = g_strdup_printf ("%d", sample_size);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "bitsPerSample",
-                    (unsigned char *) str);
-        g_free (str);
+        if (sample_size < 0)
+                xmlUnsetProp (resource->priv->xml_node,
+                              (unsigned char *) "bitsPerSample");
+        else {
+                char *str;
+
+                str = g_strdup_printf ("%d", sample_size);
+                xmlSetProp (resource->priv->xml_node,
+                            (unsigned char *) "bitsPerSample",
+                            (unsigned char *) str);
+                g_free (str);
+        }
 
         g_object_notify (G_OBJECT (resource), "bits-per-sample");
 }
@@ -1191,7 +1221,8 @@ gupnp_didl_lite_resource_set_bits_per_sample
  * @resource: A #GUPnPDIDLLiteResource
  * @protection: The protection system identifier as string
  *
- * Set the protection system used by the @resource.
+ * Set the protection system used by the @resource. Passing a negative number
+ * will unset this property.
  *
  * Return value: None.
  **/
@@ -1213,7 +1244,8 @@ gupnp_didl_lite_resource_set_protection (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @n_channels: The number of channels
  *
- * Set the number of audio channels in the @resource.
+ * Set the number of audio channels in the @resource. Passing a negative number
+ * will unset this property.
  *
  * Return value: The number of audio channels in the @resource or -1.
  **/
@@ -1221,15 +1253,20 @@ void
 gupnp_didl_lite_resource_set_audio_channels (GUPnPDIDLLiteResource *resource,
                                              int                    n_channels)
 {
-        char *str;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
-        str = g_strdup_printf ("%d", n_channels);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "nrAudioChannels",
-                    (unsigned char *) str);
-        g_free (str);
+        if (n_channels < 0)
+                xmlUnsetProp (resource->priv->xml_node,
+                              (unsigned char *) "nrAudioChannels");
+        else {
+                char *str;
+
+                str = g_strdup_printf ("%d", n_channels);
+                xmlSetProp (resource->priv->xml_node,
+                            (unsigned char *) "nrAudioChannels",
+                            (unsigned char *) str);
+                g_free (str);
+        }
 
         g_object_notify (G_OBJECT (resource), "audio-channels");
 }
@@ -1239,7 +1276,8 @@ gupnp_didl_lite_resource_set_audio_channels (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @width: The width
  *
- * Set the width of this image/video resource.
+ * Set the width of this image/video resource. Setting both width and height to
+ * a negative number will unset the resolution property.
  *
  * Return value: None.
  **/
@@ -1254,11 +1292,16 @@ gupnp_didl_lite_resource_set_width (GUPnPDIDLLiteResource *resource,
 
         get_resolution_info (resource, NULL, &height);
 
-        resolution = g_strdup_printf ("%dx%d", width, height);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "resolution",
-                    (unsigned char *) resolution);
-        g_free (resolution);
+        if (width < 0 && height < 0)
+                xmlUnsetProp (resource->priv->xml_node,
+                              (unsigned char *) "resolution");
+        else {
+                resolution = g_strdup_printf ("%dx%d", width, height);
+                xmlSetProp (resource->priv->xml_node,
+                            (unsigned char *) "resolution",
+                            (unsigned char *) resolution);
+                g_free (resolution);
+        }
 
         g_object_notify (G_OBJECT (resource), "width");
 }
@@ -1268,7 +1311,8 @@ gupnp_didl_lite_resource_set_width (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @height: The height
  *
- * Set the height of this image/video resource.
+ * Set the height of this image/video resource. Setting both width and height to
+ * a negative number will unset the resolution property.
  *
  * Return value: None.
  **/
@@ -1276,18 +1320,24 @@ void
 gupnp_didl_lite_resource_set_height (GUPnPDIDLLiteResource *resource,
                                      int                    height)
 {
-        char *resolution;
         int width = -1;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
         get_resolution_info (resource, &width, NULL);
 
-        resolution = g_strdup_printf ("%dx%d", width, height);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "resolution",
-                    (unsigned char *) resolution);
-        g_free (resolution);
+        if (width < 0 && height < 0)
+                xmlUnsetProp (resource->priv->xml_node,
+                              (unsigned char *) "resolution");
+        else {
+                char *resolution;
+
+                resolution = g_strdup_printf ("%dx%d", width, height);
+                xmlSetProp (resource->priv->xml_node,
+                                (unsigned char *) "resolution",
+                                (unsigned char *) resolution);
+                g_free (resolution);
+        }
 
         g_object_notify (G_OBJECT (resource), "height");
 }
@@ -1297,7 +1347,8 @@ gupnp_didl_lite_resource_set_height (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  * @height: The color-depth
  *
- * Set the color-depth of this image/video resource.
+ * Set the color-depth of this image/video resource. Passing a negative number
+ * will unset this property.
  *
  * Return value: None.
  **/
@@ -1305,15 +1356,20 @@ void
 gupnp_didl_lite_resource_set_color_depth (GUPnPDIDLLiteResource *resource,
                                           int                    color_depth)
 {
-        char *str;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
-        str = g_strdup_printf ("%d", color_depth);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "colorDepth",
-                    (unsigned char *) str);
-        g_free (str);
+        if (color_depth < 0)
+                xmlUnsetProp (resource->priv->xml_node,
+                              (unsigned char *) "colorDepth");
+        else {
+                char *str;
+
+                str = g_strdup_printf ("%d", color_depth);
+                xmlSetProp (resource->priv->xml_node,
+                            (unsigned char *) "colorDepth",
+                            (unsigned char *) str);
+                g_free (str);
+        }
 
         g_object_notify (G_OBJECT (resource), "color-depth");
 }
