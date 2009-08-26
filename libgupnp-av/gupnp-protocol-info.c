@@ -270,9 +270,12 @@ add_dlna_info (GString           *str,
                 g_string_append_printf (str, ";DLNA.ORG_CI=%d", conversion);
 
         g_string_append_printf (str,
-                                ";DLNA.ORG_FLAGS=%.8x%.24x",
-                                gupnp_protocol_info_get_dlna_flags (info),
-                                0);
+                                ";DLNA.ORG_FLAGS=%.8x",
+                                gupnp_protocol_info_get_dlna_flags (info));
+        /*  append 24 reserved hex-digits */
+        g_string_append_printf (str,
+                                "0000" "0000" "0000" "0000" "0000" "0000");
+        g_string_append_c (str, '"');
 }
 
 static void
