@@ -151,7 +151,7 @@ guess_jpeg_profile (GUPnPDIDLLiteResource *resource)
         } else if (width <= 4096 && height <= 4096) {
                 return "JPEG_LRG";
         } else {
-                return NULL;
+                return "*";
         }
 }
 
@@ -179,7 +179,7 @@ guess_png_profile (GUPnPDIDLLiteResource *resource)
         } else if (width <= 4096 && height <= 4096) {
                 return "PNG_LRG";
         } else {
-                return NULL;
+                return "*";
         }
 }
 
@@ -348,7 +348,7 @@ guess_aac_profile (GUPnPDIDLLiteResource *resource)
         } else if (bitrate <= 57600) {
                 return "AAC_ISO";
         }
-        return NULL;
+        return "*";
 }
 
 static const char *
@@ -416,6 +416,6 @@ dlna_guess_profile (GUPnPDIDLLiteResource *resource,
                    g_str_has_prefix (mime_type, "video/3gpp")) {
                 return "MPEG4_P2_MP4_SP_VGA_AAC";
         } else {
-                return NULL;
+                return "*";
         }
 }
