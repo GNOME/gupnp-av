@@ -7,7 +7,7 @@
 # increment age.
 # If any interfaces have been removed since the last public release, then set
 # age to 0.
-LTVERSION = 1:0:0
+LTVERSION = 2:0:0
 
 AM_CFLAGS = $(LIBGUPNP_CFLAGS) -I$(top_srcdir)
 
