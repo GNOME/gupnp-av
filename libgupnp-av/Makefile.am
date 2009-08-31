@@ -41,11 +41,14 @@ BUILT_SOURCES = gupnp-av-marshal.c gupnp-av-marshal.h
 libgupnp_av_1_0_la_LDFLAGS = -version-info $(LTVERSION) -no-undefined
 
 libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
+			     gupnp-didl-lite-object-private.h \
 			     gupnp-didl-lite-item.c \
 			     gupnp-didl-lite-container.c \
 			     gupnp-didl-lite-parser.c \
 			     gupnp-didl-lite-resource.c \
+			     gupnp-didl-lite-resource-private.h \
 			     gupnp-didl-lite-descriptor.c \
+			     gupnp-didl-lite-descriptor-private.h \
 			     gupnp-didl-lite-writer.c \
 			     gupnp-protocol-info.c \
 			     gupnp-search-criteria-parser.c \
