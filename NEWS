@@ -1,3 +1,50 @@
+0.5
+===
+
+Changes in this release:
+
+- New completely object-oriented, much simpler and consistent API:
+  * GUPnPDIDLLiteResource & GUPnPDIDLLiteObject are now first-class GObjects.
+  * Convert the helper methods to read props and their attributes from DIDL-Lite
+    xml node into new first-class objects with writable properties:
+    - GUPnPDIDLLiteObject
+    - GUPnPDIDLLiteItem
+    - GUPnPDIDLLiteContainer
+  * GUPnPDIDLLiteObject provides a convenient method to get the compatible
+    resource given a SinkProtocolInfo string.
+  * A new class for dealing with protocolInfo fields: GUPnPProtocolInfo.
+  * A new class for dealing with DIDL-Lite descriptors: GUPnPDIDLLiteDescriptor.
+  * GUPnPDIDLLiteWriter now provides a much simpler API that is consistent with
+    rest of the GUPnP AV API.
+  * GUPnPDIDLLiteWriter now handles filtering of DIDL-Lite XML.
+  * Correct possible values of GUPnPDLNAFlags.
+  * Replace GUPnPDIDLLiteParserObjectCallback by following signals:
+    - object-available
+    - container-available
+    - item-available
+- New Error domain for protocol related errors.
+- Workaround for broken printf() implementations.
+- Bitrate is in bytes/second and not bits/second.
+- Enable DLL on windows.
+
+Dependencies changed:
+
+- gupnp >= 0.13
+
+Bug fixes in this release:
+
+1729 - bitrate checks in gupnp-dlna.c look wrong.
+1579 - Minor fixes to enable dynamic library on windows
+
+All contributors to this release:
+
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Sven Neumann <s.neumann@raumfeld.com>
+Jens Georg <mail@jensge.org>
+Ross Burton <ross@openedhand.com>
+
+WARNING: This release is API and ABI incompatible with previous releases.
+
 0.4.1
 =====
 
