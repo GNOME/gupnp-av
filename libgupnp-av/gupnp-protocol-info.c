@@ -275,7 +275,6 @@ add_dlna_info (GString           *str,
         /*  append 24 reserved hex-digits */
         g_string_append_printf (str,
                                 "0000" "0000" "0000" "0000" "0000" "0000");
-        g_string_append_c (str, '"');
 }
 
 static void
