@@ -1,3 +1,9 @@
+0.5.1
+=====
+
+A micro release to fix a regression in DLNA profile guessing code in the
+previous (0.5) release.
+
 0.5
 ===
 
