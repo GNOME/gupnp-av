@@ -765,7 +765,9 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
                         mime_type = gupnp_protocol_info_get_mime_type (info);
                         dlna_profile = dlna_guess_profile (resource, mime_type);
 
-                        gupnp_protocol_info_set_dlna_profile (info,
+                        if (dlna_profile)
+                                gupnp_protocol_info_set_dlna_profile
+                                                             (info,
                                                               dlna_profile);
                 }
         }
@@ -1039,7 +1041,9 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
                 mime_type = gupnp_protocol_info_get_mime_type (info);
                 dlna_profile = dlna_guess_profile (resource, mime_type);
 
-                gupnp_protocol_info_set_dlna_profile (info, dlna_profile);
+                if (dlna_profile)
+                        gupnp_protocol_info_set_dlna_profile (info,
+                                                              dlna_profile);
         }
 
         str = gupnp_protocol_info_to_string (info);
