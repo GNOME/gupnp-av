@@ -83,7 +83,7 @@ xml_util_get_child_element_content (xmlNode    *node,
         const char *content;
 
         child_node = xml_util_get_element (node, child_name, NULL);
-        if (!child_node)
+        if (!child_node || !(child_node->children))
                 return NULL;
 
         content = (const char *) child_node->children->content;
