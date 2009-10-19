@@ -188,6 +188,7 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                              GUPNP_XML_ERROR_NO_NODE,
                              "No 'DIDL-Lite' node in the DIDL-Lite XML:\n%s",
                              didl);
+                xmlFreeDoc (doc);
 
                 return FALSE;
         }
@@ -198,6 +199,7 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                              GUPNP_XML_ERROR_EMPTY_NODE,
                              "Empty 'DIDL-Lite' node in the DIDL-Lite XML:\n%s",
                              didl);
+                xmlFreeDoc (doc);
 
                 return FALSE;
         }
