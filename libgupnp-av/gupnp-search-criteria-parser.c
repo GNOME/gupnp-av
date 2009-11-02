@@ -307,7 +307,7 @@ gupnp_search_criteria_parser_class_init
          * GUPnPSearchCriteriaParser::expression
          * @parser: The #GUPnPSearchCriteriaParser that received the signal
          * @property: The property
-         * @op: The operator
+         * @op: The operator as #GUPnPSearchCriteriaOp
          * @value: The value as string
          * @error: Place-holder for any possible errors from handler
          *
@@ -326,7 +326,7 @@ gupnp_search_criteria_parser_class_init
                               G_TYPE_BOOLEAN,
                               4,
                               G_TYPE_STRING,
-                              G_TYPE_UINT,
+                              GUPNP_TYPE_SEARCH_CRITERIA_OP,
                               G_TYPE_STRING,
                               G_TYPE_POINTER);
 
