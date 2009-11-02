@@ -43,7 +43,7 @@ gupnp_search_criteria_op_get_type (void)
         static GType type = 0;
 
         if (type == 0) {
-                static const GFlagsValue values[] = {
+                static const GEnumValue values[] = {
                         { GUPNP_SEARCH_CRITERIA_OP_EQ,
                           "GUPNP_SEARCH_CRITERIA_OP_EQ",
                           "none" },
@@ -77,7 +77,7 @@ gupnp_search_criteria_op_get_type (void)
                         { 0, NULL, NULL }
                 };
 
-                type = g_flags_register_static
+                type = g_enum_register_static
                                 (g_intern_static_string (
                                  "GUPNPSearchCriteriaOp"),
                                  values);
