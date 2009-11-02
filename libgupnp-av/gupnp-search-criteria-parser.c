@@ -79,7 +79,7 @@ gupnp_search_criteria_op_get_type (void)
 
                 type = g_enum_register_static
                                 (g_intern_static_string (
-                                 "GUPNPSearchCriteriaOp"),
+                                 "GUPnPSearchCriteriaOp"),
                                  values);
         }
 
