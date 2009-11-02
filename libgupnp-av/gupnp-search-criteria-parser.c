@@ -36,6 +36,56 @@
 #include "gupnp-search-criteria-parser.h"
 #include "gupnp-av-marshal.h"
 
+/* GType for GUPNPSearchCriteriaOp */
+GType
+gupnp_search_criteria_op_get_type (void)
+{
+        static GType type = 0;
+
+        if (type == 0) {
+                static const GFlagsValue values[] = {
+                        { GUPNP_SEARCH_CRITERIA_OP_EQ,
+                          "GUPNP_SEARCH_CRITERIA_OP_EQ",
+                          "none" },
+                        { GUPNP_SEARCH_CRITERIA_OP_NEQ,
+                          "GUPNP_SEARCH_CRITERIA_OP_NEQ",
+                          "none" },
+                        { GUPNP_SEARCH_CRITERIA_OP_LESS,
+                          "GUPNP_SEARCH_CRITERIA_OP_LESS",
+                          "none" },
+                        { GUPNP_SEARCH_CRITERIA_OP_LEQ,
+                          "GUPNP_SEARCH_CRITERIA_OP_LEQ",
+                          "none" },
+                        { GUPNP_SEARCH_CRITERIA_OP_GREATER,
+                          "GUPNP_SEARCH_CRITERIA_OP_GREATER",
+                          "none" },
+                        { GUPNP_SEARCH_CRITERIA_OP_GEQ,
+                          "GUPNP_SEARCH_CRITERIA_OP_GEQ",
+                          "none" },
+                        { GUPNP_SEARCH_CRITERIA_OP_CONTAINS,
+                          "GUPNP_SEARCH_CRITERIA_OP_CONTAINS",
+                          "none" },
+                        { GUPNP_SEARCH_CRITERIA_OP_DOES_NOT_CONTAIN,
+                          "GUPNP_SEARCH_CRITERIA_OP_DOES_NOT_CONTAIN",
+                          "none" },
+                        { GUPNP_SEARCH_CRITERIA_OP_DERIVED_FROM,
+                          "GUPNP_SEARCH_CRITERIA_OP_DERIVED_FROM",
+                          "none" },
+                        { GUPNP_SEARCH_CRITERIA_OP_EXISTS,
+                          "GUPNP_SEARCH_CRITERIA_OP_EXISTS",
+                          "none" },
+                        { 0, NULL, NULL }
+                };
+
+                type = g_flags_register_static
+                                (g_intern_static_string (
+                                 "GUPNPSearchCriteriaOp"),
+                                 values);
+        }
+
+        return type;
+}
+
 /* GUPnPSearchCriteriaParserError */
 GQuark
 gupnp_search_criteria_parser_error_quark (void)

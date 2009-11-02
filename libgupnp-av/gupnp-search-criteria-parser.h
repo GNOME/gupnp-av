@@ -66,6 +66,11 @@ typedef enum {
         GUPNP_SEARCH_CRITERIA_OP_EXISTS           = G_TOKEN_LAST + 10
 } GUPnPSearchCriteriaOp;
 
+GType
+gupnp_search_criteria_op_get_type (void) G_GNUC_CONST;
+
+#define GUPNP_TYPE_SEARCH_CRITERIA_OP (gupnp_search_criteria_op_get_type ())
+
 #define GUPNP_SEARCH_CRITERIA_PARSER_ERROR \
                 (gupnp_search_criteria_parser_error_quark ())
 
