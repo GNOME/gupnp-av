@@ -444,6 +444,50 @@ scan_rel_exp (GUPnPSearchCriteriaParser *parser,
         return ret;
 }
 
+static gboolean
+scan_search_exp (GUPnPSearchCriteriaParser *parser,
+                 GError                   **error);
+
+/* Scan a Logical operator and the part after that */
+static gboolean
+scan_logical_op (GUPnPSearchCriteriaParser *parser,
+                 GError                   **error)
+{
+        gboolean ret;
+        guint token;
+
+        token = g_scanner_peek_next_token (parser->priv->scanner);
+
+        switch (token) {
+                case SYMBOL_AND:
+                        g_scanner_get_next_token (parser->priv->scanner);
+
+                        g_signal_emit (parser, signals[CONJUNCTION], 0);
+
+                        ret = scan_search_exp (parser, error);
+
+                        break;
+
+                case SYMBOL_OR:
+                        g_scanner_get_next_token (parser->priv->scanner);
+
+                        g_signal_emit (parser, signals[DISJUNCTION], 0);
+
+                        ret = scan_search_exp (parser, error);
+
+                        break;
+
+                default:
+
+                        ret = TRUE;
+
+                        break;
+
+        }
+
+        return ret;
+}
+
 /* Scan a searchExp portion of a search criteria string */
 static gboolean
 scan_search_exp (GUPnPSearchCriteriaParser *parser,
@@ -487,30 +531,7 @@ scan_search_exp (GUPnPSearchCriteriaParser *parser,
                 if (ret == FALSE)
                         break;
 
-                token = g_scanner_peek_next_token (parser->priv->scanner);
-
-                switch (token) {
-                case SYMBOL_AND:
-                        g_scanner_get_next_token (parser->priv->scanner);
-
-                        g_signal_emit (parser, signals[CONJUNCTION], 0);
-
-                        ret = scan_search_exp (parser, error);
-
-                        break;
-
-                case SYMBOL_OR:
-                        g_scanner_get_next_token (parser->priv->scanner);
-
-                        g_signal_emit (parser, signals[DISJUNCTION], 0);
-
-                        ret = scan_search_exp (parser, error);
-
-                        break;
-
-                default:
-                        break;
-                }
+                ret = scan_logical_op (parser, error);
 
                 break;
 
