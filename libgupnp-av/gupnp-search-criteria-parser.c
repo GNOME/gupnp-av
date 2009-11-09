@@ -524,6 +524,8 @@ scan_search_exp (GUPnPSearchCriteriaParser *parser,
 
                 g_signal_emit (parser, signals[END_PARENS], 0);
 
+                ret = scan_logical_op (parser, error);
+
                 break;
 
         case G_TOKEN_IDENTIFIER:
