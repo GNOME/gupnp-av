@@ -1,3 +1,20 @@
+0.5.2
+=====
+
+Changes since 0.5.1:
+
+- Add a missing NULL check.
+- Fix a potential leak of xmlDoc.
+- Register a (g)type for GUPnPSearchCriteriaOp for better gtk-doc and
+  vala-gen-introspect support.
+- Fix docs for GUPnPSearchCriteriaParser::expression.
+- Fix parsing of SearchCriteria strings: Closing parenthesis doesn't imply end
+  of SearchCriteria expression.
+
+All contributors to this release:
+
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
 0.5.1
 =====
 
