@@ -120,17 +120,6 @@ gupnp_didl_lite_item_class_init (GUPnPDIDLLiteItemClass *klass)
 }
 
 /**
- * gupnp_didl_lite_item_new:
- *
- * Return value: A new #GUPnPDIDLLiteItem object. Unref after usage.
- **/
-GUPnPDIDLLiteItem *
-gupnp_didl_lite_item_new (void)
-{
-        return g_object_new (GUPNP_TYPE_DIDL_LITE_ITEM, NULL);
-}
-
-/**
  * gupnp_didl_lite_item_get_ref_id:
  * @item: #GUPnPDIDLLiteItem
  *

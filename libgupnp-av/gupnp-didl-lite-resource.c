@@ -639,18 +639,6 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
 }
 
 /**
- * gupnp_didl_lite_resource_new
- *
- * Return value: A new #GUPnPDIDLLiteResource object. Unref after usage.
- **/
-GUPnPDIDLLiteResource *
-gupnp_didl_lite_resource_new (void)
-{
-        return g_object_new (GUPNP_TYPE_DIDL_LITE_RESOURCE,
-                             NULL);
-}
-
-/**
  * gupnp_didl_lite_resource_new_from_xml
  * @xml_node: The pointer to 'res' node in XML document
  * @xml_doc: The reference to XML document containing this resource

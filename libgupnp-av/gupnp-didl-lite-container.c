@@ -151,17 +151,6 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
 }
 
 /**
- * gupnp_didl_lite_container_new:
- *
- * Return value: A new #GUPnPDIDLLiteContainer object. Unref after usage.
- **/
-GUPnPDIDLLiteContainer *
-gupnp_didl_lite_container_new (void)
-{
-        return g_object_new (GUPNP_TYPE_DIDL_LITE_CONTAINER, NULL);
-}
-
-/**
  * gupnp_didl_lite_container_new_from_xml:
  * @xml_node: The pointer to 'res' node in XML document
  * @xml_doc: The reference to XML document containing this container
