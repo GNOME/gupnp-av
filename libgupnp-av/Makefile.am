@@ -21,6 +21,7 @@ libgupnp_av_inc_HEADERS = gupnp-didl-lite-object.h \
 			  gupnp-didl-lite-parser.h \
 			  gupnp-didl-lite-resource.h \
 			  gupnp-didl-lite-descriptor.h \
+			  gupnp-didl-lite-contributor.h \
 			  gupnp-didl-lite-writer.h \
 			  gupnp-protocol-info.h \
 		          gupnp-search-criteria-parser.h \
@@ -49,6 +50,8 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-resource-private.h \
 			     gupnp-didl-lite-descriptor.c \
 			     gupnp-didl-lite-descriptor-private.h \
+			     gupnp-didl-lite-contributor.c \
+			     gupnp-didl-lite-contributor-private.h \
 			     gupnp-didl-lite-writer.c \
 			     gupnp-protocol-info.c \
 			     gupnp-search-criteria-parser.c \
