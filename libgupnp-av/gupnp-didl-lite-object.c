@@ -857,10 +857,8 @@ gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_author:
  * @object: #GUPnPDIDLLiteObject
- * @role: Location to put the role string (if any) into, or %NULL
  *
- * Get the author of the @object. If role is not %NULL, it is set to the role
- * of the author if available.
+ * Get the author of the @object.
  *
  * Return value: The author of the @object, or %NULL.
  **/
