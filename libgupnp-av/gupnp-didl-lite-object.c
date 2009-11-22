@@ -36,6 +36,7 @@
 #include "gupnp-didl-lite-descriptor-private.h"
 #include "gupnp-didl-lite-container.h"
 #include "gupnp-didl-lite-item.h"
+#include "gupnp-didl-lite-contributor-private.h"
 #include "xml-util.h"
 
 G_DEFINE_ABSTRACT_TYPE (GUPnPDIDLLiteObject,
@@ -664,6 +665,34 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
         return ret;
 }
 
+static GList *
+get_contributor_list_by_name (GUPnPDIDLLiteObject *object,
+                              const char          *name)
+{
+        GList *contributors = NULL;
+        GList *ret = NULL;
+        GList *l;
+
+        contributors = gupnp_didl_lite_object_get_properties (object, name);
+
+        for (l = contributors; l; l = l->next) {
+                GUPnPDIDLLiteContributor *contributor;
+                xmlNode *contributor_node;
+
+                contributor_node = (xmlNode *) l->data;
+
+                contributor = gupnp_didl_lite_contributor_new_from_xml
+                                        (contributor_node,
+                                         object->priv->xml_doc);
+
+                ret = g_list_append (ret, contributor);
+        }
+
+        g_list_free (contributors);
+
+        return ret;
+}
+
 /**
  * gupnp_didl_lite_object_new_from_xml:
  * @xml_node: The pointer to 'res' node in XML document
@@ -825,6 +854,8 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
  * Get the creator of the @object.
  *
  * Return value: The creator of the @object, or %NULL.
+ *
+ * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_creators() instead.
  **/
 const char *
 gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
@@ -836,6 +867,23 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
 }
 
 /**
+ * gupnp_didl_lite_object_get_creators:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the creators of the @object.
+ *
+ * Return value: The list of creators belonging to @object, or %NULL.
+ * #g_list_free the returned list after usage and unref each object in it.
+ **/
+GList *
+gupnp_didl_lite_object_get_creators (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return get_contributor_list_by_name (object, "creator");
+}
+
+/**
  * gupnp_didl_lite_object_get_artist:
  * @object: #GUPnPDIDLLiteObject
  * @role: Location to put the role string (if any) into, or %NULL
@@ -844,6 +892,8 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
  * of the artist if available.
  *
  * Return value: The artist of the @object, or %NULL.
+ *
+ * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_artists() instead.
  **/
 const char *
 gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
@@ -855,12 +905,31 @@ gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
 }
 
 /**
+ * gupnp_didl_lite_object_get_artists:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the artists of the @object.
+ *
+ * Return value: The list of artists belonging to @object, or %NULL.
+ * #g_list_free the returned list after usage and unref each object in it.
+ **/
+GList *
+gupnp_didl_lite_object_get_artists (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return get_contributor_list_by_name (object, "artists");
+}
+
+/**
  * gupnp_didl_lite_object_get_author:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the author of the @object.
  *
  * Return value: The author of the @object, or %NULL.
+ *
+ * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_authors() instead.
  **/
 const char *
 gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object)
@@ -869,6 +938,23 @@ gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object)
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "author");
+}
+
+/**
+ * gupnp_didl_lite_object_get_authors:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the authors of the @object.
+ *
+ * Return value: The list of authors belonging to @object, or %NULL.
+ * #g_list_free the returned list after usage and unref each object in it.
+ **/
+GList *
+gupnp_didl_lite_object_get_authors (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return get_contributor_list_by_name (object, "authors");
 }
 
 /**

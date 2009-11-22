@@ -101,11 +101,20 @@ gupnp_didl_lite_object_get_title        (GUPnPDIDLLiteObject *object);
 const char *
 gupnp_didl_lite_object_get_creator      (GUPnPDIDLLiteObject *object);
 
+GList *
+gupnp_didl_lite_object_get_creators     (GUPnPDIDLLiteObject *object);
+
 const char *
 gupnp_didl_lite_object_get_artist       (GUPnPDIDLLiteObject *object);
 
+GList *
+gupnp_didl_lite_object_get_artists      (GUPnPDIDLLiteObject *object);
+
 const char *
 gupnp_didl_lite_object_get_author       (GUPnPDIDLLiteObject *object);
+
+GList *
+gupnp_didl_lite_object_get_authors      (GUPnPDIDLLiteObject *object);
 
 const char *
 gupnp_didl_lite_object_get_genre        (GUPnPDIDLLiteObject *object);
