@@ -54,8 +54,10 @@
     <xi:include href="xml/gupnp-didl-lite-item.xml"/>
     <xi:include href="xml/gupnp-didl-lite-writer.xml"/>
     <xi:include href="xml/gupnp-didl-lite-resource.xml"/>
+    <xi:include href="xml/gupnp-didl-lite-descriptor.xml"/>
     <xi:include href="xml/gupnp-last-change-parser.xml"/>
     <xi:include href="xml/gupnp-search-criteria-parser.xml"/>
+    <xi:include href="xml/gupnp-protocol-info.xml"/>
 
   </chapter>
 
