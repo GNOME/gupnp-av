@@ -293,7 +293,7 @@ gupnp_didl_lite_descriptor_class_init (GUPnPDIDLLiteDescriptorClass *klass)
 }
 
 /**
- * gupnp_didl_lite_descriptor_new
+ * gupnp_didl_lite_descriptor_new:
  *
  * Return value: A new #GUPnPDIDLLiteDescriptor object. Unref after usage.
  **/
@@ -305,7 +305,7 @@ gupnp_didl_lite_descriptor_new (void)
 }
 
 /**
- * gupnp_didl_lite_descriptor_new_from_xml
+ * gupnp_didl_lite_descriptor_new_from_xml:
  * @xml_node: The pointer to 'desc' node in XML document
  * @xml_doc: The reference to XML document containing this descriptor
  *
@@ -328,7 +328,7 @@ gupnp_didl_lite_descriptor_new_from_xml (xmlNode     *xml_node,
 }
 
 /**
- * gupnp_didl_lite_descriptor_get_xml_node
+ * gupnp_didl_lite_descriptor_get_xml_node:
  * @descriptor: The #GUPnPDIDLLiteDescriptor
  *
  * Get the pointer to desc node in XML document.
@@ -344,7 +344,7 @@ gupnp_didl_lite_descriptor_get_xml_node (GUPnPDIDLLiteDescriptor *descriptor)
 }
 
 /**
- * gupnp_didl_lite_descriptor_get_content
+ * gupnp_didl_lite_descriptor_get_content:
  * @descriptor: A #GUPnPDIDLLiteDescriptor
  *
  * Get the content of the @descriptor.
@@ -359,8 +359,8 @@ gupnp_didl_lite_descriptor_get_content (GUPnPDIDLLiteDescriptor *descriptor)
         return (const char *) descriptor->priv->xml_node->children;
 }
 
-/*
- * gupnp_didl_lite_descriptor_get_id
+/**
+ * gupnp_didl_lite_descriptor_get_id:
  * @descriptor: A #GUPnPDIDLLiteDescriptor
  *
  * Get the ID of the @descriptor.
@@ -377,7 +377,7 @@ gupnp_didl_lite_descriptor_get_id (GUPnPDIDLLiteDescriptor *descriptor)
 }
 
 /**
- * gupnp_didl_lite_descriptor_get_metadata_type
+ * gupnp_didl_lite_descriptor_get_metadata_type:
  * @descriptor: A #GUPnPDIDLLiteDescriptor
  *
  * Get the metadata type of the @descriptor.
@@ -395,7 +395,7 @@ gupnp_didl_lite_descriptor_get_metadata_type
 }
 
 /**
- * gupnp_didl_lite_descriptor_get_name_space
+ * gupnp_didl_lite_descriptor_get_name_space:
  * @descriptor: A #GUPnPDIDLLiteDescriptor
  *
  * Get the name space associated with the @descriptor.
@@ -412,7 +412,7 @@ gupnp_didl_lite_descriptor_get_name_space (GUPnPDIDLLiteDescriptor *descriptor)
 }
 
 /**
- * gupnp_didl_lite_descriptor_set_content
+ * gupnp_didl_lite_descriptor_set_content:
  * @descriptor: A #GUPnPDIDLLiteDescriptor
  * @content: The content as string
  *
@@ -438,7 +438,7 @@ gupnp_didl_lite_descriptor_set_content (GUPnPDIDLLiteDescriptor *descriptor,
 }
 
 /**
- * gupnp_didl_lite_descriptor_set_id
+ * gupnp_didl_lite_descriptor_set_id:
  * @descriptor: A #GUPnPDIDLLiteDescriptor
  * @type: The ID as string
  *
@@ -461,7 +461,7 @@ gupnp_didl_lite_descriptor_set_id (GUPnPDIDLLiteDescriptor *descriptor,
 }
 
 /**
- * gupnp_didl_lite_descriptor_set_metadata_type
+ * gupnp_didl_lite_descriptor_set_metadata_type:
  * @descriptor: A #GUPnPDIDLLiteDescriptor
  * @type: The metadata type as string
  *
@@ -485,7 +485,7 @@ gupnp_didl_lite_descriptor_set_metadata_type
 }
 
 /**
- * gupnp_didl_lite_descriptor_set_name_space
+ * gupnp_didl_lite_descriptor_set_name_space:
  * @descriptor: A #GUPnPDIDLLiteDescriptor
  * @name_space: The name space URI as string
  *

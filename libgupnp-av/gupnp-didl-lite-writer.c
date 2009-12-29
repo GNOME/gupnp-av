@@ -389,7 +389,7 @@ gupnp_didl_lite_writer_class_init (GUPnPDIDLLiteWriterClass *klass)
 }
 
 /**
- * gupnp_didl_lite_writer_new
+ * gupnp_didl_lite_writer_new:
  * @language: The language the DIDL-Lite fragment is in, or NULL
  *
  * Return value: A new #GUPnPDIDLLiteWriter object.
@@ -403,7 +403,7 @@ gupnp_didl_lite_writer_new (const char *language)
 }
 
 /**
- * gupnp_didl_lite_writer_add_item
+ * gupnp_didl_lite_writer_add_item:
  * @writer: A #GUPnPDIDLLiteWriter
  *
  * Creates a new item, attaches it to @writer and returns it.
@@ -429,7 +429,7 @@ gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
- * gupnp_didl_lite_writer_add_container
+ * gupnp_didl_lite_writer_add_container:
  * @writer: A #GUPnPDIDLLiteWriter
  *
  * Creates a new container, attaches it to @writer and returns it.
@@ -455,7 +455,7 @@ gupnp_didl_lite_writer_add_container (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
- * gupnp_didl_lite_writer_add_descriptor
+ * gupnp_didl_lite_writer_add_descriptor:
  * @writer: A #GUPnPDIDLLiteWriter
  *
  * Creates a new descriptor, attaches it to @object and returns it.
@@ -479,7 +479,7 @@ gupnp_didl_lite_writer_add_descriptor (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
- * gupnp_didl_lite_writer_get_string
+ * gupnp_didl_lite_writer_get_string:
  * @writer: A #GUPnPDIDLLiteWriter
  *
  * Creates a string representation of the DIDL-Lite XML document.
@@ -508,7 +508,7 @@ gupnp_didl_lite_writer_get_string (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
- * gupnp_didl_lite_writer_get_xml_node
+ * gupnp_didl_lite_writer_get_xml_node:
  * @writer: The #GUPnPDIDLLiteWriter
  *
  * Get the pointer to root node in XML document.
@@ -524,7 +524,7 @@ gupnp_didl_lite_writer_get_xml_node (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
- * gupnp_didl_lite_writer_get_language
+ * gupnp_didl_lite_writer_get_language:
  * @writer: #GUPnPDIDLLiteWriter
  *
  * Get the language the DIDL-Lite fragment is in.
@@ -540,7 +540,7 @@ gupnp_didl_lite_writer_get_language (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
- * gupnp_didl_lite_writer_filter
+ * gupnp_didl_lite_writer_filter:
  * @writer: A #GUPnPDIDLLiteWriter
  * @filter: A filter string
  *

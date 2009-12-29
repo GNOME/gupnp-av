@@ -151,7 +151,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
 }
 
 /**
- * gupnp_didl_lite_container_new
+ * gupnp_didl_lite_container_new:
  *
  * Return value: A new #GUPnPDIDLLiteContainer object. Unref after usage.
  **/
@@ -162,7 +162,7 @@ gupnp_didl_lite_container_new (void)
 }
 
 /**
- * gupnp_didl_lite_container_new_from_xml
+ * gupnp_didl_lite_container_new_from_xml:
  * @xml_node: The pointer to 'res' node in XML document
  * @xml_doc: The reference to XML document containing this container
  *
@@ -185,7 +185,7 @@ gupnp_didl_lite_container_new_from_xml (xmlNode     *xml_node,
 }
 
 /**
- * gupnp_didl_lite_container_get_searchable
+ * gupnp_didl_lite_container_get_searchable:
  * @container: #GUPnPDIDLLiteContainer
  *
  * Checks whether @container is searchable.
@@ -207,7 +207,7 @@ gupnp_didl_lite_container_get_searchable (GUPnPDIDLLiteContainer *container)
 }
 
 /**
- * gupnp_didl_lite_container_get_child_count
+ * gupnp_didl_lite_container_get_child_count:
  * @container: #GUPnPDIDLLiteContainer
  *
  * Get the child count of the @container.
@@ -229,7 +229,7 @@ gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
 }
 
 /**
- * gupnp_didl_lite_container_set_searchable
+ * gupnp_didl_lite_container_set_searchable:
  * @container: #GUPnPDIDLLiteContainer
  * @searchable: The searchibility
  *
@@ -260,7 +260,7 @@ gupnp_didl_lite_container_set_searchable (GUPnPDIDLLiteContainer *container,
 }
 
 /**
- * gupnp_didl_lite_container_set_child_count
+ * gupnp_didl_lite_container_set_child_count:
  * @container: #GUPnPDIDLLiteContainer
  * @child_count: The child count
  *

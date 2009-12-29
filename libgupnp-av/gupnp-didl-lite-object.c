@@ -665,7 +665,7 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
 }
 
 /**
- * gupnp_didl_lite_object_new_from_xml
+ * gupnp_didl_lite_object_new_from_xml:
  * @xml_node: The pointer to 'res' node in XML document
  * @xml_doc: The reference to XML document containing this object
  *
@@ -696,7 +696,7 @@ gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
 }
 
 /**
- * gupnp_didl_lite_object_get_xml_node
+ * gupnp_didl_lite_object_get_xml_node:
  * @object: The #GUPnPDIDLLiteObject
  *
  * Get the pointer to object node in XML document.
@@ -712,7 +712,7 @@ gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_upnp_class
+ * gupnp_didl_lite_object_get_upnp_class:
  * @object: The #GUPnPDIDLLiteObject
  *
  * Get the UPnP class of the @object.
@@ -745,7 +745,7 @@ gupnp_didl_lite_object_get_id (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_parent_id
+ * gupnp_didl_lite_object_get_parent_id:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the ID of the parent of the @object.
@@ -763,13 +763,13 @@ gupnp_didl_lite_object_get_parent_id (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_properties
+ * gupnp_didl_lite_object_get_properties:
  * @object: #GUPnPDIDLLiteObject
  * @name: name of the properties
  *
  * Use this function to retreive property nodes by name.
  *
- * Return value: The list of property nodes by the name @property_name
+ * Return value: (element-type utf8) (transfer none):  The list of property nodes by the name @property_name
  * belonging to @object, or %NULL. #g_list_free the returned list after
  * usage but do not modify the contents.
  **/
@@ -785,7 +785,7 @@ gupnp_didl_lite_object_get_properties (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_get_restricted
+ * gupnp_didl_lite_object_get_restricted:
  * @object: #GUPnPDIDLLiteObject
  *
  * Whether the @object is restricted or not.
@@ -802,7 +802,7 @@ gupnp_didl_lite_object_get_restricted (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_title
+ * gupnp_didl_lite_object_get_title:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the title of the @object.
@@ -819,7 +819,7 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_creator
+ * gupnp_didl_lite_object_get_creator:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the creator of the @object.
@@ -836,7 +836,7 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_artist
+ * gupnp_didl_lite_object_get_artist:
  * @object: #GUPnPDIDLLiteObject
  * @role: Location to put the role string (if any) into, or %NULL
  *
@@ -855,7 +855,7 @@ gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_author
+ * gupnp_didl_lite_object_get_author:
  * @object: #GUPnPDIDLLiteObject
  * @role: Location to put the role string (if any) into, or %NULL
  *
@@ -874,7 +874,7 @@ gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_genre
+ * gupnp_didl_lite_object_get_genre:
  * @object: #GUPnPDIDLLiteObject
  * @id: Location to put the ID string (if any) into, or %NULL
  * @extended: Location to put the extended genre string (if any) into, or %NULL
@@ -894,7 +894,7 @@ gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_write_status
+ * gupnp_didl_lite_object_get_write_status:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the write status of the @object.
@@ -911,7 +911,7 @@ gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_album
+ * gupnp_didl_lite_object_get_album:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the album of the @object.
@@ -928,7 +928,7 @@ gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_album_art
+ * gupnp_didl_lite_object_get_album_art:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the URI to album art of the @object.
@@ -945,7 +945,7 @@ gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_description
+ * gupnp_didl_lite_object_get_description:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the description of the @object.
@@ -962,7 +962,7 @@ gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_date
+ * gupnp_didl_lite_object_get_date:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the date of the @object.
@@ -979,7 +979,7 @@ gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_track_number
+ * gupnp_didl_lite_object_get_track_number:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the original track number of the @object.
@@ -1002,12 +1002,13 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_resources
+ * gupnp_didl_lite_object_get_resources:
  * @object: #GUPnPDIDLLiteObject
  *
  * Use this function to retreive resources from the @object.
  *
- * Return value: The list of resources belonging to @object, or %NULL.
+ * Return value: (element-type GUPnPDIDLLiteResource) (transfer full): The list of resources belonging to 
+@object, or %NULL.
  * #g_list_free the returned list after usage and unref each resource in it.
  **/
 GList *
@@ -1041,7 +1042,7 @@ gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_compat_resource
+ * gupnp_didl_lite_object_get_compat_resource:
  * @object: #GUPnPDIDLLiteObject
  * @sink_protocol_info: The SinkProtocolInfo string from MediaRenderer
  * @lenient: Enable lenient mode
@@ -1097,8 +1098,8 @@ gupnp_didl_lite_object_get_compat_resource
 }
 
 /**
- * gupnp_didl_lite_object_set_upnp_class
  * @object: The #GUPnPDIDLLiteObject
+ * gupnp_didl_lite_object_set_upnp_class:
  *
  * Set the UPnP class of the @object to @upnp_class.
  **/
@@ -1140,7 +1141,7 @@ gupnp_didl_lite_object_set_id (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_parent_id
+ * gupnp_didl_lite_object_set_parent_id:
  * @object: #GUPnPDIDLLiteObject
  * @parent_id: The parent ID
  *
@@ -1161,7 +1162,7 @@ gupnp_didl_lite_object_set_parent_id (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_restricted
+ * gupnp_didl_lite_object_set_restricted:
  * @object: #GUPnPDIDLLiteObject
  * @restricted: The restricted status
  *
@@ -1188,7 +1189,7 @@ gupnp_didl_lite_object_set_restricted (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_title
+ * gupnp_didl_lite_object_set_title:
  * @object: #GUPnPDIDLLiteObject
  * @title: The title
  *
@@ -1211,7 +1212,7 @@ gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_creator
+ * gupnp_didl_lite_object_set_creator:
  * @object: #GUPnPDIDLLiteObject
  * @creator: The creator
  *
@@ -1234,7 +1235,7 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_artist
+ * gupnp_didl_lite_object_set_artist:
  * @object: The #GUPnPDIDLLiteObject
  * @artist: The Artist
  *
@@ -1257,7 +1258,7 @@ gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_author
+ * gupnp_didl_lite_object_set_author:
  * @object: The #GUPnPDIDLLiteObject
  * @author: The Author
  *
@@ -1280,7 +1281,7 @@ gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_genre
+ * gupnp_didl_lite_object_set_genre:
  * @object: The #GUPnPDIDLLiteObject
  * @genre: The Genre
  *
@@ -1303,7 +1304,7 @@ gupnp_didl_lite_object_set_genre (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_write_status
+ * gupnp_didl_lite_object_set_write_status:
  * @object: #GUPnPDIDLLiteObject
  * @write_status: The write status string
  *
@@ -1326,7 +1327,7 @@ gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_album
+ * gupnp_didl_lite_object_set_album:
  * @object: #GUPnPDIDLLiteObject
  * @album: The album string
  *
@@ -1349,7 +1350,7 @@ gupnp_didl_lite_object_set_album (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_album_art
+ * gupnp_didl_lite_object_set_album_art:
  * @object: #GUPnPDIDLLiteObject
  * @album_art: The URI of album art
  *
@@ -1372,7 +1373,7 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_description
+ * gupnp_didl_lite_object_set_description:
  * @object: #GUPnPDIDLLiteObject
  * @description: The description string
  *
@@ -1395,7 +1396,7 @@ gupnp_didl_lite_object_set_description (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_date
+ * gupnp_didl_lite_object_set_date:
  * @object: #GUPnPDIDLLiteObject
  * @date: The date string
  *
@@ -1418,7 +1419,7 @@ gupnp_didl_lite_object_set_date (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_track_number
+ * gupnp_didl_lite_object_set_track_number:
  * @object: #GUPnPDIDLLiteObject
  * @track_number: The original track number
  *
@@ -1445,7 +1446,7 @@ gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_add_resource
+ * gupnp_didl_lite_object_add_resource:
  * @object: A #GUPnPDIDLLiteObject
  *
  * Creates a new resource, attaches it to @object and returns it.
@@ -1469,7 +1470,7 @@ gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_add_descriptor
+ * gupnp_didl_lite_object_add_descriptor:
  * @object: A #GUPnPDIDLLiteObject
  *
  * Creates a new descriptor, attaches it to @object and returns it.

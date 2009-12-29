@@ -120,7 +120,7 @@ gupnp_didl_lite_item_class_init (GUPnPDIDLLiteItemClass *klass)
 }
 
 /**
- * gupnp_didl_lite_item_new
+ * gupnp_didl_lite_item_new:
  *
  * Return value: A new #GUPnPDIDLLiteItem object. Unref after usage.
  **/
@@ -131,7 +131,7 @@ gupnp_didl_lite_item_new (void)
 }
 
 /**
- * gupnp_didl_lite_item_get_ref_id
+ * gupnp_didl_lite_item_get_ref_id:
  * @item: #GUPnPDIDLLiteItem
  *
  * Get the ref ID of the @item.
@@ -153,7 +153,7 @@ gupnp_didl_lite_item_get_ref_id (GUPnPDIDLLiteItem *item)
 }
 
 /**
- * gupnp_didl_lite_item_set_ref_id
+ * gupnp_didl_lite_item_set_ref_id:
  * @item: #GUPnPDIDLLiteItem
  * @refid: The ref ID
  *
