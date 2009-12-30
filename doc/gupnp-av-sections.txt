@@ -173,6 +173,27 @@ gupnp_didl_lite_descriptor_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gupnp-didl-lite-contributor</FILE>
+<TITLE>GUPnPDIDLLiteContributor</TITLE>
+GUPnPDIDLLiteContributor
+gupnp_didl_lite_contributor_get_xml_node
+gupnp_didl_lite_contributor_get_role
+gupnp_didl_lite_contributor_get_name
+gupnp_didl_lite_contributor_set_role
+gupnp_didl_lite_contributor_set_name
+<SUBSECTION Standard>
+GUPNP_TYPE_DIDL_LITE_CONTRIBUTOR
+GUPNP_DIDL_LITE_CONTRIBUTOR
+GUPNP_DIDL_LITE_CONTRIBUTOR_CLASS
+GUPNP_IS_DIDL_LITE_CONTRIBUTOR
+GUPNP_IS_DIDL_LITE_CONTRIBUTOR_CLASS
+GUPNP_DIDL_LITE_CONTRIBUTOR_GET_CLASS
+<SUBSECTION Private>
+GUPnPDIDLLiteContributorPrivate
+gupnp_didl_lite_contributor_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gupnp-protocol-info</FILE>
 <TITLE>GUPnPProtocolInfo</TITLE>
 GUPnPProtocolInfo
