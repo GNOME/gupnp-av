@@ -217,7 +217,9 @@ gupnp_didl_lite_contributor_get_name (GUPnPDIDLLiteContributor *contributor)
  * @contributor: #GUPnPDIDLLiteContributor
  * @role: The role of the @contributor
  *
- * Set the role of the @contributor.
+ * Set the role of the @contributor to @role.
+ *
+ * Return value: None.
  **/
 void
 gupnp_didl_lite_contributor_set_role (GUPnPDIDLLiteContributor *contributor,
@@ -238,7 +240,7 @@ gupnp_didl_lite_contributor_set_role (GUPnPDIDLLiteContributor *contributor,
  * @contributor: A #GUPnPDIDLLiteContributor
  * @name: The name of the contributor
  *
- * Set the name of the @contributor.
+ * Set the name of the @contributor to @name.
  *
  * Return value: None.
  **/
