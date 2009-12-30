@@ -1182,8 +1182,9 @@ gupnp_didl_lite_object_get_compat_resource
 }
 
 /**
- * @object: The #GUPnPDIDLLiteObject
  * gupnp_didl_lite_object_set_upnp_class:
+ * @object: The #GUPnPDIDLLiteObject
+ * @upnp_class: The UPnP class as string.
  *
  * Set the UPnP class of the @object to @upnp_class.
  **/
