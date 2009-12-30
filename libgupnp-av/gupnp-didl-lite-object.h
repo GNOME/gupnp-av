@@ -99,20 +99,23 @@ gupnp_didl_lite_object_get_restricted   (GUPnPDIDLLiteObject *object);
 const char *
 gupnp_didl_lite_object_get_title        (GUPnPDIDLLiteObject *object);
 
+#ifndef GUPNP_DISABLE_DEPRECATED
 const char *
 gupnp_didl_lite_object_get_creator      (GUPnPDIDLLiteObject *object);
-
-GList *
-gupnp_didl_lite_object_get_creators     (GUPnPDIDLLiteObject *object);
 
 const char *
 gupnp_didl_lite_object_get_artist       (GUPnPDIDLLiteObject *object);
 
-GList *
-gupnp_didl_lite_object_get_artists      (GUPnPDIDLLiteObject *object);
-
 const char *
 gupnp_didl_lite_object_get_author       (GUPnPDIDLLiteObject *object);
+
+#endif /* GUPNP_DISABLE_DEPRECATED */
+
+GList *
+gupnp_didl_lite_object_get_creators     (GUPnPDIDLLiteObject *object);
+
+GList *
+gupnp_didl_lite_object_get_artists      (GUPnPDIDLLiteObject *object);
 
 GList *
 gupnp_didl_lite_object_get_authors      (GUPnPDIDLLiteObject *object);
@@ -174,23 +177,26 @@ void
 gupnp_didl_lite_object_set_title        (GUPnPDIDLLiteObject *object,
                                          const char          *title);
 
+#ifndef GUPNP_DISABLE_DEPRECATED
 void
 gupnp_didl_lite_object_set_creator      (GUPnPDIDLLiteObject *object,
                                          const char          *creator);
-
-GUPnPDIDLLiteContributor *
-gupnp_didl_lite_object_add_creator      (GUPnPDIDLLiteObject *object);
 
 void
 gupnp_didl_lite_object_set_artist       (GUPnPDIDLLiteObject *object,
                                          const char          *artist);
 
-GUPnPDIDLLiteContributor *
-gupnp_didl_lite_object_add_artist       (GUPnPDIDLLiteObject *object);
-
 void
 gupnp_didl_lite_object_set_author       (GUPnPDIDLLiteObject *object,
                                          const char          *author);
+
+#endif /* GUPNP_DISABLE_DEPRECATED */
+
+GUPnPDIDLLiteContributor *
+gupnp_didl_lite_object_add_creator      (GUPnPDIDLLiteObject *object);
+
+GUPnPDIDLLiteContributor *
+gupnp_didl_lite_object_add_artist       (GUPnPDIDLLiteObject *object);
 
 GUPnPDIDLLiteContributor *
 gupnp_didl_lite_object_add_author       (GUPnPDIDLLiteObject *object);
