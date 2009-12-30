@@ -31,6 +31,7 @@
 
 #include "gupnp-didl-lite-resource.h"
 #include "gupnp-didl-lite-descriptor.h"
+#include "gupnp-didl-lite-contributor.h"
 
 G_BEGIN_DECLS
 
@@ -177,13 +178,22 @@ void
 gupnp_didl_lite_object_set_creator      (GUPnPDIDLLiteObject *object,
                                          const char          *creator);
 
+GUPnPDIDLLiteContributor *
+gupnp_didl_lite_object_add_creator      (GUPnPDIDLLiteObject *object);
+
 void
 gupnp_didl_lite_object_set_artist       (GUPnPDIDLLiteObject *object,
                                          const char          *artist);
 
+GUPnPDIDLLiteContributor *
+gupnp_didl_lite_object_add_artist       (GUPnPDIDLLiteObject *object);
+
 void
 gupnp_didl_lite_object_set_author       (GUPnPDIDLLiteObject *object,
                                          const char          *author);
+
+GUPnPDIDLLiteContributor *
+gupnp_didl_lite_object_add_author       (GUPnPDIDLLiteObject *object);
 
 void
 gupnp_didl_lite_object_set_genre        (GUPnPDIDLLiteObject *object,

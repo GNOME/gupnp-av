@@ -855,7 +855,7 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
  *
  * Return value: The creator of the @object, or %NULL.
  *
- * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_creators() instead.
+ * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_creators instead.
  **/
 const char *
 gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
@@ -893,7 +893,7 @@ gupnp_didl_lite_object_get_creators (GUPnPDIDLLiteObject *object)
  *
  * Return value: The artist of the @object, or %NULL.
  *
- * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_artists() instead.
+ * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_artists instead.
  **/
 const char *
 gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
@@ -929,7 +929,7 @@ gupnp_didl_lite_object_get_artists (GUPnPDIDLLiteObject *object)
  *
  * Return value: The author of the @object, or %NULL.
  *
- * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_authors() instead.
+ * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_authors instead.
  **/
 const char *
 gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object)
@@ -1302,6 +1302,8 @@ gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
  * @creator: The creator
  *
  * Set the creator of the @object to @creator.
+ *
+ * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_add_creator instead.
  **/
 void
 gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
@@ -1320,11 +1322,40 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
 }
 
 /**
+ * gupnp_didl_lite_object_add_creator:
+ * @object: The #GUPnPDIDLLiteObject
+ *
+ * Add a new creator node to the @object and return the associated
+ * #GUPnPDIDLLiteContributor object.
+ *
+ * Return value: A new #GUPnPDIDLLiteContributor object. Unref after usage.
+ **/
+GUPnPDIDLLiteContributor *
+gupnp_didl_lite_object_add_creator (GUPnPDIDLLiteObject *object)
+{
+        xmlNode *res_node;
+
+        g_return_val_if_fail (object != NULL, NULL);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        res_node = xmlNewChild (object->priv->xml_node,
+                                object->priv->dc_ns,
+                                (unsigned char *) "creator",
+                                NULL);
+
+        return gupnp_didl_lite_contributor_new_from_xml (res_node,
+                                                         object->priv->xml_doc);
+}
+
+
+/**
  * gupnp_didl_lite_object_set_artist:
  * @object: The #GUPnPDIDLLiteObject
  * @artist: The Artist
  *
  * Set the Artist of the @object to @artist.
+ *
+ * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_add_artist instead.
  **/
 void
 gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
@@ -1343,11 +1374,39 @@ gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
 }
 
 /**
+ * gupnp_didl_lite_object_add_artist:
+ * @object: The #GUPnPDIDLLiteObject
+ *
+ * Add a new Artist node to the @object and return the associated
+ * #GUPnPDIDLLiteContributor object.
+ *
+ * Return value: A new #GUPnPDIDLLiteContributor object. Unref after usage.
+ **/
+GUPnPDIDLLiteContributor *
+gupnp_didl_lite_object_add_artist (GUPnPDIDLLiteObject *object)
+{
+        xmlNode *res_node;
+
+        g_return_val_if_fail (object != NULL, NULL);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        res_node = xmlNewChild (object->priv->xml_node,
+                                object->priv->upnp_ns,
+                                (unsigned char *) "artist",
+                                NULL);
+
+        return gupnp_didl_lite_contributor_new_from_xml (res_node,
+                                                         object->priv->xml_doc);
+}
+
+/**
  * gupnp_didl_lite_object_set_author:
  * @object: The #GUPnPDIDLLiteObject
  * @author: The Author
  *
  * Set the Author of the @object to @author.
+ *
+ * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_add_author instead.
  **/
 void
 gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
@@ -1363,6 +1422,32 @@ gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
                             author);
 
         g_object_notify (G_OBJECT (object), "author");
+}
+
+/**
+ * gupnp_didl_lite_object_add_author:
+ * @object: The #GUPnPDIDLLiteObject
+ *
+ * Add a new author node to the @object and return the associated
+ * #GUPnPDIDLLiteContributor object.
+ *
+ * Return value: A new #GUPnPDIDLLiteContributor object. Unref after usage.
+ **/
+GUPnPDIDLLiteContributor *
+gupnp_didl_lite_object_add_author (GUPnPDIDLLiteObject *object)
+{
+        xmlNode *res_node;
+
+        g_return_val_if_fail (object != NULL, NULL);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        res_node = xmlNewChild (object->priv->xml_node,
+                                object->priv->upnp_ns,
+                                (unsigned char *) "author",
+                                NULL);
+
+        return gupnp_didl_lite_contributor_new_from_xml (res_node,
+                                                         object->priv->xml_doc);
 }
 
 /**
