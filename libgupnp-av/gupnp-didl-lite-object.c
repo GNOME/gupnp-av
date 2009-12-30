@@ -798,9 +798,9 @@ gupnp_didl_lite_object_get_parent_id (GUPnPDIDLLiteObject *object)
  *
  * Use this function to retreive property nodes by name.
  *
- * Return value: (element-type utf8) (transfer none):  The list of property nodes by the name @property_name
- * belonging to @object, or %NULL. #g_list_free the returned list after
- * usage but do not modify the contents.
+ * Return value: (element-type utf8) (transfer none): The list of property nodes
+ * by the name @property_name belonging to @object, or %NULL. #g_list_free the
+ * returned list after usage but do not modify the contents.
  **/
 GList *
 gupnp_didl_lite_object_get_properties (GUPnPDIDLLiteObject *object,
