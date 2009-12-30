@@ -47,8 +47,8 @@ struct _GUPnPDIDLLiteObjectPrivate {
         xmlNode     *xml_node;
         GUPnPXMLDoc *xml_doc;
 
-        xmlNs              *upnp_ns;
-        xmlNs              *dc_ns;
+        xmlNs *upnp_ns;
+        xmlNs *dc_ns;
 };
 
 enum {
