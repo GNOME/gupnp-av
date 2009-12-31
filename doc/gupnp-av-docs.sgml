@@ -69,4 +69,5 @@
 
   </chapter>
 
+  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
 </book>
