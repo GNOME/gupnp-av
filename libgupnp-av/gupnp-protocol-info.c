@@ -227,11 +227,11 @@ add_dlna_info (GString           *str,
         const char *dlna_profile;
         const char **speeds;
         GUPnPDLNAConversion conversion;
+        GUPnPDLNAFlags flags;
 
         dlna_profile = gupnp_protocol_info_get_dlna_profile (info);
         if (dlna_profile == NULL) {
                 g_string_append_printf (str, ":*");
-
                 return;
         }
 
@@ -269,12 +269,15 @@ add_dlna_info (GString           *str,
         if (conversion != GUPNP_DLNA_CONVERSION_NONE)
                 g_string_append_printf (str, ";DLNA.ORG_CI=%d", conversion);
 
-        g_string_append_printf (str,
-                                ";DLNA.ORG_FLAGS=%.8x",
-                                gupnp_protocol_info_get_dlna_flags (info));
-        /*  append 24 reserved hex-digits */
-        g_string_append_printf (str,
-                                "0000" "0000" "0000" "0000" "0000" "0000");
+        flags = gupnp_protocol_info_get_dlna_flags (info);
+        /* Omit the FLAGS parameter if no flags set */
+        if (flags != GUPNP_DLNA_FLAGS_NONE) {
+                g_string_append_printf (str, ";DLNA.ORG_FLAGS=%.8x", flags);
+                /*  append 24 reserved hex-digits */
+                g_string_append_printf (str,
+                                        "0000" "0000" "0000"
+                                        "0000" "0000" "0000");
+        }
 }
 
 static void
@@ -287,7 +290,7 @@ gupnp_protocol_info_init (GUPnPProtocolInfo *info)
 
         info->priv->dlna_conversion = GUPNP_DLNA_CONVERSION_NONE;
         info->priv->dlna_operation  = GUPNP_DLNA_OPERATION_NONE;
-        info->priv->dlna_flags      = GUPNP_DLNA_FLAGS_DLNA_V15;
+        info->priv->dlna_flags      = GUPNP_DLNA_FLAGS_NONE;
 }
 
 static void
@@ -569,7 +572,7 @@ gupnp_protocol_info_class_init (GUPnPProtocolInfoClass *klass)
                                      "DLNAFlags",
                                      "Various generic DLNA flags.",
                                      GUPNP_TYPE_DLNA_FLAGS,
-                                     GUPNP_DLNA_FLAGS_DLNA_V15,
+                                     GUPNP_DLNA_FLAGS_NONE,
                                      G_PARAM_READWRITE |
                                      G_PARAM_STATIC_NAME |
                                      G_PARAM_STATIC_NICK |
@@ -807,7 +810,7 @@ GUPnPDLNAFlags
 gupnp_protocol_info_get_dlna_flags (GUPnPProtocolInfo *info)
 {
         g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info),
-                              GUPNP_DLNA_FLAGS_DLNA_V15);
+                              GUPNP_DLNA_FLAGS_NONE);
 
         return info->priv->dlna_flags;
 }

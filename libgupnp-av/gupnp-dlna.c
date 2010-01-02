@@ -80,6 +80,9 @@ gupnp_dlna_flags_get_type (void)
 
         if (type == 0) {
                 static const GFlagsValue values[] = {
+                        { GUPNP_DLNA_FLAGS_NONE,
+                          "GUPNP_DLNA_FLAGS_NONE",
+                          "none" },
                         { GUPNP_DLNA_FLAGS_SENDER_PACED,
                           "GUPNP_DLNA_FLAGS_SENDER_PACED",
                           "sender-paced" },

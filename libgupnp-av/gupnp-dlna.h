@@ -53,6 +53,7 @@ gupnp_dlna_flags_get_type (void) G_GNUC_CONST;
 #define GUPNP_TYPE_DLNA_FLAGS (gupnp_dlna_flags_get_type ())
 
 typedef enum {
+        GUPNP_DLNA_FLAGS_NONE                      = 0,
         GUPNP_DLNA_FLAGS_SENDER_PACED              = (1 << 31),
         GUPNP_DLNA_FLAGS_TIME_BASED_SEEK           = (1 << 30),
         GUPNP_DLNA_FLAGS_BYTE_BASED_SEEK           = (1 << 29),
