@@ -136,7 +136,7 @@ parse_additional_info (const char        *additional_info,
 
                         gupnp_protocol_info_set_dlna_operation
                                                         (info,
-                                                         strtol (p, NULL, 16));
+                                                         strtoul (p, NULL, 16));
 
                         continue;
                 }
@@ -150,7 +150,7 @@ parse_additional_info (const char        *additional_info,
                         p[8] = '\0';
                         gupnp_protocol_info_set_dlna_flags
                                                         (info,
-                                                         strtol (p, NULL, 16));
+                                                         strtoul (p, NULL, 16));
 
                         continue;
                 }
