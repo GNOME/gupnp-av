@@ -194,7 +194,16 @@ is_content_format_compat (GUPnPProtocolInfo *info1,
 
         if (mime_type1 [0] != '*' &&
             mime_type2 [0] != '*' &&
-            g_ascii_strcasecmp (mime_type1, mime_type2) != 0)
+            g_ascii_strcasecmp (mime_type1, mime_type2) != 0 &&
+            /* Handle special case for LPCM: It is the only content type that
+             * make use of mime-type parameters that we know of.
+             *
+             * Example: audio/L16;rate=44100;channels=2
+             */
+            !((g_ascii_strcasecmp (mime_type1, "audio/L16") == 0 &&
+               g_ascii_strncasecmp (mime_type2, "audio/L16", 9) == 0) ||
+              (g_ascii_strcasecmp (mime_type2, "audio/L16") == 0 &&
+               g_ascii_strncasecmp (mime_type1, "audio/L16", 9) == 0)))
                 return FALSE;
         else
                 return TRUE;
