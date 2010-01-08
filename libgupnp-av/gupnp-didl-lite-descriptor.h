@@ -91,7 +91,7 @@ gupnp_didl_lite_descriptor_get_name_space
 
 void
 gupnp_didl_lite_descriptor_set_content  (GUPnPDIDLLiteDescriptor *descriptor,
-                                         const char              *name_space);
+                                         const char              *content);
 
 void
 gupnp_didl_lite_descriptor_set_id       (GUPnPDIDLLiteDescriptor *descriptor,
