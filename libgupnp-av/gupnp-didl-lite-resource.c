@@ -1004,7 +1004,7 @@ gupnp_didl_lite_resource_set_import_uri (GUPnPDIDLLiteResource *resource,
 /**
  * gupnp_didl_lite_resource_set_protocol_info
  * @resource: A #GUPnPDIDLLiteResource
- * @protocol: The protocol string
+ * @info: The protocol string
  *
  * Set the protocol info associated with the @resource. If the
  * #GUPnPProtocolInfo:dlna-profile of @info is not set, an attempt will be made 
@@ -1353,7 +1353,7 @@ gupnp_didl_lite_resource_set_height (GUPnPDIDLLiteResource *resource,
 /**
  * gupnp_didl_lite_resource_set_color_depth
  * @resource: A #GUPnPDIDLLiteResource
- * @height: The color-depth
+ * @color_depth: The color-depth
  *
  * Set the color-depth of this image/video resource. Passing a negative number
  * will unset this property.

@@ -440,7 +440,7 @@ gupnp_didl_lite_descriptor_set_content (GUPnPDIDLLiteDescriptor *descriptor,
 /**
  * gupnp_didl_lite_descriptor_set_id:
  * @descriptor: A #GUPnPDIDLLiteDescriptor
- * @type: The ID as string
+ * @id: The ID as string
  *
  * Set the ID of the @descriptor.
  *

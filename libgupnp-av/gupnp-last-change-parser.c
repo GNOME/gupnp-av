@@ -136,7 +136,7 @@ gupnp_last_change_parser_new (void)
  * @instance_id: The ID of the AV instance caller is interested in
  * @last_change_xml: The xml from the "LastChange" event to parse
  * @error: The location where to store any error, or NULL
- * @Varargs: A va_list of tuples of state variable name, state variable type,
+ * @var_args: A va_list of tuples of state variable name, state variable type,
  * and state variable value location, terminated with NULL. The state variable
  * values should be freed after use
  *

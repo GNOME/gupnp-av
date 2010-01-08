@@ -150,12 +150,11 @@ gupnp_didl_lite_parser_new (void)
  * gupnp_didl_lite_parser_parse_didl
  * @parser: A #GUPnPDIDLLiteParser
  * @didl: The DIDL-Lite XML string to be parsed
- * @callback: The callback to call for each DIDL-Lite object found
- * @user_data: User data for callback
  * @error: The location where to store any error, or NULL
  *
- * Parses DIDL-Lite XML string @didl, calling the supplied callback for each
- * DIDL-Lite object it finds in the process.
+ * Parses DIDL-Lite XML string @didl, emitting the ::object_available,
+ * ::item_available and ::container_available signals appropriately during the
+ * process.
  *
  * Return value: TRUE on success.
  **/

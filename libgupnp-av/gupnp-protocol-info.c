@@ -996,8 +996,8 @@ gupnp_protocol_info_set_dlna_flags (GUPnPProtocolInfo  *info,
 
 /**
  * gupnp_protocol_info_is_compatible
- * @info: The #GUPnPProtocolInfo
- * @protocol_info: The protocolInfo string
+ * @info1: The first #GUPnPProtocolInfo
+ * @info2: The second #GUPnPProtocolInfo
  *
  * Checks if the given protocolInfo string is compatible with @info.
  *

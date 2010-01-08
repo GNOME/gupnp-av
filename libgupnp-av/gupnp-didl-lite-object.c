@@ -898,7 +898,6 @@ gupnp_didl_lite_object_get_creators (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_artist:
  * @object: #GUPnPDIDLLiteObject
- * @role: Location to put the role string (if any) into, or %NULL
  *
  * Get the artist of the @object. If role is not %NULL, it is set to the role
  * of the artist if available.
@@ -972,11 +971,8 @@ gupnp_didl_lite_object_get_authors (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_genre:
  * @object: #GUPnPDIDLLiteObject
- * @id: Location to put the ID string (if any) into, or %NULL
- * @extended: Location to put the extended genre string (if any) into, or %NULL
  *
- * Get the genre of the @object. If @id is not %NULL, it is set to the ID
- * of the genre if available. The same goes for @extended.
+ * Get the genre of the @object.
  *
  * Return value: The genre of the @object, or %NULL.
  **/
