@@ -350,11 +350,8 @@ gupnp_search_criteria_parser_get_type
 <SECTION>
 <FILE>gupnp-av-error</FILE>
 <TITLE>Error codes</TITLE>
-GUPNP_SEARCH_CRITERIA_PARSER_ERROR
-GUPnPSearchCriteriaParserError
 GUPNP_PROTOCOL_ERROR
 GUPnPProtocolError
 <SUBSECTION Private>
-gupnp_search_criteria_parser_error_quark
 gupnp_protocol_error_quark
 </SECTION>
