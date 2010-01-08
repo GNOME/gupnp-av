@@ -1,6 +1,7 @@
 <SECTION>
 <FILE>gupnp-didl-lite-object</FILE>
 <TITLE>GUPnPDIDLLiteObject</TITLE>
+GUPnPDIDLLiteObject
 gupnp_didl_lite_object_get_xml_node
 gupnp_didl_lite_object_get_properties
 gupnp_didl_lite_object_get_id
@@ -59,8 +60,11 @@ gupnp_didl_lite_object_get_type
 <SECTION>
 <FILE>gupnp-didl-lite-container</FILE>
 <TITLE>GUPnPDIDLLiteContainer</TITLE>
+GUPnPDIDLLiteContainer
 gupnp_didl_lite_container_get_searchable
 gupnp_didl_lite_container_get_child_count
+gupnp_didl_lite_container_set_searchable
+gupnp_didl_lite_container_set_child_count
 <SUBSECTION Standard>
 GUPnPDIDLLiteContainerClass
 GUPNP_TYPE_DIDL_LITE_CONTAINER
@@ -77,7 +81,9 @@ gupnp_didl_lite_container_get_type
 <SECTION>
 <FILE>gupnp-didl-lite-item</FILE>
 <TITLE>GUPnPDIDLLiteItem</TITLE>
+GUPnPDIDLLiteItem
 gupnp_didl_lite_item_get_ref_id
+gupnp_didl_lite_item_set_ref_id
 <SUBSECTION Standard>
 GUPnPDIDLLiteItemClass
 GUPNP_TYPE_DIDL_LITE_ITEM
@@ -346,6 +352,9 @@ gupnp_search_criteria_parser_get_type
 <TITLE>Error codes</TITLE>
 GUPNP_SEARCH_CRITERIA_PARSER_ERROR
 GUPnPSearchCriteriaParserError
+GUPNP_PROTOCOL_ERROR
+GUPnPProtocolError
 <SUBSECTION Private>
 gupnp_search_criteria_parser_error_quark
+gupnp_protocol_error_quark
 </SECTION>
