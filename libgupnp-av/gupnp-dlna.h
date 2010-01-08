@@ -31,6 +31,14 @@ gupnp_dlna_conversion_get_type (void) G_GNUC_CONST;
 
 #define GUPNP_TYPE_DLNA_CONVERSION (gupnp_dlna_conversion_get_type ())
 
+/**
+ * GUPnPDLNAConversion:
+ * @GUPNP_DLNA_CONVERSION_NONE: Content is in original source format
+ * @GUPNP_DLNA_CONVERSION_TRANSCODED: Content is transcoded
+ *
+ * The DLNA conversion flags for a resource.
+ *
+ **/
 typedef enum {
         GUPNP_DLNA_CONVERSION_NONE       = 0,
         GUPNP_DLNA_CONVERSION_TRANSCODED = 1
@@ -41,6 +49,15 @@ gupnp_dlna_operation_get_type (void) G_GNUC_CONST;
 
 #define GUPNP_TYPE_DLNA_OPERATION (gupnp_dlna_operation_get_type ())
 
+/**
+ * GUPnPDLNAOperation:
+ * @GUPNP_DLNA_OPERATION_NONE: Resource does not support seeking of any type
+ * @GUPNP_DLNA_OPERATION_RANGE: Resource supports byte-seek
+ * @GUPNP_DLNA_OPERATION_TIMESEEK: Resource supports time-seek
+ *
+ * The seek operations supported by a resource.
+ *
+ **/
 typedef enum {
         GUPNP_DLNA_OPERATION_NONE     = 0x00,
         GUPNP_DLNA_OPERATION_RANGE    = 0x01,
@@ -52,6 +69,31 @@ gupnp_dlna_flags_get_type (void) G_GNUC_CONST;
 
 #define GUPNP_TYPE_DLNA_FLAGS (gupnp_dlna_flags_get_type ())
 
+/**
+ * GUPnPDLNAFlags:
+ * @GUPNP_DLNA_FLAGS_NONE: No flags
+ * @GUPNP_DLNA_FLAGS_SENDER_PACED: Content source is the clock source during
+ *                                 transport
+ * @GUPNP_DLNA_FLAGS_TIME_BASED_SEEK: Limited Operation: time-seek supported
+ * @GUPNP_DLNA_FLAGS_BYTE_BASED_SEEK: Limited Operation: byte-seek supported
+ * @GUPNP_DLNA_FLAGS_PLAY_CONTAINER: Resource supports 'Container Playback'
+ * @GUPNP_DLNA_FLAGS_S0_INCREASE: Content does not have a fixed beginning
+ * @GUPNP_DLNA_FLAGS_SN_INCREASE: Content does not have a fixed end
+ * @GUPNP_DLNA_FLAGS_RTSP_PAUSE: RTSP resource supports pausing of media
+ *                               transfer
+ * @GUPNP_DLNA_FLAGS_STREAMING_TRANSFER_MODE: Streaming transfer mode supported
+ * @GUPNP_DLNA_FLAGS_INTERACTIVE_TRANSFER_MODE: Interactive transfer mode
+ *                                              supported
+ * @GUPNP_DLNA_FLAGS_BACKGROUND_TRANSFER_MODE: Background transfer mode
+ *                                             supported
+ * @GUPNP_DLNA_FLAGS_CONNECTION_STALL: No content transfer when paused.
+ * @GUPNP_DLNA_FLAGS_DLNA_V15: DLNAv1.5 version flag
+ *
+ * The miscellaneous operations supported by a resource. For details on these
+ * flags please refer to section 7.3.37.2 of DLNA Networked Device
+ * Interoperability Guidelines Volume 1, October 2006.
+ *
+ **/
 typedef enum {
         GUPNP_DLNA_FLAGS_NONE                      = 0,
         GUPNP_DLNA_FLAGS_SENDER_PACED              = (1 << 31),

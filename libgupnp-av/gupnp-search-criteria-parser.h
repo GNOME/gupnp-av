@@ -50,6 +50,22 @@ gupnp_search_criteria_parser_get_type (void) G_GNUC_CONST;
                  GUPNP_TYPE_SEARCH_CRITERIA_PARSER, \
                  GUPnPSearchCriteriaParserClass))
 
+/**
+ * GUPnPSearchCriteriaOp:
+ * @GUPNP_SEARCH_CRITERIA_OP_EQ: '='
+ * @GUPNP_SEARCH_CRITERIA_OP_NEQ: '!='
+ * @GUPNP_SEARCH_CRITERIA_OP_LESS: '<'
+ * @GUPNP_SEARCH_CRITERIA_OP_LEQ: '<='
+ * @GUPNP_SEARCH_CRITERIA_OP_GREATER: '>'
+ * @GUPNP_SEARCH_CRITERIA_OP_GEQ: '>='
+ * @GUPNP_SEARCH_CRITERIA_OP_CONTAINS: 'contains'
+ * @GUPNP_SEARCH_CRITERIA_OP_DOES_NOT_CONTAIN: 'doesNotContain'
+ * @GUPNP_SEARCH_CRITERIA_OP_DERIVED_FROM: 'derivedFrom'
+ * @GUPNP_SEARCH_CRITERIA_OP_EXISTS: 'exists'
+ *
+ * The possible operators in SearchCriteria strings.
+ *
+ **/
 typedef enum {
         /* G_TYPE_STRING */
         GUPNP_SEARCH_CRITERIA_OP_EQ               = G_TOKEN_LAST + 1,
