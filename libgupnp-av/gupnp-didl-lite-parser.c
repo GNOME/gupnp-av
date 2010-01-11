@@ -152,8 +152,8 @@ gupnp_didl_lite_parser_new (void)
  * @didl: The DIDL-Lite XML string to be parsed
  * @error: The location where to store any error, or NULL
  *
- * Parses DIDL-Lite XML string @didl, emitting the ::object_available,
- * ::item_available and ::container_available signals appropriately during the
+ * Parses DIDL-Lite XML string @didl, emitting the ::object-available,
+ * ::item-available and ::container-available signals appropriately during the
  * process.
  *
  * Return value: TRUE on success.
