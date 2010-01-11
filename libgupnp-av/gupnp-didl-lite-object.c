@@ -969,6 +969,44 @@ gupnp_didl_lite_object_get_authors (GUPnPDIDLLiteObject *object)
 }
 
 /**
+ * gupnp_didl_lite_object_get_descriptors:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the descriptors of the @object.
+ *
+ * Return value: The list of descriptors belonging to @object, or %NULL.
+ * #g_list_free the returned list after usage and unref each object in it.
+ **/
+GList *
+gupnp_didl_lite_object_get_descriptors (GUPnPDIDLLiteObject *object)
+{
+        GList *descriptors = NULL;
+        GList *ret = NULL;
+        GList *l;
+
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        descriptors = gupnp_didl_lite_object_get_properties (object, "desc");
+
+        for (l = descriptors; l; l = l->next) {
+                GUPnPDIDLLiteDescriptor *descriptor;
+                xmlNode *descriptor_node;
+
+                descriptor_node = (xmlNode *) l->data;
+
+                descriptor = gupnp_didl_lite_descriptor_new_from_xml
+                                        (descriptor_node,
+                                         object->priv->xml_doc);
+
+                ret = g_list_append (ret, descriptor);
+        }
+
+        g_list_free (descriptors);
+
+        return ret;
+}
+
+/**
  * gupnp_didl_lite_object_get_genre:
  * @object: #GUPnPDIDLLiteObject
  *

@@ -120,6 +120,9 @@ gupnp_didl_lite_object_get_artists      (GUPnPDIDLLiteObject *object);
 GList *
 gupnp_didl_lite_object_get_authors      (GUPnPDIDLLiteObject *object);
 
+GList *
+gupnp_didl_lite_object_get_descriptors  (GUPnPDIDLLiteObject *object);
+
 const char *
 gupnp_didl_lite_object_get_genre        (GUPnPDIDLLiteObject *object);
 
