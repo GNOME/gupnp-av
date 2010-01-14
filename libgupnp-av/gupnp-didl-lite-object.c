@@ -1204,6 +1204,8 @@ gupnp_didl_lite_object_get_compat_resource
         g_return_val_if_fail (sink_protocol_info != NULL, NULL);
 
         resources = gupnp_didl_lite_object_get_resources (object);
+        if (resources == NULL)
+                return NULL;
 
         for (res = resources;
              res != NULL && resource == NULL;
