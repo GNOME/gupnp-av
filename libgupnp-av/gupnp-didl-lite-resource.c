@@ -690,6 +690,9 @@ gupnp_didl_lite_resource_get_uri (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
 
+        if (G_UNLIKELY (resource->priv->xml_node->children == NULL))
+                return NULL;
+
         return (const char *) resource->priv->xml_node->children->content;
 }
 
