@@ -985,7 +985,7 @@ gupnp_protocol_info_set_dlna_operation (GUPnPProtocolInfo *info,
  **/
 void
 gupnp_protocol_info_set_dlna_flags (GUPnPProtocolInfo  *info,
-                                         GUPnPDLNAFlags flags)
+                                    GUPnPDLNAFlags      flags)
 {
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
 
