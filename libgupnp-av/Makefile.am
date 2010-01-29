@@ -69,6 +69,45 @@ libgupnp_av_1_0_la_LIBADD = $(LIBGUPNP_LIBS)
 
 EXTRA_DIST = gupnp-av-marshal.list
 
-CLEANFILES = $(BUILT_SOURCES)
+if HAVE_INTROSPECTION
+
+GUPnPAV-1.0.gir: libgupnp-av-1.0.la $(INTROSPECTION_SCANNER)
+	$(AM_V_GEN) \
+	$(INTROSPECTION_SCANNER) -v \
+            --namespace GUPnPAV --nsversion=1.0 \
+            --output $@ \
+            --strip-prefix= gupnp \
+            --libtool="$(LIBTOOL)" \
+            --library=gupnp-av-1.0 \
+            --include=GObject-2.0 \
+            --include=GSSDP-1.0 \
+            --include=Soup-2.4 \
+            --include=libxml2-2.0 \
+	    --include=GUPnP-1.0 \
+            --pkg libxml-2.0 \
+	    --pkg gobject-2.0 \
+	    --pkg gssdp-1.0 \
+	    --pkg libsoup-2.4 \
+	    -I$(top_srcdir) \
+	    $(libgupnp_av_1_0_la_HEADERS) \
+	    $(libgupnp_av_1_0_la_SOURCES)
+
+girdir = $(datadir)/gir-1.0
+gir_DATA = GUPnPAV-1.0.gir
+
+typelibdir = $(libdir)/girepository-1.0/
+typelib_DATA = $(gir_DATA:.gir=.typelib)
+
+%.typelib: %.gir $(INTROSPECTION_COMPILER)
+	$(AM_V_GEN) \
+	$(INTROSPECTION_COMPILER) \
+		--includedir=$(srcdir) \
+		--includedir=. \
+		$(INTROSPECTION_COMPILER_OPTS) $< -o $(@F)
+
+endif
+
+CLEANFILES = $(BUILT_SOURCES) $(gir_DATA) $(typelib_DATA)
 DISTCLEANFILES = $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = Makefile.in $(BUILT_SOURCES)
+
