@@ -3,6 +3,8 @@ SUBDIRS = libgupnp-av tests doc
 pkgconfig_DATA= gupnp-av-1.0.pc
 pkgconfigdir = $(libdir)/pkgconfig
 
+ACLOCAL_AMFLAGS=-I m4
+
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
 # Extra clean files so that maintainer-clean removes *everything*
