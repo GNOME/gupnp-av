@@ -1,3 +1,34 @@
+0.5.4
+=====
+
+Changes since 0.5.2:
+
+- Gracefully handle empty or no 'res' node.
+- Function to get the list of descriptors from DIDL-Lite objects.
+- More complete comparison for LPCM mime types.
+- Fix incorrect type conversion of DLNA flags.
+- DLNA flags should not default to a specific DLNA version.
+- New APIs to deal with contributor-related properties in DIDL-Lite objects.
+- Remove redundant construction methods.
+- Add forgotten header to the meta-header file.
+- Add and fix gobject-introspection annotations.
+- Lots of documentation fixes.
+- Many minor non-functional fixes/improvements.
+
+Bug fixes in this release:
+
+1935 - Incorrect conversion while parsing primary DLNA Flags
+1934 - DLNA Flags should not default to a specific DLNA version.
+1933 - Content type matching fails when additional parameters exist in LPCM
+       mime-type
+1814 - Add "artists" property to GUPnPDIDLLiteObject
+
+All contributors to this release:
+
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Yakup Akbay <yakbay@ubicom.com>
+Zachary Goldberg <zach@zachgoldberg.com>
+
 0.5.2
 =====
 
