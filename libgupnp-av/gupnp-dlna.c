@@ -386,7 +386,7 @@ guess_mpeg_ts_profile (GUPnPDIDLLiteResource *resource)
         width = gupnp_didl_lite_resource_get_width (resource);
         height = gupnp_didl_lite_resource_get_height (resource);
 
-        if (width > 0 && height < 0 && width / height == 16 / 9) {
+        if (width > 0 && height > 0 && width / height == 16 / 9) {
                 return "MPEG_TS_HD_NA";
         } else {
                 return "MPEG_TS_SD_NA";
