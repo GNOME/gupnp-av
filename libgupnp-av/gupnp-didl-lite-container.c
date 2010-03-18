@@ -65,7 +65,7 @@ gupnp_didl_lite_container_get_property (GObject    *object,
                          gupnp_didl_lite_container_get_searchable (container));
                 break;
         case PROP_CHILD_COUNT:
-                g_value_set_uint
+                g_value_set_int
                         (value,
                          gupnp_didl_lite_container_get_child_count (container));
                 break;
@@ -95,7 +95,7 @@ gupnp_didl_lite_container_set_property (GObject      *object,
         case PROP_CHILD_COUNT:
                 gupnp_didl_lite_container_set_child_count
                                         (container,
-                                         g_value_get_uint (value));
+                                         g_value_get_int (value));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -138,16 +138,16 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
         g_object_class_install_property
                 (object_class,
                  PROP_CHILD_COUNT,
-                 g_param_spec_uint ("child-count",
-                                    "ChildCount",
-                                    "The child count of this container.",
-                                    0,
-                                    G_MAXUINT,
-                                    0,
-                                    G_PARAM_READWRITE |
-                                    G_PARAM_STATIC_NAME |
-                                    G_PARAM_STATIC_NICK |
-                                    G_PARAM_STATIC_BLURB));
+                 g_param_spec_int ("child-count",
+                                   "ChildCount",
+                                   "The child count of this container.",
+                                   0,
+                                   G_MAXINT,
+                                   0,
+                                   G_PARAM_READWRITE |
+                                   G_PARAM_STATIC_NAME |
+                                   G_PARAM_STATIC_NICK |
+                                   G_PARAM_STATIC_BLURB));
 }
 
 /**
@@ -199,11 +199,12 @@ gupnp_didl_lite_container_get_searchable (GUPnPDIDLLiteContainer *container)
  * gupnp_didl_lite_container_get_child_count:
  * @container: #GUPnPDIDLLiteContainer
  *
- * Get the child count of the @container.
+ * Get the child count of the @container.  If the child count is unknown, -1 is
+ * returned.
  *
- * Return value: The child count of the @container.
+ * Return value: The child count of the @container, or -1 if it is unknown.
  **/
-guint
+gint
 gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
 {
         xmlNode *xml_node;
@@ -214,7 +215,7 @@ gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
         xml_node = gupnp_didl_lite_object_get_xml_node
                                 (GUPNP_DIDL_LITE_OBJECT (container));
 
-        return xml_util_get_uint_attribute (xml_node, "childCount", 0);
+        return xml_util_get_int_attribute (xml_node, "childCount", -1);
 }
 
 /**
@@ -257,7 +258,7 @@ gupnp_didl_lite_container_set_searchable (GUPnPDIDLLiteContainer *container,
  **/
 void
 gupnp_didl_lite_container_set_child_count (GUPnPDIDLLiteContainer *container,
-                                           guint                   child_count)
+                                           gint                    child_count)
 {
         xmlNode *xml_node;
         char *str;
@@ -268,7 +269,7 @@ gupnp_didl_lite_container_set_child_count (GUPnPDIDLLiteContainer *container,
         xml_node = gupnp_didl_lite_object_get_xml_node
                                 (GUPNP_DIDL_LITE_OBJECT (container));
 
-        str = g_strdup_printf ("%u", child_count);
+        str = g_strdup_printf ("%d", child_count);
         xmlSetProp (xml_node,
                     (unsigned char *) "childCount",
                     (unsigned char *) str);

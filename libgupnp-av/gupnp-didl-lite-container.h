@@ -70,7 +70,7 @@ gboolean
 gupnp_didl_lite_container_get_searchable
                                         (GUPnPDIDLLiteContainer *container);
 
-guint
+gint
 gupnp_didl_lite_container_get_child_count
                                         (GUPnPDIDLLiteContainer *container);
 
@@ -82,7 +82,7 @@ gupnp_didl_lite_container_set_searchable
 void
 gupnp_didl_lite_container_set_child_count
                                         (GUPnPDIDLLiteContainer *container,
-                                         guint                   child_count);
+                                         gint                    child_count);
 
 G_END_DECLS
 
