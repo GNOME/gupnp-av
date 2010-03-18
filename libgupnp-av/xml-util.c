@@ -154,6 +154,16 @@ xml_util_get_uint_attribute (xmlNode    *node,
                                                     (glong) default_value);
 }
 
+gint
+xml_util_get_int_attribute (xmlNode    *node,
+                            const char *attribute_name,
+                            gint        default_value)
+{
+        return (gint) xml_util_get_long_attribute (node,
+                                                   attribute_name,
+                                                   (glong) default_value);
+}
+
 glong
 xml_util_get_long_attribute (xmlNode    *node,
                              const char *attribute_name,
