@@ -89,8 +89,20 @@ GUPnPAV-1.0.gir: libgupnp-av-1.0.la $(INTROSPECTION_SCANNER)
 	    --pkg gssdp-1.0 \
 	    --pkg libsoup-2.4 \
 	    -I$(top_srcdir) \
-	    $(libgupnp_av_1_0_la_HEADERS) \
-	    $(libgupnp_av_1_0_la_SOURCES)
+	    $(libgupnp_av_inc_HEADERS) \
+	    gupnp-didl-lite-object.c \
+	    gupnp-didl-lite-item.c \
+	    gupnp-didl-lite-container.c \
+	    gupnp-didl-lite-parser.c \
+	    gupnp-didl-lite-resource.c \
+	    gupnp-didl-lite-descriptor.c \
+	    gupnp-didl-lite-contributor.c \
+	    gupnp-didl-lite-writer.c \
+	    gupnp-protocol-info.c \
+	    gupnp-search-criteria-parser.c \
+	    gupnp-last-change-parser.c \
+	    gupnp-dlna.c \
+	    gupnp-av-error.c
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = GUPnPAV-1.0.gir
