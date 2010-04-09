@@ -1,3 +1,21 @@
+0.5.5
+=====
+
+Changes since 0.5.4:
+
+- Provide gobject-introspection GIR and typelib.
+- Provide microseconds in 'duration' to satisfy XBox.
+- Fix data type of GUPnPDIDLLiteContainer:child-count
+- Fix build issues in jhbuild environment.
+- Enable silent build rules if they are available.
+
+All contributors to this release:
+
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Zach Goldberg <zach@zachgoldberg.com>
+Neil Roberts <neil@linux.intel.com>
+Ross Burton <ross@linux.intel.com>
+
 0.5.4
 =====
 
