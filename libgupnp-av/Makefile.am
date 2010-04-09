@@ -91,20 +91,21 @@ GUPnPAV-1.0.gir: libgupnp-av-1.0.la $(INTROSPECTION_SCANNER)
 	    --pkg gssdp-1.0 \
 	    --pkg libsoup-2.4 \
 	    -I$(top_srcdir) \
-	    $(libgupnp_av_inc_HEADERS) \
-	    gupnp-didl-lite-object.c \
-	    gupnp-didl-lite-item.c \
-	    gupnp-didl-lite-container.c \
-	    gupnp-didl-lite-parser.c \
-	    gupnp-didl-lite-resource.c \
-	    gupnp-didl-lite-descriptor.c \
-	    gupnp-didl-lite-contributor.c \
-	    gupnp-didl-lite-writer.c \
-	    gupnp-protocol-info.c \
-	    gupnp-search-criteria-parser.c \
-	    gupnp-last-change-parser.c \
-	    gupnp-dlna.c \
-	    gupnp-av-error.c
+	    $(addprefix $(top_srcdir)/libgupnp-av/, \
+			$(libgupnp_av_inc_HEADERS)) \
+	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-object.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-item.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-container.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-parser.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-resource.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-descriptor.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-contributor.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-writer.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-protocol-info.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-search-criteria-parser.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-last-change-parser.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-dlna.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-av-error.c
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = GUPnPAV-1.0.gir
