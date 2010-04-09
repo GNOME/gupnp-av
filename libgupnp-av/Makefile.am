@@ -32,9 +32,11 @@ libgupnp_av_inc_HEADERS = gupnp-didl-lite-object.h \
 
 
 gupnp-av-marshal.c: gupnp-av-marshal.list
+	$(AM_V_GEN) \
 	$(GLIB_GENMARSHAL) --prefix=gupnp_av_marshal $(srcdir)/gupnp-av-marshal.list --header --body > gupnp-av-marshal.c
 
 gupnp-av-marshal.h: gupnp-av-marshal.list
+	$(AM_V_GEN) \
 	$(GLIB_GENMARSHAL) --prefix=gupnp_av_marshal $(srcdir)/gupnp-av-marshal.list --header > gupnp-av-marshal.h
 
 BUILT_SOURCES = gupnp-av-marshal.c gupnp-av-marshal.h
