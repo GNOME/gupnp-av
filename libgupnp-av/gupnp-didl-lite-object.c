@@ -282,22 +282,30 @@ gupnp_didl_lite_object_constructed (GObject *object)
         GObjectClass               *object_class;
         GUPnPDIDLLiteObjectPrivate *priv;
         xmlNs                     **ns_list;
-        short                       i;
 
         priv = GUPNP_DIDL_LITE_OBJECT (object)->priv;
 
         ns_list = xmlGetNsList (priv->xml_doc->doc,
                                 xmlDocGetRootElement (priv->xml_doc->doc));
-        for (i = 0; ns_list[i] != NULL; i++) {
-                if (ns_list[i]->prefix == NULL)
-                        continue;
 
-                if (g_ascii_strcasecmp ((char *) ns_list[i]->prefix,
-                                        (char *) "upnp") == 0)
-                        priv->upnp_ns = ns_list[i];
-                else if (g_ascii_strcasecmp ((char *) ns_list[i]->prefix,
-                                             (char *) "dc") == 0)
-                        priv->dc_ns = ns_list[i];
+        if (ns_list) {
+                short i;
+
+                for (i = 0; ns_list[i] != NULL; i++) {
+                        const char *prefix;
+
+                        prefix = (const char *) ns_list[i]->prefix;
+
+                        if (prefix == NULL)
+                                continue;
+
+                        if (g_ascii_strcasecmp (prefix, "upnp") == 0)
+                                priv->upnp_ns = ns_list[i];
+                        else if (g_ascii_strcasecmp (prefix, "dc") == 0)
+                                priv->dc_ns = ns_list[i];
+                }
+
+                xmlFree (ns_list);
         }
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_object_parent_class);
