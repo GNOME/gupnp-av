@@ -55,6 +55,8 @@ enum {
         PROP_0,
         PROP_XML_NODE,
         PROP_XML_DOC,
+        PROP_UPNP_NAMESPACE,
+        PROP_DC_NAMESPACE,
         PROP_ID,
         PROP_PARENT_ID,
         PROP_RESTRICTED,
@@ -98,6 +100,12 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                 break;
         case PROP_XML_DOC:
                 didl_object->priv->xml_doc = g_value_dup_object (value);
+                break;
+        case PROP_UPNP_NAMESPACE:
+                didl_object->priv->upnp_ns = g_value_get_pointer (value);
+                break;
+        case PROP_DC_NAMESPACE:
+                didl_object->priv->dc_ns = g_value_get_pointer (value);
                 break;
         case PROP_ID:
                 gupnp_didl_lite_object_set_id (didl_object,
@@ -281,31 +289,36 @@ gupnp_didl_lite_object_constructed (GObject *object)
 {
         GObjectClass               *object_class;
         GUPnPDIDLLiteObjectPrivate *priv;
-        xmlNs                     **ns_list;
 
         priv = GUPNP_DIDL_LITE_OBJECT (object)->priv;
 
-        ns_list = xmlGetNsList (priv->xml_doc->doc,
-                                xmlDocGetRootElement (priv->xml_doc->doc));
+        if (! priv->upnp_ns || ! priv->dc_ns) {
+                xmlNs **ns_list;
 
-        if (ns_list) {
-                short i;
+                ns_list = xmlGetNsList (priv->xml_doc->doc,
+                                        xmlDocGetRootElement (priv->xml_doc->doc));
 
-                for (i = 0; ns_list[i] != NULL; i++) {
-                        const char *prefix;
+                if (ns_list) {
+                        short i;
 
-                        prefix = (const char *) ns_list[i]->prefix;
+                        for (i = 0; ns_list[i] != NULL; i++) {
+                                const char *prefix;
 
-                        if (prefix == NULL)
-                                continue;
+                                prefix = (const char *) ns_list[i]->prefix;
 
-                        if (g_ascii_strcasecmp (prefix, "upnp") == 0)
-                                priv->upnp_ns = ns_list[i];
-                        else if (g_ascii_strcasecmp (prefix, "dc") == 0)
-                                priv->dc_ns = ns_list[i];
+                                if (prefix == NULL)
+                                        continue;
+
+                                if (! priv->upnp_ns &&
+                                    g_ascii_strcasecmp (prefix, "upnp") == 0)
+                                        priv->upnp_ns = ns_list[i];
+                                else if (! priv->dc_ns &&
+                                         g_ascii_strcasecmp (prefix, "dc") == 0)
+                                        priv->dc_ns = ns_list[i];
+                        }
+
+                        xmlFree (ns_list);
                 }
-
-                xmlFree (ns_list);
         }
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_object_parent_class);
@@ -385,6 +398,54 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:upnp-namespace
+         *
+         * Pointer to the UPNP XML namespace registered with the
+         * XML document containing this object.
+         *
+         * Internal property.
+         *
+         * Stability: Private
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_UPNP_NAMESPACE,
+                 g_param_spec_pointer ("upnp-namespace",
+                                       "XML namespace",
+                                       "Pointer to the UPNP XML namespace "
+                                       "registered with the XML document "
+                                       "containing this object.",
+                                       G_PARAM_WRITABLE |
+                                       G_PARAM_CONSTRUCT_ONLY |
+                                       G_PARAM_STATIC_NAME |
+                                       G_PARAM_STATIC_NICK |
+                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:dc-namespace
+         *
+         * Pointer to the DublinCore XML namespace registered with
+         * the XML document containing this object.
+         *
+         * Internal property.
+         *
+         * Stability: Private
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_DC_NAMESPACE,
+                 g_param_spec_pointer ("dc-namespace",
+                                       "XML namespace",
+                                       "Pointer to the Dublin Core XML "
+                                       "namespace registered with the XML "
+                                       "document containing this object.",
+                                       G_PARAM_WRITABLE |
+                                       G_PARAM_CONSTRUCT_ONLY |
+                                       G_PARAM_STATIC_NAME |
+                                       G_PARAM_STATIC_NICK |
+                                       G_PARAM_STATIC_BLURB));
 
         /**
          * GUPnPDIDLLiteObject:id
@@ -724,7 +785,9 @@ get_contributor_list_by_name (GUPnPDIDLLiteObject *object,
  **/
 GUPnPDIDLLiteObject *
 gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
-                                     GUPnPXMLDoc *xml_doc)
+                                     GUPnPXMLDoc *xml_doc,
+                                     xmlNs       *upnp_ns,
+                                     xmlNs       *dc_ns)
 {
         g_return_val_if_fail (xml_node != NULL, NULL);
         g_return_val_if_fail (xml_node->name != NULL, NULL);
@@ -734,11 +797,15 @@ gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
                 return g_object_new (GUPNP_TYPE_DIDL_LITE_CONTAINER,
                                      "xml-node", xml_node,
                                      "xml-doc", xml_doc,
+                                     "upnp-namespace", upnp_ns,
+                                     "dc-namespace", dc_ns,
                                      NULL);
         else if (g_ascii_strcasecmp ((char *) xml_node->name, "item") == 0)
                 return g_object_new (GUPNP_TYPE_DIDL_LITE_ITEM,
                                      "xml-node", xml_node,
                                      "xml-doc", xml_doc,
+                                     "upnp-namespace", upnp_ns,
+                                     "dc-namespace", dc_ns,
                                      NULL);
         else
                 return NULL;

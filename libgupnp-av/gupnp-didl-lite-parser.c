@@ -208,7 +208,8 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
         for (element = element->children; element; element = element->next) {
                 GUPnPDIDLLiteObject *object;
 
-                object = gupnp_didl_lite_object_new_from_xml (element, xml_doc);
+                object = gupnp_didl_lite_object_new_from_xml (element, xml_doc,
+                                                              NULL, NULL);
 
                 if (object == NULL)
                         continue;

@@ -424,7 +424,9 @@ gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
                                 NULL);
 
         object = gupnp_didl_lite_object_new_from_xml (item_node,
-                                                      writer->priv->xml_doc);
+                                                      writer->priv->xml_doc,
+                                                      writer->priv->upnp_ns,
+                                                      writer->priv->dc_ns);
         return GUPNP_DIDL_LITE_ITEM (object);
 }
 
@@ -450,7 +452,9 @@ gupnp_didl_lite_writer_add_container (GUPnPDIDLLiteWriter *writer)
                                       NULL);
 
         object = gupnp_didl_lite_object_new_from_xml (container_node,
-                                                      writer->priv->xml_doc);
+                                                      writer->priv->xml_doc,
+                                                      writer->priv->upnp_ns,
+                                                      writer->priv->dc_ns);
         return GUPNP_DIDL_LITE_CONTAINER (object);
 }
 
