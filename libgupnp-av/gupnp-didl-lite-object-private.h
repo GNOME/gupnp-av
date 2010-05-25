@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-GUPnPDIDLLiteObject *
+G_GNUC_INTERNAL GUPnPDIDLLiteObject *
 gupnp_didl_lite_object_new_from_xml     (xmlNode     *xml_node,
                                          GUPnPXMLDoc *xml_doc);
 
