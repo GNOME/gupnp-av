@@ -203,6 +203,18 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                         (value,
                          gupnp_didl_lite_object_get_xml_node (didl_object));
                 break;
+        case PROP_UPNP_NAMESPACE:
+                g_value_set_pointer
+                        (value,
+                         gupnp_didl_lite_object_get_upnp_namespace
+                                (didl_object));
+                break;
+        case PROP_DC_NAMESPACE:
+                g_value_set_pointer
+                        (value,
+                         gupnp_didl_lite_object_get_dc_namespace
+                                (didl_object));
+                break;
         case PROP_ID:
                 g_value_set_string
                         (value,
@@ -409,22 +421,18 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
         /**
          * GUPnPDIDLLiteObject:upnp-namespace
          *
-         * Pointer to the UPNP XML namespace registered with the
-         * XML document containing this object.
+         * Pointer to the UPnP namespace registered with the XML document                * containing this object.
          *
-         * Internal property.
-         *
-         * Stability: Private
          **/
         g_object_class_install_property
                 (object_class,
                  PROP_UPNP_NAMESPACE,
                  g_param_spec_pointer ("upnp-namespace",
                                        "XML namespace",
-                                       "Pointer to the UPNP XML namespace "
+                                       "Pointer to the UPnP XML namespace "
                                        "registered with the XML document "
                                        "containing this object.",
-                                       G_PARAM_WRITABLE |
+                                       G_PARAM_READWRITE |
                                        G_PARAM_CONSTRUCT_ONLY |
                                        G_PARAM_STATIC_NAME |
                                        G_PARAM_STATIC_NICK |
@@ -433,12 +441,9 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
         /**
          * GUPnPDIDLLiteObject:dc-namespace
          *
-         * Pointer to the DublinCore XML namespace registered with
-         * the XML document containing this object.
+         * Pointer to the DublinCore namespace registered with the XML document
+         * containing this object.
          *
-         * Internal property.
-         *
-         * Stability: Private
          **/
         g_object_class_install_property
                 (object_class,
@@ -448,7 +453,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                        "Pointer to the Dublin Core XML "
                                        "namespace registered with the XML "
                                        "document containing this object.",
-                                       G_PARAM_WRITABLE |
+                                       G_PARAM_READWRITE |
                                        G_PARAM_CONSTRUCT_ONLY |
                                        G_PARAM_STATIC_NAME |
                                        G_PARAM_STATIC_NICK |
@@ -832,6 +837,39 @@ gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
         return object->priv->xml_node;
+}
+
+/**
+ * gupnp_didl_lite_object_get_upnp_namespace:
+ * @object: The #GUPnPDIDLLiteObject
+ *
+ * Get the pointer to the UPnP namespace registered with the XML document.
+ *
+ * Return value: The pointer to UPnP namespace in XML document.
+ **/
+xmlNsPtr
+gupnp_didl_lite_object_get_upnp_namespace (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return object->priv->upnp_ns;
+}
+
+/**
+ * gupnp_didl_lite_object_get_dc_namespace:
+ * @object: The #GUPnPDIDLLiteObject
+ *
+ * Get the pointer to the DublinCore namespace registered with the XML document
+ * containing this object.
+ *
+ * Return value: The pointer to DublinCore namespace in XML document.
+ **/
+xmlNsPtr
+gupnp_didl_lite_object_get_dc_namespace (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return object->priv->dc_ns;
 }
 
 /**

@@ -80,6 +80,13 @@ typedef struct {
 xmlNode *
 gupnp_didl_lite_object_get_xml_node     (GUPnPDIDLLiteObject *object);
 
+xmlNsPtr
+gupnp_didl_lite_object_get_upnp_namespace
+                                        (GUPnPDIDLLiteObject *object);
+
+xmlNsPtr
+gupnp_didl_lite_object_get_dc_namespace (GUPnPDIDLLiteObject *object);
+
 const char *
 gupnp_didl_lite_object_get_upnp_class   (GUPnPDIDLLiteObject *object);
 
