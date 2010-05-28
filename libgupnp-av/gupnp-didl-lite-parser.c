@@ -163,9 +163,12 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                                    const char          *didl,
                                    GError             **error)
 {
-        xmlDoc      *doc;
-        xmlNode     *element;
-        GUPnPXMLDoc *xml_doc;
+        xmlDoc       *doc;
+        xmlNode      *element;
+        xmlNs       **ns_list;
+        xmlNs        *upnp_ns = NULL;
+        xmlNs        *dc_ns   = NULL;
+        GUPnPXMLDoc  *xml_doc;
 
         doc = xmlRecoverMemory (didl, strlen (didl));
 	if (doc == NULL) {
@@ -203,13 +206,51 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                 return FALSE;
         }
 
+        /* Lookup UPnP and DC namespaces */
+        ns_list = xmlGetNsList (doc,
+                                xmlDocGetRootElement (doc));
+
+        if (ns_list) {
+                short i;
+
+                for (i = 0; ns_list[i] != NULL; i++) {
+                        const char *prefix = (const char *) ns_list[i]->prefix;
+
+                        if (prefix == NULL)
+                                continue;
+
+                        if (! upnp_ns &&
+                            g_ascii_strcasecmp (prefix, "upnp") == 0)
+                                upnp_ns = ns_list[i];
+                        else if (! dc_ns &&
+                                 g_ascii_strcasecmp (prefix, "dc") == 0)
+                                dc_ns = ns_list[i];
+                }
+
+                xmlFree (ns_list);
+        }
+
+        /* Create UPnP and DC namespaces if they don't exist */
+        if (! upnp_ns)
+                upnp_ns = xmlNewNs (xmlDocGetRootElement (doc),
+                                    (unsigned char *)
+                                    "urn:schemas-upnp-org:metadata-1-0/upnp/",
+                                    (unsigned char *)
+                                    GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP);
+        if (! dc_ns)
+                dc_ns = xmlNewNs (xmlDocGetRootElement (doc),
+                                  (unsigned char *)
+                                  "http://purl.org/dc/elements/1.1/",
+                                  (unsigned char *)
+                                  GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC);
+
         xml_doc = gupnp_xml_doc_new (doc);
 
         for (element = element->children; element; element = element->next) {
                 GUPnPDIDLLiteObject *object;
 
                 object = gupnp_didl_lite_object_new_from_xml (element, xml_doc,
-                                                              NULL, NULL);
+                                                              upnp_ns, dc_ns);
 
                 if (object == NULL)
                         continue;

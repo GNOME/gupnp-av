@@ -297,55 +297,6 @@ gupnp_didl_lite_object_get_property (GObject    *object,
 }
 
 static void
-gupnp_didl_lite_object_lookup_namespaces (GUPnPDIDLLiteObjectPrivate *priv)
-{
-        xmlNs **ns_list;
-
-        if (priv->upnp_ns && priv->dc_ns)
-                return;
-
-        ns_list = xmlGetNsList (priv->xml_doc->doc,
-                                xmlDocGetRootElement (priv->xml_doc->doc));
-
-        if (ns_list) {
-                short i;
-
-                for (i = 0; ns_list[i] != NULL; i++) {
-                        const char *prefix;
-
-                        prefix = (const char *) ns_list[i]->prefix;
-
-                        if (prefix == NULL)
-                                continue;
-
-                        if (! priv->upnp_ns &&
-                            g_ascii_strcasecmp (prefix, "upnp") == 0)
-                                priv->upnp_ns = ns_list[i];
-                        else if (! priv->dc_ns &&
-                                 g_ascii_strcasecmp (prefix, "dc") == 0)
-                                priv->dc_ns = ns_list[i];
-                }
-
-                xmlFree (ns_list);
-        }
-}
-
-static void
-gupnp_didl_lite_object_constructed (GObject *object)
-{
-        GObjectClass               *object_class;
-        GUPnPDIDLLiteObjectPrivate *priv;
-
-        priv = GUPNP_DIDL_LITE_OBJECT (object)->priv;
-
-        gupnp_didl_lite_object_lookup_namespaces (priv);
-
-        object_class = G_OBJECT_CLASS (gupnp_didl_lite_object_parent_class);
-        if (object_class->constructed != NULL)
-                object_class->constructed (object);
-}
-
-static void
 gupnp_didl_lite_object_dispose (GObject *object)
 {
         GObjectClass               *object_class;
@@ -371,7 +322,6 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
 
         object_class->set_property = gupnp_didl_lite_object_set_property;
         object_class->get_property = gupnp_didl_lite_object_get_property;
-        object_class->constructed = gupnp_didl_lite_object_constructed;
         object_class->dispose = gupnp_didl_lite_object_dispose;
 
         g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteObjectPrivate));
@@ -790,6 +740,8 @@ get_contributor_list_by_name (GUPnPDIDLLiteObject *object,
  * gupnp_didl_lite_object_new_from_xml:
  * @xml_node: The pointer to 'res' node in XML document
  * @xml_doc: The reference to XML document containing this object
+ * @upnp_ns: The pointer to 'upnp' namespace in XML document
+ * @dc_ns: The pointer to 'dc' namespace in XML document
  *
  * Creates a new #GUPnPDIDLLiteObject for the @xml_node.
  *
@@ -803,7 +755,8 @@ gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
 {
         g_return_val_if_fail (xml_node != NULL, NULL);
         g_return_val_if_fail (xml_node->name != NULL, NULL);
-        g_return_val_if_fail (GUPNP_IS_XML_DOC (xml_doc), NULL);
+        g_return_val_if_fail (upnp_ns != NULL, NULL);
+        g_return_val_if_fail (dc_ns != NULL, NULL);
 
         if (g_ascii_strcasecmp ((char *) xml_node->name, "container") == 0)
                 return g_object_new (GUPNP_TYPE_DIDL_LITE_CONTAINER,
