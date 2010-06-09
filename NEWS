@@ -1,3 +1,18 @@
+0.5.6
+=====
+
+Changes since 0.5.5:
+
+- Optimize namespace handling in DIDL-Lite handling code.
+- Hide internal function gupnp_didl_lite_object_new_from_xml().
+- Remove new redundant gupnp_didl_lite_container_new_from_xml().
+- Free the array allocated by xmlGetNsList().
+
+All contributors to this release:
+
+Sven Neumann <s.neumann@raumfeld.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
 0.5.5
 =====
 
