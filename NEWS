@@ -1,3 +1,18 @@
+0.5.7
+=====
+
+Changes since 0.5.6:
+
+- Make namespace properties on GUPnPDIDLLiteObject readable and provide
+  getter functions for them.
+- Improve performance of DIDL-Lite parsing by moving namespace lookups to
+  GUPnPDIDLLiteParser.
+
+All contributors to this release:
+
+Sven Neumann <s.neumann@raumfeld.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
 0.5.6
 =====
 
