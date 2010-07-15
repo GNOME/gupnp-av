@@ -184,7 +184,9 @@ filter_node (xmlNode             *node,
                 if (child->ns != NULL)
                         ns = (const char *) child->ns->prefix;
 
-                if (!is_standard_prop ((const char *) child->name, ns, NULL) &&
+                if (!is_standard_prop ((const char *) child->name,
+                                       ns,
+                                       (const char *)  node->name) &&
                     is_node_forbidden (child, allowed, ns))
                         forbidden = g_list_append (forbidden, child);
         }
