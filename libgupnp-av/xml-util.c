@@ -178,7 +178,7 @@ xml_util_get_long_attribute (xmlNode    *node,
         return atoll (content);
 }
 
-void
+xmlNode *
 xml_util_set_child (xmlNode    *parent_node,
                     xmlNs      *namespace,
                     xmlDoc     *doc,
@@ -199,5 +199,7 @@ xml_util_set_child (xmlNode    *parent_node,
         escaped = xmlEncodeSpecialChars (doc, (const unsigned char *) value);
         xmlNodeSetContent (node, escaped);
         xmlFree (escaped);
+
+        return node;
 }
 

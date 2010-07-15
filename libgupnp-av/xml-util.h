@@ -64,7 +64,7 @@ xml_util_get_long_attribute             (xmlNode    *node,
                                          const char *attribute_name,
                                          glong       default_value);
 
-G_GNUC_INTERNAL void
+G_GNUC_INTERNAL xmlNode *
 xml_util_set_child                      (xmlNode    *parent_node,
                                          xmlNs      *namespace,
                                          xmlDoc     *doc,
