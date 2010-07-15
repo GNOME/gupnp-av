@@ -1651,14 +1651,20 @@ void
 gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
                                       const char          *album_art)
 {
+        xmlNode *node;
+        xmlNs *dlna_ns;
+
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
 
-        xml_util_set_child (object->priv->xml_node,
-                            object->priv->upnp_ns,
-                            object->priv->xml_doc->doc,
-                            "albumArtURI",
-                            album_art);
+        node = xml_util_set_child (object->priv->xml_node,
+                                   object->priv->upnp_ns,
+                                   object->priv->xml_doc->doc,
+                                   "albumArtURI",
+                                   album_art);
+
+        dlna_ns = xmlNewNs (node, "urn:schemas-dlna-org:metadata-1-0/", "dlna");
+        xmlNewNsProp (node, dlna_ns, "profileID", "JPEG_TN");
 
         g_object_notify (G_OBJECT (object), "album-art");
 }
