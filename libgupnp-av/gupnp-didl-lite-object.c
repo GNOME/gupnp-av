@@ -74,6 +74,19 @@ enum {
         PROP_TRACK_NUMBER,
 };
 
+static int
+is_non_transcoded_resource (GUPnPDIDLLiteResource *resource)
+{
+        GUPnPProtocolInfo *info;
+
+        info = gupnp_didl_lite_resource_get_protocol_info (resource);
+        if (G_UNLIKELY (info == NULL))
+                return -1;
+
+        return gupnp_protocol_info_get_dlna_conversion (info) &
+               GUPNP_DLNA_CONVERSION_TRANSCODED;
+}
+
 static void
 gupnp_didl_lite_object_init (GUPnPDIDLLiteObject *object)
 {
@@ -1271,6 +1284,7 @@ gupnp_didl_lite_object_get_compat_resource
 {
         GUPnPDIDLLiteResource *resource = NULL;
         GList  *resources = NULL;
+        GList  *compat_resources = NULL;
         GList  *res;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
@@ -1281,15 +1295,32 @@ gupnp_didl_lite_object_get_compat_resource
                 return NULL;
 
         for (res = resources;
-             res != NULL && resource == NULL;
+             res != NULL;
              res = res->next) {
                 resource = (GUPnPDIDLLiteResource *) res->data;
 
-                if (!is_resource_compatible (resource, sink_protocol_info))
-                        resource = NULL;
+                if (is_resource_compatible (resource, sink_protocol_info))
+                        compat_resources = g_list_append (compat_resources,
+                                                          resource);
         }
 
-        if (resource == NULL && lenient)
+        resource = NULL;
+
+        if (compat_resources != NULL) {
+                /* Try to find non-transcoded resource */
+                res = g_list_find_custom (compat_resources,
+                                          NULL,
+                                          (GCompareFunc)
+                                          is_non_transcoded_resource);
+
+                if (res != NULL)
+                        resource = (GUPnPDIDLLiteResource *) res->data;
+                else
+                        /* Just use the first compatible resource */
+                        resource = (GUPnPDIDLLiteResource *)
+                                   compat_resources->data;
+
+        } else if (lenient)
                 /* Just use the first resource */
                 resource = (GUPnPDIDLLiteResource *) resources->data;
 
@@ -1298,6 +1329,7 @@ gupnp_didl_lite_object_get_compat_resource
                 if (res->data != resource)
                         g_object_unref (res->data);
         g_list_free (resources);
+        g_list_free (compat_resources);
 
         return resource;
 }
