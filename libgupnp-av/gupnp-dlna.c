@@ -73,7 +73,7 @@ gupnp_dlna_operation_get_type (void)
         return type;
 }
 
-        GType
+GType
 gupnp_dlna_flags_get_type (void)
 {
         static GType type = 0;
