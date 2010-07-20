@@ -1695,8 +1695,14 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
                                    "albumArtURI",
                                    album_art);
 
-        dlna_ns = xmlNewNs (node, "urn:schemas-dlna-org:metadata-1-0/", "dlna");
-        xmlNewNsProp (node, dlna_ns, "profileID", "JPEG_TN");
+        dlna_ns = xmlNewNs (node,
+                            (const unsigned char *)
+                            "urn:schemas-dlna-org:metadata-2-0/",
+                            (const unsigned char *) "dlna");
+        xmlNewNsProp (node,
+                      dlna_ns,
+                      (const unsigned char *) "profileID",
+                      (const unsigned char *) "JPEG_TN");
 
         g_object_notify (G_OBJECT (object), "album-art");
 }
