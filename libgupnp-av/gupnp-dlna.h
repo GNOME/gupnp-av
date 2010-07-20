@@ -22,7 +22,7 @@
 #ifndef __GUPNP_DLNA_H__
 #define __GUPNP_DLNA_H__
 
-#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 

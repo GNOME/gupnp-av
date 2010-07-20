@@ -58,7 +58,6 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-protocol-info.c \
 			     gupnp-search-criteria-parser.c \
 			     gupnp-last-change-parser.c \
-			     gupnp-dlna-private.h \
 			     gupnp-dlna.c \
 			     gupnp-av-error.c \
 			     xml-util.c \

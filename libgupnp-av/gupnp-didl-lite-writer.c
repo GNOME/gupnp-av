@@ -32,7 +32,6 @@
 #include "gupnp-didl-lite-object.h"
 #include "gupnp-didl-lite-object-private.h"
 #include "gupnp-didl-lite-descriptor-private.h"
-#include "gupnp-dlna-private.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
                gupnp_didl_lite_writer,

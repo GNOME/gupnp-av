@@ -30,7 +30,6 @@
 #include <string.h>
 
 #include "gupnp-didl-lite-descriptor.h"
-#include "gupnp-dlna-private.h"
 #include "xml-util.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteDescriptor,
