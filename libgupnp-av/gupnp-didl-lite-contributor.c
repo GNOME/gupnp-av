@@ -44,6 +44,8 @@ struct _GUPnPDIDLLiteContributorPrivate {
 
 enum {
         PROP_0,
+        PROP_XML_NODE,
+        PROP_XML_DOC,
         PROP_ROLE,
         PROP_NAME
 };
@@ -68,6 +70,12 @@ gupnp_didl_lite_contributor_get_property (GObject    *object,
         contributor = GUPNP_DIDL_LITE_CONTRIBUTOR (object);
 
         switch (property_id) {
+        case PROP_XML_NODE:
+                g_value_set_pointer
+                        (value,
+                         gupnp_didl_lite_contributor_get_xml_node
+                                        (contributor));
+                break;
         case PROP_ROLE:
                 g_value_set_string
                         (value,
@@ -96,6 +104,12 @@ gupnp_didl_lite_contributor_set_property (GObject      *object,
         contributor = GUPNP_DIDL_LITE_CONTRIBUTOR (object);
 
         switch (property_id) {
+        case PROP_XML_NODE:
+                contributor->priv->xml_node = g_value_get_pointer (value);
+                break;
+        case PROP_XML_DOC:
+                contributor->priv->xml_doc = g_value_dup_object (value);
+                break;
         case PROP_ROLE:
                 gupnp_didl_lite_contributor_set_role
                         (contributor,
@@ -140,6 +154,48 @@ gupnp_didl_lite_contributor_class_init (GUPnPDIDLLiteContributorClass *klass)
         object_class->get_property = gupnp_didl_lite_contributor_get_property;
         object_class->set_property = gupnp_didl_lite_contributor_set_property;
         object_class->dispose = gupnp_didl_lite_contributor_dispose;
+
+        /**
+         * GUPnPDIDLLiteContributor:xml-node
+         *
+         * The pointer to object node in XML document.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_XML_NODE,
+                 g_param_spec_pointer ("xml-node",
+                                       "XMLNode",
+                                       "The pointer to contributor node in XML"
+                                       " document.",
+                                       G_PARAM_READWRITE |
+                                       G_PARAM_CONSTRUCT_ONLY |
+                                       G_PARAM_STATIC_NAME |
+                                       G_PARAM_STATIC_NICK |
+                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteContributor:xml-doc
+         *
+         * The reference to XML document containing this object.
+         *
+         * Internal property.
+         *
+         * Stability: Private
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_XML_DOC,
+                 g_param_spec_object ("xml-doc",
+                                      "XMLDoc",
+                                      "The reference to XML document"
+                                      " containing this contributor.",
+                                      GUPNP_TYPE_XML_DOC,
+                                      G_PARAM_WRITABLE |
+                                      G_PARAM_CONSTRUCT_ONLY |
+                                      G_PARAM_PRIVATE |
+                                      G_PARAM_STATIC_NAME |
+                                      G_PARAM_STATIC_NICK |
+                                      G_PARAM_STATIC_BLURB));
 
         /**
          * GUPnPDIDLLiteContributor:role
