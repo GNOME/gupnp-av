@@ -155,6 +155,9 @@ gupnp_didl_lite_contributor_class_init (GUPnPDIDLLiteContributorClass *klass)
         object_class->set_property = gupnp_didl_lite_contributor_set_property;
         object_class->dispose = gupnp_didl_lite_contributor_dispose;
 
+        g_type_class_add_private (klass,
+                                  sizeof (GUPnPDIDLLiteContributorPrivate));
+
         /**
          * GUPnPDIDLLiteContributor:xml-node
          *
