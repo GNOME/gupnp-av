@@ -1,3 +1,26 @@
+0.5.8
+=====
+
+Changes since 0.5.7:
+
+- Fix crashes in DIDLLiteContributor API.
+- Remove incomplete and broken DLNA guessing code. Applications should use
+  gupnp-dlna now for all their DLNA needs.
+- Do set the 'dlna:profileID' property of 'albumArtURI' node and treat it as
+  mandatory as per DLNA guidelines (7.3.61.3).
+- Prefer non-transcoded resources over transcoded ones when choosing compatible 
+  resources for a particular MediaRenderer.
+- Minor correction to DIDL filtering code.
+- Some other minor improvements/fixes.
+
+Bug fixed in this release:
+
+2187 - GUPnPDIDLLiteContributor class doesn't work
+
+All contributors to this release:
+
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
 0.5.7
 =====
 
