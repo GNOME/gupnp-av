@@ -236,6 +236,7 @@ add_dlna_info (GString           *str,
         const char *dlna_profile;
         const char **speeds;
         GUPnPDLNAConversion conversion;
+        GUPnPDLNAOperation operation;
         GUPnPDLNAFlags flags;
 
         dlna_profile = gupnp_protocol_info_get_dlna_profile (info);
@@ -246,17 +247,16 @@ add_dlna_info (GString           *str,
 
         g_string_append_printf (str, ":DLNA.ORG_PN=%s", dlna_profile);
 
-        /* the OP parameter is only allowed for the "http-get"
-         * and "rtsp-rtp-udp" protocols
-         */
-        if (strcmp (gupnp_protocol_info_get_protocol (info),
-                    "http-get") == 0 ||
-            strcmp (gupnp_protocol_info_get_protocol (info),
-                    "rtsp-rtp-udp") == 0)
-                g_string_append_printf
-                        (str,
-                         ";DLNA.ORG_OP=%.2x",
-                         gupnp_protocol_info_get_dlna_operation (info));
+        operation = gupnp_protocol_info_get_dlna_operation (info);
+        if (operation != GUPNP_DLNA_OPERATION_NONE &&
+            /* the OP parameter is only allowed for the "http-get"
+             * and "rtsp-rtp-udp" protocols
+             */
+            (strcmp (gupnp_protocol_info_get_protocol (info),
+                     "http-get") == 0 ||
+             strcmp (gupnp_protocol_info_get_protocol (info),
+                     "rtsp-rtp-udp") == 0))
+                g_string_append_printf (str, ";DLNA.ORG_OP=%.2x", operation);
 
         /* Specify PS parameter if list of play speeds is provided */
         speeds = gupnp_protocol_info_get_play_speeds (info);
