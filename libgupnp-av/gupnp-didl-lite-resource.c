@@ -1087,7 +1087,7 @@ gupnp_didl_lite_resource_set_duration (GUPnPDIDLLiteResource *resource,
         else {
                 char *str;
 
-                str = g_strdup_printf ("%ld:%.2ld:%.2ld.00",
+                str = g_strdup_printf ("%ld:%.2ld:%.2ld.000",
                                        duration / (60 * 60),
                                        (duration / 60) % 60,
                                        duration % 60);
