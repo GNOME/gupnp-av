@@ -169,13 +169,23 @@ xml_util_get_long_attribute (xmlNode    *node,
                              const char *attribute_name,
                              glong       default_value)
 {
+    return (glong) xml_util_get_int64_attribute (node,
+                                                 attribute_name,
+                                                 (gint64) default_value);
+}
+
+gint64
+xml_util_get_int64_attribute (xmlNode    *node,
+                              const char *attribute_name,
+                              gint64      default_value)
+{
         const char *content;
 
         content = xml_util_get_attribute_content (node, attribute_name);
         if (!content)
                 return default_value;
 
-        return atoll (content);
+        return g_ascii_strtoll (content, NULL, 0);
 }
 
 xmlNode *

@@ -64,6 +64,11 @@ xml_util_get_long_attribute             (xmlNode    *node,
                                          const char *attribute_name,
                                          glong       default_value);
 
+G_GNUC_INTERNAL gint64
+xml_util_get_int64_attribute            (xmlNode    *node,
+                                         const char *attribute_name,
+                                         gint64      default_value);
+
 G_GNUC_INTERNAL xmlNode *
 xml_util_set_child                      (xmlNode    *parent_node,
                                          xmlNs      *namespace,

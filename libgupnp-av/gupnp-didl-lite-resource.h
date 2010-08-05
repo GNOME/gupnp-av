@@ -27,6 +27,7 @@
 
 #include <stdarg.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <libxml/tree.h>
 #include <libgupnp/gupnp.h>
 
@@ -95,6 +96,10 @@ gupnp_didl_lite_resource_set_size       (GUPnPDIDLLiteResource *resource,
                                          long                   size);
 
 void
+gupnp_didl_lite_resource_set_size64     (GUPnPDIDLLiteResource *resource,
+                                         gint64                 size);
+
+void
 gupnp_didl_lite_resource_set_duration   (GUPnPDIDLLiteResource *resource,
                                          long                   duration);
 
@@ -149,6 +154,9 @@ gupnp_didl_lite_resource_get_protocol_info
 
 long
 gupnp_didl_lite_resource_get_size       (GUPnPDIDLLiteResource *resource);
+
+gint64
+gupnp_didl_lite_resource_get_size64     (GUPnPDIDLLiteResource *resource);
 
 long
 gupnp_didl_lite_resource_get_duration   (GUPnPDIDLLiteResource *resource);

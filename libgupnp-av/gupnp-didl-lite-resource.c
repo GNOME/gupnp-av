@@ -59,6 +59,7 @@ enum {
         PROP_PROTOCOL_INFO,
 
         PROP_SIZE,
+        PROP_SIZE64,
         PROP_DURATION,
         PROP_BITRATE,
         PROP_SAMPLE_FREQ,
@@ -179,6 +180,10 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                 gupnp_didl_lite_resource_set_size (resource,
                                                    g_value_get_long (value));
                 break;
+        case PROP_SIZE64:
+                gupnp_didl_lite_resource_set_size64 (resource,
+                                                     g_value_get_int64 (value));
+                break;
         case PROP_DURATION:
                 gupnp_didl_lite_resource_set_duration
                                 (resource,
@@ -261,6 +266,9 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
         case PROP_SIZE:
                 g_value_set_long (value,
                                   gupnp_didl_lite_resource_get_size (resource));
+        case PROP_SIZE64:
+                g_value_set_int64 (value,
+                                   gupnp_didl_lite_resource_get_size64 (resource));
                 break;
         case PROP_DURATION:
                 g_value_set_long
@@ -462,6 +470,25 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
                                     G_PARAM_STATIC_NAME |
                                     G_PARAM_STATIC_NICK |
                                     G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteResource:size64
+         *
+         * The size (in bytes) of this resource.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_SIZE64,
+                 g_param_spec_int64 ("size64",
+                                     "Size64",
+                                     "The size (in bytes) of this resource.",
+                                     -1,
+                                     G_MAXINT64,
+                                     -1,
+                                     G_PARAM_READWRITE |
+                                     G_PARAM_STATIC_NAME |
+                                     G_PARAM_STATIC_NICK |
+                                     G_PARAM_STATIC_BLURB));
 
         /**
          * GUPnPDIDLLiteResource:duration
@@ -764,12 +791,27 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
 long
 gupnp_didl_lite_resource_get_size (GUPnPDIDLLiteResource *resource)
 {
+    return (long) gupnp_didl_lite_resource_get_size64 (resource);
+}
+
+/**
+ * gupnp_didl_lite_resource_get_size64
+ * @resource: A #GUPnPDIDLLiteResource
+ *
+ * Get the size (in bytes) of the @resource.
+ *
+ * Return value: The size (in bytes) of the @resource or -1.
+ **/
+gint64
+gupnp_didl_lite_resource_get_size64 (GUPnPDIDLLiteResource *resource)
+{
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
 
-        return xml_util_get_long_attribute (resource->priv->xml_node,
-                                            "size",
-                                            -1);
+        return xml_util_get_int64_attribute (resource->priv->xml_node,
+                                             "size",
+                                             -1);
 }
+
 
 /**
  * gupnp_didl_lite_resource_get_duration
@@ -1047,6 +1089,23 @@ void
 gupnp_didl_lite_resource_set_size (GUPnPDIDLLiteResource *resource,
                                    long                   size)
 {
+        gupnp_didl_lite_resource_set_size64 (resource, size);
+}
+
+/**
+ * gupnp_didl_lite_resource_set_size64
+ * @resource: A #GUPnPDIDLLiteResource
+ * @size: The size (in bytes)
+ *
+ * Set the size (in bytes) of the @resource. Passing a negative number will
+ * unset this property.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_resource_set_size64 (GUPnPDIDLLiteResource *resource,
+                                     gint64                 size)
+{
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
         if (size < 0)
@@ -1055,15 +1114,17 @@ gupnp_didl_lite_resource_set_size (GUPnPDIDLLiteResource *resource,
         else {
                 char *str;
 
-                str = g_strdup_printf ("%ld", size);
+                str = g_strdup_printf ("%" G_GINT64_FORMAT, size);
                 xmlSetProp (resource->priv->xml_node,
                             (unsigned char *) "size",
                             (unsigned char *) str);
                 g_free (str);
         }
 
+        g_object_notify (G_OBJECT (resource), "size64");
         g_object_notify (G_OBJECT (resource), "size");
 }
+
 
 /**
  * gupnp_didl_lite_resource_set_duration
