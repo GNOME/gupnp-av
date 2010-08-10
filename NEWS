@@ -1,3 +1,24 @@
+0.5.9
+=====
+
+Changes since 0.5.8:
+
+- Add 64bit size property to allow resources to be bigger than 2-GB.
+- Mircoseconds part of duration in resources needs to be a 3-digit number
+  as per DLNA requirement  (7.3.22.1).
+- Don't  set the operation parameter if no operations are supported as per DLNA 
+  requirement (7.3.33.3).
+
+Bug fixed in this release:
+
+2183 - size property of DIDL resource should be 64bit unsigned according to UPnP
+       spec
+
+All contributors to this release:
+
+Jens Georg <mail@jensge.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
 0.5.8
 =====
 
