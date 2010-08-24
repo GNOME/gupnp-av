@@ -3,6 +3,8 @@
 <TITLE>GUPnPDIDLLiteObject</TITLE>
 GUPnPDIDLLiteObject
 gupnp_didl_lite_object_get_xml_node
+gupnp_didl_lite_object_get_upnp_namespace
+gupnp_didl_lite_object_get_dc_namespace
 gupnp_didl_lite_object_get_properties
 gupnp_didl_lite_object_get_id
 gupnp_didl_lite_object_get_parent_id
@@ -176,6 +178,7 @@ gupnp_didl_lite_resource_get_audio_channels
 gupnp_didl_lite_resource_get_width
 gupnp_didl_lite_resource_get_height
 gupnp_didl_lite_resource_get_color_depth
+gupnp_didl_lite_resource_get_xml_node
 <SUBSECTION Standard>
 GUPNP_TYPE_DIDL_LITE_RESOURCE
 GUPNP_DIDL_LITE_RESOURCE
@@ -241,6 +244,7 @@ GUPnPProtocolInfo
 GUPnPDLNAConversion
 GUPnPDLNAFlags
 GUPnPDLNAOperation
+gupnp_protocol_info_new
 gupnp_protocol_info_new_from_string
 gupnp_protocol_info_to_string
 gupnp_protocol_info_is_compatible
@@ -267,9 +271,15 @@ GUPNP_PROTOCOL_INFO_CLASS
 GUPNP_IS_PROTOCOL_INFO
 GUPNP_IS_PROTOCOL_INFO_CLASS
 GUPNP_PROTOCOL_INFO_GET_CLASS
+GUPNP_TYPE_DLNA_CONVERSION
+GUPNP_TYPE_DLNA_FLAGS
+GUPNP_TYPE_DLNA_OPERATION
 <SUBSECTION Private>
 GUPnPProtocolInfoPrivate
 gupnp_protocol_info_get_type
+gupnp_dlna_conversion_get_type
+gupnp_dlna_flags_get_type
+gupnp_dlna_operation_get_type
 </SECTION>
 
 <SECTION>
@@ -307,16 +317,21 @@ GUPNP_SEARCH_CRITERIA_PARSER_CLASS
 GUPNP_IS_SEARCH_CRITERIA_PARSER
 GUPNP_IS_SEARCH_CRITERIA_PARSER_CLASS
 GUPNP_SEARCH_CRITERIA_PARSER_GET_CLASS
+GUPNP_TYPE_SEARCH_CRITERIA_OP
 <SUBSECTION Private>
 GUPnPSearchCriteriaParserPrivate
 gupnp_search_criteria_parser_get_type
+gupnp_search_criteria_op_get_type
 </SECTION>
 
 <SECTION>
 <FILE>gupnp-av-error</FILE>
 <TITLE>Error codes</TITLE>
 GUPNP_PROTOCOL_ERROR
+GUPNP_SEARCH_CRITERIA_PARSER_ERROR
 GUPnPProtocolError
+GUPnPSearchCriteriaParserError
 <SUBSECTION Private>
 gupnp_protocol_error_quark
+gupnp_search_criteria_parser_error_quark
 </SECTION>
