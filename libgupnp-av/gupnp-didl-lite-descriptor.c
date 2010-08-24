@@ -216,7 +216,6 @@ gupnp_didl_lite_descriptor_class_init (GUPnPDIDLLiteDescriptorClass *klass)
                                       GUPNP_TYPE_XML_DOC,
                                       G_PARAM_WRITABLE |
                                       G_PARAM_CONSTRUCT_ONLY |
-                                      G_PARAM_PRIVATE |
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
