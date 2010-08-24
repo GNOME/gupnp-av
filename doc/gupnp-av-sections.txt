@@ -273,44 +273,6 @@ gupnp_protocol_info_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gupnp-protocol-info</FILE>
-<TITLE>GUPnPProtocolInfo</TITLE>
-GUPnPProtocolInfo
-GUPnPDLNAConversion
-GUPnPDLNAFlags
-GUPnPDLNAOperation
-gupnp_protocol_info_new_from_string
-gupnp_protocol_info_to_string
-gupnp_protocol_info_is_compatible
-gupnp_protocol_info_set_protocol
-gupnp_protocol_info_set_network
-gupnp_protocol_info_set_mime_type
-gupnp_protocol_info_set_dlna_profile
-gupnp_protocol_info_set_play_speeds
-gupnp_protocol_info_set_dlna_conversion
-gupnp_protocol_info_set_dlna_operation
-gupnp_protocol_info_set_dlna_flags
-gupnp_protocol_info_get_protocol
-gupnp_protocol_info_get_network
-gupnp_protocol_info_get_mime_type
-gupnp_protocol_info_get_dlna_profile
-gupnp_protocol_info_get_play_speeds
-gupnp_protocol_info_get_dlna_conversion
-gupnp_protocol_info_get_dlna_operation
-gupnp_protocol_info_get_dlna_flags
-<SUBSECTION Standard>
-GUPNP_TYPE_PROTOCOL_INFO
-GUPNP_PROTOCOL_INFO
-GUPNP_PROTOCOL_INFO_CLASS
-GUPNP_IS_PROTOCOL_INFO
-GUPNP_IS_PROTOCOL_INFO_CLASS
-GUPNP_PROTOCOL_INFO_GET_CLASS
-<SUBSECTION Private>
-GUPnPProtocolInfoPrivate
-gupnp_protocol_info_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gupnp-last-change-parser</FILE>
 <TITLE>GUPnPLastChangeParser</TITLE>
 GUPnPLastChangeParser
