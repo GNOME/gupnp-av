@@ -1617,7 +1617,7 @@ gupnp_didl_lite_object_set_genre (GUPnPDIDLLiteObject *object,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
 
         xml_util_set_child (object->priv->xml_node,
-                            object->priv->dc_ns,
+                            object->priv->upnp_ns,
                             object->priv->xml_doc->doc,
                             "genre",
                             genre);
