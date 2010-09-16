@@ -1,3 +1,24 @@
+0.6.0
+=====
+
+Changes since 0.5.9:
+
+- Add mising symbols to docs.
+- Remove redundant entries from doc sections.
+- Doc system should ignore all private headers.
+- Don't use deprecated gobject API.
+- "genre" is in the upnp namespace, not dc.
+
+Bug fixed in this release:
+
+2191 - gupnp-av uses dc:genre instead of upnp:genre
+
+All contributors to this release:
+
+Sven Neumann <s.neumann@raumfeld.com>
+Jens Georg <mail@jensge.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
 0.5.9
 =====
 
