@@ -87,7 +87,7 @@ GUPnPAV-1.0.gir: libgupnp-av-1.0.la $(INTROSPECTION_SCANNER)
 	    --include=GUPnP-1.0 \
             --pkg libxml-2.0 \
 	    --pkg gobject-2.0 \
-	    --pkg gssdp-1.0 \
+	    --pkg gupnp-1.0 \
 	    --pkg libsoup-2.4 \
 	    -I$(top_srcdir) \
 	    $(addprefix $(top_srcdir)/libgupnp-av/, \
