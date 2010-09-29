@@ -1,3 +1,13 @@
+0.6.1
+=====
+
+A micro release that corrects the GIR generation rule and make it work against
+the latest gobject-intrsopection.
+
+All contributors to this release:
+
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
 0.6.0
 =====
 
