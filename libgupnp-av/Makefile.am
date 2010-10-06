@@ -70,26 +70,13 @@ libgupnp_av_1_0_la_LIBADD = $(LIBGUPNP_LIBS)
 
 EXTRA_DIST = gupnp-av-marshal.list
 
-if HAVE_INTROSPECTION
+-include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = --warn-all --add-include-path=$(srcdir)
+INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
-GUPnPAV-1.0.gir: libgupnp-av-1.0.la $(INTROSPECTION_SCANNER)
-	$(AM_V_GEN) \
-	$(INTROSPECTION_SCANNER) -v \
-            --namespace GUPnPAV --nsversion=1.0 \
-            --output $@ \
-            --strip-prefix= gupnp \
-            --libtool="$(LIBTOOL)" \
-            --library=gupnp-av-1.0 \
-            --include=GObject-2.0 \
-            --include=GSSDP-1.0 \
-            --include=Soup-2.4 \
-            --include=libxml2-2.0 \
-	    --include=GUPnP-1.0 \
-            --pkg libxml-2.0 \
-	    --pkg gobject-2.0 \
-	    --pkg gupnp-1.0 \
-	    --pkg libsoup-2.4 \
-	    -I$(top_srcdir) \
+if HAVE_INTROSPECTION
+introspection_sources = \
 	    $(addprefix $(top_srcdir)/libgupnp-av/, \
 			$(libgupnp_av_inc_HEADERS)) \
 	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-object.c \
@@ -106,19 +93,19 @@ GUPnPAV-1.0.gir: libgupnp-av-1.0.la $(INTROSPECTION_SCANNER)
 	    $(top_srcdir)/libgupnp-av/gupnp-dlna.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-av-error.c
 
-girdir = $(datadir)/gir-1.0
-gir_DATA = GUPnPAV-1.0.gir
+GUPnPAV-1.0.gir: libgupnp-av-1.0.la
+GUPnPAV_1_0_gir_INCLUDES = GObject-2.0 GSSDP-1.0 Soup-2.4 libxml2-2.0 GUPnP-1.0
+GUPnPAV_1_0_gir_CFLAGS = $(AM_CFLAGS)
+GUPnPAV_1_0_gir_LIBS = libgupnp-av-1.0.la
+GUPnPAV_1_0_gir_SCANNERFLAGS = --identifier-prefix=GUPnP --symbol-prefix=gupnp --pkg-export=gupnp-av-1.0
+GUPnPAV_1_0_gir_FILES = $(introspection_sources)
+INTROSPECTION_GIRS += GUPnPAV-1.0.gir
 
-typelibdir = $(libdir)/girepository-1.0/
-typelib_DATA = $(gir_DATA:.gir=.typelib)
+girdir = $(INTROSPECTION_GIRDIR)
+gir_DATA = $(INTROSPECTION_GIRS)
 
-%.typelib: %.gir $(INTROSPECTION_COMPILER)
-	$(AM_V_GEN) \
-	$(INTROSPECTION_COMPILER) \
-		--includedir=$(srcdir) \
-		--includedir=. \
-		$(INTROSPECTION_COMPILER_OPTS) $< -o $(@F)
-
+typelibdir = $(INTROSPECTION_TYPELIBDIR)
+typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 endif
 
 CLEANFILES = $(BUILT_SOURCES) $(gir_DATA) $(typelib_DATA)
