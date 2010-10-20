@@ -1,3 +1,19 @@
+0.6.2
+=====
+
+Another micro release that bumps the g-i requirement to 0.9.5.
+
+We either have the option of staying with the older gobject-introspection and
+keeping disto packagers happy or fix our .gir build against latest (and
+unstable) gobject-introspection that happens to be part of GNOME 2.32. After
+looking at possible alternatives, talking to a few people and keeping in mind
+that we mainly stabalized for GNOME 2.32, we've decided to go for the latter
+choice.
+
+All contributors to this release:
+
+Vincent Untz <vuntz@gnome.org>
+
 0.6.1
 =====
 
