@@ -129,3 +129,39 @@ gupnp_dlna_flags_get_type (void)
 
         return type;
 }
+
+GType
+gupnp_ocm_flags_get_type (void)
+{
+        static GType type = 0;
+
+        if (type == 0) {
+                static const GFlagsValue values[] = {
+                        { GUPNP_OCM_FLAGS_NONE,
+                          "GUPNP_OCM_FLAGS_NONE",
+                          "none" },
+                        { GUPNP_OCM_FLAGS_UPLOAD,
+                          "GUPNP_OCM_FLAGS_UPLOAD",
+                          "upload" },
+                        { GUPNP_OCM_FLAGS_CREATE_CONTAINER,
+                          "GUPNP_OCM_FLAGS_CREATE_CONTAINER",
+                          "create-container" },
+                        { GUPNP_OCM_FLAGS_DESTROYABLE,
+                          "GUPNP_OCM_FLAGS_DESTROYABLE",
+                          "destroyable" },
+                        { GUPNP_OCM_FLAGS_UPLOAD_DESTROYABLE,
+                          "GUPNP_OCM_FLAGS_UPLOAD_DESTROYABLE",
+                          "upload-destroyable" },
+                        { GUPNP_OCM_FLAGS_CHANGE_METADATA,
+                          "GUPNP_OCM_FLAGS_CHANGE_METADATA",
+                          "change-metadata" },
+                        { 0, NULL, NULL }
+                };
+
+                type = g_flags_register_static
+                                (g_intern_static_string ("GUPnPOCMFlags"),
+                                 values);
+        }
+
+        return type;
+}

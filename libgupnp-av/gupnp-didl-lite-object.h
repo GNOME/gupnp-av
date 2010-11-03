@@ -151,6 +151,9 @@ gupnp_didl_lite_object_get_date         (GUPnPDIDLLiteObject *object);
 int
 gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object);
 
+GUPnPOCMFlags
+gupnp_didl_lite_object_get_dlna_managed (GUPnPDIDLLiteObject *object);
+
 GList *
 gupnp_didl_lite_object_get_resources    (GUPnPDIDLLiteObject *object);
 
@@ -238,6 +241,10 @@ gupnp_didl_lite_object_set_date        (GUPnPDIDLLiteObject *object,
 void
 gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
                                          int                  track_number);
+
+void
+gupnp_didl_lite_object_set_dlna_managed (GUPnPDIDLLiteObject *object,
+                                         GUPnPOCMFlags        dlna_managed);
 
 G_END_DECLS
 

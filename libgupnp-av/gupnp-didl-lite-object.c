@@ -49,6 +49,7 @@ struct _GUPnPDIDLLiteObjectPrivate {
 
         xmlNs *upnp_ns;
         xmlNs *dc_ns;
+        xmlNs *dlna_ns;
 };
 
 enum {
@@ -72,6 +73,7 @@ enum {
         PROP_DESCRIPTION,
         PROP_DATE,
         PROP_TRACK_NUMBER,
+        PROP_DLNA_MANAGED,
 };
 
 static int
@@ -194,6 +196,11 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                                         (didl_object,
                                          g_value_get_int (value));
                 break;
+        case PROP_DLNA_MANAGED:
+                gupnp_didl_lite_object_set_dlna_managed
+                                        (didl_object,
+                                         g_value_get_flags (value));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -302,6 +309,11 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_int
                         (value,
                          gupnp_didl_lite_object_get_track_number (didl_object));
+                break;
+        case PROP_DLNA_MANAGED:
+                g_value_set_flags
+                        (value,
+                         gupnp_didl_lite_object_get_dlna_managed (didl_object));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -689,6 +701,24 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                    G_PARAM_STATIC_NAME |
                                    G_PARAM_STATIC_NICK |
                                    G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:dlna-managed
+         *
+         * The 'dlna:dlnaManaged' attribute.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_DLNA_MANAGED,
+                 g_param_spec_flags ("dlna-managed",
+                                     "DLNAManaged",
+                                     "The 'dlna:dlnaManaged' attribute",
+                                     GUPNP_TYPE_OCM_FLAGS,
+                                     GUPNP_OCM_FLAGS_NONE,
+                                     G_PARAM_READWRITE |
+                                     G_PARAM_STATIC_NAME |
+                                     G_PARAM_STATIC_NICK |
+                                     G_PARAM_STATIC_BLURB));
 }
 
 static gboolean
@@ -1215,6 +1245,35 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
                 return -1;
 
         return atoi (str);
+}
+
+/**
+ * gupnp_didl_lite_object_get_dlna_managed:
+ * @object: #GUPnPDIDLLiteObject
+ * @dlna_managed: The #GUPnPOCMFlags.
+ *
+ * Get the 'dlna:dlnaManaged' attribute of the @object.
+ *
+ * Return value: The 'dlna:dlnaManaged' attribute of the @object.
+ **/
+GUPnPOCMFlags
+gupnp_didl_lite_object_get_dlna_managed (GUPnPDIDLLiteObject *object)
+{
+        const char *str;
+        GUPnPOCMFlags dlna_managed;
+
+        g_return_val_if_fail (object != NULL, GUPNP_OCM_FLAGS_NONE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object),
+                              GUPNP_OCM_FLAGS_NONE);
+
+        str = xml_util_get_attribute_content (object->priv->xml_node,
+                                              "dlnaManaged");
+        if (str == NULL)
+                return GUPNP_OCM_FLAGS_NONE;
+
+        sscanf (str, "%08x", &dlna_managed);
+
+        return dlna_managed;
 }
 
 /**
@@ -1778,6 +1837,37 @@ gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
         g_free (str);
 
         g_object_notify (G_OBJECT (object), "track-number");
+}
+
+/**
+ * gupnp_didl_lite_object_set_dlna_managed:
+ * @object: #GUPnPDIDLLiteObject
+ * @dlna_managed: The #GUPnPOCMFlags.
+ *
+ * Set the 'dlna:dlnaManaged' attribute of the @object to @dlna_managed.
+ **/
+void
+gupnp_didl_lite_object_set_dlna_managed (GUPnPDIDLLiteObject *object,
+                                         GUPnPOCMFlags        dlna_managed)
+{
+        char *str;
+        xmlNs *dlna_ns;
+
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        str = g_strdup_printf ("%08x", dlna_managed);
+        dlna_ns = xmlNewNs (object->priv->xml_node,
+                            (const unsigned char *)
+                            "urn:schemas-dlna-org:metadata-2-0/",
+                            (const unsigned char *) "dlna");
+        xmlNewNsProp (object->priv->xml_node,
+                      dlna_ns,
+                      (const unsigned char *) "dlnaManaged",
+                      (const unsigned char *) str);
+        g_free (str);
+
+        g_object_notify (G_OBJECT (object), "dlna-managed");
 }
 
 /**

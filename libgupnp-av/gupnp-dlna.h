@@ -110,6 +110,36 @@ typedef enum {
         GUPNP_DLNA_FLAGS_DLNA_V15                  = (1 << 20)
 } GUPnPDLNAFlags;
 
+/**
+ * GUPnPOCMFlags:
+ * @GUPNP_OCM_FLAGS_NONE: No flags
+ * @GUPNP_OCM_FLAGS_UPLOAD: Indicates support for content upload.
+ * @GUPNP_OCM_FLAGS_CREATE_CONTAINER: Indicates support for creation of child
+ *                                    container.
+ * @GUPNP_OCM_FLAGS_DESTROYABLE: This object is destroyable.
+ * @GUPNP_OCM_FLAGS_UPLOAD_DESTROYABLE: Indicates support for upload of
+ *                                      destroyable content.
+ * @GUPNP_OCM_FLAGS_CHANGE_METADATA: Indicates support for changing metadata.
+ *
+ * The DLNA OCM flags supported by a DIDL-Lite Object. For details on these
+ * flags please refer to section 7.3.118.4 of DLNA Networked Device
+ * Interoperability Guidelines Volume 1, October 2006.
+ *
+ **/
+typedef enum {
+        GUPNP_OCM_FLAGS_NONE               = 0x0,
+        GUPNP_OCM_FLAGS_UPLOAD             = 0x01,
+        GUPNP_OCM_FLAGS_CREATE_CONTAINER   = 0x04,
+        GUPNP_OCM_FLAGS_DESTROYABLE        = 0x08,
+        GUPNP_OCM_FLAGS_UPLOAD_DESTROYABLE = 0x10,
+        GUPNP_OCM_FLAGS_CHANGE_METADATA    = 0x20
+} GUPnPOCMFlags;
+
+GType
+gupnp_ocm_flags_get_type (void) G_GNUC_CONST;
+
+#define GUPNP_TYPE_OCM_FLAGS (gupnp_ocm_flags_get_type ())
+
 G_END_DECLS
 
 #endif /* __GUPNP_DLNA_H__ */
