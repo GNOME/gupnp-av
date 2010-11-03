@@ -383,7 +383,8 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
         /**
          * GUPnPDIDLLiteObject:upnp-namespace
          *
-         * Pointer to the UPnP namespace registered with the XML document                * containing this object.
+         * Pointer to the UPnP namespace registered with the XML document
+         * containing this object.
          *
          **/
         g_object_class_install_property
@@ -1222,9 +1223,9 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
  *
  * Use this function to retreive resources from the @object.
  *
- * Return value: (element-type GUPnPDIDLLiteResource) (transfer full): The list of resources belonging to 
-@object, or %NULL.
- * #g_list_free the returned list after usage and unref each resource in it.
+ * Return value: (element-type GUPnPDIDLLiteResource) (transfer full): The list
+ *               of resources belonging to  @object, or %NULL. #g_list_free the
+ *               returned list after usage and unref each resource in it.
  **/
 GList *
 gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
