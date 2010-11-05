@@ -74,6 +74,10 @@ gint
 gupnp_didl_lite_container_get_child_count
                                         (GUPnPDIDLLiteContainer *container);
 
+GList *
+gupnp_didl_lite_container_get_create_classes
+                                        (GUPnPDIDLLiteContainer *container);
+
 void
 gupnp_didl_lite_container_set_searchable
                                         (GUPnPDIDLLiteContainer *container,
@@ -83,6 +87,11 @@ void
 gupnp_didl_lite_container_set_child_count
                                         (GUPnPDIDLLiteContainer *container,
                                          gint                    child_count);
+
+void
+gupnp_didl_lite_container_add_create_class
+                                        (GUPnPDIDLLiteContainer *container,
+                                         const char             *create_class);
 
 G_END_DECLS
 

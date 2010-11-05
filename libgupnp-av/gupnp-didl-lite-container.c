@@ -196,6 +196,44 @@ gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
 }
 
 /**
+ * gupnp_didl_lite_container_get_create_classes:
+ * @container: #GUPnPDIDLLiteContainer
+ *
+ * Gets the list of create classes of the @object.
+ *
+ * Return value: The list of create classes belonging to @object, or %NULL.
+ * #g_list_free the returned list after usage and #g_free each string in it.
+ **/
+GList *
+gupnp_didl_lite_container_get_create_classes (GUPnPDIDLLiteContainer *container)
+{
+        GList *classes = NULL;
+        GList *ret = NULL;
+        GList *l;
+
+        g_return_val_if_fail (container != NULL, NULL);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container), NULL);
+
+        classes = gupnp_didl_lite_object_get_properties (
+                        GUPNP_DIDL_LITE_OBJECT (container),
+                        "createClass");
+
+        for (l = classes; l; l = l->next) {
+                char *create_class;
+                xmlNode *node;
+
+                node = (xmlNode *) l->data;
+                create_class = g_strdup ((const char *) node->content);
+
+                ret = g_list_append (ret, create_class);
+        }
+
+        g_list_free (classes);
+
+        return ret;
+}
+
+/**
  * gupnp_didl_lite_container_set_searchable:
  * @container: #GUPnPDIDLLiteContainer
  * @searchable: The searchibility
@@ -253,4 +291,35 @@ gupnp_didl_lite_container_set_child_count (GUPnPDIDLLiteContainer *container,
         g_free (str);
 
         g_object_notify (G_OBJECT (container), "child-count");
+}
+
+/**
+ * gupnp_didl_lite_container_add_create_class:
+ * @container: #GUPnPDIDLLiteContainer
+ * @create_class: The createClass to add.
+ *
+ * Add a new create class to the @object.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_container_add_create_class (
+                GUPnPDIDLLiteContainer *container,
+                const char             *create_class)
+{
+        xmlNode *xml_node;
+        xmlNs *namespace;
+
+        g_return_if_fail (container != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container));
+
+        xml_node = gupnp_didl_lite_object_get_xml_node
+                                (GUPNP_DIDL_LITE_OBJECT (container));
+        namespace = gupnp_didl_lite_object_get_upnp_namespace
+                                (GUPNP_DIDL_LITE_OBJECT (container));
+
+        xmlNewChild (xml_node,
+                     namespace,
+                     (unsigned char *) "createClass",
+                     (unsigned char *) create_class);
 }
