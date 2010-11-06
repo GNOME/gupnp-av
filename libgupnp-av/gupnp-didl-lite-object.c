@@ -1803,7 +1803,7 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
                                    object->priv->xml_doc->doc,
                                    "albumArtURI",
                                    album_art);
-        xmlNewNsProp (node,
+        xmlSetNsProp (node,
                       object->priv->dlna_ns,
                       (const unsigned char *) "profileID",
                       (const unsigned char *) "JPEG_TN");
@@ -1901,7 +1901,7 @@ gupnp_didl_lite_object_set_dlna_managed (GUPnPDIDLLiteObject *object,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
 
         str = g_strdup_printf ("%08x", dlna_managed);
-        xmlNewNsProp (object->priv->xml_node,
+        xmlSetNsProp (object->priv->xml_node,
                       object->priv->dlna_ns,
                       (const unsigned char *) "dlnaManaged",
                       (const unsigned char *) str);
