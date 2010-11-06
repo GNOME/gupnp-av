@@ -1698,7 +1698,7 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
                             (const unsigned char *)
                             "urn:schemas-dlna-org:metadata-2-0/",
                             (const unsigned char *) "dlna");
-        xmlNewNsProp (node,
+        xmlSetNsProp (node,
                       dlna_ns,
                       (const unsigned char *) "profileID",
                       (const unsigned char *) "JPEG_TN");
