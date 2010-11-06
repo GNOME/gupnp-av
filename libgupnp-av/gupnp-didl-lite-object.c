@@ -1250,7 +1250,6 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
 /**
  * gupnp_didl_lite_object_get_dlna_managed:
  * @object: #GUPnPDIDLLiteObject
- * @dlna_managed: The #GUPnPOCMFlags.
  *
  * Get the 'dlna:dlnaManaged' attribute of the @object.
  *
