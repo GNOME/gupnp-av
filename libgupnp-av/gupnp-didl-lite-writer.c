@@ -43,6 +43,7 @@ struct _GUPnPDIDLLiteWriterPrivate {
 
         xmlNs       *upnp_ns;
         xmlNs       *dc_ns;
+        xmlNs       *dlna_ns;
 
         char        *language;
 };
@@ -291,6 +292,11 @@ gupnp_didl_lite_writer_constructed (GObject *object)
                                   "urn:schemas-upnp-org:metadata-1-0/upnp/",
                                   (unsigned char *)
                                   GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP);
+        priv->dlna_ns = xmlNewNs (priv->xml_node,
+                                  (unsigned char *)
+                                  "urn:schemas-dlna-org:metadata-2-0/",
+                                  (unsigned char *)
+                                  GUPNP_DIDL_LITE_WRITER_NAMESPACE_DLNA);
         xmlNewNs (priv->xml_node,
                   (unsigned char *)
                   "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/",
@@ -429,7 +435,8 @@ gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
         object = gupnp_didl_lite_object_new_from_xml (item_node,
                                                       writer->priv->xml_doc,
                                                       writer->priv->upnp_ns,
-                                                      writer->priv->dc_ns);
+                                                      writer->priv->dc_ns,
+                                                      writer->priv->dlna_ns);
         return GUPNP_DIDL_LITE_ITEM (object);
 }
 
@@ -457,7 +464,8 @@ gupnp_didl_lite_writer_add_container (GUPnPDIDLLiteWriter *writer)
         object = gupnp_didl_lite_object_new_from_xml (container_node,
                                                       writer->priv->xml_doc,
                                                       writer->priv->upnp_ns,
-                                                      writer->priv->dc_ns);
+                                                      writer->priv->dc_ns,
+                                                      writer->priv->dlna_ns);
         return GUPNP_DIDL_LITE_CONTAINER (object);
 }
 

@@ -58,6 +58,7 @@ enum {
         PROP_XML_DOC,
         PROP_UPNP_NAMESPACE,
         PROP_DC_NAMESPACE,
+        PROP_DLNA_NAMESPACE,
         PROP_ID,
         PROP_PARENT_ID,
         PROP_RESTRICTED,
@@ -121,6 +122,9 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                 break;
         case PROP_DC_NAMESPACE:
                 didl_object->priv->dc_ns = g_value_get_pointer (value);
+                break;
+        case PROP_DLNA_NAMESPACE:
+                didl_object->priv->dlna_ns = g_value_get_pointer (value);
                 break;
         case PROP_ID:
                 gupnp_didl_lite_object_set_id (didl_object,
@@ -233,6 +237,11 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_pointer
                         (value,
                          gupnp_didl_lite_object_get_dc_namespace
+                                (didl_object));
+        case PROP_DLNA_NAMESPACE:
+                g_value_set_pointer
+                        (value,
+                         gupnp_didl_lite_object_get_dlna_namespace
                                 (didl_object));
                 break;
         case PROP_ID:
@@ -428,6 +437,27 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                        "Pointer to the Dublin Core XML "
                                        "namespace registered with the XML "
                                        "document containing this object.",
+                                       G_PARAM_READWRITE |
+                                       G_PARAM_CONSTRUCT_ONLY |
+                                       G_PARAM_STATIC_NAME |
+                                       G_PARAM_STATIC_NICK |
+                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:dlna-namespace
+         *
+         * Pointer to the DLNA metadata namespace registered with the XML
+         * document containing this object.
+         *
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_DLNA_NAMESPACE,
+                 g_param_spec_pointer ("dlna-namespace",
+                                       "XML namespace",
+                                       "Pointer to the DLNA metadata namespace "
+                                       "registered with the XML document "
+                                       "containing this object.",
                                        G_PARAM_READWRITE |
                                        G_PARAM_CONSTRUCT_ONLY |
                                        G_PARAM_STATIC_NAME |
@@ -785,6 +815,7 @@ get_contributor_list_by_name (GUPnPDIDLLiteObject *object,
  * @xml_doc: The reference to XML document containing this object
  * @upnp_ns: The pointer to 'upnp' namespace in XML document
  * @dc_ns: The pointer to 'dc' namespace in XML document
+ * @dlna_ns: The pointer to 'dlna' namespace in XML document
  *
  * Creates a new #GUPnPDIDLLiteObject for the @xml_node.
  *
@@ -794,12 +825,14 @@ GUPnPDIDLLiteObject *
 gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
                                      GUPnPXMLDoc *xml_doc,
                                      xmlNs       *upnp_ns,
-                                     xmlNs       *dc_ns)
+                                     xmlNs       *dc_ns,
+                                     xmlNs       *dlna_ns)
 {
         g_return_val_if_fail (xml_node != NULL, NULL);
         g_return_val_if_fail (xml_node->name != NULL, NULL);
         g_return_val_if_fail (upnp_ns != NULL, NULL);
         g_return_val_if_fail (dc_ns != NULL, NULL);
+        g_return_val_if_fail (dlna_ns != NULL, NULL);
 
         if (g_ascii_strcasecmp ((char *) xml_node->name, "container") == 0)
                 return g_object_new (GUPNP_TYPE_DIDL_LITE_CONTAINER,
@@ -807,6 +840,7 @@ gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
                                      "xml-doc", xml_doc,
                                      "upnp-namespace", upnp_ns,
                                      "dc-namespace", dc_ns,
+                                     "dlna-namespace", dlna_ns,
                                      NULL);
         else if (g_ascii_strcasecmp ((char *) xml_node->name, "item") == 0)
                 return g_object_new (GUPNP_TYPE_DIDL_LITE_ITEM,
@@ -814,6 +848,7 @@ gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
                                      "xml-doc", xml_doc,
                                      "upnp-namespace", upnp_ns,
                                      "dc-namespace", dc_ns,
+                                     "dlna-namespace", dlna_ns,
                                      NULL);
         else
                 return NULL;
@@ -883,6 +918,23 @@ gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object)
 
         return xml_util_get_child_element_content (object->priv->xml_node,
                                                    "class");
+}
+
+/**
+ * gupnp_didl_lite_object_get_dlna_namespace:
+ * @object: The #GUPnPDIDLLiteObject
+ *
+ * Get the pointer to the DLNA metadata namespace registered with the XML
+ * document containing this object.
+ *
+ * Return value: The pointer to DLNA namespace in XML document.
+ **/
+xmlNsPtr
+gupnp_didl_lite_object_get_dlna_namespace (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return object->priv->dlna_ns;
 }
 
 /**
@@ -1742,7 +1794,6 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
                                       const char          *album_art)
 {
         xmlNode *node;
-        xmlNs *dlna_ns;
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
@@ -1752,13 +1803,8 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
                                    object->priv->xml_doc->doc,
                                    "albumArtURI",
                                    album_art);
-
-        dlna_ns = xmlNewNs (node,
-                            (const unsigned char *)
-                            "urn:schemas-dlna-org:metadata-2-0/",
-                            (const unsigned char *) "dlna");
         xmlNewNsProp (node,
-                      dlna_ns,
+                      object->priv->dlna_ns,
                       (const unsigned char *) "profileID",
                       (const unsigned char *) "JPEG_TN");
 
@@ -1850,18 +1896,13 @@ gupnp_didl_lite_object_set_dlna_managed (GUPnPDIDLLiteObject *object,
                                          GUPnPOCMFlags        dlna_managed)
 {
         char *str;
-        xmlNs *dlna_ns;
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
 
         str = g_strdup_printf ("%08x", dlna_managed);
-        dlna_ns = xmlNewNs (object->priv->xml_node,
-                            (const unsigned char *)
-                            "urn:schemas-dlna-org:metadata-2-0/",
-                            (const unsigned char *) "dlna");
         xmlNewNsProp (object->priv->xml_node,
-                      dlna_ns,
+                      object->priv->dlna_ns,
                       (const unsigned char *) "dlnaManaged",
                       (const unsigned char *) str);
         g_free (str);

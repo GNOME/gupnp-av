@@ -168,6 +168,7 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
         xmlNs       **ns_list;
         xmlNs        *upnp_ns = NULL;
         xmlNs        *dc_ns   = NULL;
+        xmlNs        *dlna_ns   = NULL;
         GUPnPXMLDoc  *xml_doc;
 
         doc = xmlRecoverMemory (didl, strlen (didl));
@@ -225,6 +226,9 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                         else if (! dc_ns &&
                                  g_ascii_strcasecmp (prefix, "dc") == 0)
                                 dc_ns = ns_list[i];
+                        else if (! dlna_ns &&
+                                 g_ascii_strcasecmp (prefix, "dlna") == 0)
+                                dlna_ns = ns_list[i];
                 }
 
                 xmlFree (ns_list);
@@ -243,6 +247,12 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                                   "http://purl.org/dc/elements/1.1/",
                                   (unsigned char *)
                                   GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC);
+        if (! dlna_ns)
+                dlna_ns = xmlNewNs (xmlDocGetRootElement (doc),
+                                    (unsigned char *)
+                                    "urn:schemas-dlna-org:metadata-2-0/",
+                                    (unsigned char *)
+                                    GUPNP_DIDL_LITE_WRITER_NAMESPACE_DLNA);
 
         xml_doc = gupnp_xml_doc_new (doc);
 
@@ -250,7 +260,8 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                 GUPnPDIDLLiteObject *object;
 
                 object = gupnp_didl_lite_object_new_from_xml (element, xml_doc,
-                                                              upnp_ns, dc_ns);
+                                                              upnp_ns, dc_ns,
+                                                              dlna_ns);
 
                 if (object == NULL)
                         continue;
