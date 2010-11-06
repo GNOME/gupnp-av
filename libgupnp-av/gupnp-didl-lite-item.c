@@ -144,7 +144,7 @@ gupnp_didl_lite_item_get_ref_id (GUPnPDIDLLiteItem *item)
 /**
  * gupnp_didl_lite_item_set_ref_id:
  * @item: #GUPnPDIDLLiteItem
- * @refid: The ref ID
+ * @ref_id: The ref ID
  *
  * Set the ref ID of the @item.
  **/
