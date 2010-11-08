@@ -1,3 +1,21 @@
+0.7.0
+=====
+
+The first release in the new unstable 0.7.x branch.
+
+- Add API to set/get dlna:dlnaManaged attribute.
+- Add API to add/list createClass elements to/of DIDL-Lite containers.
+- Declare/create the DLNA namespace only once at the start of the DIDL-Lite
+  document (just like upnp and dc namespaces) and pass that to each object
+  in that document.
+- Correct minor typo/c&p mistakes in docs.
+- Use correct function to set XML attributes.
+- Minor coding-style fixes to doc comments.
+
+All contributors to this release:
+
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
 0.6.2
 =====
 
