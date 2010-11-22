@@ -134,8 +134,6 @@ is_standard_prop (const char *name,
                 strcmp (name, "title") == 0) ||
                (g_strcmp0 (namespace, "upnp") == 0 &&
                 strcmp (name, "class") == 0) ||
-               (g_strcmp0 (parent_name, "albumArtURI") == 0 &&
-                strcmp (name, "profileID") == 0) ||
                (g_strcmp0 (parent_name, "res") == 0 &&
                 strcmp (name, "protocolInfo") == 0);
 }
