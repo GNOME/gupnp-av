@@ -92,11 +92,10 @@ compare_node_name (const char *a, const char *b)
         int len;
 
         p = strstr (a, "@");
-        if (p != NULL) {
+        if (p != NULL)
                 len = p - a;
-        } else {
+        else
                 len = strlen (a);
-        }
 
         return strncmp (a, b, len);
 }
