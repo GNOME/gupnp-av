@@ -91,8 +91,13 @@ compare_node_name (const char *a, const char *b)
         const char *p;
         int len;
 
+        if (a[0] == '@')
+                /* Filer is for top-level property */
+                return -1;
+
         p = strstr (a, "@");
         if (p != NULL)
+                /* Compare only the string before '@' */
                 len = p - a;
         else
                 len = strlen (a);
