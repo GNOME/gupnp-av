@@ -58,22 +58,38 @@ static int
 compare_prop (const char *a, xmlAttr *attr)
 {
         const char *p;
-        const char *attr_name;
-        const char *parent_name;
+        char *parent_name;
+        char *attr_name;
+        int ret = -1;
 
-        attr_name = (const char *) attr->name;
-        parent_name = (const char *) attr->parent->name;
+        if (attr->ns != NULL)
+                attr_name = g_strjoin (":", attr->ns->prefix, attr->name, NULL);
+        else
+                attr_name = g_strdup ((const char *) attr->name);
+
+        if (attr->parent->ns != NULL)
+                parent_name = g_strjoin (":",
+                                         attr->parent->ns->prefix,
+                                         attr->parent->name,
+                                         NULL);
+        else
+                parent_name = g_strdup ((const char *) attr->parent->name);
 
         p = strstr (a, "@");
         if (p)
                 if (p == a)
                         /* Top-level property */
-                        return strcmp (a + 1, attr_name);
+                        ret = strcmp (a + 1, attr_name);
                 else
-                        return strncmp (a, parent_name, p - a) ||
-                               strcmp (p + 1, attr_name);
+                        ret = strncmp (a, parent_name, p - a) ||
+                              strcmp (p + 1, attr_name);
         else
-                return strcmp (a, attr_name);
+                ret = strcmp (a, attr_name);
+
+        g_free (attr_name);
+        g_free (parent_name);
+
+        return ret;
 }
 
 static gboolean
