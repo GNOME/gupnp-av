@@ -1,3 +1,21 @@
+0.6.3
+=====
+
+Changes since 0.6.2:
+
+- Fix filtering of top-level DIDL-Lite attributes.
+- Correctly handle namespace of DIDL-Lite attributes and their parent nodes when
+  filtering. Together with previous change, this allows us to pass DLNA CTT
+  testcases 7.3.63.1-5.
+- 'profileID' attribute of 'albumArtURI' element isn't a standard property so it
+  must be filtered out unless its explicitly white-listed by the application.
+- Use correct function to set XML attributes.
+- Correct minor C&P mistakes in API documentation.
+
+All contributors to this release:
+
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
 0.6.2
 =====
 
