@@ -1097,7 +1097,7 @@ gupnp_didl_lite_object_get_artists (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
-        return get_contributor_list_by_name (object, "artists");
+        return get_contributor_list_by_name (object, "artist");
 }
 
 /**
@@ -1133,7 +1133,7 @@ gupnp_didl_lite_object_get_authors (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
-        return get_contributor_list_by_name (object, "authors");
+        return get_contributor_list_by_name (object, "author");
 }
 
 /**
