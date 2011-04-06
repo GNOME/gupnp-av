@@ -1,3 +1,22 @@
+0.8.0
+=====
+
+Changes since 0.7.1:
+
+- Fix XML node names for 'artist' and 'author'.
+- Explicitly link test programs. This should fix the DSO build issue on Fedora.
+- Use LDADD rather than LDFLAGS in Makefile.am.
+
+Bug fixed in this release:
+
+2222 - DIDLLiteObject get_artists()/get_authors() broken
+
+All contributors to this release:
+
+Jussi Kukkonen <jku@linux.intel.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Luis de Bethencourt <luis@debethencourt.com>
+
 0.7.1
 =====
 
