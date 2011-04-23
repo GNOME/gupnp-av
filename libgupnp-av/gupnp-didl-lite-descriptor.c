@@ -331,7 +331,7 @@ gupnp_didl_lite_descriptor_new_from_xml (xmlNode     *xml_node,
  *
  * Get the pointer to desc node in XML document.
  *
- * Return value: The pointer to desc node in XML document.
+ * Returns: (transfer none): The pointer to desc node in XML document.
  **/
 xmlNode *
 gupnp_didl_lite_descriptor_get_xml_node (GUPnPDIDLLiteDescriptor *descriptor)

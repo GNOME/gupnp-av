@@ -346,9 +346,9 @@ gupnp_didl_lite_contributor_new_from_xml (xmlNode     *xml_node,
  * gupnp_didl_lite_contributor_get_xml_node
  * @contributor: The #GUPnPDIDLLiteContributor
  *
- * Get the pointer to relavent node in XML document.
+ * Get the pointer to relevant node in XML document.
  *
- * Return value: The pointer to relavent node in XML document.
+ * Returns: (transfer none): The pointer to relevant node in XML document.
  **/
 xmlNode *
 gupnp_didl_lite_contributor_get_xml_node (GUPnPDIDLLiteContributor *contributor)

@@ -860,7 +860,7 @@ gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
  *
  * Get the pointer to object node in XML document.
  *
- * Return value: The pointer to object node in XML document.
+ * Returns: (transfer none): The pointer to object node in XML document.
  **/
 xmlNode *
 gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
@@ -876,7 +876,7 @@ gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
  *
  * Get the pointer to the UPnP namespace registered with the XML document.
  *
- * Return value: The pointer to UPnP namespace in XML document.
+ * Returns: (transfer none): The pointer to UPnP namespace in XML document.
  **/
 xmlNsPtr
 gupnp_didl_lite_object_get_upnp_namespace (GUPnPDIDLLiteObject *object)
@@ -893,7 +893,7 @@ gupnp_didl_lite_object_get_upnp_namespace (GUPnPDIDLLiteObject *object)
  * Get the pointer to the DublinCore namespace registered with the XML document
  * containing this object.
  *
- * Return value: The pointer to DublinCore namespace in XML document.
+ * Returns: (transfer none): The pointer to DublinCore namespace in XML document.
  **/
 xmlNsPtr
 gupnp_didl_lite_object_get_dc_namespace (GUPnPDIDLLiteObject *object)
@@ -927,7 +927,7 @@ gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object)
  * Get the pointer to the DLNA metadata namespace registered with the XML
  * document containing this object.
  *
- * Return value: The pointer to DLNA namespace in XML document.
+ * Returns: (transfer none): The pointer to DLNA namespace in XML document.
  **/
 xmlNsPtr
 gupnp_didl_lite_object_get_dlna_namespace (GUPnPDIDLLiteObject *object)
@@ -978,9 +978,9 @@ gupnp_didl_lite_object_get_parent_id (GUPnPDIDLLiteObject *object)
  *
  * Use this function to retreive property nodes by name.
  *
- * Return value: (element-type utf8) (transfer none): The list of property nodes
- * by the name @property_name belonging to @object, or %NULL. #g_list_free the
- * returned list after usage but do not modify the contents.
+ * Return value: (element-type xmlNode*) (transfer container): The list of
+ * property nodes by the name @property_name belonging to @object, or %NULL.
+ * #g_list_free the returned list after usage but do not modify the contents.
  **/
 GList *
 gupnp_didl_lite_object_get_properties (GUPnPDIDLLiteObject *object,
@@ -1052,7 +1052,8 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
  *
  * Get the creators of the @object.
  *
- * Return value: The list of creators belonging to @object, or %NULL.
+ * Returns: (element-type GUPnPDIDLLiteContributor*) (transfer full): The list
+ * of creators belonging to @object, or %NULL.
  * #g_list_free the returned list after usage and unref each object in it.
  **/
 GList *
@@ -1089,7 +1090,8 @@ gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
  *
  * Get the artists of the @object.
  *
- * Return value: The list of artists belonging to @object, or %NULL.
+ * Returns: (element-type GUPnPDIDLLiteContributor*) (transfer full): The list
+ * of artists belonging to @object, or %NULL.
  * #g_list_free the returned list after usage and unref each object in it.
  **/
 GList *
@@ -1125,7 +1127,8 @@ gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object)
  *
  * Get the authors of the @object.
  *
- * Return value: The list of authors belonging to @object, or %NULL.
+ * Returns: (element-type GUPnPDIDLLiteContributor*) (transfer full): The list
+ * of authors belonging to @object, or %NULL.
  * #g_list_free the returned list after usage and unref each object in it.
  **/
 GList *
@@ -1142,7 +1145,8 @@ gupnp_didl_lite_object_get_authors (GUPnPDIDLLiteObject *object)
  *
  * Get the descriptors of the @object.
  *
- * Return value: The list of descriptors belonging to @object, or %NULL.
+ * Returns: (element-type GUPnPDIDLLiteDescriptor*) (transfer full): The list of
+ * descriptors belonging to @object, or %NULL.
  * #g_list_free the returned list after usage and unref each object in it.
  **/
 GList *
@@ -1333,7 +1337,7 @@ gupnp_didl_lite_object_get_dlna_managed (GUPnPDIDLLiteObject *object)
  *
  * Use this function to retreive resources from the @object.
  *
- * Return value: (element-type GUPnPDIDLLiteResource) (transfer full): The list
+ * Return value: (element-type GUPnPDIDLLiteResource*) (transfer full): The list
  *               of resources belonging to  @object, or %NULL. #g_list_free the
  *               returned list after usage and unref each resource in it.
  **/
@@ -1382,7 +1386,7 @@ gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
  * If @lenient is #TRUE, the first resource in the list is returned instead of
  * %NULL if none of resources and protocols are found to be compatible.
  *
- * Return value: The resource belonging to @object that is comaptible with
+ * Returns: (transfer full): The resource belonging to @object that is comaptible with
  * any of the protocols specified in @sink_protocol_info, or %NULL. Unref after
  * usage.
  **/
@@ -1591,7 +1595,7 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
  * Add a new creator node to the @object and return the associated
  * #GUPnPDIDLLiteContributor object.
  *
- * Return value: A new #GUPnPDIDLLiteContributor object. Unref after usage.
+ * Returns: (transfer full): A new #GUPnPDIDLLiteContributor object. Unref after usage.
  **/
 GUPnPDIDLLiteContributor *
 gupnp_didl_lite_object_add_creator (GUPnPDIDLLiteObject *object)
@@ -1643,7 +1647,7 @@ gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
  * Add a new Artist node to the @object and return the associated
  * #GUPnPDIDLLiteContributor object.
  *
- * Return value: A new #GUPnPDIDLLiteContributor object. Unref after usage.
+ * Returns: (transfer full): A new #GUPnPDIDLLiteContributor object. Unref after usage.
  **/
 GUPnPDIDLLiteContributor *
 gupnp_didl_lite_object_add_artist (GUPnPDIDLLiteObject *object)
@@ -1694,7 +1698,7 @@ gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
  * Add a new author node to the @object and return the associated
  * #GUPnPDIDLLiteContributor object.
  *
- * Return value: A new #GUPnPDIDLLiteContributor object. Unref after usage.
+ * Returns: (transfer full): A new #GUPnPDIDLLiteContributor object. Unref after usage.
  **/
 GUPnPDIDLLiteContributor *
 gupnp_didl_lite_object_add_author (GUPnPDIDLLiteObject *object)
@@ -1916,7 +1920,7 @@ gupnp_didl_lite_object_set_dlna_managed (GUPnPDIDLLiteObject *object,
  *
  * Creates a new resource, attaches it to @object and returns it.
  *
- * Return value: A new #GUPnPDIDLLiteResource object. Unref after usage.
+ * Returns: (transfer full): A new #GUPnPDIDLLiteResource object. Unref after usage.
  **/
 GUPnPDIDLLiteResource *
 gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
@@ -1940,7 +1944,7 @@ gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
  *
  * Creates a new descriptor, attaches it to @object and returns it.
  *
- * Return value: A new #GUPnPDIDLLiteDescriptor object. Unref after usage.
+ * Returns: (transfer full): A new #GUPnPDIDLLiteDescriptor object. Unref after usage.
  **/
 GUPnPDIDLLiteDescriptor *
 gupnp_didl_lite_object_add_descriptor (GUPnPDIDLLiteObject *object)

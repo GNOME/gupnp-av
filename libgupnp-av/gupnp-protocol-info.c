@@ -762,7 +762,7 @@ gupnp_protocol_info_get_dlna_profile (GUPnPProtocolInfo *info)
  *
  * Get the allowed play speeds on this info in the form of array of strings.
  *
- * Return value: The allowed play speeds as array of strings or %NULL. This
+ * Returns: (transfer none): The allowed play speeds as array of strings or %NULL. This
  * return array and it's content must not be modified or freed.
  **/
 const char **

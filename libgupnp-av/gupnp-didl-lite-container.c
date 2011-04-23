@@ -201,7 +201,8 @@ gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
  *
  * Gets the list of create classes of the @object.
  *
- * Return value: The list of create classes belonging to @object, or %NULL.
+ * Returns: (element-type utf8) (transfer full): The list of create classes
+ * belonging to @object, or %NULL.
  * #g_list_free the returned list after usage and #g_free each string in it.
  **/
 GList *

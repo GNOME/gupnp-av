@@ -692,7 +692,7 @@ gupnp_didl_lite_resource_new_from_xml (xmlNode     *xml_node,
  *
  * Get the pointer to res node in XML document.
  *
- * Return value: The pointer to res node in XML document.
+ * Returns: (transfer none): The pointer to res node in XML document.
  **/
 xmlNode *
 gupnp_didl_lite_resource_get_xml_node (GUPnPDIDLLiteResource *resource)
@@ -744,7 +744,7 @@ gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource)
  *
  * Get the protocol info associated with the @resource.
  *
- * Return value: The protocol info associated with the @resource or %NULL. The
+ * Returns: (transfer none): The protocol info associated with the @resource or %NULL. The
  * returned object must not be unrefed.
  **/
 GUPnPProtocolInfo *

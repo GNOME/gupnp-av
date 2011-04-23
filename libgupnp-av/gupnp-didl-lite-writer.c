@@ -435,7 +435,7 @@ gupnp_didl_lite_writer_new (const char *language)
  *
  * Creates a new item, attaches it to @writer and returns it.
  *
- * Return value: A new #GUPnPDIDLLiteItem object. Unref after usage.
+ * Returns: (transfer full): A new #GUPnPDIDLLiteItem object. Unref after usage.
  **/
 GUPnPDIDLLiteItem *
 gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
@@ -464,7 +464,7 @@ gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
  *
  * Creates a new container, attaches it to @writer and returns it.
  *
- * Return value: A new #GUPnPDIDLLiteContainer object. Unref after usage.
+ * Returns: (transfer full): A new #GUPnPDIDLLiteContainer object. Unref after usage.
  **/
 GUPnPDIDLLiteContainer *
 gupnp_didl_lite_writer_add_container (GUPnPDIDLLiteWriter *writer)
@@ -493,7 +493,7 @@ gupnp_didl_lite_writer_add_container (GUPnPDIDLLiteWriter *writer)
  *
  * Creates a new descriptor, attaches it to @object and returns it.
  *
- * Return value: A new #GUPnPDIDLLiteDescriptor object. Unref after usage.
+ * Returns: (transfer full): A new #GUPnPDIDLLiteDescriptor object. Unref after usage.
  **/
 GUPnPDIDLLiteDescriptor *
 gupnp_didl_lite_writer_add_descriptor (GUPnPDIDLLiteWriter *writer)
@@ -546,7 +546,7 @@ gupnp_didl_lite_writer_get_string (GUPnPDIDLLiteWriter *writer)
  *
  * Get the pointer to root node in XML document.
  *
- * Return value: The pointer to root node in XML document.
+ * Returns: (transfer none): The pointer to root node in XML document.
  **/
 xmlNode *
 gupnp_didl_lite_writer_get_xml_node (GUPnPDIDLLiteWriter *writer)
@@ -562,7 +562,7 @@ gupnp_didl_lite_writer_get_xml_node (GUPnPDIDLLiteWriter *writer)
  *
  * Get the language the DIDL-Lite fragment is in.
  *
- * Return value: The language of the @writer, or %NULL.
+ * Returns: (transfer none): The language of the @writer, or %NULL.
  **/
 const char *
 gupnp_didl_lite_writer_get_language (GUPnPDIDLLiteWriter *writer)
