@@ -235,6 +235,45 @@ gupnp_didl_lite_container_get_create_classes (GUPnPDIDLLiteContainer *container)
 }
 
 /**
+ * gupnp_didl_lite_container_get_search_classes:
+ * @container: #GUPnPDIDLLiteContainer
+ *
+ * Gets the list of search classes of the @object.
+ *
+ * Return value: (element-type utf8) (transfer full): The list of search classes
+ * belonging to @object, or %NULL. #g_list_free the returned list after usage
+ * and #g_free each string in it.
+ **/
+GList *
+gupnp_didl_lite_container_get_search_classes (GUPnPDIDLLiteContainer *container)
+{
+        GList *classes = NULL;
+        GList *ret = NULL;
+        GList *l;
+
+        g_return_val_if_fail (container != NULL, NULL);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container), NULL);
+
+        classes = gupnp_didl_lite_object_get_properties (
+                        GUPNP_DIDL_LITE_OBJECT (container),
+                        "searchClass");
+
+        for (l = classes; l; l = l->next) {
+                char *search_class;
+                xmlNode *node;
+
+                node = (xmlNode *) l->data;
+                search_class = g_strdup ((const char *) node->content);
+
+                ret = g_list_append (ret, search_class);
+        }
+
+        g_list_free (classes);
+
+        return ret;
+}
+
+/**
  * gupnp_didl_lite_container_set_searchable:
  * @container: #GUPnPDIDLLiteContainer
  * @searchable: The searchibility
@@ -323,4 +362,65 @@ gupnp_didl_lite_container_add_create_class (
                      namespace,
                      (unsigned char *) "createClass",
                      (unsigned char *) create_class);
+}
+
+/**
+ * gupnp_didl_lite_container_add_search_class:
+ * @container: #GUPnPDIDLLiteContainer
+ * @search_class: The searchClass to add.
+ * Add a new search class to the @object.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_container_add_search_class (
+                GUPnPDIDLLiteContainer *container,
+                const char             *search_class)
+{
+        gupnp_didl_lite_container_add_search_class_full (container,
+                                                         search_class,
+                                                         TRUE);
+}
+
+/**
+ * gupnp_didl_lite_container_add_search_class_full:
+ * @container: #GUPnPDIDLLiteContainer
+ * @search_class: The searchClass to add.
+ * @include_derived: includeDerived attribute of the DIDL
+ * Add a new search class to the @object.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_container_add_search_class_full (
+                GUPnPDIDLLiteContainer *container,
+                const char             *search_class,
+                gboolean                include_derived)
+{
+        xmlNode *xml_node;
+        xmlNode *new_xml_node;
+        xmlNs *namespace;
+        const char *str;
+
+        g_return_if_fail (container != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container));
+
+        xml_node = gupnp_didl_lite_object_get_xml_node
+                                (GUPNP_DIDL_LITE_OBJECT (container));
+        namespace = gupnp_didl_lite_object_get_upnp_namespace
+                                (GUPNP_DIDL_LITE_OBJECT (container));
+
+        new_xml_node = xmlNewChild (xml_node,
+                                    namespace,
+                                    (unsigned char *) "searchClass",
+                                    (unsigned char *) search_class);
+
+        if (include_derived)
+                str = "1";
+        else
+                str = "0";
+
+        xmlSetProp (new_xml_node,
+                    (unsigned char*) "includeDerived",
+                    (unsigned char*) str);
 }

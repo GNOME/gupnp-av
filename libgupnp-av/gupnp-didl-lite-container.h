@@ -78,6 +78,10 @@ GList *
 gupnp_didl_lite_container_get_create_classes
                                         (GUPnPDIDLLiteContainer *container);
 
+GList *
+gupnp_didl_lite_container_get_search_classes
+                                        (GUPnPDIDLLiteContainer *container);
+
 void
 gupnp_didl_lite_container_set_searchable
                                         (GUPnPDIDLLiteContainer *container,
@@ -92,6 +96,17 @@ void
 gupnp_didl_lite_container_add_create_class
                                         (GUPnPDIDLLiteContainer *container,
                                          const char             *create_class);
+
+void
+gupnp_didl_lite_container_add_search_class
+                                        (GUPnPDIDLLiteContainer *container,
+                                         const char             *search_class);
+
+void
+gupnp_didl_lite_container_add_search_class_full
+                                        (GUPnPDIDLLiteContainer *container,
+                                         const char             *search_class,
+                                         gboolean                include_derived);
 
 G_END_DECLS
 
