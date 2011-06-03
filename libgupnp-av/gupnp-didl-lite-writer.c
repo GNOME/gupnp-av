@@ -312,7 +312,7 @@ gupnp_didl_lite_writer_constructed (GObject *object)
                                   GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP);
         priv->dlna_ns = xmlNewNs (priv->xml_node,
                                   (unsigned char *)
-                                  "urn:schemas-dlna-org:metadata-2-0/",
+                                  "urn:schemas-dlna-org:metadata-1-0/",
                                   (unsigned char *)
                                   GUPNP_DIDL_LITE_WRITER_NAMESPACE_DLNA);
         xmlNewNs (priv->xml_node,
