@@ -338,7 +338,7 @@ gupnp_didl_lite_container_set_child_count (GUPnPDIDLLiteContainer *container,
  * @container: #GUPnPDIDLLiteContainer
  * @create_class: The createClass to add.
  *
- * Add a new create class to the @object.
+ * Add a new create class to the @object. includeDerived defaults to "0".
  *
  * Return value: None.
  **/
@@ -347,21 +347,52 @@ gupnp_didl_lite_container_add_create_class (
                 GUPnPDIDLLiteContainer *container,
                 const char             *create_class)
 {
-        xmlNode *xml_node;
+        gupnp_didl_lite_container_add_create_class_full (container,
+                                                         create_class,
+                                                         FALSE);
+}
+
+/**
+ * gupnp_didl_lite_container_add_create_class_full:
+ * @container: #GUPnPDIDLLiteContainer
+ * @create_class: The createClass to add.
+ * @include_derived: Whether object with dervied classes may be created in
+ * this container or not.
+ *
+ * Add a new create class to the @object.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_container_add_create_class_full (
+                GUPnPDIDLLiteContainer *container,
+                const char             *create_class,
+                gboolean                include_derived)
+{
+        xmlNode *container_node, *new_node;
         xmlNs *namespace;
+        const char *str;
 
         g_return_if_fail (container != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container));
 
-        xml_node = gupnp_didl_lite_object_get_xml_node
+        container_node = gupnp_didl_lite_object_get_xml_node
                                 (GUPNP_DIDL_LITE_OBJECT (container));
         namespace = gupnp_didl_lite_object_get_upnp_namespace
                                 (GUPNP_DIDL_LITE_OBJECT (container));
 
-        xmlNewChild (xml_node,
-                     namespace,
-                     (unsigned char *) "createClass",
-                     (unsigned char *) create_class);
+        new_node = xmlNewChild (container_node,
+                                namespace,
+                                (unsigned char *) "createClass",
+                                (unsigned char *) create_class);
+        if (include_derived)
+                str = "1";
+        else
+                str = "0";
+
+        xmlSetProp (new_node,
+                    (unsigned char *) "includeDerived",
+                    (unsigned char *) str);
 }
 
 /**

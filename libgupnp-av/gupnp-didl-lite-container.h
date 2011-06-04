@@ -98,10 +98,15 @@ gupnp_didl_lite_container_add_create_class
                                          const char             *create_class);
 
 void
+gupnp_didl_lite_container_add_create_class_full
+                                        (GUPnPDIDLLiteContainer *container,
+                                         const char             *create_class,
+                                         gboolean                include_derived);
+
+void
 gupnp_didl_lite_container_add_search_class
                                         (GUPnPDIDLLiteContainer *container,
                                          const char             *search_class);
-
 void
 gupnp_didl_lite_container_add_search_class_full
                                         (GUPnPDIDLLiteContainer *container,
