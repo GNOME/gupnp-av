@@ -33,6 +33,8 @@
 #include "gupnp-didl-lite-object-private.h"
 #include "gupnp-didl-lite-descriptor-private.h"
 
+#include "xml-util.h"
+
 G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
                gupnp_didl_lite_writer,
                G_TYPE_OBJECT);
@@ -144,6 +146,16 @@ is_node_forbidden (xmlNode     *node,
 }
 
 static gboolean
+is_container_standard_prop (const char *name,
+                            const char *namespace,
+                            const char *upnp_class)
+{
+        return g_strcmp0 (upnp_class, "object.container.storageFolder") == 0 &&
+               strcmp (namespace, "upnp") == 0 &&
+               strcmp (name, "storageUsed") == 0;
+}
+
+static gboolean
 is_standard_prop (const char *name,
                   const char *namespace,
                   const char *parent_name)
@@ -191,8 +203,16 @@ filter_node (xmlNode             *node,
         xmlNode *child;
         GList   *forbidden = NULL;
         GList   *l;
+        gboolean is_container;
+        const char *container_class = NULL;
 
         filter_attributes (node, allowed, writer);
+
+        if (strcmp ((const char *) node->name, "container") == 0) {
+            is_container = TRUE;
+            container_class = xml_util_get_child_element_content (node,
+                                                                  "class");
+        }
 
         forbidden = NULL;
         for (child = node->children; child != NULL; child = child->next) {
@@ -204,7 +224,11 @@ filter_node (xmlNode             *node,
                 if (child->ns != NULL)
                         ns = (const char *) child->ns->prefix;
 
-                if (!is_standard_prop ((const char *) child->name,
+                if (!(is_container && is_container_standard_prop
+                                            ((const char *) child->name,
+                                             ns,
+                                             container_class)) &&
+                    !is_standard_prop ((const char *) child->name,
                                        ns,
                                        (const char *)  node->name) &&
                     is_node_forbidden (child, allowed, ns))
