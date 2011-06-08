@@ -113,6 +113,14 @@ gupnp_didl_lite_container_add_search_class_full
                                          const char             *search_class,
                                          gboolean                include_derived);
 
+gint64
+gupnp_didl_lite_container_get_storage_used
+                                       (GUPnPDIDLLiteContainer *container);
+
+void
+gupnp_didl_lite_container_set_storage_used
+                                       (GUPnPDIDLLiteContainer *container,
+                                        gint64                  storage_used);
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_CONTAINER_H__ */
