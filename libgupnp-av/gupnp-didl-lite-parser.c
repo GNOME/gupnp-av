@@ -45,6 +45,12 @@ enum {
 
 static guint signals[SIGNAL_LAST];
 
+static gboolean
+verify_didl_attributes (xmlNode *node)
+{
+    return xml_util_verify_attribute_is_boolean (node, "restricted");
+}
+
 static void
 gupnp_didl_lite_parser_init (GUPnPDIDLLiteParser *parser)
 {
@@ -165,6 +171,7 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
 {
         xmlDoc       *doc;
         xmlNode      *element;
+        xmlNode      *node;
         xmlNs       **ns_list;
         xmlNs        *upnp_ns = NULL;
         xmlNs        *dc_ns   = NULL;
@@ -271,11 +278,25 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                                         signals[CONTAINER_AVAILABLE],
                                         0,
                                         object);
-                else if (GUPNP_IS_DIDL_LITE_ITEM (object))
+                else if (GUPNP_IS_DIDL_LITE_ITEM (object)) {
+                        node = gupnp_didl_lite_object_get_xml_node(object);
+                        if (!verify_didl_attributes(node)) {
+                            g_object_unref (object);
+                            g_object_unref (xml_doc);
+                            g_set_error (error,
+                                         GUPNP_XML_ERROR,
+                                         GUPNP_XML_ERROR_INVALID_ATTRIBUTE,
+                                         "Could not parse DIDL-Lite XML:\n%s",
+                                         didl);
+
+                            return FALSE;
+                        }
+
                         g_signal_emit (parser,
                                         signals[ITEM_AVAILABLE],
                                         0,
                                         object);
+                }
 
                 g_signal_emit (parser,
                                 signals[OBJECT_AVAILABLE],
