@@ -368,6 +368,7 @@ gupnp_didl_lite_container_add_create_class (
  * gupnp_didl_lite_container_add_search_class:
  * @container: #GUPnPDIDLLiteContainer
  * @search_class: The searchClass to add.
+ *
  * Add a new search class to the @object.
  *
  * Return value: None.
@@ -387,6 +388,7 @@ gupnp_didl_lite_container_add_search_class (
  * @container: #GUPnPDIDLLiteContainer
  * @search_class: The searchClass to add.
  * @include_derived: includeDerived attribute of the DIDL
+ *
  * Add a new search class to the @object.
  *
  * Return value: None.
