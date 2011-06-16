@@ -229,6 +229,8 @@ xml_util_verify_attribute_is_boolean (xmlNode    *node,
         return g_ascii_strcasecmp (str, "true") == 0 ||
                g_ascii_strcasecmp (str, "yes") == 0 ||
                g_ascii_strcasecmp (str, "false") == 0 ||
-               g_ascii_strcasecmp (str, "no") == 0;
+               g_ascii_strcasecmp (str, "no") == 0 ||
+               g_ascii_strcasecmp (str, "0") == 0 ||
+               g_ascii_strcasecmp (str, "1") == 0;
 }
 
