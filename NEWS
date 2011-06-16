@@ -1,3 +1,22 @@
+0.9.0
+=====
+
+Changes since 0.8.0:
+
+- Wrong XML namespace for dlna attributes.
+- Add a sanity check for @restricted.
+- Updated gobject-introspection annotations.
+- add upnp:searchClass to containers.
+- make upnp:createClass@includeDerived mandatory.
+- add unpn:storageUsed property and make it mandatory for
+  object.container.storageFolder.
+
+All contributors to this release:
+
+Jens Georg <mail@jensge.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Topi Santakivi <topi.santakivi@digia.com>
+
 0.8.0
 =====
 
