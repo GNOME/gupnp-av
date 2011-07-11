@@ -28,6 +28,7 @@
  */
 
 #include <string.h>
+#include <ctype.h>
 #include "gupnp-av.h"
 #include "gupnp-didl-lite-object-private.h"
 #include "xml-util.h"
@@ -48,7 +49,30 @@ static guint signals[SIGNAL_LAST];
 static gboolean
 verify_didl_attributes (xmlNode *node)
 {
-    return xml_util_verify_attribute_is_boolean (node, "restricted");
+        const char *content;
+
+        content = xml_util_get_child_element_content (node, "date");
+        if (content) {
+                /* try to roughly verify the passed date with ^\d{4}-\d{2}-\d{2} */
+                char *ptr = (char *) content;
+                int state = 0;
+                while (*ptr) {
+                        if (state == 4 || state == 7) {
+                                if (*ptr != '-')
+                                        return FALSE;
+                        } else {
+                                if (!isdigit (*ptr))
+                                        return FALSE;
+                        }
+
+                        ptr++;
+                        state++;
+                        if (state == 10)
+                                break;
+                }
+        }
+
+        return xml_util_verify_attribute_is_boolean (node, "restricted");
 }
 
 static void
