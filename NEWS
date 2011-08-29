@@ -1,3 +1,16 @@
+0.10.0
+======
+
+Changes since 0.10.1:
+
+- Verify passed date in DIDL. Not a full verification but a small sanity
+  check.
+
+All contributors to this release:
+
+Topi Santakivi <topi.santakivi@digia.com>
+Jens Georg <mail@jensge.org>
+
 0.9.1
 =====
 

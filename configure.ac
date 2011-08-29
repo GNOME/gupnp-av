@@ -1,5 +1,5 @@
 AC_PREREQ(2.53)
-AC_INIT(gupnp-av, 0.9.1, http://www.gupnp.org/)
+AC_INIT(gupnp-av, 0.10.0, http://www.gupnp.org/)
 AM_INIT_AUTOMAKE()
 AC_CONFIG_SRCDIR(libgupnp-av/gupnp-av.h)
 AM_CONFIG_HEADER(config.h)
