@@ -1,7 +1,18 @@
+0.10.1
+======
+
+Changes since 0.10.0:
+
+- Bump minimum dependency of GUPnP to 0.17.0.
+
+All contributors to this release:
+
+Jens Georg <mail@jensge.org>
+
 0.10.0
 ======
 
-Changes since 0.10.1:
+Changes since 0.9.1:
 
 - Verify passed date in DIDL. Not a full verification but a small sanity
   check.
