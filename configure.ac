@@ -1,18 +1,26 @@
-AC_PREREQ(2.53)
-AC_INIT(gupnp-av, 0.10.1, http://www.gupnp.org/)
-AM_INIT_AUTOMAKE()
+AC_PREREQ([2.63])
+AC_INIT([gupnp-av],
+        [0.10.1],
+        [https://bugzilla.gnome.org/enter_bug.cgi?product=GUPnP],
+        [gupnp-av],
+        [http://www.gupnp.org/])
+
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR(libgupnp-av/gupnp-av.h)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_MACRO_DIR([m4])
+
+AM_INIT_AUTOMAKE([])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])],)
 
-AC_ISC_POSIX
+# Check for programs
 AC_PROG_CC
-AC_STDC_HEADERS
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
-AC_CONFIG_MACRO_DIR([m4])
+AC_HEADER_STDC
 AC_FUNC_MMAP
+
+# Initialize libtool
+LT_PREREQ([2.2])
+LT_INIT([win32-dll])
 
 PKG_CHECK_MODULES(LIBGUPNP, gupnp-1.0 >= 0.17.0)
 
@@ -30,9 +38,9 @@ fi
 
 GOBJECT_INTROSPECTION_CHECK([0.9.5])
 
-GTK_DOC_CHECK([1.0])
+GTK_DOC_CHECK([1.10],[--flavour no-tmpl])
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 libgupnp-av/Makefile
 tests/Makefile
@@ -41,3 +49,4 @@ doc/version.xml
 gupnp-av-1.0.pc
 gupnp-av-1.0-uninstalled.pc
 ])
+AC_OUTPUT

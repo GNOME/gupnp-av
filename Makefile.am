@@ -3,7 +3,7 @@ SUBDIRS = libgupnp-av tests doc
 pkgconfig_DATA= gupnp-av-1.0.pc
 pkgconfigdir = $(libdir)/pkgconfig
 
-ACLOCAL_AMFLAGS=-I m4
+ACLOCAL_AMFLAGS=-I m4 ${ACLOCAL_FLAGS}
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
