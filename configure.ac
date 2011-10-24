@@ -8,6 +8,7 @@ AC_INIT([gupnp-av],
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR(libgupnp-av/gupnp-av.h)
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([])
 
