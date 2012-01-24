@@ -266,6 +266,7 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
         case PROP_SIZE:
                 g_value_set_long (value,
                                   gupnp_didl_lite_resource_get_size (resource));
+                break;
         case PROP_SIZE64:
                 g_value_set_int64 (value,
                                    gupnp_didl_lite_resource_get_size64 (resource));

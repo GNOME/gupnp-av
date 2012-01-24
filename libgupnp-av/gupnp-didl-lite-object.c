@@ -238,6 +238,7 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                         (value,
                          gupnp_didl_lite_object_get_dc_namespace
                                 (didl_object));
+                break;
         case PROP_DLNA_NAMESPACE:
                 g_value_set_pointer
                         (value,
