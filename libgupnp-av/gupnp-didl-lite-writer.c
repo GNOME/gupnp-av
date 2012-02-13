@@ -151,7 +151,7 @@ is_container_standard_prop (const char *name,
                             const char *upnp_class)
 {
         return g_strcmp0 (upnp_class, "object.container.storageFolder") == 0 &&
-               strcmp (namespace, "upnp") == 0 &&
+               g_strcmp0 (namespace, "upnp") == 0 &&
                strcmp (name, "storageUsed") == 0;
 }
 
