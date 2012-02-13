@@ -50,9 +50,6 @@ static void
 gupnp_last_change_parser_dispose (GObject *object)
 {
         GObjectClass   *gobject_class;
-        GUPnPLastChangeParser *parser;
-
-        parser = GUPNP_LAST_CHANGE_PARSER (object);
 
         gobject_class = G_OBJECT_CLASS (gupnp_last_change_parser_parent_class);
         gobject_class->dispose (object);

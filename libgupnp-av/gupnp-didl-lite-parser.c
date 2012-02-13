@@ -84,9 +84,6 @@ static void
 gupnp_didl_lite_parser_dispose (GObject *object)
 {
         GObjectClass   *gobject_class;
-        GUPnPDIDLLiteParser *parser;
-
-        parser = GUPNP_DIDL_LITE_PARSER (object);
 
         gobject_class = G_OBJECT_CLASS (gupnp_didl_lite_parser_parent_class);
         gobject_class->dispose (object);
