@@ -241,11 +241,10 @@ add_dlna_info (GString           *str,
 
         dlna_profile = gupnp_protocol_info_get_dlna_profile (info);
         if (dlna_profile == NULL) {
-                g_string_append_printf (str, ":*");
-                return;
+                g_string_append_printf (str, ":");
+        } else {
+                g_string_append_printf (str, ":DLNA.ORG_PN=%s;", dlna_profile);
         }
-
-        g_string_append_printf (str, ":DLNA.ORG_PN=%s", dlna_profile);
 
         operation = gupnp_protocol_info_get_dlna_operation (info);
         if (operation != GUPNP_DLNA_OPERATION_NONE &&
@@ -256,14 +255,14 @@ add_dlna_info (GString           *str,
                      "http-get") == 0 ||
              strcmp (gupnp_protocol_info_get_protocol (info),
                      "rtsp-rtp-udp") == 0))
-                g_string_append_printf (str, ";DLNA.ORG_OP=%.2x", operation);
+                g_string_append_printf (str, "DLNA.ORG_OP=%.2x;", operation);
 
         /* Specify PS parameter if list of play speeds is provided */
         speeds = gupnp_protocol_info_get_play_speeds (info);
         if (speeds != NULL) {
                 int i;
 
-                g_string_append_printf (str, ";DLNA.ORG_PS=");
+                g_string_append_printf (str, "DLNA.ORG_PS=;");
 
                 for (i = 0; speeds[i]; i++) {
                         g_string_append (str, speeds[i]);
@@ -276,16 +275,28 @@ add_dlna_info (GString           *str,
         conversion = gupnp_protocol_info_get_dlna_conversion (info);
         /* omit the CI parameter for non-converted content */
         if (conversion != GUPNP_DLNA_CONVERSION_NONE)
-                g_string_append_printf (str, ";DLNA.ORG_CI=%d", conversion);
+                g_string_append_printf (str, "DLNA.ORG_CI=%d;", conversion);
 
         flags = gupnp_protocol_info_get_dlna_flags (info);
-        /* Omit the FLAGS parameter if no flags set */
-        if (flags != GUPNP_DLNA_FLAGS_NONE) {
-                g_string_append_printf (str, ";DLNA.ORG_FLAGS=%.8x", flags);
+        /* Omit the FLAGS parameter if no or DLNA profile are set */
+        if (flags != GUPNP_DLNA_FLAGS_NONE && dlna_profile != NULL) {
+                g_string_append_printf (str, "DLNA.ORG_FLAGS=%.8x", flags);
                 /*  append 24 reserved hex-digits */
                 g_string_append_printf (str,
                                         "0000" "0000" "0000"
                                         "0000" "0000" "0000");
+        }
+
+        /* if nothing of the above was set, use the "match all" rule */
+        switch (str->str[str->len - 1]) {
+                case ':':
+                        g_string_append_c (str, '*');
+                        break;
+                case ';':
+                        g_string_erase (str, str->len - 1, 1);
+                        break;
+                default:
+                        break;
         }
 }
 
