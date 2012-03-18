@@ -757,16 +757,16 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
                         const char            *sink_protocol_info)
 {
         gboolean ret = FALSE;
-        char **protocols;
-        guint8 i;
+        char **protocols, **it;
 
         protocols = g_strsplit (sink_protocol_info, ",", 0);
 
-        for (i = 0; protocols[i] && !ret; i++) {
+
+        for (it = protocols; it != NULL && !ret; it++) {
                 GUPnPProtocolInfo *info;
                 GUPnPProtocolInfo *res_info;
 
-                info = gupnp_protocol_info_new_from_string (protocols[i], NULL);
+                info = gupnp_protocol_info_new_from_string (*it, NULL);
                 if (info == NULL)
                         continue;
 
