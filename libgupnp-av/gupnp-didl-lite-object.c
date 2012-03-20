@@ -762,7 +762,7 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
         protocols = g_strsplit (sink_protocol_info, ",", 0);
 
 
-        for (it = protocols; it != NULL && !ret; it++) {
+        for (it = protocols; *it != NULL && !ret; it++) {
                 GUPnPProtocolInfo *info;
                 GUPnPProtocolInfo *res_info;
 
