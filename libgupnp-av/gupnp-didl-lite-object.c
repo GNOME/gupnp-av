@@ -962,8 +962,7 @@ gupnp_didl_lite_object_get_id (GUPnPDIDLLiteObject *object)
  *
  * Get the ID of the parent of the @object.
  *
- * Return value: The ID of parent of the @object, or %NULL. #g_free after
- * usage.
+ * Return value: The ID of parent of the @object, or %NULL.
  **/
 const char *
 gupnp_didl_lite_object_get_parent_id (GUPnPDIDLLiteObject *object)
