@@ -797,6 +797,8 @@ get_contributor_list_by_name (GUPnPDIDLLiteObject *object,
                 xmlNode *contributor_node;
 
                 contributor_node = (xmlNode *) l->data;
+                if (!contributor_node->children)
+                        continue;
 
                 contributor = gupnp_didl_lite_contributor_new_from_xml
                                         (contributor_node,
