@@ -90,7 +90,7 @@ get_resolution_info (GUPnPDIDLLiteResource *resource,
         if (tokens == NULL || tokens[0] == NULL || tokens[1] == NULL) {
                 g_warning ("Failed to resolution string '%s'\n", resolution);
 
-                return;
+                goto return_point;
         }
 
         if (width)
@@ -98,6 +98,7 @@ get_resolution_info (GUPnPDIDLLiteResource *resource,
         if (height)
                 *height = atoi (tokens[1]);
 
+return_point:
         g_strfreev (tokens);
 }
 
