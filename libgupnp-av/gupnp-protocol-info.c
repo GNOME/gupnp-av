@@ -146,8 +146,8 @@ parse_additional_info (const char        *additional_info,
                                   "DLNA.ORG_FLAGS=");
                 if (p != NULL) {
                         p += 15; /* end of "DLNA.ORG_FLAGS=" */
-
-                        p[8] = '\0';
+                        if (strlen (p) > 8)
+                                p[8] = '\0';
                         gupnp_protocol_info_set_dlna_flags
                                                         (info,
                                                          strtoul (p, NULL, 16));
