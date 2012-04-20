@@ -1,3 +1,5 @@
+SUBDIRS = gtest
+
 AM_CFLAGS = $(LIBGUPNP_CFLAGS) -I$(top_srcdir)
 
 noinst_PROGRAMS = test-search-criteria-parser

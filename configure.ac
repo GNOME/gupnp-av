@@ -45,6 +45,7 @@ AC_CONFIG_FILES([
 Makefile
 libgupnp-av/Makefile
 tests/Makefile
+tests/gtest/Makefile
 doc/Makefile
 doc/version.xml
 gupnp-av-1.0.pc
