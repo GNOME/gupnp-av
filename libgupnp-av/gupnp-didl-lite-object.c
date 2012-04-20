@@ -362,7 +362,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
         g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteObjectPrivate));
 
         /**
-         * GUPnPDIDLLiteObject:xml-node
+         * GUPnPDIDLLiteObject:xml-node:
          *
          * The pointer to object node in XML document.
          **/
@@ -380,7 +380,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                        G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:xml-doc
+         * GUPnPDIDLLiteObject:xml-doc:
          *
          * The reference to XML document containing this object.
          *
@@ -403,7 +403,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:upnp-namespace
+         * GUPnPDIDLLiteObject:upnp-namespace:
          *
          * Pointer to the UPnP namespace registered with the XML document
          * containing this object.
@@ -424,7 +424,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                        G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:dc-namespace
+         * GUPnPDIDLLiteObject:dc-namespace:
          *
          * Pointer to the DublinCore namespace registered with the XML document
          * containing this object.
@@ -445,7 +445,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                        G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:dlna-namespace
+         * GUPnPDIDLLiteObject:dlna-namespace:
          *
          * Pointer to the DLNA metadata namespace registered with the XML
          * document containing this object.
@@ -466,7 +466,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                        G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:id
+         * GUPnPDIDLLiteObject:id:
          *
          * The ID of this object.
          **/
@@ -483,7 +483,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:parent-id
+         * GUPnPDIDLLiteObject:parent-id:
          *
          * The ID of the parent container of this object.
          **/
@@ -501,7 +501,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:restricted
+         * GUPnPDIDLLiteObject:restricted:
          *
          * Whether this object is restricted.
          **/
@@ -518,7 +518,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                        G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:title
+         * GUPnPDIDLLiteObject:title:
          *
          * The title of this object.
          **/
@@ -535,7 +535,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:upnp-class
+         * GUPnPDIDLLiteObject:upnp-class:
          *
          * The UPnP class of this object.
          **/
@@ -552,7 +552,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:creator
+         * GUPnPDIDLLiteObject:creator:
          *
          * The creator of this object.
          *
@@ -573,7 +573,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:artist
+         * GUPnPDIDLLiteObject:artist:
          *
          * The artist of this object.
          *
@@ -594,7 +594,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:author
+         * GUPnPDIDLLiteObject:author:
          *
          * The author of this object.
          *
@@ -615,7 +615,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:genre
+         * GUPnPDIDLLiteObject:genre:
          *
          * The genre of this object.
          **/
@@ -632,7 +632,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:write-status
+         * GUPnPDIDLLiteObject:write-status:
          *
          * The write status of this object.
          **/
@@ -649,7 +649,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:album
+         * GUPnPDIDLLiteObject:album:
          *
          * The album of this object.
          **/
@@ -666,7 +666,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:album-art
+         * GUPnPDIDLLiteObject:album-art:
          *
          * The URI to album art of this object.
          **/
@@ -683,7 +683,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:description
+         * GUPnPDIDLLiteObject:description:
          *
          * The description of this object.
          **/
@@ -700,7 +700,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:date
+         * GUPnPDIDLLiteObject:date:
          *
          * The date of this object.
          **/
@@ -717,7 +717,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:track-number
+         * GUPnPDIDLLiteObject:track-number:
          *
          * The original track number of this object.
          **/
@@ -734,7 +734,7 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                    G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteObject:dlna-managed
+         * GUPnPDIDLLiteObject:dlna-managed:
          *
          * The 'dlna:dlnaManaged' attribute.
          **/
@@ -941,7 +941,7 @@ gupnp_didl_lite_object_get_dlna_namespace (GUPnPDIDLLiteObject *object)
 }
 
 /**
- * gupnp_didl_lite_object_get_id
+ * gupnp_didl_lite_object_get_id:
  * @object: #GUPnPDIDLLiteObject
  *
  * Get the ID of the @object.
@@ -1474,7 +1474,7 @@ gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
 }
 
 /**
- * gupnp_didl_lite_object_set_id
+ * gupnp_didl_lite_object_set_id:
  * @object: #GUPnPDIDLLiteObject
  * @id: The ID
  *

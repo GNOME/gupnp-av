@@ -125,7 +125,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
         object_class->set_property = gupnp_didl_lite_container_set_property;
 
         /**
-         * GUPnPDIDLLiteContainer:searchable
+         * GUPnPDIDLLiteContainer:searchable:
          *
          * Whether this container is searchable.
          **/
@@ -142,7 +142,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
                                        G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteContainer:child-count
+         * GUPnPDIDLLiteContainer:child-count:
          *
          * The child count of this container.
          **/
@@ -161,7 +161,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
                                    G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteContainer:storage-used
+         * GUPnPDIDLLiteContainer:storage-used:
          *
          * The number of bytes used by all child items of this container.
          **/

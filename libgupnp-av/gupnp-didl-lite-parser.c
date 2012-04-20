@@ -99,7 +99,7 @@ gupnp_didl_lite_parser_class_init (GUPnPDIDLLiteParserClass *klass)
         object_class->dispose = gupnp_didl_lite_parser_dispose;
 
         /**
-         * GUPnPDIDLLiteParser::object-available
+         * GUPnPDIDLLiteParser::object-available:
          * @parser: The #GUPnPDIDLLiteParser that received the signal
          * @object: The now available #GUPnPDIDLLiteObject
          *
@@ -120,7 +120,7 @@ gupnp_didl_lite_parser_class_init (GUPnPDIDLLiteParserClass *klass)
                               GUPNP_TYPE_DIDL_LITE_OBJECT);
 
         /**
-         * GUPnPDIDLLiteParser::item-available
+         * GUPnPDIDLLiteParser::item-available:
          * @parser: The #GUPnPDIDLLiteParser that received the signal
          * @item: The now available #GUPnPDIDLLiteItem
          *
@@ -141,7 +141,7 @@ gupnp_didl_lite_parser_class_init (GUPnPDIDLLiteParserClass *klass)
                               GUPNP_TYPE_DIDL_LITE_ITEM);
 
         /**
-         * GUPnPDIDLLiteParser::container-available
+         * GUPnPDIDLLiteParser::container-available:
          * @parser: The #GUPnPDIDLLiteParser that received the signal
          * @container: The now available #GUPnPDIDLLiteContainer
          *
@@ -163,7 +163,7 @@ gupnp_didl_lite_parser_class_init (GUPnPDIDLLiteParserClass *klass)
 }
 
 /**
- * gupnp_didl_lite_parser_new
+ * gupnp_didl_lite_parser_new:
  *
  * Return value: A new #GUPnPDIDLLiteParser object.
  **/
@@ -174,7 +174,7 @@ gupnp_didl_lite_parser_new (void)
 }
 
 /**
- * gupnp_didl_lite_parser_parse_didl
+ * gupnp_didl_lite_parser_parse_didl:
  * @parser: A #GUPnPDIDLLiteParser
  * @didl: The DIDL-Lite XML string to be parsed
  * @error: The location where to store any error, or NULL

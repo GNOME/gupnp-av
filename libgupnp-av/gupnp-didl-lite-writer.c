@@ -402,7 +402,7 @@ gupnp_didl_lite_writer_class_init (GUPnPDIDLLiteWriterClass *klass)
         g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteWriterPrivate));
 
         /**
-         * GUPnPDIDLLiteWriter:xml-node
+         * GUPnPDIDLLiteWriter:xml-node:
          *
          * The pointer to root node in XML document.
          **/
@@ -419,7 +419,7 @@ gupnp_didl_lite_writer_class_init (GUPnPDIDLLiteWriterClass *klass)
                                        G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteWriter:language
+         * GUPnPDIDLLiteWriter:language:
          *
          * The language the DIDL-Lite fragment is in.
          *
