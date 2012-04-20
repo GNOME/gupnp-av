@@ -1,3 +1,29 @@
+0.10.2
+======
+
+Changes since 0.10.1:
+
+- Update Autotools integration.
+- Create xz tarballs by default.
+- Several fixes from static code analysis.
+- Fix an endless loop on really largs {Source,Sink}ProtocolInfo strings.
+- Fix a crash in gupnp_didl_lite_contributor_get_name.
+- Fix documentation for gupnp_didl_lite_object_get_parent_id.
+- Fix a memory leak in resolution parsing.
+- Allow OP, CI and PS params without DLNA profile.
+
+All contributors to this release:
+Jens Georg <mail@jensge.org>
+Javier Jardón <jjardon@gnome.org>
+Mark Ryan <mark.d.ryan@intel.com>
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=671246
+ - https://bugzilla.gnome.org/show_bug.cgi?id=674319
+ - https://bugzilla.gnome.org/show_bug.cgi?id=674324
+ - https://bugzilla.gnome.org/show_bug.cgi?id=674325
+ - https://bugzilla.gnome.org/show_bug.cgi?id=653894
+
 0.10.1
 ======
 
