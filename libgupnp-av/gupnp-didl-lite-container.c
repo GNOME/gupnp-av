@@ -255,9 +255,11 @@ gupnp_didl_lite_container_get_create_classes (GUPnPDIDLLiteContainer *container)
                 xmlNode *node;
 
                 node = (xmlNode *) l->data;
-                create_class = g_strdup ((const char *) node->content);
+                if (node->children != NULL) {
+                    create_class = g_strdup ((const char *) node->children->content);
 
-                ret = g_list_append (ret, create_class);
+                    ret = g_list_append (ret, create_class);
+                }
         }
 
         g_list_free (classes);
@@ -294,9 +296,11 @@ gupnp_didl_lite_container_get_search_classes (GUPnPDIDLLiteContainer *container)
                 xmlNode *node;
 
                 node = (xmlNode *) l->data;
-                search_class = g_strdup ((const char *) node->content);
+                if (node->children != NULL) {
+                    search_class = g_strdup ((const char *) node->children->content);
 
-                ret = g_list_append (ret, search_class);
+                    ret = g_list_append (ret, search_class);
+                }
         }
 
         g_list_free (classes);
