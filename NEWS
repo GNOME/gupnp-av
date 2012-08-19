@@ -1,3 +1,21 @@
+0.10.3
+======
+
+Changes since 0.10.2:
+
+- Ignore case when parsing DIDLLite and LastChange.
+- Fix gupnp_didl_lite_container_get_{create|search}_classes.
+- Fix a potential memory corruption in parse_additional_info.
+
+All contributors to this release:
+Jens Georg <mail@jensge.org>
+Mark Ryan <mark.d.ryan@intel.com>
+
+Bugs fixes in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=674322
+ - https://bugzilla.gnome.org/show_bug.cgi?id=676372
+ - https://bugzilla.gnome.org/show_bug.cgi?id=678784
+
 0.10.2
 ======
 
