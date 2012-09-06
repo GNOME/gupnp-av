@@ -1,10 +1,12 @@
 /*
  * Copyright (C) 2009 Nokia Corporation.
  * Copyright (C) 2007, 2008 OpenedHand Ltd.
+ * Copyright (C) 2012 Intel Corporation
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
  *          Jorn Baayen <jorn@openedhand.com>
+ *          Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -70,7 +72,9 @@ enum {
 
         PROP_WIDTH,
         PROP_HEIGHT,
-        PROP_COLOR_DEPTH
+        PROP_COLOR_DEPTH,
+
+        PROP_UPDATE_COUNT
 };
 
 static void
@@ -227,6 +231,11 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                                 (resource,
                                  g_value_get_int (value));
                 break;
+        case PROP_UPDATE_COUNT:
+                gupnp_didl_lite_resource_set_update_count
+                                        (resource,
+                                         g_value_get_uint (value));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -317,6 +326,11 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
                 g_value_set_int
                         (value,
                          gupnp_didl_lite_resource_get_color_depth (resource));
+                break;
+        case PROP_UPDATE_COUNT:
+                g_value_set_uint
+                         (value,
+                          gupnp_didl_lite_resource_get_update_count (resource));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -663,6 +677,25 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
                                    G_PARAM_STATIC_NAME |
                                    G_PARAM_STATIC_NICK |
                                    G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteResource:update_count:
+         *
+         * The update count of this resource.
+         **/
+        g_object_class_install_property
+                       (object_class,
+                        PROP_UPDATE_COUNT,
+                        g_param_spec_uint ("update-count",
+                                           "UpdateCount",
+                                           "The update count of this resource.",
+                                           0,
+                                           G_MAXUINT,
+                                           0,
+                                           G_PARAM_READWRITE |
+                                           G_PARAM_STATIC_NAME |
+                                           G_PARAM_STATIC_NICK |
+                                           G_PARAM_STATIC_BLURB));
 }
 
 /**
@@ -982,6 +1015,44 @@ gupnp_didl_lite_resource_get_color_depth (GUPnPDIDLLiteResource *resource)
         return xml_util_get_long_attribute (resource->priv->xml_node,
                                             "colorDepth",
                                             -1);
+}
+
+/**
+ * gupnp_didl_lite_resource_get_update_count:
+ * @resource: A #GUPnPDIDLLiteResource
+ *
+ * Get the update count of this resource.
+ *
+ * Return value: The update count of the @resource.
+ **/
+guint
+gupnp_didl_lite_resource_get_update_count (GUPnPDIDLLiteResource *resource)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), 0);
+
+        return xml_util_get_uint_attribute (resource->priv->xml_node,
+                                            "updateCount",
+                                            -1);
+}
+
+/**
+ * gupnp_didl_lite_resource_update_count_is_set:
+ * @resource: A #GUPnPDIDLLiteResource
+ *
+ * Check whether the update count property of this resource is set.
+ *
+ * Return value: %TRUE if set, otherwise %FALSE.
+ **/
+gboolean
+gupnp_didl_lite_resource_update_count_is_set (GUPnPDIDLLiteResource *resource)
+{
+        const char *content;
+
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), FALSE);
+
+        content = xml_util_get_attribute_content (resource->priv->xml_node,
+                                                  "updateCount");
+        return content != NULL;
 }
 
 /**
@@ -1417,3 +1488,47 @@ gupnp_didl_lite_resource_set_color_depth (GUPnPDIDLLiteResource *resource,
         g_object_notify (G_OBJECT (resource), "color-depth");
 }
 
+/**
+ * gupnp_didl_lite_resource_set_update_count:
+ * @resource: A #GUPnPDIDLLiteResource
+ * @update_count: The update_count
+ *
+ * Set the update count of this resource.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_resource_set_update_count (GUPnPDIDLLiteResource *resource,
+                                          guint                  update_count)
+{
+        char *str;
+
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+
+        str = g_strdup_printf ("%u", update_count);
+        xmlSetProp (resource->priv->xml_node,
+                    (unsigned char *) "updateCount",
+                    (unsigned char *) str);
+        g_free (str);
+
+        g_object_notify (G_OBJECT (resource), "update-count");
+}
+
+/**
+ * gupnp_didl_lite_resource_unset_update_count:
+ * @resource: A #GUPnPDIDLLiteResource
+ *
+ * Unset the update count of this resource.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_resource_unset_update_count (GUPnPDIDLLiteResource *resource)
+{
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+
+        xmlUnsetProp (resource->priv->xml_node,
+                      (unsigned char *) "updateCount");
+
+        g_object_notify (G_OBJECT (resource), "update-count");
+}

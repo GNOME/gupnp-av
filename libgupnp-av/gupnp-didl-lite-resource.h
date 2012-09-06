@@ -1,10 +1,12 @@
 /*
  * Copyright (C) 2009 Nokia Corporation.
  * Copyright (C) 2007, 2008 OpenedHand Ltd.
+ * Copyright (C) 2012 Intel Corporation
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
  *          Jorn Baayen <jorn@openedhand.com>
+ *          Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -139,6 +141,15 @@ gupnp_didl_lite_resource_set_color_depth
                                         (GUPnPDIDLLiteResource *resource,
                                          int                    color_depth);
 
+void
+gupnp_didl_lite_resource_set_update_count
+                                        (GUPnPDIDLLiteResource *resource,
+                                         guint                  update_count);
+
+void
+gupnp_didl_lite_resource_unset_update_count
+                                        (GUPnPDIDLLiteResource *resource);
+
 xmlNode *
 gupnp_didl_lite_resource_get_xml_node   (GUPnPDIDLLiteResource *resource);
 
@@ -187,6 +198,14 @@ gupnp_didl_lite_resource_get_height     (GUPnPDIDLLiteResource *resource);
 
 int
 gupnp_didl_lite_resource_get_color_depth
+                                        (GUPnPDIDLLiteResource *resource);
+
+guint
+gupnp_didl_lite_resource_get_update_count
+                                        (GUPnPDIDLLiteResource *resource);
+
+gboolean
+gupnp_didl_lite_resource_update_count_is_set
                                         (GUPnPDIDLLiteResource *resource);
 
 G_END_DECLS
