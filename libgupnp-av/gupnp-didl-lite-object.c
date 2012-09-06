@@ -1,8 +1,10 @@
 /*
  * Copyright (C) 2009 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
+ *          Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -75,6 +77,7 @@ enum {
         PROP_DATE,
         PROP_TRACK_NUMBER,
         PROP_DLNA_MANAGED,
+        PROP_UPDATE_ID
 };
 
 static int
@@ -205,6 +208,11 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                                         (didl_object,
                                          g_value_get_flags (value));
                 break;
+        case PROP_UPDATE_ID:
+                gupnp_didl_lite_object_set_update_id
+                                        (didl_object,
+                                         g_value_get_uint (value));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -324,6 +332,11 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_flags
                         (value,
                          gupnp_didl_lite_object_get_dlna_managed (didl_object));
+                break;
+        case PROP_UPDATE_ID:
+                g_value_set_uint
+                        (value,
+                         gupnp_didl_lite_object_get_update_id (didl_object));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -750,6 +763,25 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                      G_PARAM_STATIC_NAME |
                                      G_PARAM_STATIC_NICK |
                                      G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:update-id:
+         *
+         * Update ID of this object.
+         **/
+        g_object_class_install_property
+                                (object_class,
+                                 PROP_UPDATE_ID,
+                                 g_param_spec_uint ("update-id",
+                                                    "UpdateID",
+                                                    "Update ID of this object.",
+                                                    0,
+                                                    G_MAXUINT,
+                                                    0,
+                                                    G_PARAM_READWRITE |
+                                                    G_PARAM_STATIC_NAME |
+                                                    G_PARAM_STATIC_NICK |
+                                                    G_PARAM_STATIC_BLURB));
 }
 
 static gboolean
@@ -1334,6 +1366,46 @@ gupnp_didl_lite_object_get_dlna_managed (GUPnPDIDLLiteObject *object)
 }
 
 /**
+ * gupnp_didl_lite_object_get_update_id:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the update ID of the @object.
+ *
+ * Return value: The update ID of the @object.
+ **/
+guint
+gupnp_didl_lite_object_get_update_id (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (object != NULL, 0);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), 0);
+
+        return xml_util_get_uint_child_element (object->priv->xml_node,
+                                                "objectUpdateID",
+                                                0);
+}
+
+/**
+ * gupnp_didl_lite_object_update_id_is_set:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get whether the update ID of the @object is set.
+ *
+ * Return value: %TRUE if update ID is set, otherwise %FALSE
+ **/
+gboolean
+gupnp_didl_lite_object_update_id_is_set (GUPnPDIDLLiteObject *object)
+{
+        const char *content;
+
+        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), FALSE);
+
+        content = xml_util_get_child_element_content (object->priv->xml_node,
+                                                      "objectUpdateID");
+        return content != NULL;
+}
+
+/**
  * gupnp_didl_lite_object_get_resources:
  * @object: #GUPnPDIDLLiteObject
  *
@@ -1914,6 +1986,51 @@ gupnp_didl_lite_object_set_dlna_managed (GUPnPDIDLLiteObject *object,
         g_free (str);
 
         g_object_notify (G_OBJECT (object), "dlna-managed");
+}
+
+/**
+ * gupnp_didl_lite_object_set_update_id:
+ * @object: #GUPnPDIDLLiteObject
+ * @update_id: Update ID
+ *
+ * Set the update ID of the @object.
+ **/
+void
+gupnp_didl_lite_object_set_update_id (GUPnPDIDLLiteObject *object,
+                                      guint                update_id)
+{
+        char *str;
+
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        str = g_strdup_printf ("%u", update_id);
+        xml_util_set_child (object->priv->xml_node,
+                            object->priv->upnp_ns,
+                            object->priv->xml_doc->doc,
+                            "class",
+                            str);
+        g_free (str);
+
+        g_object_notify (G_OBJECT (object), "update-id");
+}
+
+/**
+ * gupnp_didl_lite_object_unset_update_id:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Unset the update ID property of the @object.
+ **/
+void
+gupnp_didl_lite_object_unset_update_id (GUPnPDIDLLiteObject *object)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        xml_util_unset_child (object->priv->xml_node,
+                              "objectUpdateID");
+
+        g_object_notify (G_OBJECT (object), "update-id");
 }
 
 /**

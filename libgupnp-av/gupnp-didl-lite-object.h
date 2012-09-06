@@ -1,10 +1,12 @@
 /*
  * Copyright (C) 2009 Nokia Corporation.
  * Copyright (C) 2007, 2008 OpenedHand Ltd.
+ * Copyright (C) 2012 Intel Corporation
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
  *          Jorn Baayen <jorn@openedhand.com>
+ *          Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -158,6 +160,12 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object);
 GUPnPOCMFlags
 gupnp_didl_lite_object_get_dlna_managed (GUPnPDIDLLiteObject *object);
 
+guint
+gupnp_didl_lite_object_get_update_id    (GUPnPDIDLLiteObject *object);
+
+gboolean
+gupnp_didl_lite_object_update_id_is_set (GUPnPDIDLLiteObject *object);
+
 GList *
 gupnp_didl_lite_object_get_resources    (GUPnPDIDLLiteObject *object);
 
@@ -249,6 +257,13 @@ gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
 void
 gupnp_didl_lite_object_set_dlna_managed (GUPnPDIDLLiteObject *object,
                                          GUPnPOCMFlags        dlna_managed);
+
+void
+gupnp_didl_lite_object_set_update_id    (GUPnPDIDLLiteObject *object,
+                                         guint                update_id);
+
+void
+gupnp_didl_lite_object_unset_update_id  (GUPnPDIDLLiteObject *object);
 
 G_END_DECLS
 
