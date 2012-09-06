@@ -1,8 +1,10 @@
 /*
  * Copyright (C) 2009 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
+ *          Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +32,7 @@
 #include <string.h>
 
 #include "gupnp-didl-lite-container.h"
+#include "gupnp-didl-lite-object-private.h"
 #include "xml-util.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteContainer,
@@ -40,7 +43,8 @@ enum {
         PROP_0,
         PROP_SEARCHABLE,
         PROP_CHILD_COUNT,
-        PROP_STORAGE_USED
+        PROP_STORAGE_USED,
+        PROP_CONTAINER_UPDATE_ID
 };
 
 static void
@@ -75,6 +79,12 @@ gupnp_didl_lite_container_get_property (GObject    *object,
                         (value,
                          gupnp_didl_lite_container_get_storage_used (container));
                 break;
+        case PROP_CONTAINER_UPDATE_ID:
+                g_value_set_uint
+                              (value,
+                               gupnp_didl_lite_container_get_container_update_id
+                                        (container));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -107,6 +117,11 @@ gupnp_didl_lite_container_set_property (GObject      *object,
                 gupnp_didl_lite_container_set_storage_used
                                         (container,
                                          g_value_get_int64 (value));
+                break;
+        case PROP_CONTAINER_UPDATE_ID:
+                gupnp_didl_lite_container_set_container_update_id
+                                        (container,
+                                         g_value_get_uint (value));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -179,6 +194,25 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
                                      G_PARAM_STATIC_NAME |
                                      G_PARAM_STATIC_NICK |
                                      G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteContainer:container-update-id:
+         *
+         * Update ID of this container.
+         **/
+        g_object_class_install_property
+                             (object_class,
+                              PROP_CONTAINER_UPDATE_ID,
+                              g_param_spec_uint ("container-update-id",
+                                                 "ContainerUpdateID",
+                                                 "Update ID of this container.",
+                                                 0,
+                                                 G_MAXUINT,
+                                                 0,
+                                                 G_PARAM_READWRITE |
+                                                 G_PARAM_STATIC_NAME |
+                                                 G_PARAM_STATIC_NICK |
+                                                 G_PARAM_STATIC_BLURB));
 }
 
 /**
@@ -224,6 +258,56 @@ gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
                                 (GUPNP_DIDL_LITE_OBJECT (container));
 
         return xml_util_get_int_attribute (xml_node, "childCount", -1);
+}
+
+/**
+ * gupnp_didl_lite_container_get_container_update_id:
+ * @container: #GUPnPDIDLLiteContainer
+ *
+ * Get the container update ID of the @container.
+ *
+ * Return value: The container update ID of the @container.
+ **/
+guint
+gupnp_didl_lite_container_get_container_update_id
+                                        (GUPnPDIDLLiteContainer *container)
+{
+        xmlNode *xml_node;
+
+        g_return_val_if_fail (container != NULL, 0);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container), 0);
+
+        xml_node = gupnp_didl_lite_object_get_xml_node
+                                (GUPNP_DIDL_LITE_OBJECT (container));
+
+        return xml_util_get_uint_child_element (xml_node,
+                                                "containerUpdateID",
+                                                0);
+}
+
+/**
+ * gupnp_didl_lite_container_container_update_id_is_set:
+ * @container: #GUPnPDIDLLiteContainer
+ *
+ * Get whether the container update ID of the @container is set.
+ *
+ * Return value: %TRUE if update ID is set, otherwise %FALSE
+ **/
+gboolean
+gupnp_didl_lite_container_container_update_id_is_set
+                                        (GUPnPDIDLLiteContainer *container)
+{
+        const char *content;
+        xmlNode *xml_node;
+
+        g_return_val_if_fail (container != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container), FALSE);
+
+        xml_node = gupnp_didl_lite_object_get_xml_node
+                                        (GUPNP_DIDL_LITE_OBJECT (container));
+        content = xml_util_get_child_element_content (xml_node,
+                                                      "containerUpdateID");
+        return content != NULL;
 }
 
 /**
@@ -401,6 +485,65 @@ gupnp_didl_lite_container_set_child_count (GUPnPDIDLLiteContainer *container,
         g_free (str);
 
         g_object_notify (G_OBJECT (container), "child-count");
+}
+
+/**
+ * gupnp_didl_lite_container_set_container_update_id:
+ * @container: #GUPnPDIDLLiteContainer
+ * @update_id: The container update ID
+ *
+ * Set the container update ID of the @container.
+ **/
+void
+gupnp_didl_lite_container_set_container_update_id
+                                        (GUPnPDIDLLiteContainer *container,
+                                         guint                   update_id)
+{
+        xmlNode *xml_node;
+        xmlNsPtr upnp_ns;
+        GUPnPXMLDoc *xml_doc;
+        char *str;
+        GUPnPDIDLLiteObject *self_as_object;
+
+        g_return_if_fail (container != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container));
+
+        self_as_object = GUPNP_DIDL_LITE_OBJECT (container);
+        xml_node = gupnp_didl_lite_object_get_xml_node (self_as_object);
+        xml_doc = gupnp_didl_lite_object_get_gupnp_xml_doc (self_as_object);
+        upnp_ns = gupnp_didl_lite_object_get_upnp_namespace (self_as_object);
+
+        str = g_strdup_printf ("%u", update_id);
+        xml_util_set_child (xml_node,
+                            upnp_ns,
+                            xml_doc->doc,
+                            "containerUpdateID",
+                            str);
+        g_free (str);
+
+        g_object_notify (G_OBJECT (container), "container-update-id");
+}
+
+/**
+ * gupnp_didl_lite_container_unset_container_update_id:
+ * @container: #GUPnPDIDLLiteContainer
+ *
+ * Unset the container update ID property of the @container.
+ **/
+void
+gupnp_didl_lite_container_unset_container_update_id
+                                        (GUPnPDIDLLiteContainer *container)
+{
+        xmlNode *xml_node;
+
+        g_return_if_fail (container != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container));
+
+        xml_node = gupnp_didl_lite_object_get_xml_node
+                                        (GUPNP_DIDL_LITE_OBJECT (container));
+        xml_util_unset_child (xml_node, "containerUpdateID");
+
+        g_object_notify (G_OBJECT (container), "container-update-id");
 }
 
 /**

@@ -1,8 +1,10 @@
 /*
  * Copyright (C) 2009 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
+ *          Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -74,6 +76,14 @@ gint
 gupnp_didl_lite_container_get_child_count
                                         (GUPnPDIDLLiteContainer *container);
 
+guint
+gupnp_didl_lite_container_get_container_update_id
+                                        (GUPnPDIDLLiteContainer *container);
+
+gboolean
+gupnp_didl_lite_container_container_update_id_is_set
+                                        (GUPnPDIDLLiteContainer *container);
+
 GList *
 gupnp_didl_lite_container_get_create_classes
                                         (GUPnPDIDLLiteContainer *container);
@@ -91,6 +101,15 @@ void
 gupnp_didl_lite_container_set_child_count
                                         (GUPnPDIDLLiteContainer *container,
                                          gint                    child_count);
+
+void
+gupnp_didl_lite_container_set_container_update_id
+                                        (GUPnPDIDLLiteContainer *container,
+                                         guint                   update_id);
+
+void
+gupnp_didl_lite_container_unset_container_update_id
+                                        (GUPnPDIDLLiteContainer *container);
 
 void
 gupnp_didl_lite_container_add_create_class
