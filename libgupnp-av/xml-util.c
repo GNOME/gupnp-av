@@ -65,9 +65,8 @@ xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
        GList *children = NULL;
 
        for (node = node->children; node; node = node->next) {
-               if (node->name == NULL) {
+               if (node->name == NULL)
                        continue;
-               }
 
                if (strcmp (name, (char *) node->name) == 0) {
                        children = g_list_append (children, node);
@@ -229,18 +228,30 @@ xml_util_set_child (xmlNode    *parent_node,
         xmlChar *escaped;
 
         node = xml_util_get_element (parent_node, name, NULL);
-        if (node == NULL) {
+        if (node == NULL)
                 node = xmlNewChild (parent_node,
                                     namespace,
                                     (unsigned char *) name,
                                     NULL);
-        }
 
         escaped = xmlEncodeSpecialChars (doc, (const unsigned char *) value);
         xmlNodeSetContent (node, escaped);
         xmlFree (escaped);
 
         return node;
+}
+
+void
+xml_util_unset_child (xmlNode    *parent_node,
+                      const char *name)
+{
+        xmlNode *node;
+
+        node = xml_util_get_element (parent_node, name, NULL);
+        if (node != NULL) {
+                xmlUnlinkNode (node);
+                xmlFreeNode (node);
+        }
 }
 
 gboolean
