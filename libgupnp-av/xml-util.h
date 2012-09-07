@@ -1,9 +1,11 @@
 /*
  * Copyright (C) 2006, 2007 OpenedHand Ltd.
  * Copyright (C) 2007 Zeeshan Ali.
+ * Copyright (C) 2012 Intel Corporation
  *
  * Author: Jorn Baayen <jorn@openedhand.com>
  * Author: Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+ * Author: Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,6 +42,16 @@ xml_util_get_child_elements_by_name     (xmlNode *node,
 G_GNUC_INTERNAL const char *
 xml_util_get_child_element_content      (xmlNode    *node,
                                          const char *child_name);
+
+G_GNUC_INTERNAL guint
+xml_util_get_uint_child_element         (xmlNode    *node,
+                                         const char *child_name,
+                                         guint       default_value);
+
+G_GNUC_INTERNAL guint64
+xml_util_get_uint64_child_element       (xmlNode    *node,
+                                         const char *child_name,
+                                         guint64     default_value);
 
 G_GNUC_INTERNAL const char *
 xml_util_get_attribute_content          (xmlNode    *node,
