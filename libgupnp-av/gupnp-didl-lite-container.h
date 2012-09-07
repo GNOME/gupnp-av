@@ -84,6 +84,14 @@ gboolean
 gupnp_didl_lite_container_container_update_id_is_set
                                         (GUPnPDIDLLiteContainer *container);
 
+guint
+gupnp_didl_lite_container_get_total_deleted_child_count
+                                        (GUPnPDIDLLiteContainer *container);
+
+gboolean
+gupnp_didl_lite_container_total_deleted_child_count_is_set
+                                        (GUPnPDIDLLiteContainer *container);
+
 GList *
 gupnp_didl_lite_container_get_create_classes
                                         (GUPnPDIDLLiteContainer *container);
@@ -109,6 +117,15 @@ gupnp_didl_lite_container_set_container_update_id
 
 void
 gupnp_didl_lite_container_unset_container_update_id
+                                        (GUPnPDIDLLiteContainer *container);
+
+void
+gupnp_didl_lite_container_set_total_deleted_child_count
+                                        (GUPnPDIDLLiteContainer *container,
+                                         guint                   count);
+
+void
+gupnp_didl_lite_container_unset_total_deleted_child_count
                                         (GUPnPDIDLLiteContainer *container);
 
 void
