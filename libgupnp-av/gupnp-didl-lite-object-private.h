@@ -1,8 +1,10 @@
 /*
  * Copyright (C) 2009 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
+ *          Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,6 +36,10 @@ gupnp_didl_lite_object_new_from_xml     (xmlNode     *xml_node,
                                          xmlNs       *upnp_ns,
                                          xmlNs       *dc_ns,
                                          xmlNs       *dlna_ns);
+
+G_GNUC_INTERNAL GUPnPXMLDoc *
+gupnp_didl_lite_object_get_gupnp_xml_doc
+                                        (GUPnPDIDLLiteObject *object);
 
 G_END_DECLS
 
