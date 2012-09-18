@@ -1,9 +1,10 @@
 /*
- * Copyright (C) 2007 Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
- * Copyright (C) 2006, 2007, 2008 OpenedHand Ltd.
+ * Copyright (C) 2012 Intel Corporation.
+ * Copyright (C) 2009 Nokia Corporation.
  *
- * Author: Zeeshan Ali Khattak <zeenix@gstreamer.net>
- *         Jorn Baayen <jorn@openedhand.com>
+ * Author: Christophe Guiraud <christophe.guiraud@intel.com>
+ * Author: Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+ *                               <zeeshan.ali@nokia.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,16 +22,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "gupnp-didl-lite-object.h"
-#include "gupnp-didl-lite-container.h"
-#include "gupnp-didl-lite-createclass.h"
-#include "gupnp-didl-lite-item.h"
-#include "gupnp-didl-lite-parser.h"
-#include "gupnp-didl-lite-resource.h"
-#include "gupnp-didl-lite-descriptor.h"
-#include "gupnp-didl-lite-writer.h"
-#include "gupnp-protocol-info.h"
-#include "gupnp-search-criteria-parser.h"
-#include "gupnp-last-change-parser.h"
-#include "gupnp-dlna.h"
+#ifndef __GUPNP_DIDL_LITE_CREATE_CLASS_PRIVATE_H__
+#define __GUPNP_DIDL_LITE_CREATE_CLASS_PRIVATE_H__
 
+#include <glib-object.h>
+#include <libxml/tree.h>
+
+G_BEGIN_DECLS
+
+G_GNUC_INTERNAL GUPnPDIDLLiteCreateClass *
+gupnp_didl_lite_create_class_new_from_xml (xmlNode     *xml_node,
+                                           GUPnPXMLDoc *xml_doc);
+
+G_END_DECLS
+
+#endif /* __GUPNP_DIDL_LITE_CREATE_CLASS_PRIVATE_H__ */

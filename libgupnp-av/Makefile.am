@@ -18,6 +18,7 @@ lib_LTLIBRARIES = libgupnp-av-1.0.la
 libgupnp_av_inc_HEADERS = gupnp-didl-lite-object.h \
 			  gupnp-didl-lite-item.h \
 			  gupnp-didl-lite-container.h \
+			  gupnp-didl-lite-createclass.h \
 			  gupnp-didl-lite-parser.h \
 			  gupnp-didl-lite-resource.h \
 			  gupnp-didl-lite-descriptor.h \
@@ -47,6 +48,8 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-object-private.h \
 			     gupnp-didl-lite-item.c \
 			     gupnp-didl-lite-container.c \
+			     gupnp-didl-lite-createclass.c \
+			     gupnp-didl-lite-createclass-private.h \
 			     gupnp-didl-lite-parser.c \
 			     gupnp-didl-lite-resource.c \
 			     gupnp-didl-lite-resource-private.h \
@@ -87,6 +90,7 @@ introspection_sources = \
 	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-descriptor.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-contributor.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-writer.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-didl-lite-createclass.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-protocol-info.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-search-criteria-parser.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-last-change-parser.c \

@@ -2,9 +2,10 @@
  * Copyright (C) 2009 Nokia Corporation.
  * Copyright (C) 2012 Intel Corporation
  *
- * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
- *                                <zeeshanak@gnome.org>
+ * Authors: Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+ *                                <zeeshan.ali@nokia.com>
  *          Krzesimir Nowak <krnowak@openismus.com>
+ *          Christophe Guiraud <christophe.guiraud@intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,7 +34,10 @@
 
 #include "gupnp-didl-lite-container.h"
 #include "gupnp-didl-lite-object-private.h"
+#include "gupnp-didl-lite-createclass.h"
+#include "gupnp-didl-lite-createclass-private.h"
 #include "xml-util.h"
+
 
 G_DEFINE_TYPE (GUPnPDIDLLiteContainer,
                gupnp_didl_lite_container,
@@ -419,6 +423,7 @@ gupnp_didl_lite_container_get_create_classes (GUPnPDIDLLiteContainer *container)
                 xmlNode *node;
 
                 node = (xmlNode *) l->data;
+
                 if (node->children != NULL) {
                     create_class = g_strdup ((const char *) node->children->content);
 
@@ -427,6 +432,53 @@ gupnp_didl_lite_container_get_create_classes (GUPnPDIDLLiteContainer *container)
         }
 
         g_list_free (classes);
+
+        return ret;
+}
+
+/**
+ * gupnp_didl_lite_container_get_create_classes_full:
+ * @container: #GUPnPDIDLLiteContainer
+ *
+ * Gets the list of create classes of the @container.
+ *
+ * Returns: (element-type GUPnPDIDLLiteCreateClass*) (transfer full): The list
+ * of create classes belonging to @container, or %NULL.
+ * #g_list_free the returned list after usage and unref each object in it.
+ **/
+GList *
+gupnp_didl_lite_container_get_create_classes_full (
+                                            GUPnPDIDLLiteContainer *container)
+{
+        GList *cc_list = NULL;
+        GList *ret = NULL;
+        GList *l;
+
+        g_return_val_if_fail (container != NULL, NULL);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container), NULL);
+
+        cc_list = gupnp_didl_lite_object_get_properties (
+                                           GUPNP_DIDL_LITE_OBJECT (container),
+                                           "createClass");
+
+        for (l = cc_list; l; l = l->next) {
+                GUPnPDIDLLiteCreateClass *cc;
+                xmlNode *cc_node;
+                GUPnPXMLDoc *cc_doc;
+
+                cc_node = (xmlNode *) l->data;
+                if (!cc_node->children)
+                        continue;
+
+                cc_doc = gupnp_didl_lite_object_get_gupnp_xml_doc (
+                                           GUPNP_DIDL_LITE_OBJECT (container));
+
+                cc = gupnp_didl_lite_create_class_new_from_xml (cc_node, cc_doc);
+
+                ret = g_list_append (ret, cc);
+        }
+
+        g_list_free (cc_list);
 
         return ret;
 }

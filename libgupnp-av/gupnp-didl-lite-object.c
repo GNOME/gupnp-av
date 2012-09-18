@@ -2097,4 +2097,3 @@ gupnp_didl_lite_object_add_descriptor (GUPnPDIDLLiteObject *object)
         return gupnp_didl_lite_descriptor_new_from_xml (desc_node,
                                                         object->priv->xml_doc);
 }
-

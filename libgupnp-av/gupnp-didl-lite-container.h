@@ -4,6 +4,7 @@
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
+ *          Christophe Guiraud <christophe.guiraud@intel.com>
  *          Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -97,6 +98,9 @@ gupnp_didl_lite_container_get_create_classes
                                         (GUPnPDIDLLiteContainer *container);
 
 GList *
+gupnp_didl_lite_container_get_create_classes_full
+                                        (GUPnPDIDLLiteContainer *container);
+GList *
 gupnp_didl_lite_container_get_search_classes
                                         (GUPnPDIDLLiteContainer *container);
 
@@ -157,6 +161,7 @@ void
 gupnp_didl_lite_container_set_storage_used
                                        (GUPnPDIDLLiteContainer *container,
                                         gint64                  storage_used);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_CONTAINER_H__ */
