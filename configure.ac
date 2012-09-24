@@ -23,7 +23,9 @@ AC_FUNC_MMAP
 LT_PREREQ([2.2])
 LT_INIT([win32-dll])
 
-PKG_CHECK_MODULES(LIBGUPNP, gupnp-1.0 >= 0.17.0)
+PKG_CHECK_MODULES(LIBGUPNP, gupnp-1.0 >= 0.17.0 \
+                            gobject-2.0 \
+                            libxml-2.0)
 
 # glib-genmarshal
 GLIB_GENMARSHAL=`pkg-config --variable=glib_genmarshal glib-2.0`
