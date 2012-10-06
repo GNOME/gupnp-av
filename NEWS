@@ -1,3 +1,29 @@
+0.11.0
+======
+
+Changes since 0.10.3:
+
+- Add support for properties needed to implement MediaServer:3 "Track changes"
+  functionality.
+- Add proper upnp:createClass support.
+- Clean-up pkg-config files and link to the correct libraries instead of
+  relying on gupnp leaking the right ones.
+- Generate vapi from GIR files.
+
+All contributors to this release:
+
+Krzesimir Nowak <krnowak@openismus.com>
+Jens Georg <mail@jensge.org>
+Andreas Henriksson <andreas@fatal.se>
+Christophe Guiraud <christophe.guiraud@intel.com>
+
+Bug fixes in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=684297
+ - https://bugzilla.gnome.org/show_bug.cgi?id=685477
+
+Changes in dependencies:
+ - gupnp >= 0.19.0 for proper cleaned pkg-config file consistency.
+
 0.10.3
 ======
 
