@@ -101,6 +101,7 @@ GUPnPAV-1.0.gir: libgupnp-av-1.0.la
 GUPnPAV_1_0_gir_INCLUDES = GObject-2.0 GSSDP-1.0 Soup-2.4 libxml2-2.0 GUPnP-1.0
 GUPnPAV_1_0_gir_CFLAGS = $(AM_CFLAGS)
 GUPnPAV_1_0_gir_LIBS = libgupnp-av-1.0.la
+GUPnPAV_1_0_gir_NAMESPACE = GUPnPAV
 GUPnPAV_1_0_gir_SCANNERFLAGS = --identifier-prefix=GUPnP --symbol-prefix=gupnp --pkg-export=gupnp-av-1.0
 GUPnPAV_1_0_gir_FILES = $(introspection_sources)
 INTROSPECTION_GIRS += GUPnPAV-1.0.gir

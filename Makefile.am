@@ -1,4 +1,4 @@
-SUBDIRS = libgupnp-av tests doc
+SUBDIRS = libgupnp-av tests doc vala
 
 pkgconfig_DATA= gupnp-av-1.0.pc
 pkgconfigdir = $(libdir)/pkgconfig

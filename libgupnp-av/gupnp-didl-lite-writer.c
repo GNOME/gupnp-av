@@ -441,7 +441,7 @@ gupnp_didl_lite_writer_class_init (GUPnPDIDLLiteWriterClass *klass)
 
 /**
  * gupnp_didl_lite_writer_new:
- * @language: The language the DIDL-Lite fragment is in, or NULL
+ * @language: (allow-none):The language the DIDL-Lite fragment is in, or NULL
  *
  * Return value: A new #GUPnPDIDLLiteWriter object.
  **/

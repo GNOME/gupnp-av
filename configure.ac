@@ -39,7 +39,16 @@ if test "x$enable_debug" = "xyes"; then
         CFLAGS="$CFLAGS -g -Wall"
 fi
 
-GOBJECT_INTROSPECTION_CHECK([0.9.5])
+GOBJECT_INTROSPECTION_CHECK([1.33.4])
+
+# vapigen
+AS_IF([test "x$found_introspection" = "xyes"],
+      [
+       VALA_PROG_VAPIGEN([0.14])
+      ]
+)
+AM_CONDITIONAL([HAVE_VAPIGEN], [test "x$VAPIGEN" != "x"])
+
 
 GTK_DOC_CHECK([1.10],[--flavour no-tmpl])
 
@@ -50,6 +59,7 @@ tests/Makefile
 tests/gtest/Makefile
 doc/Makefile
 doc/version.xml
+vala/Makefile
 gupnp-av-1.0.pc
 gupnp-av-1.0-uninstalled.pc
 ])
