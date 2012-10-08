@@ -106,10 +106,10 @@ GUPnPAV_1_0_gir_SCANNERFLAGS = --identifier-prefix=GUPnP --symbol-prefix=gupnp -
 GUPnPAV_1_0_gir_FILES = $(introspection_sources)
 INTROSPECTION_GIRS += GUPnPAV-1.0.gir
 
-girdir = $(INTROSPECTION_GIRDIR)
+girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibdir = $(INTROSPECTION_TYPELIBDIR)
+typelibdir = $(libdir)/girepository-1.0
 typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 endif
 
