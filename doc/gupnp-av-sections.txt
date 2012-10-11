@@ -338,6 +338,44 @@ gupnp_search_criteria_op_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gupnp-feature</FILE>
+<TITLE>GUPnPFeature</TITLE>
+GUPnPFeature
+gupnp_feature_get_name
+gupnp_feature_get_version
+gupnp_feature_get_object_ids
+<SUBSECTION Standard>
+GUPnPFeatureClass
+GUPNP_TYPE_FEATURE
+GUPNP_FEATURE
+GUPNP_FEATURE_CLASS
+GUPNP_IS_FEATURE_PARSER
+GUPNP_IS_FEATURE_PARSER_CLASS
+GUPNP_FEATURE_GET_CLASS
+<SUBSECTION Private>
+GUPnPFeaturePrivate
+gupnp_feature_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gupnp-feature-list-parser</FILE>
+<TITLE>GUPnPFeatureListParser</TITLE>
+GUPnPFeatureListParser
+gupnp_feature_list_parser_new
+gupnp_feature_list_parser_parse_text
+<SUBSECTION Standard>
+GUPnPFeatureListParserClass
+GUPNP_TYPE_FEATURE_LIST_PARSER
+GUPNP_FEATURE_LIST_PARSER
+GUPNP_FEATURE_LIST_PARSER_CLASS
+GUPNP_IS_FEATURE_LIST_PARSER_PARSER
+GUPNP_IS_FEATURE_LIST_PARSER_PARSER_CLASS
+GUPNP_FEATURE_LIST_PARSER_GET_CLASS
+<SUBSECTION Private>
+gupnp_feature_list_parser_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gupnp-av-error</FILE>
 <TITLE>Error codes</TITLE>
 GUPNP_PROTOCOL_ERROR
