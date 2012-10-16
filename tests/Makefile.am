@@ -8,9 +8,14 @@ test_search_criteria_parser_LDADD = \
 			$(top_builddir)/libgupnp-av/libgupnp-av-1.0.la \
 			$(LIBGUPNP_LIBS)
 
-check_PROGRAMS = check-search
+check_PROGRAMS = check-search \
+		 check-feature-list-parser
 check_search_SOURCES = check-search.c
 check_search_LDADD = $(top_builddir)/libgupnp-av/libgupnp-av-1.0.la \
 		     $(LIBGUPNP_LIBS)
+check_feature_list_parser_SOURCES = check-feature-list-parser.c
+check_feature_list_parser_LDADD = \
+			$(top_builddir)/libgupnp-av/libgupnp-av-1.0.la \
+			$(LIBGUPNP_LIBS)
 
 TESTS = $(check_PROGRAMS)
