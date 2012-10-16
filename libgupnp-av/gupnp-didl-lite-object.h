@@ -37,6 +37,17 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_APPLIABLE,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_BAD_XML,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_BAD_XML,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR
+} GUPnPDIDLLiteFragmentResult;
+
 GType
 gupnp_didl_lite_object_get_type (void) G_GNUC_CONST;
 
@@ -264,6 +275,18 @@ gupnp_didl_lite_object_set_update_id    (GUPnPDIDLLiteObject *object,
 
 void
 gupnp_didl_lite_object_unset_update_id  (GUPnPDIDLLiteObject *object);
+
+GUPnPDIDLLiteFragmentResult
+gupnp_didl_lite_object_is_fragment_pair_valid
+                                        (GUPnPDIDLLiteObject *object,
+					 const gchar         *current_fragment,
+					 const gchar         *new_fragment);
+
+gboolean
+gupnp_didl_lite_object_apply_fragment_pair
+                                        (GUPnPDIDLLiteObject *object,
+					 const gchar         *current_fragment,
+					 const gchar         *new_fragment);
 
 G_END_DECLS
 

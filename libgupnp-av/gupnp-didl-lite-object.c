@@ -2097,3 +2097,670 @@ gupnp_didl_lite_object_add_descriptor (GUPnPDIDLLiteObject *object)
         return gupnp_didl_lite_descriptor_new_from_xml (desc_node,
                                                         object->priv->xml_doc);
 }
+
+typedef struct {
+        gchar *node_name;
+        gchar *attribute_name;
+} NodeDiff;
+
+static NodeDiff *
+node_diff_new (const xmlChar *node_name,
+               const xmlChar *attribute_name)
+{
+        NodeDiff *diff = g_slice_new (NodeDiff);
+
+        diff->node_name = g_strdup ((gchar *) node_name);
+        diff->attribute_name = g_strdup ((gchar *) attribute_name);
+
+        return diff;
+}
+
+static void
+node_diff_free (NodeDiff *diff)
+{
+        if (diff) {
+                g_free (diff->node_name);
+                g_free (diff->attribute_name);
+                g_slice_free (NodeDiff, diff);
+        }
+}
+
+static gboolean
+node_deep_equal (xmlNodePtr first,
+                 xmlNodePtr second);
+
+static gboolean
+node_deep_equal (xmlNodePtr first,
+                 xmlNodePtr second)
+{
+        GHashTable *first_attributes = g_hash_table_new (g_str_hash,
+                                                         g_str_equal);
+        xmlAttrPtr attribute;
+        gboolean equal = FALSE;
+
+        if (xmlStrcmp (first->name, second->name))
+                return FALSE;
+
+        /* compare attributes */
+        for (attribute = first->properties;
+             attribute;
+             attribute = attribute->next) {
+                g_hash_table_insert (first_attributes,
+                                     (gpointer) attribute->name,
+                                     attribute->children->content);
+        }
+        for (attribute = second->properties;
+             attribute;
+             attribute = attribute->next) {
+                const xmlChar *value = NULL;
+                const xmlChar *key = attribute->name;
+
+                if (g_hash_table_lookup_extended (first_attributes, key, NULL, (gpointer *) &value)) {
+                        if (!xmlStrcmp (value, attribute->children->content)) {
+                                g_hash_table_remove (first_attributes, key);
+                                continue;
+                        }
+                }
+                goto out;
+        }
+
+        if (g_hash_table_size (first_attributes))
+                goto out;
+
+        /* compare content */
+        if (xmlStrcmp (first->content, second->content))
+                goto out;
+        equal = TRUE;
+ out:
+        g_hash_table_unref (first_attributes);
+        if (equal) {
+                xmlNodePtr first_child;
+                xmlNodePtr second_child;
+
+                for (first_child = first->children,
+                     second_child = second->children;
+                     first_child && second_child;
+                     first_child = first_child->next,
+                     second_child = second_child->next) {
+                        if (!node_deep_equal (first_child, second_child)) {
+                                return FALSE;
+                        }
+                }
+                if (first_child || second_child)
+                        return FALSE;
+        }
+
+        return equal;
+}
+
+static xmlNodePtr
+find_node (xmlNodePtr haystack,
+           xmlNodePtr needle);
+
+static xmlNodePtr
+find_node (xmlNodePtr haystack,
+           xmlNodePtr needle)
+{
+        xmlNodePtr iter;
+
+        if (node_deep_equal (haystack, needle))
+                return haystack;
+
+        for (iter = haystack->children;
+             iter;
+             iter = iter->next) {
+                xmlNodePtr found_node = find_node (iter, needle);
+
+                if (found_node)
+                        return found_node;
+        }
+
+        return NULL;
+}
+
+static gboolean
+is_current_doc_part_of_this_doc (xmlDocPtr this_doc,
+                                 xmlDocPtr current_doc)
+{
+        xmlNodePtr current_node = current_doc->children->children;
+        xmlNodePtr this_node = find_node (this_doc->children, current_node);
+
+        if (!this_node)
+                return FALSE;
+
+        for (current_node = current_node->next, this_node = this_node->next;
+             current_node && this_node;
+             current_node = current_node->next, this_node = this_node->next) {
+                if (!node_deep_equal (current_node, this_node))
+                        return FALSE;
+        }
+
+        return TRUE;
+}
+
+static gboolean
+is_read_only (const gchar *changed_element,
+              const gchar *changed_attribute)
+{
+        static GHashTable *readonly_props = NULL;
+        static gsize readonly_props_loaded = 0;
+
+        if (g_once_init_enter (&readonly_props_loaded)) {
+                readonly_props = g_hash_table_new (g_str_hash,
+                                                   g_str_equal);
+
+                g_hash_table_add (readonly_props, "@id");
+                g_hash_table_add (readonly_props, "@parentID");
+                g_hash_table_add (readonly_props, "@refID");
+                g_hash_table_add (readonly_props, "@restricted");
+                g_hash_table_add (readonly_props, "@searchable");
+                g_hash_table_add (readonly_props, "@childCount");
+                g_hash_table_add (readonly_props, "searchClass");
+                g_hash_table_add (readonly_props, "searchClass@name");
+                g_hash_table_add (readonly_props, "searchClass@includeDerived");
+                g_hash_table_add (readonly_props, "createClass");
+                g_hash_table_add (readonly_props, "createClass@name");
+                g_hash_table_add (readonly_props, "createClass@includeDerived");
+                g_hash_table_add (readonly_props, "writeStatus");
+                g_hash_table_add (readonly_props, "res@importUri");
+                g_hash_table_add (readonly_props, "storageTotal");
+                g_hash_table_add (readonly_props, "storageUsed");
+                g_hash_table_add (readonly_props, "storageFree");
+                g_hash_table_add (readonly_props, "storageMaxPartition");
+                g_hash_table_add (readonly_props, "storageMedium");
+                g_hash_table_add (readonly_props, "playbackCount");
+                g_hash_table_add (readonly_props, "srsRecordScheduleID");
+                g_hash_table_add (readonly_props, "srsRecordTaskID");
+                g_hash_table_add (readonly_props, "price");
+                g_hash_table_add (readonly_props, "price@currency");
+                g_hash_table_add (readonly_props, "payPerView");
+                g_hash_table_add (readonly_props, "dateTimeRange");
+                g_hash_table_add (readonly_props, "dateTimeRange@daylightSaving");
+                g_hash_table_add (readonly_props, "signalStrength");
+                g_hash_table_add (readonly_props, "signalLocked");
+                g_hash_table_add (readonly_props, "tuned");
+                g_hash_table_add (readonly_props, "containerUpdateID");
+                g_hash_table_add (readonly_props, "objectUpdateID");
+                g_hash_table_add (readonly_props, "totalDeletedChildCount");
+                g_hash_table_add (readonly_props, "res@updateCount");
+                g_once_init_leave (&readonly_props_loaded, 1);
+        }
+        if (changed_element) {
+
+                if (changed_attribute) {
+                        gchar *test_prop = g_strdup_printf ("%s@%s",
+                                                            changed_element,
+                                                            changed_attribute);
+                        gboolean result = g_hash_table_contains (readonly_props,
+                                                                 test_prop);
+
+                        g_free (test_prop);
+                        if (result)
+                                return TRUE;
+                        test_prop = g_strdup_printf ("@%s", changed_attribute);
+                        result = g_hash_table_contains (readonly_props,
+                                                        test_prop);
+                        g_free (test_prop);
+                        if (result)
+                                return TRUE;
+                }
+                return g_hash_table_contains (readonly_props, changed_element);
+        }
+        return FALSE;
+}
+
+typedef struct {
+        gboolean required;
+        GHashTable* required_dep_props; /* string set */
+        GHashTable* required_indep_props; /* string to indep prop */
+} IndependentProperty;
+
+void
+independent_property_free (IndependentProperty *indep)
+{
+        if (indep) {
+                g_hash_table_unref (indep->required_dep_props);
+                g_hash_table_unref (indep->required_indep_props);
+                g_slice_free (IndependentProperty, indep);
+        }
+}
+
+IndependentProperty *
+independent_property_new (gboolean required)
+{
+        IndependentProperty *indep = g_slice_new (IndependentProperty);
+
+        indep->required = required;
+        indep->required_dep_props = g_hash_table_new_full (g_str_hash,
+                                                           g_str_equal,
+                                                           g_free,
+                                                           NULL);
+        indep->required_indep_props = g_hash_table_new_full
+                                   (g_str_hash,
+                                    g_str_equal,
+                                    g_free,
+                                    (GDestroyNotify) independent_property_free);
+
+        return indep;
+}
+
+static void
+insert_indep_prop (GHashTable *props,
+                   gchar *name,
+                   IndependentProperty *prop)
+{
+        g_hash_table_insert (props, g_strdup (name), prop);
+}
+
+static void
+insert_indep_prop_to_indep (IndependentProperty *prop,
+                            gchar *name,
+                            IndependentProperty *req_prop)
+{
+        insert_indep_prop (prop->required_indep_props, name, req_prop);
+}
+
+static void
+add_dep_prop (IndependentProperty *indep,
+              gchar *name)
+{
+        g_hash_table_add (indep->required_dep_props, g_strdup (name));
+}
+
+IndependentProperty *
+create_prop_with_required_dep_props (gboolean required,
+                                     gchar *dep_prop,
+                                     ...)
+{
+        IndependentProperty *indep = independent_property_new (required);
+
+        if (dep_prop) {
+                va_list var_args;
+                gchar *name = dep_prop;
+
+                va_start (var_args, dep_prop);
+                do {
+                        add_dep_prop (indep, name);
+                        name = va_arg (var_args, gchar *);
+                } while (name);
+                va_end (var_args);
+        }
+
+        return indep;
+}
+
+IndependentProperty *
+create_foreign_metadata_props (void)
+{
+        IndependentProperty *fm = independent_property_new (FALSE);
+        IndependentProperty *other;
+
+        add_dep_prop (fm, "type");
+
+        other = independent_property_new (TRUE);
+        insert_indep_prop_to_indep (fm, "fmId", other);
+
+        other = independent_property_new (TRUE);
+        insert_indep_prop_to_indep (fm, "fmClass", other);
+
+        other = independent_property_new (TRUE);
+        insert_indep_prop_to_indep (fm, "fmProvider", other);
+
+        other = independent_property_new (TRUE);
+        add_dep_prop (other, "xmlFlag");
+        insert_indep_prop_to_indep (fm, "fmBody", other);
+
+        return fm;
+}
+
+static GHashTable *
+get_required_properties (void)
+{
+        static GHashTable *required_props = NULL;
+        static gsize required_props_loaded = 0;
+
+        if (g_once_init_enter (&required_props_loaded)) {
+                required_props = g_hash_table_new_full
+                                   (g_str_hash,
+                                    g_str_equal,
+                                    g_free,
+                                    (GDestroyNotify) independent_property_free);
+
+                insert_indep_prop (required_props,
+                                   NULL,
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "id",
+                                         "parentID",
+                                         "restricted",
+                                         NULL));
+
+                insert_indep_prop (required_props,
+                                   "title",
+                                   independent_property_new (TRUE));
+                insert_indep_prop (required_props,
+                                   "class",
+                                   independent_property_new (TRUE));
+
+                insert_indep_prop (required_props,
+                                   "res",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "protocolInfo",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "programID",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "type",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "seriesID",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "type",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "channelID",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "type",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "programCode",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "type",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "channelGroupName",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "id",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "price",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "currency",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "desc",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "nameSpace",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "deviceUDN",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "serviceType",
+                                         "serviceId",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "stateVariableCollection",
+                                   create_prop_with_required_dep_props
+                                        (FALSE,
+                                         "serviceName",
+                                         "rcsInstanceType",
+                                         NULL));
+                insert_indep_prop (required_props,
+                                   "foreignMetadata",
+                                   create_foreign_metadata_props ());
+                g_once_init_leave (&required_props_loaded, 1);
+        }
+
+        return required_props;
+}
+
+static gboolean
+is_required (const xmlChar *changed_element,
+             const xmlChar *changed_attribute)
+{
+        GHashTable *required_props = get_required_properties ();
+
+        if (changed_element) {
+                IndependentProperty *toplevel_prop = g_hash_table_lookup
+                                        (required_props,
+                                         NULL);
+                IndependentProperty *this_prop = g_hash_table_lookup
+                                        (required_props,
+                                         (gpointer) changed_element);
+
+                if (changed_attribute) {
+                        if (g_hash_table_contains (toplevel_prop->required_dep_props,
+                                                   changed_attribute))
+                                return TRUE;
+                        if (g_hash_table_contains (this_prop->required_dep_props,
+                                                   changed_attribute))
+                                return TRUE;
+                }
+                if (g_hash_table_contains (toplevel_prop->required_indep_props,
+                                           changed_element))
+                                return TRUE;
+                /* TODO: check if changed element is not a required
+                 * property of its parent element. That needs some
+                 * additions in IndepependentProperty.
+                 */
+        }
+        return FALSE;
+}
+
+static gboolean
+is_valid (xmlNodePtr node G_GNUC_UNUSED)
+{
+        return TRUE;
+}
+
+static GList *
+get_toplevel_changes (xmlNodePtr current_node,
+                      xmlNodePtr new_node)
+{
+        xmlAttrPtr attribute;
+        GHashTable *current_attributes = g_hash_table_new (g_str_hash,
+                                                           g_str_equal);
+        GList *changes = NULL;
+        const xmlChar *name = new_node->name;
+
+        /* compare attributes */
+        for (attribute = current_node->properties;
+             attribute;
+             attribute = attribute->next) {
+                g_hash_table_insert (current_attributes,
+                                     (gpointer) attribute->name,
+                                     attribute->children->content);
+        }
+        for (attribute = new_node->properties;
+             attribute;
+             attribute = attribute->next) {
+                const xmlChar *value = NULL;
+                const xmlChar *key = attribute->name;
+                gboolean differs = FALSE;
+
+                if (g_hash_table_lookup_extended (current_attributes,
+                                                  key,
+                                                  NULL,
+                                                  (gpointer *) &value)) {
+                        if (xmlStrcmp (value, attribute->children->content)) {
+                                differs = TRUE;
+                        }
+                        g_hash_table_remove (current_attributes, key);
+                } else
+                        differs = TRUE;
+                if (differs)
+                        changes = g_list_prepend (changes,
+                                                  node_diff_new (name,
+                                                                 key));
+        }
+
+        if (g_hash_table_size (current_attributes) > 0) {
+                GHashTableIter iter;
+                xmlChar *key = NULL;
+
+                g_hash_table_iter_init (&iter, current_attributes);
+                while (g_hash_table_iter_next (&iter,
+                                               (gpointer *) &key,
+                                               NULL)) {
+                        changes = g_list_prepend (changes, node_diff_new (name,
+                                                                          key));
+                }
+        }
+
+        g_hash_table_unref (current_attributes);
+
+        return changes;
+}
+
+static gboolean
+new_doc_is_valid_modification (xmlDocPtr                    current_doc,
+                               xmlDocPtr                    new_doc,
+                               GUPnPDIDLLiteFragmentResult *result) {
+        xmlNodePtr current_node;
+        xmlNodePtr new_node;
+
+        for (current_node = current_doc->children->children,
+             new_node = new_doc->children->children;
+             current_node && new_node;
+             current_node = current_node->next,
+             new_node = new_node->next) {
+                GList *changes;
+
+                if (node_deep_equal (current_node, new_node)) {
+                        /* this is just a context, skip the checks. */
+                        continue;
+                }
+                if (xmlStrcmp (current_node->name, new_node->name)) {
+                        *result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
+                        return FALSE;
+                }
+                changes = get_toplevel_changes (current_node, new_node);
+                if (changes) {
+                        GList *iter;
+
+                        for (iter = changes; iter; iter = iter->next) {
+                                NodeDiff *diff = (NodeDiff *) iter->data;
+
+                                if (is_read_only (diff->node_name,
+                                                  diff->attribute_name)) {
+                                        *result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
+                                        g_list_free_full (changes, (GDestroyNotify) node_diff_free);
+                                        return FALSE;
+                                }
+                        }
+                }
+        }
+        /* If there are some more nodes in current fragment then it
+         * means they are going to be removed. Check against required
+         * or read-only tag removal.
+         */
+        for (; current_node; current_node = current_node->next) {
+                /* TODO: should we check if there are some readonly
+                 * attributes when we remove whole element?
+                 */
+                if (is_read_only ((gchar *) current_node->name, NULL)) {
+                        *result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
+                        return FALSE;
+                }
+                /* We don't check for required attributes or
+                 * subelements, because most of them are required only
+                 * when the element exists. And we are removing this
+                 * one.
+                 */
+                if (is_required (current_node->name, NULL)) {
+                        *result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG;
+                        return FALSE;
+                }
+        }
+        /* If there are some more nodes in new fragment then it means
+         * they are going to be added. Check against read-only tags
+         * addition and general sanity check.
+         */
+        for (; new_node; new_node = new_node->next) {
+                if (is_read_only ((gchar *) new_node->name, NULL)) {
+                        *result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
+                        return FALSE;
+                }
+                /* TODO: We probably should check if newly added node
+                 * has all required properties.
+                 */
+                if (!is_valid (new_node)) {
+                        *result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
+                }
+        }
+
+        return TRUE;
+}
+
+static gchar *
+fix_fragment (const gchar *fragment)
+{
+        return g_strdup_printf ("<DIDLLiteFragment>%s</DIDLLiteFragment>",
+                                fragment);
+}
+
+GUPnPDIDLLiteFragmentResult
+gupnp_didl_lite_object_is_fragment_pair_valid
+                                        (GUPnPDIDLLiteObject *object,
+					 const gchar         *current_fragment,
+					 const gchar         *new_fragment)
+{
+        xmlDocPtr this_doc;
+        xmlDocPtr current_doc;
+        xmlDocPtr new_doc;
+        GUPnPDIDLLiteFragmentResult result;
+        gchar *fixed_current_fragment;
+        gchar *fixed_new_fragment;
+
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object),
+                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
+        g_return_val_if_fail (current_fragment != NULL,
+                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
+        g_return_val_if_fail (new_fragment != NULL,
+                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
+
+        fixed_current_fragment = fix_fragment (current_fragment);
+        fixed_new_fragment = fix_fragment (new_fragment);
+        result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_APPLIABLE;
+        this_doc = object->priv->xml_doc->doc;
+        current_doc = xmlRecoverMemory (fixed_current_fragment,
+                                        strlen (fixed_current_fragment));
+        new_doc = xmlRecoverMemory (fixed_new_fragment,
+                                    strlen (fixed_new_fragment));
+
+        if (!current_doc) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_BAD_XML;
+                goto out;
+        }
+        if (!new_doc) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_BAD_XML;
+                goto out;
+        }
+
+        if (!is_current_doc_part_of_this_doc (this_doc, current_doc)) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID;
+                goto out;
+        }
+
+        if (!new_doc_is_valid_modification (current_doc, new_doc, &result)) {
+                goto out;
+        }
+
+ out:
+        g_free (fixed_new_fragment);
+        g_free (fixed_current_fragment);
+        if (new_doc)
+                xmlFreeDoc (new_doc);
+        if (current_doc)
+                xmlFreeDoc (current_doc);
+
+        return result;
+}
+
+gboolean
+gupnp_didl_lite_object_apply_fragment_pair
+                                        (GUPnPDIDLLiteObject *object G_GNUC_UNUSED,
+					 const gchar         *current_fragment G_GNUC_UNUSED,
+					 const gchar         *new_fragment G_GNUC_UNUSED)
+{
+        return FALSE;
+}
