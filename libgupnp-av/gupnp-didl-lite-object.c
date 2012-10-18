@@ -2135,14 +2135,20 @@ static gboolean
 node_deep_equal (xmlNodePtr first,
                  xmlNodePtr second)
 {
-        GHashTable *first_attributes = g_hash_table_new (g_str_hash,
-                                                         g_str_equal);
+        GHashTable *first_attributes;
         xmlAttrPtr attribute;
-        gboolean equal = FALSE;
+        gboolean equal;
+
+        if (!first && !second)
+                return TRUE;
+        if (!first || !second)
+                return FALSE;
 
         if (xmlStrcmp (first->name, second->name))
                 return FALSE;
 
+        equal = FALSE;
+        first_attributes = g_hash_table_new (g_str_hash, g_str_equal);
         /* compare attributes */
         for (attribute = first->properties;
              attribute;
@@ -2225,7 +2231,14 @@ is_current_doc_part_of_this_doc (xmlDocPtr this_doc,
                                  xmlDocPtr current_doc)
 {
         xmlNodePtr current_node = current_doc->children->children;
-        xmlNodePtr this_node = find_node (this_doc->children, current_node);
+        xmlNodePtr this_node;
+
+        /* No current node means that we want to add new elements to
+           the document. */
+        if (!current_node)
+                return TRUE;
+
+        this_node = find_node (this_doc->children, current_node);
 
         if (!this_node)
                 return FALSE;
@@ -2317,7 +2330,7 @@ typedef struct {
         GHashTable* required_indep_props; /* string to indep prop */
 } IndependentProperty;
 
-void
+static void
 independent_property_free (IndependentProperty *indep)
 {
         if (indep) {
@@ -2327,7 +2340,7 @@ independent_property_free (IndependentProperty *indep)
         }
 }
 
-IndependentProperty *
+static IndependentProperty *
 independent_property_new (gboolean required)
 {
         IndependentProperty *indep = g_slice_new (IndependentProperty);
@@ -2369,7 +2382,7 @@ add_dep_prop (IndependentProperty *indep,
         g_hash_table_add (indep->required_dep_props, g_strdup (name));
 }
 
-IndependentProperty *
+static IndependentProperty *
 create_prop_with_required_dep_props (gboolean required,
                                      gchar *dep_prop,
                                      ...)
@@ -2391,7 +2404,7 @@ create_prop_with_required_dep_props (gboolean required,
         return indep;
 }
 
-IndependentProperty *
+static IndependentProperty *
 create_foreign_metadata_props (void)
 {
         IndependentProperty *fm = independent_property_new (FALSE);
@@ -2429,7 +2442,7 @@ get_required_properties (void)
                                     (GDestroyNotify) independent_property_free);
 
                 insert_indep_prop (required_props,
-                                   NULL,
+                                   "",
                                    create_prop_with_required_dep_props
                                         (FALSE,
                                          "id",
@@ -2524,7 +2537,7 @@ is_required (const xmlChar *changed_element,
         if (changed_element) {
                 IndependentProperty *toplevel_prop = g_hash_table_lookup
                                         (required_props,
-                                         NULL);
+                                         "");
                 IndependentProperty *this_prop = g_hash_table_lookup
                                         (required_props,
                                          (gpointer) changed_element);
@@ -2637,7 +2650,7 @@ typedef struct {
         xmlSchemaValidCtxtPtr valid_context;
 } XSDValidateData;
 
-void
+static void
 xsd_validate_data_free (XSDValidateData *data)
 {
         if (!data)
@@ -2653,13 +2666,15 @@ xsd_validate_data_free (XSDValidateData *data)
         g_slice_free (XSDValidateData, data);
 }
 
-XSDValidateData *
+static XSDValidateData *
 xsd_validate_data_new (const gchar *xsd_file)
 {
         XSDValidateData *data = g_slice_new0 (XSDValidateData);
         gboolean failed = TRUE;
 
-        data->schema_doc = xmlReadFile (xsd_file, NULL, 0);
+        return data;
+
+        data->schema_doc = xmlReadFile (xsd_file, NULL, XML_PARSE_NONET);
         if (!data->schema_doc) {
                 /* the schema cannot be loaded or is not well-formed */
                 goto out;
@@ -2693,6 +2708,14 @@ static gboolean
 validate_temporary_modification (xmlDocPtr        modified_doc,
                                  XSDValidateData *vdata)
 {
+        xmlChar *dump = NULL;
+
+        xmlDocDumpMemory (modified_doc, &dump, NULL);
+        g_debug ("Modified doc dump:\n%s", dump);
+        xmlFree (dump);
+
+        return TRUE;
+
         return (xmlSchemaValidateDoc (vdata->valid_context, modified_doc) == 0);
 }
 
@@ -2725,16 +2748,18 @@ apply_temporary_addition (xmlDocPtr        modified_doc,
                           xmlNodePtr       new_node,
                           XSDValidateData *vdata)
 {
-        xmlNodePtr mod_sibling = find_node (modified_doc->children,
-                                            sibling);
+        xmlNodePtr mod_sibling;
 
-        if (!mod_sibling || (xmlAddSibling (mod_sibling, new_node) != NULL)) {
+        if (sibling->doc == modified_doc)
+                mod_sibling = sibling;
+        else
+                mod_sibling = find_node (modified_doc->children, sibling);
+
+        if (!mod_sibling || !xmlAddSibling (mod_sibling, new_node))
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
-        }
 
-        if (validate_temporary_modification (modified_doc, vdata)) {
+        if (!validate_temporary_modification (modified_doc, vdata))
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
-        }
 
         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK;
 }
@@ -2752,7 +2777,7 @@ apply_temporary_removal (xmlDocPtr        modified_doc,
 
         xmlUnlinkNode (mod_cur_node);
         xmlFreeNode (mod_cur_node);
-        if (validate_temporary_modification (modified_doc, vdata)) {
+        if (!validate_temporary_modification (modified_doc, vdata)) {
                 /* not sure if this is correct */
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG;
         }
@@ -2767,7 +2792,7 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
                                XSDValidateData *vdata) {
         xmlNodePtr current_node;
         xmlNodePtr new_node;
-        xmlNodePtr last_sibling;
+        xmlNodePtr last_sibling = NULL;
 
         for (current_node = current_doc->children->children,
              new_node = new_doc->children->children;
@@ -2778,6 +2803,7 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
                 if (node_deep_equal (current_node, new_node)) {
                         /* this is just a context, skip the checks. */
                         last_sibling = current_node;
+                        new_node = new_node->next;
                         continue;
                 }
                 if (xmlStrcmp (current_node->name, new_node->name)) {
@@ -2786,6 +2812,12 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
                 if (is_any_change_read_only (current_node, new_node))
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
                 last_sibling = new_node;
+                /* we can't put this line into for instruction,
+                 * because new_node is unlinked from its document and
+                 * put into another one in
+                 * apply_temporary_modification. We have to get its
+                 * sibling before that happens.
+                 */
                 new_node = new_node->next;
                 result = apply_temporary_modification (modified_doc,
                                                        current_node,
@@ -2794,6 +2826,10 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
                 if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
                         return result;
         }
+        if (!last_sibling &&
+            modified_doc->children &&
+            modified_doc->children->children)
+                last_sibling = modified_doc->children->children->children;
         /* If there are some more nodes in current fragment then it
          * means they are going to be removed. Check against required
          * or read-only tag removal.
@@ -2826,8 +2862,9 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
          * they are going to be added. Check against read-only tags
          * addition and general sanity check.
          */
-        for (; new_node; new_node = new_node->next) {
+        while (new_node) {
                 GUPnPDIDLLiteFragmentResult result;
+                xmlNodePtr temp_node;
 
                 if (is_read_only ((gchar *) new_node->name, NULL)) {
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
@@ -2836,9 +2873,11 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
                  * has all required properties. Maybe XSD check could
                  * do that for us.
                  */
+                temp_node = new_node;
+                new_node = new_node->next;
                 result = apply_temporary_addition (modified_doc,
                                                    last_sibling,
-                                                   new_node,
+                                                   temp_node,
                                                    vdata);
                 if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
                         return result;
@@ -2850,11 +2889,18 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
 static gchar *
 fix_fragment (const gchar *fragment)
 {
-        return g_strdup_printf ("<DIDLLiteFragment>%s</DIDLLiteFragment>",
-                                fragment);
+        return g_strdup_printf
+                    ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                     "<DIDLLiteFragment\n"
+                     "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"
+                     "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\"\n"
+                     "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"\n"
+                     "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+                     ">%s</DIDLLiteFragment>\n",
+                     fragment);
 }
 
-GUPnPDIDLLiteFragmentResult
+static GUPnPDIDLLiteFragmentResult
 check_fragments (xmlDocPtr        this_doc,
                  xmlDocPtr        modified_doc,
                  const gchar     *current_fragment,
@@ -2922,7 +2968,7 @@ get_data_dir (void)
         return datadir;
 }
 
-XSDValidateData *
+static XSDValidateData *
 get_xsd_validate_data (void)
 {
         gchar *path = g_strdup_printf

@@ -20,37 +20,38 @@
  */
 
 #include <glib-object.h>
-#include "gupnp-didl-lite-object.h"
-#include "gupnp-didl-lite-object-private.h"
+#include <libgupnp-av/gupnp-didl-lite-object.h>
+#include <libgupnp-av/gupnp-didl-lite-writer.h>
+#include <libgupnp-av/gupnp-didl-lite-item.h>
 
 /* creates an item described by:
 static const gchar * const didllite =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        "<DIDL-Lite"
-        "xmlns:dc=\"http://purl.org/dc/elements/1.1/\""
-        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\""
-        "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\""
-        "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
-        "xsi:schemaLocation=\""
-        "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
-        "http://www.upnp.org/schemas/av/didl-lite.xsd"
-        "urn:schemas-upnp-org:metadata-1-0/upnp/"
-        "http://www.upnp.org/schemas/av/upnp.xsd\">"
-        "<item id=\"18\" parentID=\"13\" restricted=\"0\">"
-        "<dc:title>Try a little tenderness</dc:title>"
-        "<upnp:class>object.item.audioItem.musicTrack</upnp:class>"
-        "<res protocolInfo=\"http-get:*:audio/mpeg:*\" size=\"3558000\">"
-        "http://168.192.1.1/audio197.mp3"
-        "</res>"
-        "<upnp:artist>Unknown</upnp:artist>"
-        "</item>"
-        "</DIDL-Lite>";
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<DIDL-Lite\n"
+        "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"
+        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\"\n"
+        "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"\n"
+        "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+        "xsi:schemaLocation=\"\n"
+        "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\n"
+        "http://www.upnp.org/schemas/av/didl-lite.xsd\n"
+        "urn:schemas-upnp-org:metadata-1-0/upnp/\n"
+        "http://www.upnp.org/schemas/av/upnp.xsd\">\n"
+        "<item id=\"18\" parentID=\"13\" restricted=\"0\">\n"
+        "<dc:title>Try a little tenderness</dc:title>\n"
+        "<upnp:class>object.item.audioItem.musicTrack</upnp:class>\n"
+        "<res protocolInfo=\"http-get:*:audio/mpeg:*\" size=\"3558000\">\n"
+        "http://168.192.1.1/audio197.mp3\n"
+        "</res>\n"
+        "<upnp:artist>Unknown</upnp:artist>\n"
+        "</item>\n"
+        "</DIDL-Lite>\n";
 */
 static GUPnPDIDLLiteObject *
 get_item (void)
 {
-        GUPnPDIDLiteWriter *writer = gupnp_didl_lite_writer_new ();
-        GUPnPDIDLiteItem *item = gupnp_didl_lite_writer_add_item (writer);
+        GUPnPDIDLLiteWriter *writer = gupnp_didl_lite_writer_new (NULL);
+        GUPnPDIDLLiteItem *item = gupnp_didl_lite_writer_add_item (writer);
         GUPnPDIDLLiteObject *object = GUPNP_DIDL_LITE_OBJECT (item);
         GUPnPDIDLLiteContributor *artist;
         GUPnPDIDLLiteResource *resource;
@@ -83,17 +84,25 @@ get_item (void)
 }
 
 static const gchar * const current_fragments[] = {
+        /* 1 */
         "<upnp:class>object.item.audioItem.musicTrack</upnp:class>",
+        /* 2 */
         "",
+        /* 3 */
         "<upnp:artist>Unknown</upnp:artist>",
+        /* 4 */
         "<dc:title>Try a little tenderness</dc:title>"
 };
 
 static const gchar * const new_fragments[] = {
+        /* 1 */
         "<upnp:class>object.item.audioItem.musicTrack</upnp:class>"
         "<upnp:genre>Obscure</upnp:genre>",
+        /* 2 */
         "<upnp:genre>Even more obscure</upnp:genre>",
+        /* 3 */
         "",
+        /* 4 */
         "<dc:title>Cthulhu fhtagn</dc:title>"
 };
 
@@ -105,15 +114,27 @@ create_fragment_list (const gchar * const * const fragments,
         guint iter;
 
         for (iter = 0; iter < count; ++iter) {
-                list = g_list_prepend (list, fragments[iter]);
+                list = g_list_prepend (list, (gpointer) fragments[iter]);
         }
 
         return g_list_reverse (list);
 }
 
+static void
+debug_dump (GUPnPDIDLLiteObject *object)
+{
+        xmlChar *dump = NULL;
+        xmlNodePtr node = gupnp_didl_lite_object_get_xml_node (object);
+        xmlDocPtr doc = node->doc;
+
+        xmlDocDumpMemory (doc, &dump, NULL);
+        g_debug ("Obj dump:\n%s", dump);
+        xmlFree (dump);
+}
+
 int main (void)
 {
-        GUPnPDIDLLiteObject *obj;
+        GUPnPDIDLLiteObject *object;
         GList *current = create_fragment_list
                                         (current_fragments,
                                          G_N_ELEMENTS (current_fragments));
@@ -122,11 +143,15 @@ int main (void)
         GUPnPDIDLLiteFragmentResult result;
 
         g_type_init ();
-        g_setenv ("GUPNP_AV_DATADIR", TOP_SRCDIR G_DIR_SEPARATOR_S "data", FALSE);
+        g_setenv ("GUPNP_AV_DATADIR", ABS_TOP_SRCDIR G_DIR_SEPARATOR_S "data", FALSE);
 
-        obj = get_item ();
-        result = gupnp_didl_lite_object_apply_fragments (obj, current, new);
-
+        object = get_item ();
+        debug_dump (object);
+        result = gupnp_didl_lite_object_apply_fragments (object, current, new);
+        g_list_free (new);
+        g_list_free (current);
+        debug_dump (object);
+        g_object_unref (object);
         if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
                 return 1;
         return 0;

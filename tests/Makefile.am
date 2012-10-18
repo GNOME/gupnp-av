@@ -18,6 +18,6 @@ check_search_CFLAGS = $(common_cflags)
 fragments_SOURCES = fragments.c
 fragments_LDADD = $(top_builddir)/libgupnp-av/libgupnp-av-1.0.la \
 		  $(LIBGUPNP_LIBS)
-fragments_CFLAGS = $(common_cflags) -DTOP_SRCDIR="\"$(top_srcdir)\""
+fragments_CFLAGS = $(common_cflags) -DABS_TOP_SRCDIR="\"$(abs_top_srcdir)\""
 
 TESTS = $(check_PROGRAMS)
