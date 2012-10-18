@@ -2910,6 +2910,31 @@ apply_modification (GUPnPXMLDoc *doc,
         xmlFreeDoc (original_doc);
 }
 
+static const gchar *
+get_data_dir (void)
+{
+        const gchar *datadir = g_getenv ("GUPNP_AV_DATADIR");
+
+        if (!datadir)
+                /* that's a macro defined by -DDATADIR=foo */
+                datadir = DATADIR;
+
+        return datadir;
+}
+
+XSDValidateData *
+get_xsd_validate_data (void)
+{
+        gchar *path = g_strdup_printf
+                                     ("%s" G_DIR_SEPARATOR_S "didl-lite-v2.xsd",
+                                      get_data_dir ());
+        XSDValidateData *vdata = xsd_validate_data_new (path);
+
+        g_free (path);
+
+        return vdata;
+}
+
 GUPnPDIDLLiteFragmentResult
 gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
                                         GList               *current_fragments,
@@ -2920,9 +2945,7 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
         GUPnPDIDLLiteFragmentResult result;
         GList *current_iter;
         GList *new_iter;
-        XSDValidateData *vdata = xsd_validate_data_new (DATADIR
-                                                        G_DIR_SEPARATOR_S
-                                                        "didl-lite-v2.xsd");
+        XSDValidateData *vdata = get_xsd_validate_data ();
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object),
                               GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
