@@ -48,18 +48,20 @@ static const gchar * const didllite =
         "</DIDL-Lite>\n";
 */
 static GUPnPDIDLLiteObject *
-get_item (void)
+get_item (GUPnPDIDLLiteWriter *writer, guint id, guint parent_id)
 {
-        GUPnPDIDLLiteWriter *writer = gupnp_didl_lite_writer_new (NULL);
         GUPnPDIDLLiteItem *item = gupnp_didl_lite_writer_add_item (writer);
         GUPnPDIDLLiteObject *object = GUPNP_DIDL_LITE_OBJECT (item);
         GUPnPDIDLLiteContributor *artist;
         GUPnPDIDLLiteResource *resource;
         GUPnPProtocolInfo *info;
+        gchar *str_id = g_strdup_printf ("%u", id);
 
-        g_object_unref (writer);
-        gupnp_didl_lite_object_set_id (object, "18");
-        gupnp_didl_lite_object_set_parent_id (object, "13");
+        gupnp_didl_lite_object_set_id (object, str_id);
+        g_free (str_id);
+        str_id = g_strdup_printf ("%u", parent_id);
+        gupnp_didl_lite_object_set_parent_id (object, str_id);
+        g_free (str_id);
         gupnp_didl_lite_object_set_restricted (object, FALSE);
         gupnp_didl_lite_object_set_title (object, "Try a little tenderness");
         gupnp_didl_lite_object_set_upnp_class
@@ -134,6 +136,7 @@ debug_dump (GUPnPDIDLLiteObject *object)
 
 int main (void)
 {
+        GUPnPDIDLLiteObject *temp_object;
         GUPnPDIDLLiteObject *object;
         GList *current = create_fragment_list
                                         (current_fragments,
@@ -141,17 +144,22 @@ int main (void)
         GList *new = create_fragment_list (new_fragments,
                                            G_N_ELEMENTS (new_fragments));
         GUPnPDIDLLiteFragmentResult result;
+        GUPnPDIDLLiteWriter *writer;
 
         g_type_init ();
         g_setenv ("GUPNP_AV_DATADIR", ABS_TOP_SRCDIR G_DIR_SEPARATOR_S "data", FALSE);
 
-        object = get_item ();
+        writer = gupnp_didl_lite_writer_new (NULL);
+        temp_object = get_item (writer, 3, 2);
+        object = get_item (writer, 18, 13);
         debug_dump (object);
         result = gupnp_didl_lite_object_apply_fragments (object, current, new);
         g_list_free (new);
         g_list_free (current);
         debug_dump (object);
         g_object_unref (object);
+        g_object_unref (temp_object);
+        g_object_unref (writer);
         if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
                 return 1;
         return 0;
