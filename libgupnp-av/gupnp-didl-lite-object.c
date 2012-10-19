@@ -2732,17 +2732,19 @@ apply_temporary_modification (DocNode         *modified,
 {
         xmlNodePtr mod_cur_node = find_node (modified->node,
                                              current_node);
+        xmlNodePtr new_node_copy = xmlCopyNode (new_node, 2);
 
         if (!mod_cur_node) {
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
         }
 
-        mod_cur_node = xmlReplaceNode (mod_cur_node, new_node);
+        xmlUnlinkNode (new_node_copy);
+        mod_cur_node = xmlReplaceNode (mod_cur_node, new_node_copy);
+        xmlUnlinkNode (mod_cur_node);
         xmlFreeNode (mod_cur_node);
 
-        if (!validate_temporary_modification (modified->doc, vdata)) {
+        if (!validate_temporary_modification (modified->doc, vdata))
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
-        }
 
         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK;
 }
@@ -2754,14 +2756,22 @@ apply_temporary_addition (DocNode         *modified,
                           XSDValidateData *vdata)
 {
         xmlNodePtr mod_sibling;
+        xmlNodePtr new_node_copy = xmlCopyNode (new_node, 2);
 
         if (sibling->doc == modified->doc)
                 mod_sibling = sibling;
         else
                 mod_sibling = find_node (modified->node, sibling);
 
-        if (!mod_sibling || !xmlAddSibling (mod_sibling, new_node))
+        if (!mod_sibling)
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
+
+        xmlUnlinkNode (new_node_copy);
+
+        if (!xmlAddSibling (mod_sibling, new_node_copy)) {
+                xmlFreeNode (new_node_copy);
+                return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
+        }
 
         if (!validate_temporary_modification (modified->doc, vdata))
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
@@ -2782,10 +2792,9 @@ apply_temporary_removal (DocNode         *modified,
 
         xmlUnlinkNode (mod_cur_node);
         xmlFreeNode (mod_cur_node);
-        if (!validate_temporary_modification (modified->doc, vdata)) {
+        if (!validate_temporary_modification (modified->doc, vdata))
                 /* not sure if this is correct */
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG;
-        }
 
         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK;
 }
@@ -2795,15 +2804,14 @@ new_doc_is_valid_modification (DocNode         *modified,
                                xmlDocPtr        current_doc,
                                xmlDocPtr        new_doc,
                                XSDValidateData *vdata) {
-        xmlNodePtr current_node;
-        xmlNodePtr new_node;
+        xmlNodePtr current_node = current_doc->children->children;
+        xmlNodePtr new_node = new_doc->children->children;
         xmlNodePtr last_sibling = NULL;
 
-        for (current_node = current_doc->children->children,
-             new_node = new_doc->children->children;
-             current_node && new_node;
-             current_node = current_node->next) {
+        while (current_node && new_node) {
                 GUPnPDIDLLiteFragmentResult result;
+                xmlNodePtr temp_current_node = current_node;
+                xmlNodePtr temp_new_node = new_node;
 
                 last_sibling = new_node;
                 /* We can't put this line into for instruction,
@@ -2813,18 +2821,17 @@ new_doc_is_valid_modification (DocNode         *modified,
                  * sibling before that could happen.
                  */
                 new_node = new_node->next;
-                if (node_deep_equal (current_node, last_sibling)) {
+                current_node = current_node->next;
+                if (node_deep_equal (temp_current_node, temp_new_node))
                         /* This is just a context, skip the checks. */
                         continue;
-                }
-                if (xmlStrcmp (current_node->name, last_sibling->name)) {
+                if (xmlStrcmp (temp_current_node->name, temp_new_node->name))
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
-                }
-                if (is_any_change_read_only (current_node, last_sibling))
+                if (is_any_change_read_only (temp_current_node, temp_new_node))
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
                 result = apply_temporary_modification (modified,
-                                                       current_node,
-                                                       last_sibling,
+                                                       temp_current_node,
+                                                       temp_new_node,
                                                        vdata);
                 if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
                         return result;
@@ -2843,13 +2850,15 @@ new_doc_is_valid_modification (DocNode         *modified,
          * means they are going to be removed. Check against required
          * or read-only tag removal.
          */
-        for (; current_node; current_node = current_node->next) {
+        while (current_node) {
                 GUPnPDIDLLiteFragmentResult result;
+                xmlNodePtr temp_node = current_node;
 
+                current_node = current_node->next;
                 /* TODO: should we check if there are some readonly
                  * attributes when we remove whole element?
                  */
-                if (is_read_only ((gchar *) current_node->name, NULL)) {
+                if (is_read_only ((gchar *) temp_node->name, NULL)) {
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
                 }
                 /* We don't check for required attributes or
@@ -2857,11 +2866,11 @@ new_doc_is_valid_modification (DocNode         *modified,
                  * when the element exists. And we are removing this
                  * one.
                  */
-                if (is_required (current_node->name, NULL)) {
+                if (is_required (temp_node->name, NULL)) {
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG;
                 }
                 result = apply_temporary_removal (modified,
-                                                  current_node,
+                                                  temp_node,
                                                   vdata);
 
                 if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
@@ -2969,6 +2978,7 @@ apply_modification (GUPnPDIDLLiteObject *object,
                 return FALSE;
 
         priv->xml_node = modified->node;
+        xmlFreeNode (old);
 
         return TRUE;
 }
