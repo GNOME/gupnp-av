@@ -2226,9 +2226,14 @@ find_node (xmlNodePtr haystack,
         return NULL;
 }
 
+typedef struct {
+        xmlDocPtr doc;
+        xmlNodePtr node;
+} DocNode;
+
 static gboolean
-is_current_doc_part_of_this_doc (xmlDocPtr this_doc,
-                                 xmlDocPtr current_doc)
+is_current_doc_part_of_original_doc (DocNode   *original,
+                                     xmlDocPtr  current_doc)
 {
         xmlNodePtr current_node = current_doc->children->children;
         xmlNodePtr this_node;
@@ -2238,7 +2243,7 @@ is_current_doc_part_of_this_doc (xmlDocPtr this_doc,
         if (!current_node)
                 return TRUE;
 
-        this_node = find_node (this_doc->children, current_node);
+        this_node = find_node (original->node, current_node);
 
         if (!this_node)
                 return FALSE;
@@ -2720,12 +2725,12 @@ validate_temporary_modification (xmlDocPtr        modified_doc,
 }
 
 static GUPnPDIDLLiteFragmentResult
-apply_temporary_modification (xmlDocPtr        modified_doc,
+apply_temporary_modification (DocNode         *modified,
                               xmlNodePtr       current_node,
                               xmlNodePtr       new_node,
                               XSDValidateData *vdata)
 {
-        xmlNodePtr mod_cur_node = find_node (modified_doc->children,
+        xmlNodePtr mod_cur_node = find_node (modified->node,
                                              current_node);
 
         if (!mod_cur_node) {
@@ -2735,7 +2740,7 @@ apply_temporary_modification (xmlDocPtr        modified_doc,
         mod_cur_node = xmlReplaceNode (mod_cur_node, new_node);
         xmlFreeNode (mod_cur_node);
 
-        if (!validate_temporary_modification (modified_doc, vdata)) {
+        if (!validate_temporary_modification (modified->doc, vdata)) {
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
         }
 
@@ -2743,33 +2748,33 @@ apply_temporary_modification (xmlDocPtr        modified_doc,
 }
 
 static GUPnPDIDLLiteFragmentResult
-apply_temporary_addition (xmlDocPtr        modified_doc,
+apply_temporary_addition (DocNode         *modified,
                           xmlNodePtr       sibling,
                           xmlNodePtr       new_node,
                           XSDValidateData *vdata)
 {
         xmlNodePtr mod_sibling;
 
-        if (sibling->doc == modified_doc)
+        if (sibling->doc == modified->doc)
                 mod_sibling = sibling;
         else
-                mod_sibling = find_node (modified_doc->children, sibling);
+                mod_sibling = find_node (modified->node, sibling);
 
         if (!mod_sibling || !xmlAddSibling (mod_sibling, new_node))
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
 
-        if (!validate_temporary_modification (modified_doc, vdata))
+        if (!validate_temporary_modification (modified->doc, vdata))
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
 
         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK;
 }
 
 static GUPnPDIDLLiteFragmentResult
-apply_temporary_removal (xmlDocPtr        modified_doc,
+apply_temporary_removal (DocNode         *modified,
                          xmlNodePtr       current_node,
                          XSDValidateData *vdata)
 {
-        xmlNodePtr mod_cur_node = find_node (modified_doc->children,
+        xmlNodePtr mod_cur_node = find_node (modified->node,
                                              current_node);
 
         if (!mod_cur_node)
@@ -2777,7 +2782,7 @@ apply_temporary_removal (xmlDocPtr        modified_doc,
 
         xmlUnlinkNode (mod_cur_node);
         xmlFreeNode (mod_cur_node);
-        if (!validate_temporary_modification (modified_doc, vdata)) {
+        if (!validate_temporary_modification (modified->doc, vdata)) {
                 /* not sure if this is correct */
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG;
         }
@@ -2786,7 +2791,7 @@ apply_temporary_removal (xmlDocPtr        modified_doc,
 }
 
 static GUPnPDIDLLiteFragmentResult
-new_doc_is_valid_modification (xmlDocPtr        modified_doc,
+new_doc_is_valid_modification (DocNode         *modified,
                                xmlDocPtr        current_doc,
                                xmlDocPtr        new_doc,
                                XSDValidateData *vdata) {
@@ -2800,36 +2805,40 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
              current_node = current_node->next) {
                 GUPnPDIDLLiteFragmentResult result;
 
-                if (node_deep_equal (current_node, new_node)) {
-                        /* this is just a context, skip the checks. */
-                        last_sibling = current_node;
-                        new_node = new_node->next;
-                        continue;
-                }
-                if (xmlStrcmp (current_node->name, new_node->name)) {
-                        return GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
-                }
-                if (is_any_change_read_only (current_node, new_node))
-                        return GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
                 last_sibling = new_node;
-                /* we can't put this line into for instruction,
-                 * because new_node is unlinked from its document and
-                 * put into another one in
+                /* We can't put this line into for instruction,
+                 * because new_node could be unlinked from its
+                 * document and put into another one in
                  * apply_temporary_modification. We have to get its
-                 * sibling before that happens.
+                 * sibling before that could happen.
                  */
                 new_node = new_node->next;
-                result = apply_temporary_modification (modified_doc,
+                if (node_deep_equal (current_node, last_sibling)) {
+                        /* This is just a context, skip the checks. */
+                        continue;
+                }
+                if (xmlStrcmp (current_node->name, last_sibling->name)) {
+                        return GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID;
+                }
+                if (is_any_change_read_only (current_node, last_sibling))
+                        return GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
+                result = apply_temporary_modification (modified,
                                                        current_node,
                                                        last_sibling,
                                                        vdata);
                 if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
                         return result;
         }
-        if (!last_sibling &&
-            modified_doc->children &&
-            modified_doc->children->children)
-                last_sibling = modified_doc->children->children->children;
+        if (!last_sibling) {
+                if (modified->node->children)
+                        last_sibling = modified->node->children;
+                else
+                        /* We expect that modified object has some
+                         * required tags like <upnp:class> or
+                         * <dc:title>.
+                         */
+                        return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
+        }
         /* If there are some more nodes in current fragment then it
          * means they are going to be removed. Check against required
          * or read-only tag removal.
@@ -2851,7 +2860,7 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
                 if (is_required (current_node->name, NULL)) {
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG;
                 }
-                result = apply_temporary_removal (modified_doc,
+                result = apply_temporary_removal (modified,
                                                   current_node,
                                                   vdata);
 
@@ -2875,7 +2884,7 @@ new_doc_is_valid_modification (xmlDocPtr        modified_doc,
                  */
                 temp_node = new_node;
                 new_node = new_node->next;
-                result = apply_temporary_addition (modified_doc,
+                result = apply_temporary_addition (modified,
                                                    last_sibling,
                                                    temp_node,
                                                    vdata);
@@ -2901,19 +2910,22 @@ fix_fragment (const gchar *fragment)
 }
 
 static GUPnPDIDLLiteFragmentResult
-check_fragments (xmlDocPtr        this_doc,
-                 xmlDocPtr        modified_doc,
+check_fragments (DocNode         *original,
+                 DocNode         *modified,
                  const gchar     *current_fragment,
                  const gchar     *new_fragment,
                  XSDValidateData *vdata)
 {
         gchar *fixed_current_fragment = fix_fragment (current_fragment);
         gchar *fixed_new_fragment = fix_fragment (new_fragment);
-        xmlDocPtr current_doc = xmlRecoverMemory 
-                                        (fixed_current_fragment,
-                                         strlen (fixed_current_fragment));
-        xmlDocPtr new_doc = xmlRecoverMemory (fixed_new_fragment,
-                                              strlen (fixed_new_fragment));
+        xmlDocPtr current_doc = xmlReadDoc (BAD_CAST (fixed_current_fragment),
+                                            NULL,
+                                            NULL,
+                                            XML_PARSE_NONET);
+        xmlDocPtr new_doc = xmlReadDoc (BAD_CAST (fixed_new_fragment),
+                                        NULL,
+                                        NULL,
+                                        XML_PARSE_NONET);
         GUPnPDIDLLiteFragmentResult result;
 
         if (!current_doc) {
@@ -2925,12 +2937,12 @@ check_fragments (xmlDocPtr        this_doc,
                 goto out;
         }
 
-        if (!is_current_doc_part_of_this_doc (this_doc, current_doc)) {
+        if (!is_current_doc_part_of_original_doc (original, current_doc)) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID;
                 goto out;
         }
 
-        result = new_doc_is_valid_modification (modified_doc,
+        result = new_doc_is_valid_modification (modified,
                                                 current_doc,
                                                 new_doc,
                                                 vdata);
@@ -2946,14 +2958,19 @@ check_fragments (xmlDocPtr        this_doc,
         return result;
 }
 
-static void
-apply_modification (GUPnPXMLDoc *doc,
-                    xmlDocPtr    modified_doc)
+static gboolean
+apply_modification (GUPnPDIDLLiteObject *object,
+                    DocNode             *modified)
 {
-        xmlDocPtr original_doc = doc->doc;
+        GUPnPDIDLLiteObjectPrivate *priv = object->priv;
+        xmlNodePtr old = xmlReplaceNode (priv->xml_node, modified->node);
 
-        doc->doc = modified_doc;
-        xmlFreeDoc (original_doc);
+        if (!old)
+                return FALSE;
+
+        priv->xml_node = modified->node;
+
+        return TRUE;
 }
 
 static const gchar *
@@ -2986,8 +3003,8 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
                                         GList               *current_fragments,
                                         GList               *new_fragments)
 {
-        xmlDocPtr this_doc;
-        xmlDocPtr modified_doc;
+        DocNode modified;
+        DocNode original;
         GUPnPDIDLLiteFragmentResult result;
         GList *current_iter;
         GList *new_iter;
@@ -3003,10 +3020,18 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
                               GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
 
         result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK;
-        this_doc = object->priv->xml_doc->doc;
-        modified_doc = xmlCopyDoc (this_doc, 1);
+        original.doc = object->priv->xml_doc->doc;
+        original.node = object->priv->xml_node;
+        modified.doc = xmlCopyDoc (original.doc, 1);
 
-        if (!modified_doc) {
+        if (!modified.doc) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
+                goto out;
+        }
+
+        modified.node = find_node (modified.doc->children, original.node);
+
+        if (!modified.node) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
                 goto out;
         }
@@ -3017,8 +3042,8 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
                 const gchar *current_fragment = (gchar *) current_iter->data;
                 const gchar *new_fragment = (gchar *) new_iter->data;
 
-                result = check_fragments (this_doc,
-                                          modified_doc,
+                result = check_fragments (&original,
+                                          &modified,
                                           current_fragment,
                                           new_fragment,
                                           vdata);
@@ -3033,17 +3058,10 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
                 goto out;
         }
 
-        if (!modified_doc) {
-                goto out;
-        }
-
-        /* modified doc will be freed by GUPnPXMLDoc */
-        apply_modification (object->priv->xml_doc, modified_doc);
-        modified_doc = NULL;
+        apply_modification (object, &modified);
  out:
-        if (modified_doc) {
-                xmlFreeDoc (modified_doc);
-        }
+        if (modified.doc)
+                xmlFreeDoc (modified.doc);
         xsd_validate_data_free (vdata);
 
         return result;
