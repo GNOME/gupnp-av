@@ -243,12 +243,12 @@ gupnp_didl_lite_object_set_album_art    (GUPnPDIDLLiteObject *object,
                                          const char          *album_art);
 
 void
-gupnp_didl_lite_object_set_description (GUPnPDIDLLiteObject *object,
-                                        const char          *description);
+gupnp_didl_lite_object_set_description  (GUPnPDIDLLiteObject *object,
+                                         const char          *description);
 
 void
-gupnp_didl_lite_object_set_date        (GUPnPDIDLLiteObject *object,
-                                        const char          *date);
+gupnp_didl_lite_object_set_date         (GUPnPDIDLLiteObject *object,
+                                         const char          *date);
 
 void
 gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
@@ -264,6 +264,33 @@ gupnp_didl_lite_object_set_update_id    (GUPnPDIDLLiteObject *object,
 
 void
 gupnp_didl_lite_object_unset_update_id  (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_title_xml_string
+                                        (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_date_xml_string
+                                        (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_upnp_class_xml_string
+                                        (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_album_xml_string
+                                        (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_track_number_xml_string
+                                        (GUPnPDIDLLiteObject *object);
+
+char *
+gupnp_didl_lite_object_get_artists_xml_string
+                                        (GUPnPDIDLLiteObject *object);
+
+void
+gupnp_didl_lite_object_unset_artists    (GUPnPDIDLLiteObject *object);
 
 G_END_DECLS
 

@@ -844,6 +844,70 @@ get_contributor_list_by_name (GUPnPDIDLLiteObject *object,
         return ret;
 }
 
+static char *
+get_contributors_xml_string_by_name (GUPnPDIDLLiteObject *object,
+                                     const char          *name)
+{
+        GList     *contributors = NULL;
+        char      *ret = NULL;
+        GList     *l;
+        xmlBuffer *buffer;
+
+        contributors = gupnp_didl_lite_object_get_properties (object, name);
+        if (contributors == NULL)
+                return NULL;
+
+        buffer = xmlBufferCreate ();
+
+        for (l = contributors; l; l = l->next) {
+                xmlNode *node;
+
+                node = (xmlNode *) l->data;
+                if (!node->children)
+                        continue;
+
+                xmlNodeDump (buffer,
+                             object->priv->xml_doc->doc,
+                             node,
+                             0,
+                             0);
+        }
+
+        ret = g_strndup ((char *) xmlBufferContent (buffer),
+                         xmlBufferLength (buffer));
+        xmlBufferFree (buffer);
+
+        g_list_free (contributors);
+
+        return ret;
+}
+
+static void
+unset_contributors_by_name (GUPnPDIDLLiteObject *object, const char *name)
+{
+        GList *contributors = NULL;
+        GList *l;
+
+        contributors = gupnp_didl_lite_object_get_properties (object, name);
+        if (contributors == NULL)
+                return;
+
+        for (l = contributors; l; l = l->next) {
+                xmlNode *node;
+
+                node = (xmlNode *) l->data;
+                if (!node->children)
+                        continue;
+
+                xmlUnlinkNode (node);
+                xmlFreeNode (node);
+        }
+
+        g_list_free (contributors);
+
+        return;
+}
+
 /**
  * gupnp_didl_lite_object_new_from_xml:
  * @xml_node: The pointer to 'res' node in XML document
@@ -2096,4 +2160,133 @@ gupnp_didl_lite_object_add_descriptor (GUPnPDIDLLiteObject *object)
 
         return gupnp_didl_lite_descriptor_new_from_xml (desc_node,
                                                         object->priv->xml_doc);
+}
+
+/**
+ * gupnp_didl_lite_object_get_title_xml_string:
+ * @object: A #GUPnPDIDLLiteObject
+ *
+ * Creates a string representation of the DIDL-Lite XML fragment related to the
+ * object title.
+ *
+ * Return value: A DIDL-Lite XML fragment string, or %NULL. #g_free after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_title_xml_string (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return xml_util_get_child_string (object->priv->xml_node,
+                                          object->priv->xml_doc->doc,
+                                          "title");
+}
+
+/**
+ * gupnp_didl_lite_object_get_date_xml_string:
+ * @object: A #GUPnPDIDLLiteObject
+ *
+ * Creates a string representation of the DIDL-Lite XML fragment related to the
+ * object date.
+ *
+ * Return value: A DIDL-Lite XML fragment string, or %NULL. #g_free after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_date_xml_string (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return xml_util_get_child_string (object->priv->xml_node,
+                                          object->priv->xml_doc->doc,
+                                          "date");
+}
+
+/**
+ * gupnp_didl_lite_object_get_upnp_class_xml_string:
+ * @object: A #GUPnPDIDLLiteObject
+ *
+ * Creates a string representation of the DIDL-Lite XML fragment related to the
+ * object UPnP class.
+ *
+ * Return value: A DIDL-Lite XML fragment string, or %NULL. #g_free after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_upnp_class_xml_string (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return xml_util_get_child_string (object->priv->xml_node,
+                                          object->priv->xml_doc->doc,
+                                          "class");
+}
+
+/**
+ * gupnp_didl_lite_object_get_album_xml_string:
+ * @object: A #GUPnPDIDLLiteObject
+ *
+ * Creates a string representation of the DIDL-Lite XML fragment related to the
+ * object album.
+ *
+ * Return value: A DIDL-Lite XML fragment string, or %NULL. #g_free after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_album_xml_string (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return xml_util_get_child_string (object->priv->xml_node,
+                                          object->priv->xml_doc->doc,
+                                          "album");
+}
+
+/**
+ * gupnp_didl_lite_object_get_track_number_xml_string:
+ * @object: A #GUPnPDIDLLiteObject
+ *
+ * Creates a string representation of the DIDL-Lite XML fragment related to the
+ * object track number.
+ *
+ * Return value: A DIDL-Lite XML fragment string, or %NULL. #g_free after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_track_number_xml_string (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return xml_util_get_child_string (object->priv->xml_node,
+                                          object->priv->xml_doc->doc,
+                                          "originalTrackNumber");
+}
+
+/**
+ * gupnp_didl_lite_object_get_artists_xml_string:
+ * @object: A #GUPnPDIDLLiteObject
+ *
+ * Creates a string representation of the DIDL-Lite XML fragments related to the
+ * object artists.
+ *
+ * Return value: A DIDL-Lite XML fragment string, or %NULL. #g_free after usage.
+ **/
+char *
+gupnp_didl_lite_object_get_artists_xml_string (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return get_contributors_xml_string_by_name (object, "artist");
+}
+
+/**
+ * gupnp_didl_lite_object_unset_artists:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Unset the artists properties of the @object.
+ **/
+void
+gupnp_didl_lite_object_unset_artists (GUPnPDIDLLiteObject *object)
+{
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+
+        unset_contributors_by_name (object, "artist");
+
+        g_object_notify (G_OBJECT (object), "artist");
 }

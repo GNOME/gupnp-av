@@ -275,3 +275,28 @@ xml_util_verify_attribute_is_boolean (xmlNode    *node,
                g_ascii_strcasecmp (str, "1") == 0;
 }
 
+char *
+xml_util_get_child_string (xmlNode    *parent_node,
+                           xmlDoc     *doc,
+                           const char *name)
+{
+        xmlBuffer *buffer;
+        char      *ret;
+        xmlNode   *node;
+
+        node = xml_util_get_element (parent_node, name, NULL);
+        if (!node)
+                return NULL;
+
+        buffer = xmlBufferCreate ();
+        xmlNodeDump (buffer,
+                     doc,
+                     node,
+                     0,
+                     0);
+        ret = g_strndup ((char *) xmlBufferContent (buffer),
+                         xmlBufferLength (buffer));
+        xmlBufferFree (buffer);
+
+        return ret;
+}
