@@ -2025,7 +2025,7 @@ gupnp_didl_lite_object_set_update_id (GUPnPDIDLLiteObject *object,
         xml_util_set_child (object->priv->xml_node,
                             object->priv->upnp_ns,
                             object->priv->xml_doc->doc,
-                            "class",
+                            "objectUpdateID",
                             str);
         g_free (str);
 
