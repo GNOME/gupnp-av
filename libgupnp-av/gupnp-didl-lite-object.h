@@ -278,9 +278,11 @@ void
 gupnp_didl_lite_object_unset_update_id  (GUPnPDIDLLiteObject *object);
 
 GUPnPDIDLLiteFragmentResult
-gupnp_didl_lite_object_apply_fragments  (GUPnPDIDLLiteObject *object,
-					 GList               *current_fragments,
-					 GList               *new_fragments);
+gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
+                                        gchar               **current_fragments,
+                                        gint                  current_size,
+                                        gchar               **new_fragments,
+                                        gint                  new_size);
 
 G_END_DECLS
 

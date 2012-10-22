@@ -3018,17 +3018,30 @@ get_xsd_validate_data (void)
         return vdata;
 }
 
+/**
+ * gupnp_didl_lite_object_apply_fragments:
+ * @object: The #GUPnPDIDLLiteObject
+ * @current_fragments: (array) (transfer none): XML fragments of @objects
+ * @current_size: Size of @current_fragments or -1.
+ * @new_fragments: (array) (transfer none): Substitutes for @current_fragments.
+ * @new_size: Size of @new_fragments or -1.
+ *
+ * Updates object by applying @new_fragments in places of @current_fragments.
+ *
+ * Returns: Result of operation.
+ */
 GUPnPDIDLLiteFragmentResult
-gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
-                                        GList               *current_fragments,
-                                        GList               *new_fragments)
+gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
+                                        gchar               **current_fragments,
+                                        gint                  current_size,
+                                        gchar               **new_fragments,
+                                        gint                  new_size)
 {
         DocNode modified;
         DocNode original;
         GUPnPDIDLLiteFragmentResult result;
-        GList *current_iter;
-        GList *new_iter;
-        XSDValidateData *vdata = get_xsd_validate_data ();
+        XSDValidateData *vdata;
+        gint iter;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object),
                               GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
@@ -3036,10 +3049,25 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
                               GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
         g_return_val_if_fail (new_fragments != NULL,
                               GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
+
+        vdata = get_xsd_validate_data ();
+
         g_return_val_if_fail (vdata != NULL,
                               GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
 
         result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK;
+        modified.doc = NULL;
+
+        if (current_size < 0)
+                current_size = g_strv_length (current_fragments);
+        if (new_size < 0)
+                new_size = g_strv_length (new_fragments);
+
+        if (current_size != new_size) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_MISMATCH;
+                goto out;
+        }
+
         original.doc = object->priv->xml_doc->doc;
         original.node = object->priv->xml_node;
         modified.doc = xmlCopyDoc (original.doc, 1);
@@ -3056,11 +3084,9 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
                 goto out;
         }
 
-        for (current_iter = current_fragments, new_iter = new_fragments;
-             current_iter && new_iter;
-             current_iter = current_iter->next, new_iter = new_iter->next) {
-                const gchar *current_fragment = (gchar *) current_iter->data;
-                const gchar *new_fragment = (gchar *) new_iter->data;
+        for (iter = 0; iter < new_size; ++iter) {
+                const gchar *current_fragment = current_fragments[iter];
+                const gchar *new_fragment = new_fragments[iter];
 
                 result = check_fragments (&original,
                                           &modified,
@@ -3071,11 +3097,6 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject *object,
                 if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK) {
                         goto out;
                 }
-        }
-
-        if (current_iter || new_iter) {
-                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_MISMATCH;
-                goto out;
         }
 
         apply_modification (object, &modified);
