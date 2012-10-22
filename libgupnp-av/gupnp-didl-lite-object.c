@@ -2724,6 +2724,16 @@ validate_temporary_modification (xmlDocPtr        modified_doc,
         return (xmlSchemaValidateDoc (vdata->valid_context, modified_doc) == 0);
 }
 
+static xmlNodePtr
+copy_node (xmlNodePtr node)
+{
+        xmlNodePtr dup = xmlCopyNode (node, 1);
+
+        /* TODO: remove useless namespace definition. */
+
+        return dup;
+}
+
 static GUPnPDIDLLiteFragmentResult
 apply_temporary_modification (DocNode         *modified,
                               xmlNodePtr       current_node,
@@ -2732,7 +2742,7 @@ apply_temporary_modification (DocNode         *modified,
 {
         xmlNodePtr mod_cur_node = find_node (modified->node,
                                              current_node);
-        xmlNodePtr new_node_copy = xmlCopyNode (new_node, 2);
+        xmlNodePtr new_node_copy = copy_node (new_node);
 
         if (!mod_cur_node) {
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
@@ -2756,7 +2766,7 @@ apply_temporary_addition (DocNode         *modified,
                           XSDValidateData *vdata)
 {
         xmlNodePtr mod_sibling;
-        xmlNodePtr new_node_copy = xmlCopyNode (new_node, 2);
+        xmlNodePtr new_node_copy = copy_node (new_node);
 
         if (sibling->doc == modified->doc)
                 mod_sibling = sibling;
