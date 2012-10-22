@@ -37,7 +37,7 @@ static const gchar * const didllite =
         "http://www.upnp.org/schemas/av/didl-lite.xsd\n"
         "urn:schemas-upnp-org:metadata-1-0/upnp/\n"
         "http://www.upnp.org/schemas/av/upnp.xsd\">\n"
-        "<item id=\"18\" parentID=\"13\" restricted=\"0\">\n"
+        "<item id=\"$id\" parentID=\"$parent_id\" restricted=\"0\">\n"
         "<dc:title>Try a little tenderness</dc:title>\n"
         "<upnp:class>object.item.audioItem.musicTrack</upnp:class>\n"
         "<res protocolInfo=\"http-get:*:audio/mpeg:*\" size=\"3558000\">\n"
@@ -145,6 +145,10 @@ int main (void)
                                            G_N_ELEMENTS (new_fragments));
         GUPnPDIDLLiteFragmentResult result;
         GUPnPDIDLLiteWriter *writer;
+        int retval = 1;
+        const gchar *value;
+        GList* artists;
+        GUPnPDIDLLiteContributor *artist;
 
         g_type_init ();
         g_setenv ("GUPNP_AV_DATADIR", ABS_TOP_SRCDIR G_DIR_SEPARATOR_S "data", FALSE);
@@ -157,10 +161,58 @@ int main (void)
         g_list_free (new);
         g_list_free (current);
         debug_dump (object);
+        if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK) {
+                g_warning ("Applying fragments failed.");
+                goto out;
+        }
+
+        value = gupnp_didl_lite_object_get_title (object);
+
+        if (g_strcmp0 (value, "Cthulhu fhtagn")) {
+                g_warning ("Title is '%s', should be 'Cthulhu fhtagn'.", value);
+                goto out;
+        }
+
+        artists = gupnp_didl_lite_object_get_artists (object);
+
+        if (artists) {
+                g_warning ("Should be no artists.");
+                g_list_free_full (artists, g_object_unref);
+                goto out;
+        }
+
+        value = gupnp_didl_lite_object_get_title (temp_object);
+
+        if (g_strcmp0 (value, "Try a little tenderness")) {
+                g_warning ("Title is '%s', should be 'Try a little tenderness'.", value);
+                goto out;
+        }
+
+        artists = gupnp_didl_lite_object_get_artists (temp_object);
+
+        if (!artists) {
+                g_warning ("Should be one artist, there are none.");
+                goto out;
+        }
+        if (artists->next) {
+                g_list_free_full (artists, g_object_unref);
+                g_warning ("Should be one artist, there are more.");
+                goto out;
+        }
+        artist = g_object_ref (artists->data);
+        g_list_free_full (artists, g_object_unref);
+        value = gupnp_didl_lite_contributor_get_name (artist);
+        if (g_strcmp0 (value, "Unknown")) {
+                g_object_unref (artist);
+                g_warning ("Artist is '%s', but should be 'Unknown'.", value);
+                goto out;
+        }
+        g_object_unref (artist);
+
+        retval = 0;
+ out:
         g_object_unref (object);
         g_object_unref (temp_object);
         g_object_unref (writer);
-        if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
-                return 1;
-        return 0;
+        return retval;
 }
