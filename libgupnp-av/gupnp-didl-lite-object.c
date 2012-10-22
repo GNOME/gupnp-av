@@ -3021,9 +3021,9 @@ get_xsd_validate_data (void)
 /**
  * gupnp_didl_lite_object_apply_fragments:
  * @object: The #GUPnPDIDLLiteObject
- * @current_fragments: (array) (transfer none): XML fragments of @objects
+ * @current_fragments: (array length=current_size) (transfer none): XML fragments of @objects
  * @current_size: Size of @current_fragments or -1.
- * @new_fragments: (array) (transfer none): Substitutes for @current_fragments.
+ * @new_fragments: (array length=new_size) (transfer none): Substitutes for @current_fragments.
  * @new_size: Size of @new_fragments or -1.
  *
  * Updates object by applying @new_fragments in places of @current_fragments.
