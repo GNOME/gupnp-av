@@ -85,7 +85,7 @@ get_item (GUPnPDIDLLiteWriter *writer, guint id, guint parent_id)
         return object;
 }
 
-static const gchar * const current_fragments[] = {
+static gchar *current_fragments[] = {
         /* 1 */
         "<upnp:class>object.item.audioItem.musicTrack</upnp:class>",
         /* 2 */
@@ -96,7 +96,7 @@ static const gchar * const current_fragments[] = {
         "<dc:title>Try a little tenderness</dc:title>"
 };
 
-static const gchar * const new_fragments[] = {
+static gchar *new_fragments[] = {
         /* 1 */
         "<upnp:class>object.item.audioItem.musicTrack</upnp:class>"
         "<upnp:genre>Obscure</upnp:genre>",
@@ -107,20 +107,6 @@ static const gchar * const new_fragments[] = {
         /* 4 */
         "<dc:title>Cthulhu fhtagn</dc:title>"
 };
-
-static GList*
-create_fragment_list (const gchar * const * const fragments,
-                      guint count)
-{
-        GList *list = NULL;
-        guint iter;
-
-        for (iter = 0; iter < count; ++iter) {
-                list = g_list_prepend (list, (gpointer) fragments[iter]);
-        }
-
-        return g_list_reverse (list);
-}
 
 static void
 debug_dump (GUPnPDIDLLiteObject *object)
@@ -138,11 +124,6 @@ int main (void)
 {
         GUPnPDIDLLiteObject *temp_object;
         GUPnPDIDLLiteObject *object;
-        GList *current = create_fragment_list
-                                        (current_fragments,
-                                         G_N_ELEMENTS (current_fragments));
-        GList *new = create_fragment_list (new_fragments,
-                                           G_N_ELEMENTS (new_fragments));
         GUPnPDIDLLiteFragmentResult result;
         GUPnPDIDLLiteWriter *writer;
         int retval = 1;
@@ -157,9 +138,11 @@ int main (void)
         temp_object = get_item (writer, 3, 2);
         object = get_item (writer, 18, 13);
         debug_dump (object);
-        result = gupnp_didl_lite_object_apply_fragments (object, current, new);
-        g_list_free (new);
-        g_list_free (current);
+        result = gupnp_didl_lite_object_apply_fragments (object,
+                                                         current_fragments,
+                                                         G_N_ELEMENTS (current_fragments),
+                                                         new_fragments,
+                                                         G_N_ELEMENTS (new_fragments));
         debug_dump (object);
         if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK) {
                 g_warning ("Applying fragments failed.");
