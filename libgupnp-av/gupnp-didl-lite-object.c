@@ -3046,9 +3046,9 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object),
                               GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
         g_return_val_if_fail (current_fragments != NULL,
-                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
+                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID);
         g_return_val_if_fail (new_fragments != NULL,
-                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
+                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID);
 
         vdata = get_xsd_validate_data ();
 
@@ -3065,6 +3065,11 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
 
         if (current_size != new_size) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_MISMATCH;
+                goto out;
+        }
+
+        if (!current_size) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID;
                 goto out;
         }
 
