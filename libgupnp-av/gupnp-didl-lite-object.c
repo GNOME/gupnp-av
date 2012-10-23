@@ -2981,6 +2981,7 @@ apply_modification (GUPnPDIDLLiteObject *object,
                     DocNode             *modified)
 {
         GUPnPDIDLLiteObjectPrivate *priv = object->priv;
+        /* I guess we should copy the modified->node first. */
         xmlNodePtr old = xmlReplaceNode (priv->xml_node, modified->node);
 
         if (old == NULL)
