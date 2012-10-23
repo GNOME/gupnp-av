@@ -2120,7 +2120,7 @@ node_diff_new (const xmlChar *node_name,
 static void
 node_diff_free (NodeDiff *diff)
 {
-        if (diff) {
+        if (diff != NULL) {
                 g_free (diff->node_name);
                 g_free (diff->attribute_name);
                 g_slice_free (NodeDiff, diff);
@@ -2139,9 +2139,9 @@ node_deep_equal (xmlNodePtr first,
         xmlAttrPtr attribute;
         gboolean equal;
 
-        if (!first && !second)
+        if (first == NULL && second == NULL)
                 return TRUE;
-        if (!first || !second)
+        if (first == NULL || second == NULL)
                 return FALSE;
 
         if (xmlStrcmp (first->name, second->name))
@@ -2151,24 +2151,27 @@ node_deep_equal (xmlNodePtr first,
         first_attributes = g_hash_table_new (g_str_hash, g_str_equal);
         /* compare attributes */
         for (attribute = first->properties;
-             attribute;
-             attribute = attribute->next) {
+             attribute != NULL;
+             attribute = attribute->next)
                 g_hash_table_insert (first_attributes,
                                      (gpointer) attribute->name,
                                      attribute->children->content);
-        }
         for (attribute = second->properties;
-             attribute;
+             attribute != NULL;
              attribute = attribute->next) {
                 const xmlChar *value = NULL;
                 const xmlChar *key = attribute->name;
 
-                if (g_hash_table_lookup_extended (first_attributes, key, NULL, (gpointer *) &value)) {
+                if (g_hash_table_lookup_extended (first_attributes,
+                                                  key,
+                                                  NULL,
+                                                  (gpointer *) &value))
                         if (!xmlStrcmp (value, attribute->children->content)) {
                                 g_hash_table_remove (first_attributes, key);
+
                                 continue;
                         }
-                }
+
                 goto out;
         }
 
@@ -2187,14 +2190,12 @@ node_deep_equal (xmlNodePtr first,
 
                 for (first_child = first->children,
                      second_child = second->children;
-                     first_child && second_child;
+                     first_child != NULL && second_child != NULL;
                      first_child = first_child->next,
-                     second_child = second_child->next) {
-                        if (!node_deep_equal (first_child, second_child)) {
+                     second_child = second_child->next)
+                        if (!node_deep_equal (first_child, second_child))
                                 return FALSE;
-                        }
-                }
-                if (first_child || second_child)
+                if (first_child != NULL || second_child != NULL)
                         return FALSE;
         }
 
@@ -2214,12 +2215,10 @@ find_node (xmlNodePtr haystack,
         if (node_deep_equal (haystack, needle))
                 return haystack;
 
-        for (iter = haystack->children;
-             iter;
-             iter = iter->next) {
+        for (iter = haystack->children; iter != NULL; iter = iter->next) {
                 xmlNodePtr found_node = find_node (iter, needle);
 
-                if (found_node)
+                if (found_node != NULL)
                         return found_node;
         }
 
@@ -2240,20 +2239,19 @@ is_current_doc_part_of_original_doc (DocNode   *original,
 
         /* No current node means that we want to add new elements to
            the document. */
-        if (!current_node)
+        if (current_node == NULL)
                 return TRUE;
 
         this_node = find_node (original->node, current_node);
 
-        if (!this_node)
+        if (this_node == NULL)
                 return FALSE;
 
         for (current_node = current_node->next, this_node = this_node->next;
-             current_node && this_node;
-             current_node = current_node->next, this_node = this_node->next) {
+             current_node != NULL && this_node != NULL;
+             current_node = current_node->next, this_node = this_node->next)
                 if (!node_deep_equal (current_node, this_node))
                         return FALSE;
-        }
 
         return TRUE;
 }
@@ -2295,7 +2293,8 @@ is_read_only (const gchar *changed_element,
                 g_hash_table_add (readonly_props, "price@currency");
                 g_hash_table_add (readonly_props, "payPerView");
                 g_hash_table_add (readonly_props, "dateTimeRange");
-                g_hash_table_add (readonly_props, "dateTimeRange@daylightSaving");
+                g_hash_table_add (readonly_props,
+                                  "dateTimeRange@daylightSaving");
                 g_hash_table_add (readonly_props, "signalStrength");
                 g_hash_table_add (readonly_props, "signalLocked");
                 g_hash_table_add (readonly_props, "tuned");
@@ -2305,9 +2304,8 @@ is_read_only (const gchar *changed_element,
                 g_hash_table_add (readonly_props, "res@updateCount");
                 g_once_init_leave (&readonly_props_loaded, 1);
         }
-        if (changed_element) {
-
-                if (changed_attribute) {
+        if (changed_element != NULL) {
+                if (changed_attribute != NULL) {
                         gchar *test_prop = g_strdup_printf ("%s@%s",
                                                             changed_element,
                                                             changed_attribute);
@@ -2324,8 +2322,10 @@ is_read_only (const gchar *changed_element,
                         if (result)
                                 return TRUE;
                 }
+
                 return g_hash_table_contains (readonly_props, changed_element);
         }
+
         return FALSE;
 }
 
@@ -2338,7 +2338,7 @@ typedef struct {
 static void
 independent_property_free (IndependentProperty *indep)
 {
-        if (indep) {
+        if (indep != NULL) {
                 g_hash_table_unref (indep->required_dep_props);
                 g_hash_table_unref (indep->required_indep_props);
                 g_slice_free (IndependentProperty, indep);
@@ -2365,8 +2365,8 @@ independent_property_new (gboolean required)
 }
 
 static void
-insert_indep_prop (GHashTable *props,
-                   gchar *name,
+insert_indep_prop (GHashTable          *props,
+                   gchar               *name,
                    IndependentProperty *prop)
 {
         g_hash_table_insert (props, g_strdup (name), prop);
@@ -2374,7 +2374,7 @@ insert_indep_prop (GHashTable *props,
 
 static void
 insert_indep_prop_to_indep (IndependentProperty *prop,
-                            gchar *name,
+                            gchar               *name,
                             IndependentProperty *req_prop)
 {
         insert_indep_prop (prop->required_indep_props, name, req_prop);
@@ -2382,19 +2382,19 @@ insert_indep_prop_to_indep (IndependentProperty *prop,
 
 static void
 add_dep_prop (IndependentProperty *indep,
-              gchar *name)
+              gchar               *name)
 {
         g_hash_table_add (indep->required_dep_props, g_strdup (name));
 }
 
 static IndependentProperty *
-create_prop_with_required_dep_props (gboolean required,
-                                     gchar *dep_prop,
+create_prop_with_required_dep_props (gboolean  required,
+                                     gchar    *dep_prop,
                                      ...)
 {
         IndependentProperty *indep = independent_property_new (required);
 
-        if (dep_prop) {
+        if (dep_prop != NULL) {
                 va_list var_args;
                 gchar *name = dep_prop;
 
@@ -2402,7 +2402,7 @@ create_prop_with_required_dep_props (gboolean required,
                 do {
                         add_dep_prop (indep, name);
                         name = va_arg (var_args, gchar *);
-                } while (name);
+                } while (name != NULL);
                 va_end (var_args);
         }
 
@@ -2539,7 +2539,7 @@ is_required (const xmlChar *changed_element,
 {
         GHashTable *required_props = get_required_properties ();
 
-        if (changed_element) {
+        if (changed_element != NULL) {
                 IndependentProperty *toplevel_prop = g_hash_table_lookup
                                         (required_props,
                                          "");
@@ -2547,12 +2547,14 @@ is_required (const xmlChar *changed_element,
                                         (required_props,
                                          (gpointer) changed_element);
 
-                if (changed_attribute) {
-                        if (g_hash_table_contains (toplevel_prop->required_dep_props,
-                                                   changed_attribute))
+                if (changed_attribute != NULL) {
+                        if (g_hash_table_contains
+                                        (toplevel_prop->required_dep_props,
+                                         changed_attribute))
                                 return TRUE;
-                        if (g_hash_table_contains (this_prop->required_dep_props,
-                                                   changed_attribute))
+                        if (g_hash_table_contains
+                                        (this_prop->required_dep_props,
+                                         changed_attribute))
                                 return TRUE;
                 }
                 if (g_hash_table_contains (toplevel_prop->required_indep_props,
@@ -2563,6 +2565,7 @@ is_required (const xmlChar *changed_element,
                  * additions in IndepependentProperty.
                  */
         }
+
         return FALSE;
 }
 
@@ -2578,14 +2581,13 @@ get_toplevel_changes (xmlNodePtr current_node,
 
         /* compare attributes */
         for (attribute = current_node->properties;
-             attribute;
-             attribute = attribute->next) {
+             attribute != NULL;
+             attribute = attribute->next)
                 g_hash_table_insert (current_attributes,
                                      (gpointer) attribute->name,
                                      attribute->children->content);
-        }
         for (attribute = new_node->properties;
-             attribute;
+             attribute != NULL;
              attribute = attribute->next) {
                 const xmlChar *value = NULL;
                 const xmlChar *key = attribute->name;
@@ -2595,9 +2597,8 @@ get_toplevel_changes (xmlNodePtr current_node,
                                                   key,
                                                   NULL,
                                                   (gpointer *) &value)) {
-                        if (xmlStrcmp (value, attribute->children->content)) {
+                        if (xmlStrcmp (value, attribute->children->content))
                                 differs = TRUE;
-                        }
                         g_hash_table_remove (current_attributes, key);
                 } else
                         differs = TRUE;
@@ -2614,10 +2615,9 @@ get_toplevel_changes (xmlNodePtr current_node,
                 g_hash_table_iter_init (&iter, current_attributes);
                 while (g_hash_table_iter_next (&iter,
                                                (gpointer *) &key,
-                                               NULL)) {
+                                               NULL))
                         changes = g_list_prepend (changes, node_diff_new (name,
                                                                           key));
-                }
         }
 
         g_hash_table_unref (current_attributes);
@@ -2633,17 +2633,18 @@ is_any_change_read_only (xmlNodePtr current_node,
         GList *iter;
         gboolean read_only = FALSE;
 
-        for (iter = changes; iter; iter = iter->next) {
+        for (iter = changes; iter != NULL; iter = iter->next) {
                 NodeDiff *diff = (NodeDiff *) iter->data;
 
                 if (is_read_only (diff->node_name,
                                   diff->attribute_name)) {
                         read_only = TRUE;
+
                         break;
                 }
         }
 
-        if (changes)
+        if (changes != NULL)
                 g_list_free_full (changes, (GDestroyNotify) node_diff_free);
         return read_only;
 }
@@ -2658,15 +2659,15 @@ typedef struct {
 static void
 xsd_validate_data_free (XSDValidateData *data)
 {
-        if (!data)
+        if (data == NULL)
                 return;
-        if (data->valid_context)
+        if (data->valid_context != NULL)
                 xmlSchemaFreeValidCtxt (data->valid_context);
-        if (data->schema)
+        if (data->schema != NULL)
                 xmlSchemaFree (data->schema);
-        if (data->parser_context)
+        if (data->parser_context != NULL)
                 xmlSchemaFreeParserCtxt (data->parser_context);
-        if (data->schema_doc)
+        if (data->schema_doc != NULL)
                 xmlFreeDoc (data->schema_doc);
         g_slice_free (XSDValidateData, data);
 }
@@ -2680,25 +2681,21 @@ xsd_validate_data_new (const gchar *xsd_file)
         return data;
 
         data->schema_doc = xmlReadFile (xsd_file, NULL, XML_PARSE_NONET);
-        if (!data->schema_doc) {
+        if (data->schema_doc == NULL)
                 /* the schema cannot be loaded or is not well-formed */
                 goto out;
-        }
         data->parser_context = xmlSchemaNewDocParserCtxt (data->schema_doc);
-        if (!data->parser_context) {
+        if (data->parser_context == NULL)
                 /* unable to create a parser context for the schema */
                 goto out;
-        }
         data->schema = xmlSchemaParse (data->parser_context);
-        if (!data->schema) {
+        if (data->schema == NULL)
                 /* the schema itself is not valid */
                 goto out;
-        }
         data->valid_context = xmlSchemaNewValidCtxt (data->schema);
-        if (!data->valid_context) {
+        if (data->valid_context == NULL)
                 /* unable to create a validation context for the schema */
                 goto out;
-        }
         failed = FALSE;
  out:
         if (failed) {
@@ -2744,7 +2741,7 @@ apply_temporary_modification (DocNode         *modified,
                                              current_node);
         xmlNodePtr new_node_copy = copy_node (new_node);
 
-        if (!mod_cur_node) {
+        if (mod_cur_node == NULL) {
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
         }
 
@@ -2773,13 +2770,14 @@ apply_temporary_addition (DocNode         *modified,
         else
                 mod_sibling = find_node (modified->node, sibling);
 
-        if (!mod_sibling)
+        if (mod_sibling == NULL)
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
 
         xmlUnlinkNode (new_node_copy);
 
-        if (!xmlAddSibling (mod_sibling, new_node_copy)) {
+        if (xmlAddSibling (mod_sibling, new_node_copy) == NULL) {
                 xmlFreeNode (new_node_copy);
+
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
         }
 
@@ -2797,7 +2795,7 @@ apply_temporary_removal (DocNode         *modified,
         xmlNodePtr mod_cur_node = find_node (modified->node,
                                              current_node);
 
-        if (!mod_cur_node)
+        if (mod_cur_node == NULL)
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
 
         xmlUnlinkNode (mod_cur_node);
@@ -2813,12 +2811,13 @@ static GUPnPDIDLLiteFragmentResult
 new_doc_is_valid_modification (DocNode         *modified,
                                xmlDocPtr        current_doc,
                                xmlDocPtr        new_doc,
-                               XSDValidateData *vdata) {
+                               XSDValidateData *vdata)
+{
         xmlNodePtr current_node = current_doc->children->children;
         xmlNodePtr new_node = new_doc->children->children;
         xmlNodePtr last_sibling = NULL;
 
-        while (current_node && new_node) {
+        while (current_node != NULL && new_node != NULL) {
                 GUPnPDIDLLiteFragmentResult result;
                 xmlNodePtr temp_current_node = current_node;
                 xmlNodePtr temp_new_node = new_node;
@@ -2846,8 +2845,8 @@ new_doc_is_valid_modification (DocNode         *modified,
                 if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
                         return result;
         }
-        if (!last_sibling) {
-                if (modified->node->children)
+        if (last_sibling == NULL) {
+                if (modified->node->children != NULL)
                         last_sibling = modified->node->children;
                 else
                         /* We expect that modified object has some
@@ -2860,7 +2859,7 @@ new_doc_is_valid_modification (DocNode         *modified,
          * means they are going to be removed. Check against required
          * or read-only tag removal.
          */
-        while (current_node) {
+        while (current_node != NULL) {
                 GUPnPDIDLLiteFragmentResult result;
                 xmlNodePtr temp_node = current_node;
 
@@ -2868,17 +2867,15 @@ new_doc_is_valid_modification (DocNode         *modified,
                 /* TODO: should we check if there are some readonly
                  * attributes when we remove whole element?
                  */
-                if (is_read_only ((gchar *) temp_node->name, NULL)) {
+                if (is_read_only ((gchar *) temp_node->name, NULL))
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
-                }
                 /* We don't check for required attributes or
                  * subelements, because most of them are required only
                  * when the element exists. And we are removing this
                  * one.
                  */
-                if (is_required (temp_node->name, NULL)) {
+                if (is_required (temp_node->name, NULL))
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG;
-                }
                 result = apply_temporary_removal (modified,
                                                   temp_node,
                                                   vdata);
@@ -2890,13 +2887,12 @@ new_doc_is_valid_modification (DocNode         *modified,
          * they are going to be added. Check against read-only tags
          * addition and general sanity check.
          */
-        while (new_node) {
+        while (new_node != NULL) {
                 GUPnPDIDLLiteFragmentResult result;
                 xmlNodePtr temp_node;
 
-                if (is_read_only ((gchar *) new_node->name, NULL)) {
+                if (is_read_only ((gchar *) new_node->name, NULL))
                         return GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG;
-                }
                 /* TODO: We probably should check if newly added node
                  * has all required properties. Maybe XSD check could
                  * do that for us.
@@ -2947,17 +2943,20 @@ check_fragments (DocNode         *original,
                                         XML_PARSE_NONET);
         GUPnPDIDLLiteFragmentResult result;
 
-        if (!current_doc) {
+        if (current_doc == NULL) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_BAD_XML;
+
                 goto out;
         }
-        if (!new_doc) {
+        if (new_doc == NULL) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_BAD_XML;
+
                 goto out;
         }
 
         if (!is_current_doc_part_of_original_doc (original, current_doc)) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID;
+
                 goto out;
         }
 
@@ -2967,9 +2966,9 @@ check_fragments (DocNode         *original,
                                                 vdata);
 
  out:
-        if (new_doc)
+        if (new_doc != NULL)
                 xmlFreeDoc (new_doc);
-        if (current_doc)
+        if (current_doc != NULL)
                 xmlFreeDoc (current_doc);
         g_free (fixed_new_fragment);
         g_free (fixed_current_fragment);
@@ -2984,7 +2983,7 @@ apply_modification (GUPnPDIDLLiteObject *object,
         GUPnPDIDLLiteObjectPrivate *priv = object->priv;
         xmlNodePtr old = xmlReplaceNode (priv->xml_node, modified->node);
 
-        if (!old)
+        if (old == NULL)
                 return FALSE;
 
         priv->xml_node = modified->node;
@@ -2998,7 +2997,7 @@ get_data_dir (void)
 {
         const gchar *datadir = g_getenv ("GUPNP_AV_DATADIR");
 
-        if (!datadir)
+        if (datadir == NULL)
                 /* that's a macro defined by -DDATADIR=foo */
                 datadir = DATADIR;
 
@@ -3065,11 +3064,13 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
 
         if (current_size != new_size) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_MISMATCH;
+
                 goto out;
         }
 
         if (!current_size) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID;
+
                 goto out;
         }
 
@@ -3077,15 +3078,17 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
         original.node = object->priv->xml_node;
         modified.doc = xmlCopyDoc (original.doc, 1);
 
-        if (!modified.doc) {
+        if (modified.doc == NULL) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
+
                 goto out;
         }
 
         modified.node = find_node (modified.doc->children, original.node);
 
-        if (!modified.node) {
+        if (modified.node == NULL) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
+
                 goto out;
         }
 
@@ -3099,14 +3102,13 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
                                           new_fragment,
                                           vdata);
 
-                if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK) {
+                if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
                         goto out;
-                }
         }
 
         apply_modification (object, &modified);
  out:
-        if (modified.doc)
+        if (modified.doc != NULL)
                 xmlFreeDoc (modified.doc);
         xsd_validate_data_free (vdata);
 
