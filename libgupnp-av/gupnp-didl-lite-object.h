@@ -34,20 +34,9 @@
 #include "gupnp-didl-lite-resource.h"
 #include "gupnp-didl-lite-descriptor.h"
 #include "gupnp-didl-lite-contributor.h"
+#include "gupnp-av-enums.h"
 
 G_BEGIN_DECLS
-
-typedef enum {
-      GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK,
-      GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_BAD_XML,
-      GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_BAD_XML,
-      GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID,
-      GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID,
-      GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG,
-      GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG,
-      GUPNP_DIDL_LITE_FRAGMENT_RESULT_MISMATCH,
-      GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR
-} GUPnPDIDLLiteFragmentResult;
 
 GType
 gupnp_didl_lite_object_get_type (void) G_GNUC_CONST;

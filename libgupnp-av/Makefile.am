@@ -29,7 +29,8 @@ libgupnp_av_inc_HEADERS = gupnp-didl-lite-object.h \
 			  gupnp-last-change-parser.h \
 			  gupnp-dlna.h \
 			  gupnp-av-error.h \
-			  gupnp-av.h
+			  gupnp-av.h \
+			  gupnp-av-enums.h
 
 
 gupnp-av-marshal.c: gupnp-av-marshal.list
@@ -67,6 +68,10 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     xml-util.h \
 			     gvalue-util.c \
 			     gvalue-util.h \
+			     fragment-util.c \
+			     fragment-util.h \
+			     xsd-data.c \
+			     xsd-data.h \
 			     $(BUILT_SOURCES)
 
 libgupnp_av_1_0_la_LIBADD = $(LIBGUPNP_LIBS)
