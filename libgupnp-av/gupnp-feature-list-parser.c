@@ -114,12 +114,13 @@ get_feature_object_ids (xmlNode *feature)
  * Parses @text and returns the list of available features.
  * If an error occured @error will be set.
  *
- * Return value: The list of features or %NULL if an error occured.
+ * Return value: (transfer full) (element-type GUPnPFeature): The list of
+ * features or %NULL if an error occured.
  **/
 GList *
 gupnp_feature_list_parser_parse_text (GUPnPFeatureListParser *parser,
-                                         const char          *text,
-                                         GError              **error)
+                                      const char             *text,
+                                      GError                **error)
 {
         xmlDoc       *doc;
         xmlNode      *element;

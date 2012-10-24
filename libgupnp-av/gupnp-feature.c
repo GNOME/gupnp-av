@@ -191,7 +191,7 @@ gupnp_feature_class_init (GUPnPFeatureClass *klass)
 
 /**
  * gupnp_feature_get_name:
- * @v: #GUPnPFeature
+ * @feature: #GUPnPFeature
  *
  * Get the name of the @feature.
  *
