@@ -112,10 +112,10 @@ gupnp_didl_lite_object_get_restricted   (GUPnPDIDLLiteObject *object);
 const char *
 gupnp_didl_lite_object_get_title        (GUPnPDIDLLiteObject *object);
 
-#ifndef GUPNP_DISABLE_DEPRECATED
 const char *
 gupnp_didl_lite_object_get_creator      (GUPnPDIDLLiteObject *object);
 
+#ifndef GUPNP_DISABLE_DEPRECATED
 const char *
 gupnp_didl_lite_object_get_artist       (GUPnPDIDLLiteObject *object);
 
@@ -202,11 +202,11 @@ void
 gupnp_didl_lite_object_set_title        (GUPnPDIDLLiteObject *object,
                                          const char          *title);
 
-#ifndef GUPNP_DISABLE_DEPRECATED
 void
 gupnp_didl_lite_object_set_creator      (GUPnPDIDLLiteObject *object,
                                          const char          *creator);
 
+#ifndef GUPNP_DISABLE_DEPRECATED
 void
 gupnp_didl_lite_object_set_artist       (GUPnPDIDLLiteObject *object,
                                          const char          *artist);

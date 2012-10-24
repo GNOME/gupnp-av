@@ -569,9 +569,6 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
          *
          * The creator of this object.
          *
-         * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_creators and
-         * #gupnp_didl_lite_object_add_creator instead since unlike this
-         * property, they are capable of dealing with multiple creator nodes.
          **/
         g_object_class_install_property
                 (object_class,
@@ -1149,8 +1146,6 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
  * Get the creator of the @object.
  *
  * Return value: The creator of the @object, or %NULL.
- *
- * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_get_creators instead.
  **/
 const char *
 gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
@@ -1724,8 +1719,6 @@ gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
  * @creator: The creator
  *
  * Set the creator of the @object to @creator.
- *
- * Deprecated: 0.5.3: Use #gupnp_didl_lite_object_add_creator instead.
  **/
 void
 gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
