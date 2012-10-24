@@ -38,6 +38,13 @@ namespace GUPnP {
                 FAILED
         }
 
+	[CCode (cheader_filename = "libgupnp-av/gupnp-av.h", cprefix = "GUPNP_PROTOCOL_ERROR_")]
+	public errordomain ProtocolError {
+		INVALID_SYNTAX,
+		OTHER;
+		public static GLib.Quark quark ();
+	}
+
         public class SearchCriteriaParser : GLib.Object {
             public virtual signal bool expression (string property, GUPnP.SearchCriteriaOp op, string value, GLib.Error error);
         }

@@ -8,3 +8,5 @@ DIDL_LITE_WRITER_NAMESPACE_* skip
 SearchCriteriaParserError skip
 SearchCriteriaParser
     .expression skip
+ProtocolError skip
+protocol_error_quark skip
