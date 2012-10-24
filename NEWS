@@ -1,3 +1,26 @@
+0.11.1
+======
+
+Changes since 0.11.0:
+- Add m4 vapigen detection macro.
+- Fix introspection install dirs.
+- Fix objectUpdateID setter.
+- Add a FeatureList parser.
+- Add some XML fragment getters for DIDLLiteObject.
+- Lower G-I requirements.
+- Enable introspection during distcheck.
+- Undeprecate single-value _{get|set}_creator methods.
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=685963
+ - https://bugzilla.gnome.org/show_bug.cgi?id=686464
+
+All contributors to this release:
+
+Jens Georg <mail@jensge.org>
+Regis Merlino <regis.merlino@intel.com>
+Christophe Guiraud <christophe.guiraud@intel.com>
+
 0.11.0
 ======
 
@@ -17,7 +40,7 @@ Jens Georg <mail@jensge.org>
 Andreas Henriksson <andreas@fatal.se>
 Christophe Guiraud <christophe.guiraud@intel.com>
 
-Bug fixes in this release:
+Bug fixed in this release:
  - https://bugzilla.gnome.org/show_bug.cgi?id=684297
  - https://bugzilla.gnome.org/show_bug.cgi?id=685477
 
