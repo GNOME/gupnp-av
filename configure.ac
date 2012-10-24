@@ -16,6 +16,7 @@ AM_SILENT_RULES([yes])
 
 # Check for programs
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_HEADER_STDC
 AC_FUNC_MMAP
 
@@ -59,6 +60,7 @@ tests/Makefile
 tests/gtest/Makefile
 doc/Makefile
 doc/version.xml
+data/Makefile
 vala/Makefile
 gupnp-av-1.0.pc
 gupnp-av-1.0-uninstalled.pc

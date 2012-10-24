@@ -1,1 +1,1 @@
-dist_pkgdatadir_DATA = didl-lite-v2.xsd
+dist_pkgdata_DATA = didl-lite-v2.xsd
