@@ -40,6 +40,7 @@
 #include "gupnp-didl-lite-item.h"
 #include "gupnp-didl-lite-contributor-private.h"
 #include "xml-util.h"
+#include "xsd-data.h"
 
 G_DEFINE_ABSTRACT_TYPE (GUPnPDIDLLiteObject,
                         gupnp_didl_lite_object,
@@ -53,6 +54,8 @@ struct _GUPnPDIDLLiteObjectPrivate {
         xmlNs *dc_ns;
         xmlNs *dlna_ns;
 };
+
+static XSDData *didl_lite_xsd;
 
 enum {
         PROP_0,
@@ -779,6 +782,9 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                                     G_PARAM_STATIC_NAME |
                                                     G_PARAM_STATIC_NICK |
                                                     G_PARAM_STATIC_BLURB));
+
+        if (didl_lite_xsd == NULL)
+                didl_lite_xsd = fragment_util_get_didl_lite_xsd_data ();
 }
 
 static gboolean
