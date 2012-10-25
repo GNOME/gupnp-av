@@ -16,6 +16,7 @@ AM_SILENT_RULES([yes])
 
 # Check for programs
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_HEADER_STDC
 AC_FUNC_MMAP
 
