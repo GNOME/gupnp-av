@@ -30,6 +30,8 @@
 #include <libxml/tree.h>
 #include <stdarg.h>
 
+G_BEGIN_DECLS
+
 /* Misc utilities for inspecting xmlNodes */
 G_GNUC_INTERNAL xmlNode *
 xml_util_get_element                    (xmlNode    *node,
@@ -114,5 +116,7 @@ xml_util_copy_node                      (xmlNode *node);
 
 G_GNUC_INTERNAL GHashTable *
 xml_util_get_attributes_map             (xmlNode *node);
+
+G_END_DECLS
 
 #endif /* __XML_UTIL_H__ */
