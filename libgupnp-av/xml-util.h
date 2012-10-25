@@ -100,4 +100,19 @@ G_GNUC_INTERNAL char *
 xml_util_get_child_string               (xmlNode    *parent_node,
                                          xmlDoc     *doc,
                                          const char *name);
+
+G_GNUC_INTERNAL gboolean
+xml_util_node_deep_equal                (xmlNode *first,
+                                         xmlNode *second);
+
+G_GNUC_INTERNAL xmlNode *
+xml_util_find_node                      (xmlNode *haystack,
+                                         xmlNode *needle);
+
+G_GNUC_INTERNAL xmlNode *
+xml_util_copy_node                      (xmlNode *node);
+
+G_GNUC_INTERNAL GHashTable *
+xml_util_get_attributes_map             (xmlNode *node);
+
 #endif /* __XML_UTIL_H__ */
