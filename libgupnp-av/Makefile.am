@@ -71,6 +71,8 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     xml-util.h \
 			     gvalue-util.c \
 			     gvalue-util.h \
+			     xsd-data.c \
+			     xsd-data.h \
 			     $(BUILT_SOURCES)
 
 libgupnp_av_1_0_la_LIBADD = $(LIBGUPNP_LIBS)
