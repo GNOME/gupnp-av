@@ -1,9 +1,7 @@
 /*
- * Copyright (C) 2007 Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
- * Copyright (C) 2006, 2007, 2008 OpenedHand Ltd.
+ * Copyright (C) 2012 Intel Corporation
  *
- * Author: Zeeshan Ali Khattak <zeenix@gstreamer.net>
- *         Jorn Baayen <jorn@openedhand.com>
+ * Authors: Krzesimir Nowak <krnowak@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,19 +19,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "gupnp-av-enums.h"
-#include "gupnp-didl-lite-object.h"
-#include "gupnp-didl-lite-container.h"
-#include "gupnp-didl-lite-createclass.h"
-#include "gupnp-didl-lite-item.h"
-#include "gupnp-didl-lite-parser.h"
-#include "gupnp-didl-lite-resource.h"
-#include "gupnp-didl-lite-descriptor.h"
-#include "gupnp-didl-lite-writer.h"
-#include "gupnp-protocol-info.h"
-#include "gupnp-search-criteria-parser.h"
-#include "gupnp-last-change-parser.h"
-#include "gupnp-feature.h"
-#include "gupnp-feature-list-parser.h"
-#include "gupnp-dlna.h"
+#ifndef __GUPNP_AV_ENUMS_H__
+#define __GUPNP_AV_ENUMS_H__
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
+typedef enum {
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_BAD_XML,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_BAD_XML,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_READONLY_TAG,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_MISMATCH,
+      GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR
+} GUPnPDIDLLiteFragmentResult;
+
+G_END_DECLS
+
+#endif /* __GUPNP_AV_ENUMS_H__ */

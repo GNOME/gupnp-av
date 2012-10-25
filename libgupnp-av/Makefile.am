@@ -31,7 +31,8 @@ libgupnp_av_inc_HEADERS = gupnp-didl-lite-object.h \
 			  gupnp-feature-list-parser.h \
 			  gupnp-dlna.h \
 			  gupnp-av-error.h \
-			  gupnp-av.h
+			  gupnp-av.h \
+			  gupnp-av-enums.h
 
 
 gupnp-av-marshal.c: gupnp-av-marshal.list
