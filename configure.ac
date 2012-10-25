@@ -59,6 +59,7 @@ tests/Makefile
 tests/gtest/Makefile
 doc/Makefile
 doc/version.xml
+data/Makefile
 vala/Makefile
 gupnp-av-1.0.pc
 gupnp-av-1.0-uninstalled.pc
