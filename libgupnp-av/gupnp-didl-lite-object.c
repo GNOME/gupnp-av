@@ -2291,6 +2291,46 @@ gupnp_didl_lite_object_unset_artists (GUPnPDIDLLiteObject *object)
         g_object_notify (G_OBJECT (object), "artist");
 }
 
+/* GENERAL DOCS ABOUT FRAGMENT APPLYING.
+ *
+ * The function applying fragments takes two arrays of fragments. One
+ * array contains current fragments and another one contains new
+ * fragments. Both arrays have to be of equal length and have more
+ * then zero elements. Each of fragments in both arrays make a pair
+ * (i.e. first/second/third/... fragment in current array and
+ * first/second/third/... fragment in new array form a pair). Each
+ * fragment can have zero, one or more XML elements.
+ *
+ * For each fragment pair first we check if current fragment is indeed
+ * a part of this object's document. If it is then we check validity
+ * of new fragment for applying. If it is then we replace the current
+ * fragment with new fragment in object's document copy and validate
+ * the modified document against didl-lite schema. After all fragment
+ * pairs are processed we replace a part describing this object in
+ * original document with respective one in modified document.
+ *
+ * Checking if current fragment is a part of object's document is in
+ * essence checking for deep equality of document's node and this
+ * fragment (i.e. element name and properties have to be equal, same
+ * for children).
+ *
+ * Checking if new fragment is valid for applying is about checking
+ * whether element in new fragment is either a context (i.e. both
+ * current element and new element are deep equal) or element
+ * modification (i.e. changes attributes but element name is still the
+ * same). There may be a case when there are more elements in current
+ * fragment than in new fragment then those excessive elements are
+ * checked whether they can be really removed. The other case is when
+ * there are more elements in new fragments than in current fragment -
+ * in such situation we check if additions are valid.
+ *
+ * By checking validity of modification, removals or additions we mean
+ * that no read-only properties are changed. Additionaly, for
+ * removals, we check if required properties are not removed.
+ *
+ * This approach may fail in some more twisted cases.
+ */
+
 /**
  * gupnp_didl_lite_object_apply_fragments:
  * @object: The #GUPnPDIDLLiteObject
