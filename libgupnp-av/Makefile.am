@@ -88,6 +88,8 @@ INTROSPECTION_SCANNER_ARGS = --warn-all --add-include-path=$(srcdir)
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
 if HAVE_INTROSPECTION
+export GUPNP_AV_DATADIR := $(top_srcdir)/data
+
 introspection_sources = \
 	    $(addprefix $(top_srcdir)/libgupnp-av/, \
 			$(libgupnp_av_inc_HEADERS)) \
