@@ -9,7 +9,7 @@
 # age to 0.
 LTVERSION = 2:0:0
 
-AM_CFLAGS = $(LIBGUPNP_CFLAGS) -I$(top_srcdir)
+AM_CFLAGS = $(LIBGUPNP_CFLAGS) -I$(top_srcdir) -DDATADIR="\"$(pkgdatadir)\""
 
 libgupnp_av_incdir = $(includedir)/gupnp-av-1.0/libgupnp-av
 
@@ -72,6 +72,8 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     xml-util.h \
 			     gvalue-util.c \
 			     gvalue-util.h \
+			     fragment-util.c \
+			     fragment-util.h \
 			     xsd-data.c \
 			     xsd-data.h \
 			     $(BUILT_SOURCES)
