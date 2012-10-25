@@ -40,6 +40,7 @@
 #include "gupnp-didl-lite-item.h"
 #include "gupnp-didl-lite-contributor-private.h"
 #include "xml-util.h"
+#include "fragment-util.h"
 #include "xsd-data.h"
 
 G_DEFINE_ABSTRACT_TYPE (GUPnPDIDLLiteObject,
@@ -2288,4 +2289,102 @@ gupnp_didl_lite_object_unset_artists (GUPnPDIDLLiteObject *object)
         unset_contributors_by_name (object, "artist");
 
         g_object_notify (G_OBJECT (object), "artist");
+}
+
+/**
+ * gupnp_didl_lite_object_apply_fragments:
+ * @object: The #GUPnPDIDLLiteObject
+ * @current_fragments: (array length=current_size) (transfer none): XML
+ * fragments of @object.
+ * @current_size: Size of @current_fragments or -1.
+ * @new_fragments: (array length=new_size) (transfer none): Substitutes
+ * for @current_fragments.
+ * @new_size: Size of @new_fragments or -1.
+ *
+ * Updates object by applying @new_fragments in places of
+ * @current_fragments. For @current_size and @new_size -1 can be
+ * passed when respectively @current_fragments and @new_fragments are
+ * NULL terminated.
+ *
+ * Returns: Result of operation.
+ */
+GUPnPDIDLLiteFragmentResult
+gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
+                                        gchar               **current_fragments,
+                                        gint                  current_size,
+                                        gchar               **new_fragments,
+                                        gint                  new_size)
+{
+        DocNode modified;
+        DocNode original;
+        GUPnPDIDLLiteFragmentResult result;
+        gint iter;
+
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object),
+                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR);
+        g_return_val_if_fail (current_fragments != NULL,
+                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID);
+        g_return_val_if_fail (new_fragments != NULL,
+                              GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_INVALID);
+
+        result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK;
+        modified.doc = NULL;
+
+        if (current_size < 0)
+                current_size = g_strv_length (current_fragments);
+        if (new_size < 0)
+                new_size = g_strv_length (new_fragments);
+
+        if (current_size != new_size) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_MISMATCH;
+
+                goto out;
+        }
+
+        if (!current_size) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID;
+
+                goto out;
+        }
+
+        original.doc = object->priv->xml_doc->doc;
+        original.node = object->priv->xml_node;
+        modified.doc = xmlCopyDoc (original.doc, 1);
+
+        if (modified.doc == NULL) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
+
+                goto out;
+        }
+
+        modified.node = xml_util_find_node (modified.doc->children,
+                                            original.node);
+
+        if (modified.node == NULL) {
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
+
+                goto out;
+        }
+
+        for (iter = 0; iter < new_size; ++iter) {
+                const gchar *current_fragment = current_fragments[iter];
+                const gchar *new_fragment = new_fragments[iter];
+
+                result = fragment_util_check_fragments (&original,
+                                                        &modified,
+                                                        current_fragment,
+                                                        new_fragment,
+                                                        didl_lite_xsd);
+
+                if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK)
+                        goto out;
+        }
+
+        if (!fragment_util_apply_modification (&object->priv->xml_node,
+                                               &modified))
+                result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
+ out:
+        if (modified.doc != NULL)
+                xmlFreeDoc (modified.doc);
+        return result;
 }

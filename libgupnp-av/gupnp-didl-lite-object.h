@@ -34,6 +34,7 @@
 #include "gupnp-didl-lite-resource.h"
 #include "gupnp-didl-lite-descriptor.h"
 #include "gupnp-didl-lite-contributor.h"
+#include "gupnp-av-enums.h"
 
 G_BEGIN_DECLS
 
@@ -291,6 +292,14 @@ gupnp_didl_lite_object_get_artists_xml_string
 
 void
 gupnp_didl_lite_object_unset_artists    (GUPnPDIDLLiteObject *object);
+
+GUPnPDIDLLiteFragmentResult
+gupnp_didl_lite_object_apply_fragments
+                                      (GUPnPDIDLLiteObject  *object,
+                                       gchar               **current_fragments,
+                                       gint                  current_size,
+                                       gchar               **new_fragments,
+                                       gint                  new_size);
 
 G_END_DECLS
 
