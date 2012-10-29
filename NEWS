@@ -1,3 +1,15 @@
+0.11.2
+======
+
+Changes since 0.11.1:
+- Implement fragment handling and verification in DIDLLiteObject.
+- Don't error out if vapigen cannot be found.
+
+All contributors to this release:
+
+Krzesimir Nowak <krnowak@openismus.com>
+Jens Georg <mail@jensge.org>
+
 0.11.1
 ======
 
