@@ -27,6 +27,7 @@ libgupnp_av_inc_HEADERS = gupnp-didl-lite-object.h \
 			  gupnp-protocol-info.h \
 		          gupnp-search-criteria-parser.h \
 			  gupnp-last-change-parser.h \
+			  gupnp-media-collection.h \
 			  gupnp-feature.h \
 			  gupnp-feature-list-parser.h \
 			  gupnp-dlna.h \
@@ -64,6 +65,7 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-protocol-info.c \
 			     gupnp-search-criteria-parser.c \
 			     gupnp-last-change-parser.c \
+			     gupnp-media-collection.c \
 			     gupnp-feature.c \
 			     gupnp-feature-list-parser.c \
 			     gupnp-dlna.c \
@@ -107,6 +109,7 @@ introspection_sources = \
 	    $(top_srcdir)/libgupnp-av/gupnp-protocol-info.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-search-criteria-parser.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-last-change-parser.c \
+	    $(top_srcdir)/libgupnp-av/gupnp-media-collection.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-feature.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-feature-list-parser.c \
 	    $(top_srcdir)/libgupnp-av/gupnp-dlna.c \
