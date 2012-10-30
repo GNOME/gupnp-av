@@ -11,7 +11,7 @@
 	<xsd:import namespace="urn:schemas-upnp-org:metadata-1-0/upnp/" schemaLocation="http://www.upnp.org/schemas/av/upnp.xsd"/>
 	<xsd:import namespace="urn:schemas-upnp-org:av:av" schemaLocation="http://www.upnp.org/schemas/av/av.xsd"/>
 	<xsd:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/simpledc20021212.xsd"/>
-	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2005/08/xml.xsd"/>
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
 
 	<!--============================================================
 
