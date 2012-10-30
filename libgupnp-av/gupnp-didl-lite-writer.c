@@ -483,6 +483,44 @@ gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
 }
 
 /**
+ * gupnp_didl_lite_writer_add_container_child_item:
+ * @writer: #GUPnPDIDLLiteWriter
+ * @container: #GUPnPDIDLLiteContainer
+ *
+ * Add a child item to a container. This is only useful in DIDL_S playlist
+ * creation.
+ *
+ * Return: (transfer full): A new #GUPnPDIDLLiteItem object. Unref after
+ * usage.
+ **/
+GUPnPDIDLLiteItem *
+gupnp_didl_lite_writer_add_container_child_item
+                                        (GUPnPDIDLLiteWriter    *writer,
+                                         GUPnPDIDLLiteContainer *container)
+{
+        xmlNode *item_node, *container_node;
+        GUPnPDIDLLiteObject *object;
+        GUPnPXMLDoc *doc;
+
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container), NULL);
+
+        object = GUPNP_DIDL_LITE_OBJECT (container);
+        container_node = gupnp_didl_lite_object_get_xml_node (object);
+
+        item_node = xmlNewChild (container_node,
+                                 NULL,
+                                 (xmlChar *) "item",
+                                 NULL);
+
+        object = gupnp_didl_lite_object_new_from_xml (item_node,
+                                                      writer->priv->xml_doc,
+                                                      writer->priv->upnp_ns,
+                                                      writer->priv->dc_ns,
+                                                      writer->priv->dlna_ns);
+        return GUPNP_DIDL_LITE_ITEM (object);
+}
+
+/**
  * gupnp_didl_lite_writer_add_container:
  * @writer: A #GUPnPDIDLLiteWriter
  *

@@ -90,6 +90,11 @@ gupnp_didl_lite_writer_add_item         (GUPnPDIDLLiteWriter *writer);
 GUPnPDIDLLiteContainer *
 gupnp_didl_lite_writer_add_container    (GUPnPDIDLLiteWriter *writer);
 
+GUPnPDIDLLiteItem *
+gupnp_didl_lite_writer_add_container_child_item
+                                        (GUPnPDIDLLiteWriter    *writer,
+                                         GUPnPDIDLLiteContainer *container);
+
 GUPnPDIDLLiteDescriptor *
 gupnp_didl_lite_writer_add_descriptor   (GUPnPDIDLLiteWriter *writer);
 
