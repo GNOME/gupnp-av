@@ -74,6 +74,8 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gvalue-util.h \
 			     fragment-util.c \
 			     fragment-util.h \
+			     time-utils.c \
+			     time-utils.h \
 			     xsd-data.c \
 			     xsd-data.h \
 			     $(BUILT_SOURCES)
