@@ -14,3 +14,4 @@ gupnp_search_criteria_parser_get_type
 gupnp_search_criteria_op_get_type
 gupnp_feature_get_type
 gupnp_feature_list_parser_get_type
+gupnp_media_collection_get_type

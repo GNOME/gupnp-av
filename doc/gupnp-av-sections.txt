@@ -432,6 +432,30 @@ gupnp_feature_list_parser_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gupnp-media-collection</FILE>
+<TITLE>GUPnPMediaCollection</TITLE>
+GUPnPMediaCollectionType
+GUPnPMediaCollection
+GUPnPMediaCollectionClass
+gupnp_media_collection_new
+gupnp_media_collection_set_title
+gupnp_media_collection_get_title
+gupnp_media_collection_set_author
+gupnp_media_collection_get_author
+gupnp_media_collection_add_item
+gupnp_media_collection_get_string
+<SUBSECTION Standard>
+GUPNP_IS_MEDIA_COLLECTION
+GUPNP_IS_MEDIA_COLLECTION_CLASS
+GUPNP_MEDIA_COLLECTION
+GUPNP_MEDIA_COLLECTION_CLASS
+GUPNP_MEDIA_COLLECTION_GET_CLASS
+GUPNP_TYPE_MEDIA_COLLECTION
+GUPnPMediaCollectionPrivate
+gupnp_media_collection_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gupnp-av-error</FILE>
 <TITLE>Error codes</TITLE>
 GUPNP_PROTOCOL_ERROR
