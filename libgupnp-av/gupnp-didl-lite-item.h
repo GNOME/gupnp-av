@@ -1,8 +1,10 @@
 /*
  * Copyright (C) 2009 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Authors: Zeeshan Ali (Khattak) <zeeshan.ali@nokia.com>
  *                                <zeeshanak@gnome.org>
+ *          Jens Georg <jensg@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -72,6 +74,13 @@ gupnp_didl_lite_item_get_ref_id         (GUPnPDIDLLiteItem *item);
 void
 gupnp_didl_lite_item_set_ref_id         (GUPnPDIDLLiteItem *item,
                                          const char        *ref_id);
+
+void
+gupnp_didl_lite_item_set_lifetime       (GUPnPDIDLLiteItem *item,
+                                         glong              lifetime);
+
+glong
+gupnp_didl_lite_item_get_lifetime       (GUPnPDIDLLiteItem *item);
 
 G_END_DECLS
 

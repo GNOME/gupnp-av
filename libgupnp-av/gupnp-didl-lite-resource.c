@@ -35,9 +35,7 @@
 
 #include "gupnp-didl-lite-resource.h"
 #include "xml-util.h"
-
-#define SEC_PER_MIN 60
-#define SEC_PER_HOUR 3600
+#include "time-utils.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteResource,
                gupnp_didl_lite_resource,
@@ -104,31 +102,6 @@ get_resolution_info (GUPnPDIDLLiteResource *resource,
 
 return_point:
         g_strfreev (tokens);
-}
-
-static long
-seconds_from_time (const char *time_str)
-{
-        char **tokens;
-        gdouble seconds = -1;
-
-        if (time_str == NULL)
-                return -1;
-
-        tokens = g_strsplit (time_str, ":", -1);
-        if (tokens[0] == NULL ||
-            tokens[1] == NULL ||
-            tokens[2] == NULL)
-                goto return_point;
-
-        seconds = g_strtod (tokens[2], NULL);
-        seconds += g_strtod (tokens[1], NULL) * SEC_PER_MIN;
-        seconds += g_strtod (tokens[0], NULL) * SEC_PER_HOUR;
-
-return_point:
-        g_strfreev (tokens);
-
-        return (long) seconds;
 }
 
 static void
@@ -1220,10 +1193,7 @@ gupnp_didl_lite_resource_set_duration (GUPnPDIDLLiteResource *resource,
         else {
                 char *str;
 
-                str = g_strdup_printf ("%ld:%.2ld:%.2ld.000",
-                                       duration / (60 * 60),
-                                       (duration / 60) % 60,
-                                       duration % 60);
+                str = seconds_to_time (duration);
                 xmlSetProp (resource->priv->xml_node,
                             (unsigned char *) "duration",
                             (unsigned char *) str);

@@ -123,6 +123,8 @@ gupnp_didl_lite_container_get_type
 GUPnPDIDLLiteItem
 gupnp_didl_lite_item_get_ref_id
 gupnp_didl_lite_item_set_ref_id
+gupnp_didl_lite_item_get_lifetime
+gupnp_didl_lite_item_set_lifetime
 <SUBSECTION Standard>
 GUPnPDIDLLiteItemClass
 GUPNP_TYPE_DIDL_LITE_ITEM

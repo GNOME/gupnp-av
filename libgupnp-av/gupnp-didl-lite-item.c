@@ -31,6 +31,7 @@
 
 #include "gupnp-didl-lite-item.h"
 #include "xml-util.h"
+#include "time-utils.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteItem,
                gupnp_didl_lite_item,
@@ -38,7 +39,8 @@ G_DEFINE_TYPE (GUPnPDIDLLiteItem,
 
 enum {
         PROP_0,
-        PROP_REF_ID
+        PROP_REF_ID,
+        PROP_LIFETIME
 };
 
 static void
@@ -63,6 +65,11 @@ gupnp_didl_lite_item_get_property (GObject    *object,
                         (value,
                          gupnp_didl_lite_item_get_ref_id (item));
                 break;
+        case PROP_LIFETIME:
+                g_value_set_long
+                        (value,
+                         gupnp_didl_lite_item_get_lifetime (item));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -84,6 +91,10 @@ gupnp_didl_lite_item_set_property (GObject      *object,
         case PROP_REF_ID:
                 gupnp_didl_lite_item_set_ref_id (item,
                                                  g_value_get_string (value));
+                break;
+        case PROP_LIFETIME:
+                gupnp_didl_lite_item_set_lifetime (item,
+                                                   g_value_get_long (value));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -117,6 +128,24 @@ gupnp_didl_lite_item_class_init (GUPnPDIDLLiteItemClass *klass)
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteItem:lifetime:
+         *
+         * The lifetime in seconds of this DIDLLite item in a media collection.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_LIFETIME,
+                 g_param_spec_long ("lifetime",
+                                    "Lifetime",
+                                    "The lifetime (in seconds) of this"
+                                    " item.",
+                                    -1,
+                                    G_MAXLONG,
+                                    -1,
+                                    G_PARAM_READWRITE |
+                                    G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -165,4 +194,63 @@ gupnp_didl_lite_item_set_ref_id (GUPnPDIDLLiteItem *item,
                     (unsigned char *) ref_id);
 
         g_object_notify (G_OBJECT (item), "ref-id");
+}
+
+/**
+ * gupnp_didl_lite_item_set_lifetime:
+ * @item: #GUPnPDIDLLiteItem
+ * @lifetime: The lifetime (in seconds) of this item in a media collection.
+ **/
+void
+gupnp_didl_lite_item_set_lifetime (GUPnPDIDLLiteItem *item,
+                                   glong              lifetime)
+{
+        xmlNode *node = NULL;
+        xmlNs *ns = NULL;
+        GUPnPXMLDoc *doc = NULL;
+        GUPnPDIDLLiteObject *object = NULL;
+
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_ITEM (item));
+
+        object = GUPNP_DIDL_LITE_OBJECT (item);
+        node = gupnp_didl_lite_object_get_xml_node (object);
+        ns = gupnp_didl_lite_object_get_dlna_namespace (object);
+        g_object_get (G_OBJECT (object), "xml-doc", &doc, NULL);
+
+        if (lifetime < 0)
+                xml_util_unset_child (node, "lifetime");
+        else {
+                char *str;
+
+                str = seconds_to_time (lifetime);
+                xml_util_set_child (node, ns, doc->doc, "lifetime", str);
+                g_free (str);
+        }
+
+        g_object_notify (G_OBJECT (object), "lifetime");
+}
+
+/**
+ * gupnp_didl_lite_item_get_lifetime:
+ * @item: #GUPnPDIDLLiteItem
+ *
+ * Returns: -1 if unset or the lifetime (in seconds) of the current item.
+ **/
+glong
+gupnp_didl_lite_item_get_lifetime (GUPnPDIDLLiteItem *item)
+{
+        xmlNode *node = NULL;
+        const char *lifetime_str;
+        long lifetime;
+        GUPnPDIDLLiteObject *object = NULL;
+
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_ITEM (item), -1);
+
+        object = GUPNP_DIDL_LITE_OBJECT (item);
+        node = gupnp_didl_lite_object_get_xml_node (object);
+
+        lifetime_str = xml_util_get_child_element_content (node, "lifetime");
+        lifetime = seconds_from_time (lifetime_str);
+
+        return lifetime;
 }
