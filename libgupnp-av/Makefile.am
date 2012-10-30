@@ -61,6 +61,7 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-contributor.c \
 			     gupnp-didl-lite-contributor-private.h \
 			     gupnp-didl-lite-writer.c \
+			     gupnp-didl-lite-writer-private.h \
 			     gupnp-protocol-info.c \
 			     gupnp-search-criteria-parser.c \
 			     gupnp-last-change-parser.c \
