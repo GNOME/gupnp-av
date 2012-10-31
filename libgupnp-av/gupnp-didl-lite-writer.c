@@ -209,7 +209,8 @@ filter_attributes (xmlNode             *node,
 static void
 filter_node (xmlNode             *node,
              GList               *allowed,
-             GUPnPDIDLLiteWriter *writer)
+             GUPnPDIDLLiteWriter *writer,
+             gboolean             tags_only)
 {
         xmlNode *child;
         GList   *forbidden = NULL;
@@ -217,7 +218,8 @@ filter_node (xmlNode             *node,
         gboolean is_container;
         const char *container_class = NULL;
 
-        filter_attributes (node, allowed, writer);
+        if (!tags_only)
+                filter_attributes (node, allowed, writer);
 
         if (strcmp ((const char *) node->name, "container") == 0) {
             is_container = TRUE;
@@ -261,8 +263,40 @@ filter_node (xmlNode             *node,
         /* Recurse */
         for (child = node->children; child != NULL; child = child->next)
                 if (!xmlNodeIsText (child))
-                        filter_node (child, allowed, writer);
+                        filter_node (child, allowed, writer, tags_only);
 }
+
+static void
+apply_filter (GUPnPDIDLLiteWriter *writer,
+              const char          *filter,
+              gboolean             tags_only)
+{
+        char **tokens;
+        GList *allowed = NULL;
+        unsigned short i;
+        xmlNode *node;
+
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
+        g_return_if_fail (filter != NULL);
+
+        if (filter[0] == '*')
+                return;         /* Wildcard */
+
+        tokens = g_strsplit (filter, ",", -1);
+        g_return_if_fail (tokens != NULL);
+
+        for (i = 0; tokens[i] != NULL; i++)
+                allowed = g_list_append (allowed, tokens[i]);
+
+        for (node = writer->priv->xml_node->children;
+             node != NULL;
+             node = node->next)
+                filter_node (node, allowed, writer, tags_only);
+
+        g_list_free (allowed);
+        g_strfreev (tokens);
+}
+
 
 static void
 gupnp_didl_lite_writer_init (GUPnPDIDLLiteWriter *writer)
@@ -662,28 +696,28 @@ void
 gupnp_didl_lite_writer_filter (GUPnPDIDLLiteWriter *writer,
                                const char          *filter)
 {
-        char **tokens;
-        GList *allowed = NULL;
-        unsigned short i;
-        xmlNode *node;
+        apply_filter (writer, filter, FALSE);
+}
 
-        g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
-        g_return_if_fail (filter != NULL);
-
-        if (filter[0] == '*')
-                return;         /* Wildcard */
-
-        tokens = g_strsplit (filter, ",", -1);
-        g_return_if_fail (tokens != NULL);
-
-        for (i = 0; tokens[i] != NULL; i++)
-                allowed = g_list_append (allowed, tokens[i]);
-
-        for (node = writer->priv->xml_node->children;
-             node != NULL;
-             node = node->next)
-                filter_node (node, allowed, writer);
-
-        g_list_free (allowed);
-        g_strfreev (tokens);
+/**
+ * gupnp_didl_lite_writer_filter_tags:
+ * @writer: A #GUPnPDIDLLiteWriter
+ * @filter: A filter string
+ *
+ * Clears the DIDL-Lite XML document of the properties not specified in the
+ * @filter. The passed filter string would typically come from the 'Filter'
+ * argument of Browse or Search actions from a ContentDirectory control point.
+ * Please refer to Section 2.3.15 of UPnP AV ContentDirectory version 3
+ * specification for details on this string.
+ *
+ * In contrast to gupnp_didl_lite_writer_filter(), this function only removes
+ * unwanted tags but leaves all attributes in-place.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_writer_filter_tags (GUPnPDIDLLiteWriter *writer,
+                                    const char          *filter)
+{
+        apply_filter (writer, filter, TRUE);
 }

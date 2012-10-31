@@ -32,6 +32,10 @@ gupnp_didl_lite_writer_add_container_child_item
                                         (GUPnPDIDLLiteWriter    *writer,
                                          GUPnPDIDLLiteContainer *container);
 
+G_GNUC_INTERNAL void
+gupnp_didl_lite_writer_filter_tags      (GUPnPDIDLLiteWriter   *writer,
+                                         const char            *filter);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_WRITER_PRIVATE_H__ */
