@@ -36,4 +36,4 @@
 #include "gupnp-feature.h"
 #include "gupnp-feature-list-parser.h"
 #include "gupnp-dlna.h"
-
+#include "gupnp-media-collection.h"

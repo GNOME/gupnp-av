@@ -56,11 +56,6 @@ typedef struct _GUPnPMediaCollectionPrivate GUPnPMediaCollectionPrivate;
 typedef struct _GUPnPMediaCollection GUPnPMediaCollection;
 typedef struct _GUPnPMediaCollectionClass GUPnPMediaCollectionClass;
 
-enum _GUPnPMediaCollectionType {
-        DIDL_S
-};
-typedef enum _GUPnPMediaCollectionType GUPnPMediaCollectionType;
-
 struct _GUPnPMediaCollection {
         GObject parent;
 
@@ -78,7 +73,7 @@ struct _GUPnPMediaCollectionClass {
 };
 
 GUPnPMediaCollection *
-gupnp_media_collection_new (GUPnPMediaCollectionType type);
+gupnp_media_collection_new ();
 
 void
 gupnp_media_collection_set_title  (GUPnPMediaCollection *collection,

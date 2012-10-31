@@ -218,6 +218,12 @@ gupnp_media_collection_class_init (GUPnPMediaCollectionClass *klass)
                                       G_PARAM_STATIC_STRINGS));
 }
 
+GUPnPMediaCollection *
+gupnp_media_collection_new ()
+{
+        return g_object_new (GUPNP_TYPE_MEDIA_COLLECTION, NULL);
+}
+
 void
 gupnp_media_collection_set_title  (GUPnPMediaCollection *collection,
                                    const char           *title)
