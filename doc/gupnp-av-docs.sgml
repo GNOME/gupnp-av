@@ -61,6 +61,7 @@
     <xi:include href="xml/gupnp-protocol-info.xml"/>
     <xi:include href="xml/gupnp-feature.xml"/>
     <xi:include href="xml/gupnp-feature-list-parser.xml"/>
+    <xi:include href="xml/gupnp-media-collection.xml"/>
 
   </chapter>
 
