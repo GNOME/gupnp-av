@@ -20,6 +20,7 @@
  */
 
 #include <libgupnp-av/gupnp-didl-lite-parser.h>
+#include <libgupnp-av/gupnp-didl-lite-writer.h>
 
 #define TEST_DIDL_BGO674319 \
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" \
@@ -68,12 +69,34 @@ test_bgo674319 (void)
         g_assert (artists == NULL);
 }
 
+static void
+test_bgo687462 (void)
+{
+        GUPnPDIDLLiteWriter *writer;
+        GUPnPDIDLLiteObject *object;
+
+        writer = gupnp_didl_lite_writer_new (NULL);
+        object = (GUPnPDIDLLiteObject *)
+                                gupnp_didl_lite_writer_add_item (writer);
+        gupnp_didl_lite_object_set_album (object, "Test");
+        g_assert_cmpstr (gupnp_didl_lite_object_get_album (object), ==, "Test");
+
+        gupnp_didl_lite_object_set_album_art (object, "AlbumArt");
+        g_assert_cmpstr (gupnp_didl_lite_object_get_album_art (object), ==, "AlbumArt");
+
+        gupnp_didl_lite_writer_filter (writer, "upnp:album");
+
+        g_assert_cmpstr (gupnp_didl_lite_object_get_album (object), ==, "Test");
+        g_assert (gupnp_didl_lite_object_get_album_art (object) == NULL);
+}
+
 int main (int argc, char *argv[])
 {
         g_type_init ();
         g_test_init (&argc, &argv, NULL);
 
         g_test_add_func ("/bugs/gnome/674319", test_bgo674319);
+        g_test_add_func ("/bugs/gnome/687462", test_bgo687462);
 
         g_test_run ();
 

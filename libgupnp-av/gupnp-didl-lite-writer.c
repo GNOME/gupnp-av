@@ -107,7 +107,7 @@ static int
 compare_node_name (const char *a, const char *b)
 {
         const char *p;
-        int len;
+        int len, result;
 
         if (a[0] == '@')
                 /* Filter is for top-level property */
@@ -120,7 +120,15 @@ compare_node_name (const char *a, const char *b)
         else
                 len = strlen (a);
 
-        return strncmp (a, b, len);
+        result = strncmp (a, b, len);
+
+        if (result == 0) {
+            /* Avoid that we return a match although only prefixes match like
+             * in upnp:album and upnp:albumArtUri, cf. bgo#687462 */
+            return strlen (b) - len;
+        }
+
+        return result;
 }
 
 static gboolean
