@@ -110,7 +110,7 @@ compare_node_name (const char *a, const char *b)
         int len;
 
         if (a[0] == '@')
-                /* Filer is for top-level property */
+                /* Filter is for top-level property */
                 return -1;
 
         p = strstr (a, "@");
