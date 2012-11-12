@@ -75,6 +75,16 @@ verify_didl_attributes (xmlNode *node)
         return xml_util_verify_attribute_is_boolean (node, "restricted");
 }
 
+static gboolean
+parse_elements (GUPnPDIDLLiteParser *parser,
+                xmlNode             *node,
+                GUPnPXMLDoc         *xml_doc,
+                xmlNs               *upnp_ns,
+                xmlNs               *dc_ns,
+                xmlNs               *dlna_ns,
+                gboolean             recursive,
+                GError             **error);
+
 static void
 gupnp_didl_lite_parser_init (GUPnPDIDLLiteParser *parser)
 {
@@ -190,6 +200,28 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                                    const char          *didl,
                                    GError             **error)
 {
+
+    gupnp_didl_lite_parser_parse_didl_recursive (parser, didl, FALSE, error);
+}
+
+/**
+ * gupnp_didl_lite_parser_parse_didl_recursive:
+ * @parser: A #GUPnPDIDLLiteParser
+ * @didl: The DIDL-Lite XML string to be parsed
+ * @error: The location where to store any error, or NULL
+ *
+ * Parses DIDL-Lite XML string @didl, emitting the ::object-available,
+ * ::item-available and ::container-available signals appropriately during the
+ * process.
+ *
+ * Return value: TRUE on success.
+ **/
+gboolean
+gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
+                                             const char          *didl,
+                                             gboolean             recursive,
+                                             GError             **error)
+{
         xmlDoc       *doc;
         xmlNode      *element;
         xmlNode      *node;
@@ -200,7 +232,7 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
         GUPnPXMLDoc  *xml_doc;
 
         doc = xmlRecoverMemory (didl, strlen (didl));
-	if (doc == NULL) {
+        if (doc == NULL) {
                 g_set_error (error,
                              GUPNP_XML_ERROR,
                              GUPNP_XML_ERROR_PARSE,
@@ -284,7 +316,29 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
 
         xml_doc = gupnp_xml_doc_new (doc);
 
-        for (element = element->children; element; element = element->next) {
+        return parse_elements (parser,
+                               element,
+                               xml_doc,
+                               upnp_ns,
+                               dc_ns,
+                               dlna_ns,
+                               recursive,
+                               error);
+}
+
+static gboolean
+parse_elements (GUPnPDIDLLiteParser *parser,
+                xmlNode             *node,
+                GUPnPXMLDoc         *xml_doc,
+                xmlNs               *upnp_ns,
+                xmlNs               *dc_ns,
+                xmlNs               *dlna_ns,
+                gboolean             recursive,
+                GError             **error)
+{
+        xmlNode      *element;
+
+        for (element = node->children; element; element = element->next) {
                 GUPnPDIDLLiteObject *object;
 
                 object = gupnp_didl_lite_object_new_from_xml (element, xml_doc,
@@ -294,12 +348,21 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                 if (object == NULL)
                         continue;
 
-                if (GUPNP_IS_DIDL_LITE_CONTAINER (object))
+                if (GUPNP_IS_DIDL_LITE_CONTAINER (object)) {
                         g_signal_emit (parser,
-                                        signals[CONTAINER_AVAILABLE],
-                                        0,
-                                        object);
-                else if (GUPNP_IS_DIDL_LITE_ITEM (object)) {
+                                       signals[CONTAINER_AVAILABLE],
+                                       0,
+                                       object);
+                        if (recursive)
+                                parse_elements (parser,
+                                                element,
+                                                xml_doc,
+                                                upnp_ns,
+                                                dc_ns,
+                                                dlna_ns,
+                                                recursive,
+                                                error);
+                } else if (GUPNP_IS_DIDL_LITE_ITEM (object)) {
                         node = gupnp_didl_lite_object_get_xml_node(object);
                         if (!verify_didl_attributes(node)) {
                             g_object_unref (object);
@@ -307,8 +370,7 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                             g_set_error (error,
                                          GUPNP_XML_ERROR,
                                          GUPNP_XML_ERROR_INVALID_ATTRIBUTE,
-                                         "Could not parse DIDL-Lite XML:\n%s",
-                                         didl);
+                                         "Could not parse DIDL-Lite XML");
 
                             return FALSE;
                         }

@@ -75,25 +75,34 @@ struct _GUPnPMediaCollectionClass {
 GUPnPMediaCollection *
 gupnp_media_collection_new ();
 
-void
-gupnp_media_collection_set_title  (GUPnPMediaCollection *collection,
-                                   const char           *title);
-
-const char *
-gupnp_media_collection_get_title  (GUPnPMediaCollection *collection);
+GUPnPMediaCollection *
+gupnp_media_collection_new_from_string (const char *data);
 
 void
-gupnp_media_collection_set_author (GUPnPMediaCollection *collection,
-                                   const char           *author);
+gupnp_media_collection_set_title       (GUPnPMediaCollection *collection,
+                                        const char           *title);
 
 const char *
-gupnp_media_collection_get_author (GUPnPMediaCollection *collection);
+gupnp_media_collection_get_title       (GUPnPMediaCollection *collection);
+
+void
+gupnp_media_collection_set_author      (GUPnPMediaCollection *collection,
+                                        const char           *author);
+
+const char *
+gupnp_media_collection_get_author      (GUPnPMediaCollection *collection);
 
 GUPnPDIDLLiteItem *
-gupnp_media_collection_add_item   (GUPnPMediaCollection *collection);
+gupnp_media_collection_add_item        (GUPnPMediaCollection *collection);
 
 char *
-gupnp_media_collection_get_string (GUPnPMediaCollection *collection);
+gupnp_media_collection_get_string      (GUPnPMediaCollection *collection);
+
+GList *
+gupnp_media_collection_get_items       (GUPnPMediaCollection *collection);
+
+gboolean
+gupnp_media_collection_get_mutable     (GUPnPMediaCollection *collection);
 
 G_END_DECLS
 

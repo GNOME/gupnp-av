@@ -29,6 +29,8 @@
 #include "gupnp-media-collection.h"
 #include "gupnp-didl-lite-writer.h"
 #include "gupnp-didl-lite-writer-private.h"
+#include "gupnp-didl-lite-parser.h"
+#include "gupnp-didl-lite-parser-private.h"
 
 // DIDL_S allowed tags as per DLNA Guidelines 11.1
 #define DIDL_S_FILTER "dc:title,dc:creator,upnp:class,upnp:album,res,item," \
@@ -42,12 +44,16 @@ struct _GUPnPMediaCollectionPrivate {
         GUPnPDIDLLiteWriter *writer;
         GUPnPDIDLLiteObject *container;
         GList               *items;
+        gboolean             mutable;
+        char                *data;
 };
 
 enum {
         PROP_0,
         PROP_AUTHOR,
         PROP_TITLE,
+        PROP_MUTABLE,
+        PROP_DATA,
 };
 
 static void
@@ -73,6 +79,54 @@ reparent_children (GUPnPMediaCollection *collection)
         }
 }
 
+static void
+on_container_available (GUPnPMediaCollection   *self,
+                        GUPnPDIDLLiteContainer *container,
+                        gpointer                user_data)
+{
+        /* According to media format spec, there's only one container allowed;
+         * We allow any number of containers, but only the last one wins. */
+        if (self->priv->container != NULL)
+                g_object_unref (self->priv->container);
+
+        self->priv->container = g_object_ref (container);
+}
+
+static void
+on_item_available (GUPnPMediaCollection   *self,
+                   GUPnPDIDLLiteItem      *item,
+                   gpointer                user_data)
+{
+        self->priv->items = g_list_prepend (self->priv->items,
+                                            g_object_ref (item));
+}
+
+static void
+parse_data (GUPnPMediaCollection *collection, const char *data)
+{
+        GUPnPDIDLLiteParser *parser;
+        GError *error = NULL;
+        gboolean result;
+
+        parser = gupnp_didl_lite_parser_new ();
+        g_signal_connect_swapped (G_OBJECT (parser),
+                                  "container-available",
+                                  G_CALLBACK (on_container_available),
+                                  collection);
+        g_signal_connect_swapped (G_OBJECT (parser),
+                                  "item-available",
+                                  G_CALLBACK (on_item_available),
+                                  collection);
+
+        result = gupnp_didl_lite_parser_parse_didl_recursive (parser,
+                                                              data,
+                                                              TRUE,
+                                                              &error);
+        if (!result) {
+                g_warning ("Failed to parse DIDL-Lite: %s", error->message);
+                g_error_free (error);
+        }
+}
 
 static void
 gupnp_media_collection_init (GUPnPMediaCollection *collection)
@@ -81,6 +135,9 @@ gupnp_media_collection_init (GUPnPMediaCollection *collection)
                                         (collection,
                                          GUPNP_TYPE_MEDIA_COLLECTION,
                                          GUPnPMediaCollectionPrivate);
+        /* Initialize as mutable and decide later on in constructed() if we
+         * really are. */
+        collection->priv->mutable = TRUE;
 }
 
 static void
@@ -101,6 +158,9 @@ gupnp_media_collection_set_property (GObject      *object,
         case PROP_TITLE:
                 gupnp_media_collection_set_title (collection,
                                                   g_value_get_string (value));
+                break;
+        case PROP_DATA:
+                collection->priv->data = g_value_dup_string (value);
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -127,6 +187,10 @@ gupnp_media_collection_get_property (GObject    *object,
                 g_value_set_string
                         (value, gupnp_media_collection_get_title (collection));
                 break;
+        case PROP_MUTABLE:
+                g_value_set_boolean
+                        (value, gupnp_media_collection_get_mutable (collection));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -140,9 +204,29 @@ gupnp_media_collection_constructed (GObject *object)
         GObjectClass         *object_class;
 
         collection = GUPNP_MEDIA_COLLECTION (object);
-        if (collection->priv->writer == NULL)
-                collection->priv->writer = gupnp_didl_lite_writer_new (NULL);
 
+        /* Check if we have some data. If there's data, we assume that the
+         * user meant to parse a playlist. We ignore title and author then. */
+        if (collection->priv->data != NULL) {
+                if (collection->priv->container != NULL) {
+                        g_object_unref (collection->priv->container);
+                        collection->priv->container = NULL;
+                }
+
+                if (collection->priv->writer != NULL) {
+                        g_object_unref (collection->priv->writer);
+                        collection->priv->writer = NULL;
+                }
+
+                parse_data (collection, collection->priv->data);
+                collection->priv->mutable = FALSE;
+        } else if (collection->priv->writer == NULL) {
+                collection->priv->writer =
+                                        gupnp_didl_lite_writer_new (NULL);
+                collection->priv->mutable = TRUE;
+        }
+
+        /* Chain up */
         object_class = G_OBJECT_CLASS (gupnp_media_collection_parent_class);
         if (object_class->constructed != NULL)
                 object_class->constructed (object);
@@ -170,6 +254,9 @@ gupnp_media_collection_dispose (GObject *object)
                 g_object_unref (collection->priv->container);
                 collection->priv->container = NULL;
         }
+
+        g_free (collection->priv->data);
+        collection->priv->data = NULL;
 
         object_class = G_OBJECT_CLASS (gupnp_media_collection_parent_class);
         object_class->dispose (object);
@@ -220,6 +307,39 @@ gupnp_media_collection_class_init (GUPnPMediaCollectionClass *klass)
                                       G_PARAM_READWRITE |
                                       G_PARAM_CONSTRUCT |
                                       G_PARAM_STATIC_STRINGS));
+
+        /**
+         * GUPnPMediaCollection:mutable:
+         *
+         * Whether this media collation is modifyable or not.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_MUTABLE,
+                 g_param_spec_boolean ("mutable",
+                                       "Mutable",
+                                       "The mutability of this collection",
+                                       FALSE,
+                                       G_PARAM_READABLE |
+                                       G_PARAM_STATIC_STRINGS));
+
+        /**
+         * GUPnPMediaCollection:data:
+         *
+         * Block of data to parse a collection from. If data is set upon
+         * construction it will override the other properties and create a
+         * unmutable collection parsed from data.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_DATA,
+                 g_param_spec_string ("data",
+                                      "Data",
+                                      "Data to construct the playlist from",
+                                      NULL,
+                                      G_PARAM_WRITABLE |
+                                      G_PARAM_CONSTRUCT_ONLY |
+                                      G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -236,6 +356,22 @@ gupnp_media_collection_new ()
 }
 
 /**
+ * gupnp_media_collection_new_from_string:
+ * @data: XML string.
+ *
+ * Parse a new #GUPnPMediaCollection from a block of XML data.
+ *
+ * Returns: (transfer full): A new #GUPnPMediaCollection.
+ **/
+GUPnPMediaCollection *
+gupnp_media_collection_new_from_string (const char *data)
+{
+        return g_object_new (GUPNP_TYPE_MEDIA_COLLECTION,
+                             "data", data,
+                             NULL);
+}
+
+/**
  * gupnp_media_collection_set_title:
  * @collection: #GUPnPMediaCollection
  * @title: New Title of this collection;
@@ -249,6 +385,7 @@ gupnp_media_collection_set_title  (GUPnPMediaCollection *collection,
         GUPnPDIDLLiteContainer *container;
 
         g_return_if_fail (GUPNP_IS_MEDIA_COLLECTION (collection));
+        g_return_if_fail (collection->priv->mutable);
 
         if (title == NULL)
                 return;
@@ -304,6 +441,7 @@ gupnp_media_collection_set_author (GUPnPMediaCollection *collection,
         GUPnPDIDLLiteContainer *container;
 
         g_return_if_fail (GUPNP_IS_MEDIA_COLLECTION (collection));
+        g_return_if_fail (collection->priv->mutable);
 
         if (author == NULL)
                 return;
@@ -350,26 +488,29 @@ gupnp_media_collection_get_author (GUPnPMediaCollection *collection)
  * @collection: #GUPnPMediaCollection
  *
  * Return value: (transfer full): A new #GUPnPDIDLLiteItem object. Unref after
- * usage.
+ * use.
  **/
 GUPnPDIDLLiteItem *
 gupnp_media_collection_add_item (GUPnPMediaCollection *collection)
 {
         g_return_val_if_fail (collection != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_MEDIA_COLLECTION (collection), NULL);
+        g_return_val_if_fail (collection->priv->mutable, NULL);
+
         GUPnPDIDLLiteItem *item = NULL;
 
         if (collection->priv->container != NULL)
                 item = gupnp_didl_lite_writer_add_container_child_item
                                         (collection->priv->writer,
-                                         GUPNP_DIDL_LITE_CONTAINER (collection->priv->container));
+                                         GUPNP_DIDL_LITE_CONTAINER
+                                                (collection->priv->container));
         else
                 item = gupnp_didl_lite_writer_add_item
                                         (collection->priv->writer);
 
         /* Keep a reference of the object in case we need to do reparenting */
-        collection->priv->items = g_list_append (collection->priv->items,
-                                                 g_object_ref (item));
+        collection->priv->items = g_list_prepend (collection->priv->items,
+                                                  g_object_ref (item));
 
         return item;
 }
@@ -379,7 +520,8 @@ gupnp_media_collection_add_item (GUPnPMediaCollection *collection)
  * @collection: #GUPnPMediaCollection
  *
  * Return value: (transfer full): XML string representing this media
- * collection. g_free() after use.
+ * collection. g_free() after use. If the colleciton is not mutable, returns a
+ * copy of the original string.
  **/
 char *
 gupnp_media_collection_get_string (GUPnPMediaCollection *collection)
@@ -387,7 +529,49 @@ gupnp_media_collection_get_string (GUPnPMediaCollection *collection)
         g_return_val_if_fail (collection != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_MEDIA_COLLECTION (collection), NULL);
 
+        if (collection->priv->data)
+                return g_strdup (collection->priv->data);
+
         gupnp_didl_lite_writer_filter_tags (collection->priv->writer,
                                             DIDL_S_FILTER);
+
         return gupnp_didl_lite_writer_get_string (collection->priv->writer);
+}
+
+/**
+ * gupnp_media_collection_get_items:
+ * @collection: #GUPnPMediaCollection
+ *
+ * Return value: (transfer full)(element-type GUPnPDIDLLiteItem): A #GList
+ * containing the elemens of this collection, in proper order. Unref all items
+ * and free the list after use.
+ **/
+GList *
+gupnp_media_collection_get_items (GUPnPMediaCollection *collection)
+{
+        g_return_val_if_fail (collection != NULL, NULL);
+        g_return_val_if_fail (GUPNP_IS_MEDIA_COLLECTION (collection), NULL);
+
+        GList *tmp = NULL, *iter;
+
+        for (iter = collection->priv->items; iter != NULL; iter = iter->next) {
+                tmp = g_list_prepend (tmp, g_object_ref (iter->data));
+        }
+
+        return tmp;
+}
+
+/**
+ * gupnp_media_collection_get_mutable:
+ * @collection: #GUPnPMediaCollection
+ *
+ * Return value: #TRUE if the collections is modifiable, #FALSE otherwise.
+ **/
+gboolean
+gupnp_media_collection_get_mutable (GUPnPMediaCollection *collection)
+{
+        g_return_val_if_fail (collection != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_MEDIA_COLLECTION (collection), FALSE);
+
+        return collection->priv->mutable;
 }

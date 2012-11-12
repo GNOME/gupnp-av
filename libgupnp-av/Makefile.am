@@ -55,6 +55,7 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-createclass.c \
 			     gupnp-didl-lite-createclass-private.h \
 			     gupnp-didl-lite-parser.c \
+			     gupnp-didl-lite-parser-private.h \
 			     gupnp-didl-lite-resource.c \
 			     gupnp-didl-lite-resource-private.h \
 			     gupnp-didl-lite-descriptor.c \
