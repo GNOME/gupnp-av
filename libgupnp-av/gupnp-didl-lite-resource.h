@@ -95,7 +95,7 @@ gupnp_didl_lite_resource_set_protocol_info
 
 void
 gupnp_didl_lite_resource_set_size       (GUPnPDIDLLiteResource *resource,
-                                         long                   size);
+                                         glong                  size);
 
 void
 gupnp_didl_lite_resource_set_size64     (GUPnPDIDLLiteResource *resource,
@@ -103,7 +103,7 @@ gupnp_didl_lite_resource_set_size64     (GUPnPDIDLLiteResource *resource,
 
 void
 gupnp_didl_lite_resource_set_duration   (GUPnPDIDLLiteResource *resource,
-                                         long                   duration);
+                                         glong                  duration);
 
 void
 gupnp_didl_lite_resource_set_bitrate    (GUPnPDIDLLiteResource *resource,

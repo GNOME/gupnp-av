@@ -822,10 +822,10 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
  *
  * Return value: The size (in bytes) of the @resource or -1.
  **/
-long
+glong
 gupnp_didl_lite_resource_get_size (GUPnPDIDLLiteResource *resource)
 {
-    return (long) gupnp_didl_lite_resource_get_size64 (resource);
+    return (glong) gupnp_didl_lite_resource_get_size64 (resource);
 }
 
 /**
@@ -855,7 +855,7 @@ gupnp_didl_lite_resource_get_size64 (GUPnPDIDLLiteResource *resource)
  *
  * Return value: The duration (in seconds) of the @resource or -1.
  **/
-long
+glong
 gupnp_didl_lite_resource_get_duration (GUPnPDIDLLiteResource *resource)
 {
         const char *duration_str;
@@ -1159,7 +1159,7 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
  **/
 void
 gupnp_didl_lite_resource_set_size (GUPnPDIDLLiteResource *resource,
-                                   long                   size)
+                                   glong                  size)
 {
         gupnp_didl_lite_resource_set_size64 (resource, size);
 }
@@ -1210,7 +1210,7 @@ gupnp_didl_lite_resource_set_size64 (GUPnPDIDLLiteResource *resource,
  **/
 void
 gupnp_didl_lite_resource_set_duration (GUPnPDIDLLiteResource *resource,
-                                       long                   duration)
+                                       glong                  duration)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 

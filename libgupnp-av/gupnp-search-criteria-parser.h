@@ -93,6 +93,11 @@ gupnp_search_criteria_op_get_type (void) G_GNUC_CONST;
 GQuark
 gupnp_search_criteria_parser_error_quark (void);
 
+/**
+ * GUPnPSearchCriteriaParserError:
+ * @GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED: Parsing the search criteria
+ * failed.
+ **/
 typedef enum {
         GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED
 } GUPnPSearchCriteriaParserError;
