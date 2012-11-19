@@ -1,3 +1,20 @@
+0.11.3
+======
+
+Changes since 0.11.2:
+- Fix documentation generation for recently added functionality.
+- Tweak XSD files to make the validation shut up completely.
+- Fix an issue in the DIDL-Lite filtering.
+- Add new class GUPnPMediaCollection for parsing and creation of DIDL_S
+  playlists.
+
+All contributors to this release:
+
+Jens Georg <jensg@openismus.com>
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=687462
+
 0.11.2
 ======
 
