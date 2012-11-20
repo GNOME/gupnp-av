@@ -73,7 +73,7 @@ struct _GUPnPMediaCollectionClass {
 };
 
 GUPnPMediaCollection *
-gupnp_media_collection_new ();
+gupnp_media_collection_new (void);
 
 GUPnPMediaCollection *
 gupnp_media_collection_new_from_string (const char *data);

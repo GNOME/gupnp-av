@@ -350,7 +350,7 @@ gupnp_media_collection_class_init (GUPnPMediaCollectionClass *klass)
  * Returns: (transfer full): A new #GUPnPMediaCollection.
  **/
 GUPnPMediaCollection *
-gupnp_media_collection_new ()
+gupnp_media_collection_new (void)
 {
         return g_object_new (GUPNP_TYPE_MEDIA_COLLECTION, NULL);
 }
