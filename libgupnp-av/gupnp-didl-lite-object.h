@@ -301,6 +301,9 @@ gupnp_didl_lite_object_apply_fragments
                                        gchar               **new_fragments,
                                        gint                  new_size);
 
+char *
+gupnp_didl_lite_object_get_xml_string   (GUPnPDIDLLiteObject *object);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_OBJECT_H__ */

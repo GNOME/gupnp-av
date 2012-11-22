@@ -2428,3 +2428,30 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
                 xmlFreeDoc (modified.doc);
         return result;
 }
+
+/**
+ * gupnp_didl_lite_object_get_xml_string:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Get the representation of this object as an XML string.
+ * Returns: (transfer full): XML representation of this object as string.
+ **/
+char *
+gupnp_didl_lite_object_get_xml_string (GUPnPDIDLLiteObject *object)
+{
+        xmlBuffer *buffer = NULL;
+        char *ret = NULL;
+
+        buffer = xmlBufferCreate ();
+        xmlNodeDump (buffer,
+                     object->priv->xml_doc->doc,
+                     object->priv->xml_node,
+                     0,
+                     0);
+
+        ret = g_strndup (BAD_CAST (xmlBufferContent (buffer)),
+                         xmlBufferLength (buffer));
+        xmlBufferFree (buffer);
+
+        return ret;
+}
