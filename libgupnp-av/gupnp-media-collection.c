@@ -123,8 +123,18 @@ parse_data (GUPnPMediaCollection *collection, const char *data)
                                                               TRUE,
                                                               &error);
         if (!result) {
+                GUPnPMediaCollectionPrivate *priv = collection->priv;
+
                 g_warning ("Failed to parse DIDL-Lite: %s", error->message);
                 g_error_free (error);
+                if (priv->container) {
+                        g_object_unref (priv->container);
+                        priv->container = NULL;
+                }
+                if (priv->items) {
+                        g_list_free_full (priv->items, g_object_unref);
+                        priv->items = NULL;
+                }
         }
 }
 
