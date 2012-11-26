@@ -32,6 +32,7 @@
 #include "gupnp-av.h"
 #include "gupnp-didl-lite-object-private.h"
 #include "xml-util.h"
+#include "gupnp-didl-lite-parser-private.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteParser,
                gupnp_didl_lite_parser,
@@ -200,8 +201,10 @@ gupnp_didl_lite_parser_parse_didl (GUPnPDIDLLiteParser *parser,
                                    const char          *didl,
                                    GError             **error)
 {
-
-    gupnp_didl_lite_parser_parse_didl_recursive (parser, didl, FALSE, error);
+        return gupnp_didl_lite_parser_parse_didl_recursive (parser,
+                                                            didl,
+                                                            FALSE,
+                                                            error);
 }
 
 /**
