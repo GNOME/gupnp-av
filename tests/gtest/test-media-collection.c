@@ -162,6 +162,7 @@
     "</container>" \
 "</DIDL-Lite>"
 
+#define TEST_PARSE_NO_XML "This is just some random text"
 
 void
 test_didl_collection_construction ()
@@ -269,6 +270,37 @@ test_didl_collection_parse_full ()
         g_assert_cmpstr (gupnp_didl_lite_object_get_title (GUPNP_DIDL_LITE_OBJECT (it->data)), ==,
                          "Song3");
         g_list_free_full (items, (GDestroyNotify) g_object_unref);
+}
+
+#define ERROR_MESSAGE "Failed to parse DIDL-Lite: No 'DIDL-Lite' node in the DIDL-Lite XML:"
+
+static gboolean
+ignore_xml_parse_error (const gchar *log_domain,
+                        GLogLevelFlags log_level,
+                        const gchar *message,
+                        gpointer user_data)
+{
+        if (strncmp (message,
+                     ERROR_MESSAGE,
+                     g_utf8_strlen (ERROR_MESSAGE, -1) - 1) == 0) {
+                return FALSE;
+        }
+
+        return TRUE;
+}
+
+void
+test_didl_collection_parse_invalid ()
+{
+        GUPnPMediaCollection *collection;
+        GList *items;
+
+        g_test_log_set_fatal_handler (ignore_xml_parse_error, NULL);
+        collection = gupnp_media_collection_new_from_string (TEST_PARSE_NO_XML);
+        items = gupnp_media_collection_get_items (collection);
+
+        g_assert (items == NULL);
+        g_object_unref (collection);
 }
 
 void
@@ -445,6 +477,8 @@ int main (int argc, char *argv[])
                          test_didl_collection_parse_flat);
         g_test_add_func ("/didl/collection/parse_full",
                          test_didl_collection_parse_full);
+        g_test_add_func ("/didl/collection/parse_invalid",
+                         test_didl_collection_parse_invalid);
 
         g_test_add_func ("/didl/collection/create_flat",
                          test_didl_collection_create_flat);
