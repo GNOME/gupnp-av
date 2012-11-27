@@ -76,7 +76,6 @@ read_state_variable (const char *variable_name,
         const char *val_str;
 
         variable_node = xml_util_get_element (instance_node,
-                                              "InstanceID",
                                               variable_name,
                                               NULL);
         if (!variable_node)
@@ -102,13 +101,17 @@ get_instance_node (xmlDoc *doc,
 {
         xmlNode *node;
 
-        for (node = doc->children;
+        if (doc->children == NULL)
+                return NULL;
+
+        for (node = doc->children->children;
              node;
              node = node->next) {
-                guint id;
+                if (node->type != XML_ELEMENT_NODE)
+                        continue;
 
-                id = xml_util_get_uint_attribute (node, "val", 0);
-                if (id == instance_id)
+                if (!xmlStrcmp (node->name, BAD_CAST ("InstanceID")) &&
+                    xml_util_get_uint_attribute (node, "val", 0) == instance_id)
                         break;
         }
 
