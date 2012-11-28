@@ -435,7 +435,6 @@ gupnp_feature_list_parser_get_type
 <SECTION>
 <FILE>gupnp-media-collection</FILE>
 <TITLE>GUPnPMediaCollection</TITLE>
-GUPnPMediaCollectionType
 GUPnPMediaCollection
 gupnp_media_collection_new
 gupnp_media_collection_new_from_string
@@ -458,6 +457,36 @@ GUPNP_TYPE_MEDIA_COLLECTION
 GUPnPMediaCollectionPrivate
 gupnp_media_collection_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gupnp-cds-last-change-parser</FILE>
+<TITLE>GUPnPCDSLastChangeParser</TITLE>
+GUPnPCDSLastChangeParser
+GUPnPCDSLastChangeEvent
+GUPnPCDSLastChangeEntry
+gupnp_cds_last_change_parser_new
+gupnp_cds_last_change_parser_parse
+gupnp_cds_last_change_entry_ref
+gupnp_cds_last_change_entry_unref
+gupnp_cds_last_change_entry_get_event
+gupnp_cds_last_change_entry_get_object_id
+gupnp_cds_last_change_entry_get_parent_id
+gupnp_cds_last_change_entry_get_class
+gupnp_cds_last_change_entry_is_subtree_update
+gupnp_cds_last_change_entry_get_update_id
+<SUBSECTION Standard>
+GUPnPCDSLastChangeParserClass
+GUPNP_CDS_LAST_CHANGE_PARSER
+GUPNP_CDS_LAST_CHANGE_PARSER_CLASS
+GUPNP_CDS_LAST_CHANGE_PARSER_GET_CLASS
+GUPNP_IS_CDS_LAST_CHANGE_PARSER
+GUPNP_IS_CDS_LAST_CHANGE_PARSER_CLASS
+GUPNP_TYPE_CDS_LAST_CHANGE_PARSER
+GUPnPCDSLastChangeParserPrivate
+gupnp_cds_last_change_entry_get_type
+gupnp_cds_last_change_parser_get_type
+</SECTION>
+
 
 <SECTION>
 <FILE>gupnp-av-error</FILE>
