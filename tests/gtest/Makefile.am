@@ -1,5 +1,6 @@
 TESTS_ENVIRONMENT = G_SLICE=debug-blocks \
-					LD_LIBRARY_PATH=$(top_builddir)/libgupnp-av/.libs:$(LD_LIBRARY_PATH)
+		    LD_LIBRARY_PATH=$(top_builddir)/libgupnp-av/.libs:$(LD_LIBRARY_PATH) \
+		    GUPNP_AV_DATADIR=$(top_srcdir)/data
 
 TESTS=$(check_PROGRAMS)
 
