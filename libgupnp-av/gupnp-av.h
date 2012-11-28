@@ -33,6 +33,7 @@
 #include "gupnp-protocol-info.h"
 #include "gupnp-search-criteria-parser.h"
 #include "gupnp-last-change-parser.h"
+#include "gupnp-cds-last-change-parser.h"
 #include "gupnp-feature.h"
 #include "gupnp-feature-list-parser.h"
 #include "gupnp-dlna.h"

@@ -15,3 +15,5 @@ gupnp_search_criteria_op_get_type
 gupnp_feature_get_type
 gupnp_feature_list_parser_get_type
 gupnp_media_collection_get_type
+gupnp_cds_last_change_parser_get_type
+gupnp_cds_last_change_entry_get_type
