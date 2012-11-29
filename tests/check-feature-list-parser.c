@@ -83,7 +83,9 @@ main (int argc, char **argv)
         GList                  *item;
         gboolean               success = TRUE;
 
+#if !GLIB_CHECK_VERSION (2, 35, 0)
         g_type_init ();
+#endif
 
         parser = gupnp_feature_list_parser_new ();
 

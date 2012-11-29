@@ -36,7 +36,9 @@ main (int argc, char **argv)
         GError *error;
         int i;
 
+#if !GLIB_CHECK_VERSION (2, 35, 0)
         g_type_init ();
+#endif
 
         parser = gupnp_search_criteria_parser_new ();
 

@@ -131,7 +131,9 @@ int main (void)
         GList* artists;
         GUPnPDIDLLiteContributor *artist;
 
+#if !GLIB_CHECK_VERSION (2, 35, 0)
         g_type_init ();
+#endif
         g_setenv ("GUPNP_AV_DATADIR", ABS_TOP_SRCDIR G_DIR_SEPARATOR_S "data", FALSE);
 
         writer = gupnp_didl_lite_writer_new (NULL);
