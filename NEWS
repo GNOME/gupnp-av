@@ -1,3 +1,28 @@
+0.11.4
+======
+
+Changes since 0.11.3:
+- Fix DIDL_S parsing issues in GUPnPMediaCollection.
+- Fix reference count issues in GUPnPMediaCollection.
+- Add more tests for GUPnPMediaCollection.
+- Add test for LastChange parser.
+- Fix LD_LIBRARAY_PATH handling on make check.
+- Silence XSD validation errors on make check.
+- Silence makefile portability warnings.
+- Some gtk-doc fixes.
+- Add LastChange parser for LastChange in ContentDirectory:3 including tests.
+
+All contributors to this release:
+
+Jens Georg <jensg@openismus.com>
+Krzesimir Nowak <krnowak@openismus.com>
+Regis Merlino <regis.merlino@intel.com>
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=689094
+ - https://bugzilla.gnome.org/show_bug.cgi?id=689141
+ - https://bugzilla.gnome.org/show_bug.cgi?id=689276
+
 0.11.3
 ======
 
