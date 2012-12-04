@@ -105,7 +105,7 @@ gboolean
 gupnp_cds_last_change_entry_is_subtree_update (GUPnPCDSLastChangeEntry *entry);
 
 guint32
-gupnp_cds_last_change_parser_get_update_id    (GUPnPCDSLastChangeEntry *entry);
+gupnp_cds_last_change_entry_get_update_id    (GUPnPCDSLastChangeEntry *entry);
 
 G_END_DECLS
 
