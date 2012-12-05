@@ -1,3 +1,18 @@
+0.11.5
+======
+
+Changes since 0.11.4:
+- Fix API definition in gupnp-cds-last-change-parser.h
+- Set items in a media collection to "restricted" by default.
+
+All contributors to this release:
+
+Jens Georg <jensg@openismus.com>
+Ludovic Ferrandis <ludovic.ferrandis@intel.com>
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=689517
+
 0.11.4
 ======
 
