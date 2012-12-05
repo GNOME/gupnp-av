@@ -215,7 +215,7 @@ filter_node (xmlNode             *node,
         xmlNode *child;
         GList   *forbidden = NULL;
         GList   *l;
-        gboolean is_container;
+        gboolean is_container = FALSE;
         const char *container_class = NULL;
 
         if (!tags_only)
