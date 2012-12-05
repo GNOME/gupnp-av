@@ -522,6 +522,13 @@ gupnp_media_collection_add_item (GUPnPMediaCollection *collection)
         collection->priv->items = g_list_prepend (collection->priv->items,
                                                   g_object_ref (item));
 
+        /* Mandatory in DLNA for object. Not specified if mandatory for
+         * DIDL_S, but to avoid problems with clients reusing their normal
+         * DIDL-Lite parser, we set it here if the application doesn't.
+         */
+        gupnp_didl_lite_object_set_restricted (GUPNP_DIDL_LITE_OBJECT (item),
+                                               TRUE);
+
         return item;
 }
 

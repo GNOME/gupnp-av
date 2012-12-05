@@ -91,17 +91,17 @@
         "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
         "xmlns:dlna=\"urn:schemas-dlna-org:metadata-1-0/\" " \
         "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
-    "<item>" \
+    "<item restricted=\"1\">" \
       "<dc:title>Song1</dc:title>" \
       "<upnp:class>object.item.audioItem</upnp:class>" \
       "<res>http://example.com/song1.mp3</res>" \
     "</item>" \
-    "<item>" \
+    "<item restricted=\"1\">" \
       "<dc:title>Song2</dc:title>" \
       "<upnp:class>object.item.audioItem</upnp:class>" \
       "<res>http://example.com/song2.mp3</res>" \
     "</item>" \
-    "<item>" \
+    "<item restricted=\"1\">" \
       "<dc:title>Song3</dc:title>" \
       "<upnp:class>object.item.audioItem</upnp:class>" \
       "<res>http://example.com/song3.mp3</res>" \
@@ -117,17 +117,17 @@
     "<container>" \
       "<dc:title>TestCollection1</dc:title>" \
       "<dc:creator>TestCollection1Author</dc:creator>" \
-      "<item>" \
+      "<item restricted=\"1\">" \
         "<dc:title>Song1</dc:title>" \
         "<upnp:class>object.item.audioItem</upnp:class>" \
         "<res>http://example.com/song1.mp3</res>" \
       "</item>" \
-      "<item>" \
+      "<item restricted=\"1\">" \
         "<dc:title>Song2</dc:title>" \
         "<upnp:class>object.item.audioItem</upnp:class>" \
         "<res>http://example.com/song2.mp3</res>" \
       "</item>" \
-      "<item>" \
+      "<item restricted=\"1\">" \
         "<dc:title>Song3</dc:title>" \
         "<upnp:class>object.item.audioItem</upnp:class>" \
         "<res>http://example.com/song3.mp3</res>" \
@@ -142,17 +142,17 @@
         "xmlns:dlna=\"urn:schemas-dlna-org:metadata-1-0/\" " \
         "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
     "<container>" \
-      "<item>" \
+      "<item restricted=\"1\">" \
         "<dc:title>Song1</dc:title>" \
         "<upnp:class>object.item.audioItem</upnp:class>" \
         "<res>http://example.com/song1.mp3</res>" \
       "</item>" \
-      "<item>" \
+      "<item restricted=\"1\">" \
         "<dc:title>Song2</dc:title>" \
         "<upnp:class>object.item.audioItem</upnp:class>" \
         "<res>http://example.com/song2.mp3</res>" \
       "</item>" \
-      "<item>" \
+      "<item restricted=\"1\">" \
         "<dc:title>Song3</dc:title>" \
         "<upnp:class>object.item.audioItem</upnp:class>" \
         "<res>http://example.com/song3.mp3</res>" \
