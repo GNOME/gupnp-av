@@ -154,7 +154,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                         tmp = xml_util_get_attribute_content (it, "objClass");
                         entry->class = g_strdup (tmp);
 
-                        entry->update_id = xml_util_get_uint_child_element
+                        entry->update_id = (guint32) xml_util_get_uint_attribute
                                         (it,
                                          "updateID",
                                          0);
@@ -173,7 +173,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                         tmp = xml_util_get_attribute_content (it, "objID");
                         entry->object_id = g_strdup (tmp);
 
-                        entry->update_id = xml_util_get_uint_child_element
+                        entry->update_id = (guint32) xml_util_get_uint_attribute
                                         (it,
                                          "updateID",
                                          0);
@@ -192,7 +192,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                         tmp = xml_util_get_attribute_content (it, "objID");
                         entry->object_id = g_strdup (tmp);
 
-                        entry->update_id = xml_util_get_uint_child_element
+                        entry->update_id = (guint32) xml_util_get_uint_attribute
                                         (it,
                                          "updateID",
                                          0);
@@ -211,7 +211,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                         tmp = xml_util_get_attribute_content (it, "objID");
                         entry->object_id = g_strdup (tmp);
 
-                        entry->update_id = xml_util_get_uint_child_element
+                        entry->update_id = (guint32) xml_util_get_uint_attribute
                                         (it,
                                          "updateID",
                                          0);
