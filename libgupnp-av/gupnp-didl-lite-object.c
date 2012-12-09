@@ -2449,7 +2449,7 @@ gupnp_didl_lite_object_get_xml_string (GUPnPDIDLLiteObject *object)
                      0,
                      0);
 
-        ret = g_strndup (BAD_CAST (xmlBufferContent (buffer)),
+        ret = g_strndup ((char *) xmlBufferContent (buffer),
                          xmlBufferLength (buffer));
         xmlBufferFree (buffer);
 
