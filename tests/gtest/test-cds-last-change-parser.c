@@ -414,10 +414,16 @@ compare_entries (const char *file, GList *entries)
                         entry = &test_reference_data[i].data[j];
                         g_assert_cmpstr (entry->class, ==,
                                          gupnp_cds_last_change_entry_get_class (it->data));
+                        g_assert_cmpstr (entry->parent_id, ==,
+                                         gupnp_cds_last_change_entry_get_parent_id (it->data));
+                        g_assert_cmpuint (entry->update_id, ==,
+                                          gupnp_cds_last_change_entry_get_update_id (it->data));
                         g_assert_cmpstr (entry->object_id, ==,
                                          gupnp_cds_last_change_entry_get_object_id (it->data));
                         g_assert_cmpint (entry->event, ==,
                                          gupnp_cds_last_change_entry_get_event (it->data));
+                        g_assert_cmpint (entry->is_st_update, ==,
+                                         gupnp_cds_last_change_entry_is_subtree_update (it->data));
                 }
 
                 return;
