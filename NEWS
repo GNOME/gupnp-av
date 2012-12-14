@@ -1,3 +1,21 @@
+0.11.6
+======
+
+Changes since 0.11.5:
+- Fix an unitialized variable.
+- Fix a wrong use of BAD_CAST.
+- Fix handling of updateID in the CDS LastChange parser.
+- Fix CDS LastChange test.
+
+All contributors to this release:
+
+Jens Georg <jensg@openismus.com>
+Mark Ryan <mark.d.ryan@intel.com>
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=689701
+ - https://bugzilla.gnome.org/show_bug.cgi?id=689808
+
 0.11.5
 ======
 
