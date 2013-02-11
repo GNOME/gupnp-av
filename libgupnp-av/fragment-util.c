@@ -102,6 +102,29 @@ get_toplevel_changes (xmlNodePtr current_node,
         return changes;
 }
 
+#if GLIB_CHECK_VERSION (2, 32, 0)
+
+#define hash_table_contains g_hash_table_contains
+#define hash_table_add g_hash_table_add
+
+#else
+
+static gboolean
+hash_table_contains (GHashTable *table,
+                     gpointer    key)
+{
+  return g_hash_table_lookup_extended (table, key, NULL, NULL);
+}
+
+static void
+hash_table_add (GHashTable *table,
+                gpointer    key)
+{
+  g_hash_table_replace (table, key, key);
+}
+
+#endif
+
 static gboolean
 is_read_only (const gchar *changed_element,
               const gchar *changed_attribute)
@@ -113,41 +136,41 @@ is_read_only (const gchar *changed_element,
                 readonly_props = g_hash_table_new (g_str_hash,
                                                    g_str_equal);
 
-                g_hash_table_add (readonly_props, "@id");
-                g_hash_table_add (readonly_props, "@parentID");
-                g_hash_table_add (readonly_props, "@refID");
-                g_hash_table_add (readonly_props, "@restricted");
-                g_hash_table_add (readonly_props, "@searchable");
-                g_hash_table_add (readonly_props, "@childCount");
-                g_hash_table_add (readonly_props, "searchClass");
-                g_hash_table_add (readonly_props, "searchClass@name");
-                g_hash_table_add (readonly_props, "searchClass@includeDerived");
-                g_hash_table_add (readonly_props, "createClass");
-                g_hash_table_add (readonly_props, "createClass@name");
-                g_hash_table_add (readonly_props, "createClass@includeDerived");
-                g_hash_table_add (readonly_props, "writeStatus");
-                g_hash_table_add (readonly_props, "res@importUri");
-                g_hash_table_add (readonly_props, "storageTotal");
-                g_hash_table_add (readonly_props, "storageUsed");
-                g_hash_table_add (readonly_props, "storageFree");
-                g_hash_table_add (readonly_props, "storageMaxPartition");
-                g_hash_table_add (readonly_props, "storageMedium");
-                g_hash_table_add (readonly_props, "playbackCount");
-                g_hash_table_add (readonly_props, "srsRecordScheduleID");
-                g_hash_table_add (readonly_props, "srsRecordTaskID");
-                g_hash_table_add (readonly_props, "price");
-                g_hash_table_add (readonly_props, "price@currency");
-                g_hash_table_add (readonly_props, "payPerView");
-                g_hash_table_add (readonly_props, "dateTimeRange");
-                g_hash_table_add (readonly_props,
-                                  "dateTimeRange@daylightSaving");
-                g_hash_table_add (readonly_props, "signalStrength");
-                g_hash_table_add (readonly_props, "signalLocked");
-                g_hash_table_add (readonly_props, "tuned");
-                g_hash_table_add (readonly_props, "containerUpdateID");
-                g_hash_table_add (readonly_props, "objectUpdateID");
-                g_hash_table_add (readonly_props, "totalDeletedChildCount");
-                g_hash_table_add (readonly_props, "res@updateCount");
+                hash_table_add (readonly_props, "@id");
+                hash_table_add (readonly_props, "@parentID");
+                hash_table_add (readonly_props, "@refID");
+                hash_table_add (readonly_props, "@restricted");
+                hash_table_add (readonly_props, "@searchable");
+                hash_table_add (readonly_props, "@childCount");
+                hash_table_add (readonly_props, "searchClass");
+                hash_table_add (readonly_props, "searchClass@name");
+                hash_table_add (readonly_props, "searchClass@includeDerived");
+                hash_table_add (readonly_props, "createClass");
+                hash_table_add (readonly_props, "createClass@name");
+                hash_table_add (readonly_props, "createClass@includeDerived");
+                hash_table_add (readonly_props, "writeStatus");
+                hash_table_add (readonly_props, "res@importUri");
+                hash_table_add (readonly_props, "storageTotal");
+                hash_table_add (readonly_props, "storageUsed");
+                hash_table_add (readonly_props, "storageFree");
+                hash_table_add (readonly_props, "storageMaxPartition");
+                hash_table_add (readonly_props, "storageMedium");
+                hash_table_add (readonly_props, "playbackCount");
+                hash_table_add (readonly_props, "srsRecordScheduleID");
+                hash_table_add (readonly_props, "srsRecordTaskID");
+                hash_table_add (readonly_props, "price");
+                hash_table_add (readonly_props, "price@currency");
+                hash_table_add (readonly_props, "payPerView");
+                hash_table_add (readonly_props, "dateTimeRange");
+                hash_table_add (readonly_props,
+                                "dateTimeRange@daylightSaving");
+                hash_table_add (readonly_props, "signalStrength");
+                hash_table_add (readonly_props, "signalLocked");
+                hash_table_add (readonly_props, "tuned");
+                hash_table_add (readonly_props, "containerUpdateID");
+                hash_table_add (readonly_props, "objectUpdateID");
+                hash_table_add (readonly_props, "totalDeletedChildCount");
+                hash_table_add (readonly_props, "res@updateCount");
                 g_once_init_leave (&readonly_props_loaded, 1);
         }
         if (changed_element != NULL) {
@@ -155,21 +178,21 @@ is_read_only (const gchar *changed_element,
                         gchar *test_prop = g_strdup_printf ("%s@%s",
                                                             changed_element,
                                                             changed_attribute);
-                        gboolean result = g_hash_table_contains (readonly_props,
-                                                                 test_prop);
+                        gboolean result = hash_table_contains (readonly_props,
+                                                               test_prop);
 
                         g_free (test_prop);
                         if (result)
                                 return TRUE;
                         test_prop = g_strdup_printf ("@%s", changed_attribute);
-                        result = g_hash_table_contains (readonly_props,
-                                                        test_prop);
+                        result = hash_table_contains (readonly_props,
+                                                      test_prop);
                         g_free (test_prop);
                         if (result)
                                 return TRUE;
                 }
 
-                return g_hash_table_contains (readonly_props, changed_element);
+                return hash_table_contains (readonly_props, changed_element);
         }
 
         return FALSE;
@@ -330,7 +353,7 @@ static void
 add_dep_prop (IndependentProperty *indep,
               gchar               *name)
 {
-        g_hash_table_add (indep->required_dep_props, g_strdup (name));
+        hash_table_add (indep->required_dep_props, g_strdup (name));
 }
 
 static IndependentProperty *
@@ -494,17 +517,16 @@ is_required (const xmlChar *changed_element,
                                          (gpointer) changed_element);
 
                 if (changed_attribute != NULL) {
-                        if (g_hash_table_contains
+                        if (hash_table_contains
                                         (toplevel_prop->required_dep_props,
                                          changed_attribute))
                                 return TRUE;
-                        if (g_hash_table_contains
-                                        (this_prop->required_dep_props,
-                                         changed_attribute))
+                        if (hash_table_contains (this_prop->required_dep_props,
+                                                 changed_attribute))
                                 return TRUE;
                 }
-                if (g_hash_table_contains (toplevel_prop->required_indep_props,
-                                           changed_element))
+                if (hash_table_contains (toplevel_prop->required_indep_props,
+                                         changed_element))
                                 return TRUE;
                 /* TODO: check if changed element is not a required
                  * property of its parent element. That needs some
