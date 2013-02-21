@@ -69,11 +69,8 @@ static void
 parse_additional_info (const char        *additional_info,
                        GUPnPProtocolInfo *info)
 {
-        GUPnPProtocolInfoPrivate *priv;
         char **tokens = NULL;
         short i;
-
-        priv = info->priv;
 
         if (strcmp (additional_info, "*") == 0)
                 return;
