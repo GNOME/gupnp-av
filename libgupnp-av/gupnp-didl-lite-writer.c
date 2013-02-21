@@ -545,7 +545,6 @@ gupnp_didl_lite_writer_add_container_child_item
 {
         xmlNode *item_node, *container_node;
         GUPnPDIDLLiteObject *object;
-        GUPnPXMLDoc *doc;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container), NULL);
 
