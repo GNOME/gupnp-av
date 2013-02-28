@@ -25,3 +25,7 @@ gtk-doc.make
 *.la
 libtool
 stamp-h1
+
+/tests/test-search-criteria-parser
+/vala/gupnp-av-1.0.stamp
+/vala/gupnp-av-1.0.vapi
