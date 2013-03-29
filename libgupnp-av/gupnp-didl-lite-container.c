@@ -367,7 +367,7 @@ gupnp_didl_lite_container_get_total_deleted_child_count
 
         return xml_util_get_uint_child_element (xml_node,
                                                 "totalDeletedChildCount",
-                                                0);
+                                                -1);
 }
 
 /**
