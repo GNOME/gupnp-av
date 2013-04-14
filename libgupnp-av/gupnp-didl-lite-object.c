@@ -790,13 +790,10 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
 
 static gboolean
 is_resource_compatible (GUPnPDIDLLiteResource *resource,
-                        const char            *sink_protocol_info)
+                        char                 **protocols)
 {
         gboolean ret = FALSE;
-        char **protocols, **it;
-
-        protocols = g_strsplit (sink_protocol_info, ",", 0);
-
+        char **it;
 
         for (it = protocols; *it != NULL && !ret; it++) {
                 GUPnPProtocolInfo *info;
@@ -812,8 +809,6 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
 
                 g_object_unref (info);
         }
-
-        g_strfreev (protocols);
 
         return ret;
 }
@@ -1557,6 +1552,7 @@ gupnp_didl_lite_object_get_compat_resource
         GList  *resources = NULL;
         GList  *compat_resources = NULL;
         GList  *res;
+        char **protocols = NULL;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
         g_return_val_if_fail (sink_protocol_info != NULL, NULL);
@@ -1565,15 +1561,18 @@ gupnp_didl_lite_object_get_compat_resource
         if (resources == NULL)
                 return NULL;
 
+        protocols = g_strsplit (sink_protocol_info, ",", -1);
         for (res = resources;
              res != NULL;
              res = res->next) {
                 resource = (GUPnPDIDLLiteResource *) res->data;
 
-                if (is_resource_compatible (resource, sink_protocol_info))
+                if (is_resource_compatible (resource, protocols))
                         compat_resources = g_list_append (compat_resources,
                                                           resource);
         }
+        g_strfreev (protocols);
+        protocols = NULL;
 
         resource = NULL;
 
