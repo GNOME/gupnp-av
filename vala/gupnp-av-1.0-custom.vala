@@ -48,4 +48,8 @@ namespace GUPnP {
         public class SearchCriteriaParser : GLib.Object {
             public virtual signal bool expression (string property, GUPnP.SearchCriteriaOp op, string value, GLib.Error error);
         }
+
+        public class LastChangeParser : GLib.Object {
+            public bool parse_last_change (uint instance_id, string last_change_xml, ...) throws GLib.Error;
+        }
 }
