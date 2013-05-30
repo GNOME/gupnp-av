@@ -57,9 +57,13 @@ gupnp_didl_lite_create_class_get_type (void) G_GNUC_CONST;
 
 typedef struct _GUPnPDIDLLiteCreateClassPrivate GUPnPDIDLLiteCreateClassPrivate;
 
+/**
+ * GUPnPDIDLLiteCreateClass:
+ **/
 typedef struct {
         GObject parent;
 
+        /*< private >*/
         GUPnPDIDLLiteCreateClassPrivate *priv;
 } GUPnPDIDLLiteCreateClass;
 

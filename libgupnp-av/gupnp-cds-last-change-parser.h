@@ -68,6 +68,18 @@ struct _GUPnPCDSLastChangeParserClass {
         GObjectClass parent_class;
 };
 
+/**
+ * GUPnPCDSLastChangeEvent:
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_INVALID: Invalid #GUPnPCDSLastChangeEntry.
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_ADDED: The #GUPnPCDSLastChangeEntry is
+ * an object added event.
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_REMOVED: The #GUPnPCDSLastChangeEntry
+ * is an object removal event.
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_MODIFIED: The #GUPnPCDSLastChangeEntry
+ * is an object modification event.
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_ST_DONE: The #GUPnPCDSLastChangeEntry is a
+ * subtree update done event.
+ */
 typedef enum GUPnPCDSLastChangeEvent {
         GUPNP_CDS_LAST_CHANGE_EVENT_INVALID,
         GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_ADDED,

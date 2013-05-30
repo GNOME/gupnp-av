@@ -60,6 +60,7 @@ gupnp_didl_lite_object_get_title_xml_string
 gupnp_didl_lite_object_get_track_number_xml_string
 gupnp_didl_lite_object_get_update_id
 gupnp_didl_lite_object_get_upnp_class_xml_string
+gupnp_didl_lite_object_get_xml_string
 gupnp_didl_lite_object_set_update_id
 gupnp_didl_lite_object_unset_artists
 gupnp_didl_lite_object_unset_update_id
@@ -283,7 +284,6 @@ gupnp_didl_lite_contributor_get_type
 <SECTION>
 <FILE>gupnp-didl-lite-create-class</FILE>
 <TITLE>GUPnPDIDLLiteCreateClass</TITLE>
-GUPnPDIDLLiteCreateClass
 gupnp_didl_lite_create_class_get_content
 gupnp_didl_lite_create_class_set_content
 gupnp_didl_lite_create_class_get_include_derived
@@ -299,6 +299,7 @@ GUPNP_IS_DIDL_LITE_CREATE_CLASS
 GUPNP_IS_DIDL_LITE_CREATE_CLASS_CLASS
 GUPNP_TYPE_DIDL_LITE_CREATE_CLASS
 <SUBSECTION Private>
+GUPnPDIDLLiteCreateClass
 GUPnPDIDLLiteCreateClassPrivate
 gupnp_didl_lite_create_class_get_type
 </SECTION>
