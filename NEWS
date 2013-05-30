@@ -1,3 +1,18 @@
+0.12.2
+======
+
+Changes since 0.12.1:
+- Fix VAPI generation if GObject-introspection version is >= 1.36.
+- Fix vala bindings for LastChangeParser.parse_last_change.
+- Small improvement to resource matching.
+- Fix DIDLLiteContainer.get_total_deleted_child_count return value.
+- Fix compiling with -Wall -Werror.
+- Fix gtk-doc warnings.
+
+All contributors to this release:
+  Jens Georg <mail@jensge.org>
+  Ludovic Ferrandis <ludovic.ferrandis@intel.com>
+
 0.12.1
 ======
 
