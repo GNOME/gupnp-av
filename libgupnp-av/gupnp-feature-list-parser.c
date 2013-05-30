@@ -39,7 +39,7 @@ G_DEFINE_TYPE (GUPnPFeatureListParser,
                G_TYPE_OBJECT);
 
 static void
-gupnp_feature_list_parser_init (GUPnPFeatureListParser *parser)
+gupnp_feature_list_parser_init (G_GNUC_UNUSED GUPnPFeatureListParser *parser)
 {
         /* Nothing to do here */
 }
@@ -118,9 +118,10 @@ get_feature_object_ids (xmlNode *feature)
  * features or %NULL if an error occured.
  **/
 GList *
-gupnp_feature_list_parser_parse_text (GUPnPFeatureListParser *parser,
-                                      const char             *text,
-                                      GError                **error)
+gupnp_feature_list_parser_parse_text
+                                 (G_GNUC_UNUSED GUPnPFeatureListParser *parser,
+                                  const char             *text,
+                                  GError                **error)
 {
         xmlDoc       *doc;
         xmlNode      *element;

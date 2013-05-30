@@ -20,6 +20,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include <libgupnp-av/gupnp-cds-last-change-parser.h>
 
@@ -395,7 +396,7 @@ TestReference test_reference_data[] = {
 static void
 compare_entries (const char *file, GList *entries)
 {
-        int reference_size, i, j;
+        guint reference_size, i, j;
         GList *it = entries;
 
         reference_size = G_N_ELEMENTS (test_reference_data);

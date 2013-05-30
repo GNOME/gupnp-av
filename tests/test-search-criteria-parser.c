@@ -23,40 +23,40 @@
 #include <stdlib.h>
 
 static void
-begin_parens_cb (GUPnPSearchCriteriaParser *parser,
-                 gpointer                   user_data)
+begin_parens_cb (G_GNUC_UNUSED GUPnPSearchCriteriaParser *parser,
+                 G_GNUC_UNUSED gpointer                   user_data)
 {
         g_print ("(");
 }
 
 static void
-end_parens_cb (GUPnPSearchCriteriaParser *parser,
-               gpointer                   user_data)
+end_parens_cb (G_GNUC_UNUSED GUPnPSearchCriteriaParser *parser,
+               G_GNUC_UNUSED gpointer                   user_data)
 {
         g_print (")");
 }
 
 static void
-conjunction_cb (GUPnPSearchCriteriaParser *parser,
-                gpointer                   user_data)
+conjunction_cb (G_GNUC_UNUSED GUPnPSearchCriteriaParser *parser,
+                G_GNUC_UNUSED gpointer                   user_data)
 {
         g_print (" and ");
 }
 
 static void
-disjunction_cb (GUPnPSearchCriteriaParser *parser,
-                gpointer                   user_data)
+disjunction_cb (G_GNUC_UNUSED GUPnPSearchCriteriaParser *parser,
+                G_GNUC_UNUSED gpointer                   user_data)
 {
         g_print (" or ");
 }
 
 static gboolean
-expression_cb (GUPnPSearchCriteriaParser *parser,
-               const char                *property,
-               GUPnPSearchCriteriaOp      op,
-               const char                *value,
-               GError                   **error,
-               gpointer                   user_data)
+expression_cb (G_GNUC_UNUSED GUPnPSearchCriteriaParser *parser,
+               const char                              *property,
+               GUPnPSearchCriteriaOp                    op,
+               const char                              *value,
+               G_GNUC_UNUSED GError                   **error,
+               G_GNUC_UNUSED gpointer                   user_data)
 {
         g_print ("%s %d %s", property, op, value);
 

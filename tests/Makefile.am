@@ -2,7 +2,7 @@ SUBDIRS = gtest
 
 common_cflags = \
 	$(LIBGUPNP_CFLAGS) \
-	-I$(top_srcdir)
+	-I$(top_srcdir) -Wno-unused-parameters
 common_ldadd = \
 	$(top_builddir)/libgupnp-av/libgupnp-av-1.0.la \
 	$(LIBGUPNP_LIBS)

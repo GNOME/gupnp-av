@@ -184,8 +184,7 @@ is_standard_prop (const char *name,
 
 static void
 filter_attributes (xmlNode             *node,
-                   GList               *allowed,
-                   GUPnPDIDLLiteWriter *writer)
+                   GList               *allowed)
 {
         xmlAttr *attr;
         GList   *forbidden = NULL;
@@ -219,7 +218,7 @@ filter_node (xmlNode             *node,
         const char *container_class = NULL;
 
         if (!tags_only)
-                filter_attributes (node, allowed, writer);
+                filter_attributes (node, allowed);
 
         if (strcmp ((const char *) node->name, "container") == 0) {
             is_container = TRUE;

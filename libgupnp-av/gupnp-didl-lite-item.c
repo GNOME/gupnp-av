@@ -44,7 +44,7 @@ enum {
 };
 
 static void
-gupnp_didl_lite_item_init (GUPnPDIDLLiteItem *item)
+gupnp_didl_lite_item_init (G_GNUC_UNUSED GUPnPDIDLLiteItem *item)
 {
         /* Nothing to initialize, yay! */
 }

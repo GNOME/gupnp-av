@@ -87,7 +87,7 @@ parse_elements (GUPnPDIDLLiteParser *parser,
                 GError             **error);
 
 static void
-gupnp_didl_lite_parser_init (GUPnPDIDLLiteParser *parser)
+gupnp_didl_lite_parser_init (G_GNUC_UNUSED GUPnPDIDLLiteParser *parser)
 {
 }
 

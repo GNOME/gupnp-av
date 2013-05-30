@@ -59,12 +59,12 @@ G_DEFINE_BOXED_TYPE (GUPnPCDSLastChangeEntry,
                      gupnp_cds_last_change_entry_unref);
 
 static void
-gupnp_cds_last_change_parser_init (GUPnPCDSLastChangeParser *parser)
+gupnp_cds_last_change_parser_init (G_GNUC_UNUSED GUPnPCDSLastChangeParser *parser)
 {
 }
 
 static void
-gupnp_cds_last_change_parser_class_init (GUPnPCDSLastChangeParserClass *klass)
+gupnp_cds_last_change_parser_class_init (G_GNUC_UNUSED GUPnPCDSLastChangeParserClass *klass)
 {
 }
 

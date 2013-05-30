@@ -82,7 +82,7 @@ reparent_children (GUPnPMediaCollection *collection)
 static void
 on_container_available (GUPnPMediaCollection   *self,
                         GUPnPDIDLLiteContainer *container,
-                        gpointer                user_data)
+                        G_GNUC_UNUSED gpointer  user_data)
 {
         /* According to media format spec, there's only one container allowed;
          * We allow any number of containers, but only the last one wins. */
@@ -95,7 +95,7 @@ on_container_available (GUPnPMediaCollection   *self,
 static void
 on_item_available (GUPnPMediaCollection   *self,
                    GUPnPDIDLLiteItem      *item,
-                   gpointer                user_data)
+                   G_GNUC_UNUSED gpointer  user_data)
 {
         self->priv->items = g_list_prepend (self->priv->items,
                                             g_object_ref (item));

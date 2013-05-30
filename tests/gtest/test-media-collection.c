@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <string.h>
+
 #include <libgupnp-av/gupnp-media-collection.h>
 
 /* Flat DIDL_S playlist */
@@ -275,10 +277,10 @@ test_didl_collection_parse_full ()
 #define ERROR_MESSAGE "Failed to parse DIDL-Lite: No 'DIDL-Lite' node in the DIDL-Lite XML:"
 
 static gboolean
-ignore_xml_parse_error (const gchar *log_domain,
-                        GLogLevelFlags log_level,
-                        const gchar *message,
-                        gpointer user_data)
+ignore_xml_parse_error (G_GNUC_UNUSED const gchar   *log_domain,
+                        G_GNUC_UNUSED GLogLevelFlags log_level,
+                        const gchar                 *message,
+                        G_GNUC_UNUSED gpointer       user_data)
 {
         if (strncmp (message,
                      ERROR_MESSAGE,

@@ -42,7 +42,7 @@ G_DEFINE_TYPE (GUPnPLastChangeParser,
                G_TYPE_OBJECT);
 
 static void
-gupnp_last_change_parser_init (GUPnPLastChangeParser *parser)
+gupnp_last_change_parser_init (G_GNUC_UNUSED GUPnPLastChangeParser *parser)
 {
 }
 
@@ -147,11 +147,11 @@ gupnp_last_change_parser_new (void)
  **/
 gboolean
 gupnp_last_change_parser_parse_last_change_valist
-                                       (GUPnPLastChangeParser *parser,
-                                        guint                  instance_id,
-                                        const char            *last_change_xml,
-                                        GError               **error,
-                                        va_list                var_args)
+                         (G_GNUC_UNUSED GUPnPLastChangeParser *parser,
+                          guint                                instance_id,
+                          const char                          *last_change_xml,
+                          GError                             **error,
+                          va_list                              var_args)
 {
         const char *variable_name;
         xmlDoc  *doc;

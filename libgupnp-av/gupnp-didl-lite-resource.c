@@ -105,9 +105,9 @@ return_point:
 }
 
 static void
-on_protocol_info_changed (GUPnPProtocolInfo *info,
-                          GParamSpec        *pspec,
-                          gpointer           user_data)
+on_protocol_info_changed (GUPnPProtocolInfo        *info,
+                          G_GNUC_UNUSED GParamSpec *pspec,
+                          gpointer                  user_data)
 {
         GUPnPDIDLLiteResource *resource = GUPNP_DIDL_LITE_RESOURCE (user_data);
 

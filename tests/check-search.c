@@ -30,11 +30,11 @@ static const char * const searches[] = {
 };
 
 int
-main (int argc, char **argv)
+main (G_GNUC_UNUSED int argc, G_GNUC_UNUSED char **argv)
 {
         GUPnPSearchCriteriaParser *parser;
         GError *error;
-        int i;
+        guint i;
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
         g_type_init ();

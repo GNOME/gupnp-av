@@ -53,7 +53,7 @@ enum {
 };
 
 static void
-gupnp_didl_lite_container_init (GUPnPDIDLLiteContainer *container)
+gupnp_didl_lite_container_init (G_GNUC_UNUSED GUPnPDIDLLiteContainer *container)
 {
         /* Nothing to initialize, yay! */
 }

@@ -42,9 +42,9 @@
 "</DIDL-Lite>"
 
 static void
-test_bgo674319_on_object_available (GUPnPDIDLLiteParser *parser,
-                                    GUPnPDIDLLiteObject *object,
-                                    gpointer             user_data)
+test_bgo674319_on_object_available (G_GNUC_UNUSED GUPnPDIDLLiteParser *parser,
+                                    GUPnPDIDLLiteObject               *object,
+                                    gpointer                           user_data)
 {
         GUPnPDIDLLiteObject **out = (GUPnPDIDLLiteObject **) user_data;
         *out = g_object_ref (object);
