@@ -88,10 +88,17 @@ gupnp_dlna_flags_get_type (void) G_GNUC_CONST;
  *                                             supported
  * @GUPNP_DLNA_FLAGS_CONNECTION_STALL: No content transfer when paused.
  * @GUPNP_DLNA_FLAGS_DLNA_V15: DLNAv1.5 version flag
+ * @GUPNP_DLNA_FLAGS_LINK_PROTECTED_CONTENT: The content is protected.
+ * @GUPNP_DLNA_FLAGS_CLEAR_TEXT_BYTE_SEEK_FULL: Full byte seek on cleartext
+ *                                              domain is supported.
+ * @GUPNP_DLNA_FLAGS_LOP_CLEAR_TEXT_BYTE_SEEK: Limited operations on
+ *                                              byte seek in cleartext domain.
  *
  * The miscellaneous operations supported by a resource. For details on these
  * flags please refer to section 7.3.37.2 of DLNA Networked Device
  * Interoperability Guidelines Volume 1, October 2006.
+ *
+ * Updated DTCP Flags based on 2011 Guidelines, section 7.4.1.3.23.2
  *
  **/
 typedef enum {
@@ -107,7 +114,10 @@ typedef enum {
         GUPNP_DLNA_FLAGS_INTERACTIVE_TRANSFER_MODE = (1 << 23),
         GUPNP_DLNA_FLAGS_BACKGROUND_TRANSFER_MODE  = (1 << 22),
         GUPNP_DLNA_FLAGS_CONNECTION_STALL          = (1 << 21),
-        GUPNP_DLNA_FLAGS_DLNA_V15                  = (1 << 20)
+        GUPNP_DLNA_FLAGS_DLNA_V15                  = (1 << 20),
+        GUPNP_DLNA_FLAGS_LINK_PROTECTED_CONTENT    = (1 << 16),
+        GUPNP_DLNA_FLAGS_CLEAR_TEXT_BYTE_SEEK_FULL = (1 << 15),
+        GUPNP_DLNA_FLAGS_LOP_CLEAR_TEXT_BYTE_SEEK  = (1 << 14)
 } GUPnPDLNAFlags;
 
 /**

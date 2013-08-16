@@ -119,6 +119,15 @@ gupnp_dlna_flags_get_type (void)
                         { GUPNP_DLNA_FLAGS_DLNA_V15,
                           "GUPNP_DLNA_FLAGS_DLNA_V15",
                           "dlna-v15" },
+                        { GUPNP_DLNA_FLAGS_LINK_PROTECTED_CONTENT,
+                          "GUPNP_DLNA_FLAGS_LINK_PROTECTED_CONTENT",
+                          "link-protected-content" },
+                        { GUPNP_DLNA_FLAGS_CLEAR_TEXT_BYTE_SEEK_FULL,
+                          "GUPNP_DLNA_FLAGS_CLEAR_TEXT_BYTE_SEEK_FULL",
+                          "cleartext-byteseek-full" },
+                        { GUPNP_DLNA_FLAGS_LOP_CLEAR_TEXT_BYTE_SEEK,
+                          "GUPNP_DLNA_FLAGS_LOP_CLEAR_TEXT_BYTE_SEEK",
+                          "lop-cleartext-byteseek" },
                         { 0, NULL, NULL }
                 };
 
