@@ -1513,7 +1513,8 @@ gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
                 /* Create a resource struct out of DIDLLite XML */
                 resource = gupnp_didl_lite_resource_new_from_xml
                                         (res_node,
-                                         object->priv->xml_doc);
+                                         object->priv->xml_doc,
+                                         object->priv->dlna_ns);
 
                 ret = g_list_append (ret, resource);
         }
@@ -2134,7 +2135,8 @@ gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
                                 NULL);
 
         return gupnp_didl_lite_resource_new_from_xml (res_node,
-                                                      object->priv->xml_doc);
+                                                      object->priv->xml_doc,
+                                                      object->priv->dlna_ns);
 }
 
 /**

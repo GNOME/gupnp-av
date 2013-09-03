@@ -80,6 +80,8 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteResourceClass;
 
+#define GUPNP_DIDL_LITE_RESOURCE_NAMESPACE_DLNA "dlna"
+
 void
 gupnp_didl_lite_resource_set_uri        (GUPnPDIDLLiteResource *resource,
                                          const char            *uri);
@@ -100,6 +102,11 @@ gupnp_didl_lite_resource_set_size       (GUPnPDIDLLiteResource *resource,
 void
 gupnp_didl_lite_resource_set_size64     (GUPnPDIDLLiteResource *resource,
                                          gint64                 size);
+
+void
+gupnp_didl_lite_resource_set_clear_text_size
+                                        (GUPnPDIDLLiteResource *resource,
+                                         gint64                 clear_text_size);
 
 void
 gupnp_didl_lite_resource_set_duration   (GUPnPDIDLLiteResource *resource,
@@ -153,6 +160,10 @@ gupnp_didl_lite_resource_unset_update_count
 xmlNode *
 gupnp_didl_lite_resource_get_xml_node   (GUPnPDIDLLiteResource *resource);
 
+xmlNsPtr
+gupnp_didl_lite_resource_get_dlna_namespace
+                                        (GUPnPDIDLLiteResource *resource);
+
 const char *
 gupnp_didl_lite_resource_get_uri        (GUPnPDIDLLiteResource *resource);
 
@@ -168,6 +179,10 @@ gupnp_didl_lite_resource_get_size       (GUPnPDIDLLiteResource *resource);
 
 gint64
 gupnp_didl_lite_resource_get_size64     (GUPnPDIDLLiteResource *resource);
+
+gint64
+gupnp_didl_lite_resource_get_clear_text_size
+                                        (GUPnPDIDLLiteResource *resource);
 
 long
 gupnp_didl_lite_resource_get_duration   (GUPnPDIDLLiteResource *resource);

@@ -34,8 +34,10 @@
 #include <string.h>
 
 #include "gupnp-didl-lite-resource.h"
+#include "gupnp-didl-lite-resource-private.h"
 #include "xml-util.h"
 #include "time-utils.h"
+#include "xsd-data.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteResource,
                gupnp_didl_lite_resource,
@@ -44,6 +46,7 @@ G_DEFINE_TYPE (GUPnPDIDLLiteResource,
 struct _GUPnPDIDLLiteResourcePrivate {
         xmlNode     *xml_node;
         GUPnPXMLDoc *xml_doc;
+        xmlNs       *dlna_ns;
 
         GUPnPProtocolInfo *protocol_info;
 };
@@ -55,11 +58,12 @@ enum {
 
         PROP_URI,
         PROP_IMPORT_URI,
-
+        PROP_DLNA_NAMESPACE,
         PROP_PROTOCOL_INFO,
 
         PROP_SIZE,
         PROP_SIZE64,
+        PROP_CLEAR_TEXT_SIZE,
         PROP_DURATION,
         PROP_BITRATE,
         PROP_SAMPLE_FREQ,
@@ -162,6 +166,13 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                 gupnp_didl_lite_resource_set_size64 (resource,
                                                      g_value_get_int64 (value));
                 break;
+        case PROP_DLNA_NAMESPACE:
+                resource->priv->dlna_ns = g_value_get_pointer (value);
+                break;
+        case PROP_CLEAR_TEXT_SIZE:
+                gupnp_didl_lite_resource_set_clear_text_size (resource,
+                                                     g_value_get_int64 (value));
+                break;
         case PROP_DURATION:
                 gupnp_didl_lite_resource_set_duration
                                 (resource,
@@ -253,6 +264,16 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
         case PROP_SIZE64:
                 g_value_set_int64 (value,
                                    gupnp_didl_lite_resource_get_size64 (resource));
+                break;
+        case PROP_DLNA_NAMESPACE:
+                g_value_set_pointer
+                        (value,
+                         gupnp_didl_lite_resource_get_dlna_namespace (resource));
+                break;
+        case PROP_CLEAR_TEXT_SIZE:
+                g_value_set_int64
+                         (value,
+                          gupnp_didl_lite_resource_get_clear_text_size (resource));
                 break;
         case PROP_DURATION:
                 g_value_set_long
@@ -479,6 +500,45 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
                                      G_PARAM_STATIC_BLURB));
 
         /**
+         * GUPnPDIDLLiteResource:clearTextsize:
+         *
+         * The size (in bytes) of this resource.
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_CLEAR_TEXT_SIZE,
+                 g_param_spec_int64 ("cleartextSize",
+                                    "ClearTextSize",
+                                    "The clear text size (in bytes) of this resource.",
+                                    -1,
+                                    G_MAXLONG,
+                                    -1,
+                                    G_PARAM_READWRITE |
+                                    G_PARAM_STATIC_NAME |
+                                    G_PARAM_STATIC_NICK |
+                                    G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteResource:dlna-namespace:
+         *
+         * Pointer to the DLNA metadata namespace registered with the
+         * resource object.
+         *
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_DLNA_NAMESPACE,
+                 g_param_spec_pointer ("dlna-namespace",
+                                       "XML namespace",
+                                       "Pointer to the DLNA metadata namespace "
+                                       "registered with the resource.",
+                                       G_PARAM_READWRITE |
+                                       G_PARAM_CONSTRUCT_ONLY |
+                                       G_PARAM_STATIC_NAME |
+                                       G_PARAM_STATIC_NICK |
+                                       G_PARAM_STATIC_BLURB));
+
+        /**
          * GUPnPDIDLLiteResource:duration:
          *
          * The duration (in seconds) of this resource.
@@ -682,13 +742,15 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
  **/
 GUPnPDIDLLiteResource *
 gupnp_didl_lite_resource_new_from_xml (xmlNode     *xml_node,
-                                       GUPnPXMLDoc *xml_doc)
+                                       GUPnPXMLDoc *xml_doc,
+                                       xmlNs       *dlna_ns)
 {
         GUPnPDIDLLiteResource *resource;
 
         return g_object_new (GUPNP_TYPE_DIDL_LITE_RESOURCE,
                              "xml-node", xml_node,
                              "xml-doc", xml_doc,
+                             "dlna-namespace", dlna_ns,
                              NULL);
 
         return resource;
@@ -708,6 +770,23 @@ gupnp_didl_lite_resource_get_xml_node (GUPnPDIDLLiteResource *resource)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
 
         return resource->priv->xml_node;
+}
+
+/**
+ * gupnp_didl_lite_resource_get_dlna_namespace:
+ * @resource: The #GUPnPDIDLLiteObject
+ *
+ * Get the pointer to the DLNA metadata namespace registered with the XML
+ * document containing this object.
+ *
+ * Returns: (transfer none): The pointer to DLNA namespace in XML document.
+ **/
+xmlNsPtr
+gupnp_didl_lite_resource_get_dlna_namespace (GUPnPDIDLLiteResource *resource)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+
+        return resource->priv->dlna_ns;
 }
 
 /**
@@ -819,6 +898,23 @@ gupnp_didl_lite_resource_get_size64 (GUPnPDIDLLiteResource *resource)
                                              -1);
 }
 
+/**
+ * gupnp_didl_lite_resource_get_clear_text_size:
+ * @resource: A #GUPnPDIDLLiteResource
+ *
+ * Get the size (in bytes) of the @resource.
+ *
+ * Return value: The size (in bytes) of the @resource or -1.
+ **/
+gint64
+gupnp_didl_lite_resource_get_clear_text_size (GUPnPDIDLLiteResource *resource)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+
+        return xml_util_get_int64_attribute (resource->priv->xml_node,
+                                             "cleartextSize",
+                                             -1);
+}
 
 /**
  * gupnp_didl_lite_resource_get_duration:
@@ -1170,6 +1266,44 @@ gupnp_didl_lite_resource_set_size64 (GUPnPDIDLLiteResource *resource,
         g_object_notify (G_OBJECT (resource), "size");
 }
 
+/**
+ * gupnp_didl_lite_resource_set_clear_text_size:
+ * @resource: A #GUPnPDIDLLiteResource
+ * @clear_text_size: The size (in bytes)
+ *
+ * Set the size (in bytes) of the @resource. Passing a negative number will
+ * unset this property.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_resource_set_clear_text_size
+                                        (GUPnPDIDLLiteResource *resource,
+                                         gint64                 clear_text_size)
+{
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+
+        if (clear_text_size < 0)
+                xmlUnsetNsProp (resource->priv->xml_node,
+                                resource->priv->dlna_ns,
+                                (unsigned char *) "cleartextSize");
+        else {
+                char *str;
+                str = g_strdup_printf ("%" G_GINT64_FORMAT, clear_text_size);
+                xmlSetNsProp (resource->priv->xml_node,
+                              resource->priv->dlna_ns,
+                              (unsigned char *) "cleartextSize",
+                              (unsigned char *) str);
+                if (resource->priv->dlna_ns) {
+                    xmlNewNs (resource->priv->xml_node,
+                              resource->priv->dlna_ns->href,
+                              GUPNP_DIDL_LITE_RESOURCE_NAMESPACE_DLNA);
+                }
+                g_free (str);
+        }
+
+        g_object_notify (G_OBJECT (resource), "cleartextSize");
+}
 
 /**
  * gupnp_didl_lite_resource_set_duration:
