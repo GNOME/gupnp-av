@@ -1294,11 +1294,6 @@ gupnp_didl_lite_resource_set_clear_text_size
                               resource->priv->dlna_ns,
                               (unsigned char *) "cleartextSize",
                               (unsigned char *) str);
-                if (resource->priv->dlna_ns) {
-                    xmlNewNs (resource->priv->xml_node,
-                              resource->priv->dlna_ns->href,
-                              GUPNP_DIDL_LITE_RESOURCE_NAMESPACE_DLNA);
-                }
                 g_free (str);
         }
 

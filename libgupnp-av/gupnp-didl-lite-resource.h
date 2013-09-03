@@ -80,7 +80,6 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteResourceClass;
 
-#define GUPNP_DIDL_LITE_RESOURCE_NAMESPACE_DLNA "dlna"
 
 void
 gupnp_didl_lite_resource_set_uri        (GUPnPDIDLLiteResource *resource,
