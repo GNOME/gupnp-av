@@ -259,7 +259,7 @@ add_dlna_info (GString           *str,
         if (speeds != NULL) {
                 int i;
 
-                g_string_append_printf (str, "DLNA.ORG_PS=;");
+                g_string_append (str, "DLNA.ORG_PS=");
 
                 for (i = 0; speeds[i]; i++) {
                         g_string_append (str, speeds[i]);
@@ -267,6 +267,7 @@ add_dlna_info (GString           *str,
                         if (speeds[i + 1])
                                 g_string_append_c (str, ',');
                 }
+                g_string_append_c (str, ';');
         }
 
         conversion = gupnp_protocol_info_get_dlna_conversion (info);
