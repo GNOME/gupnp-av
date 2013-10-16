@@ -171,7 +171,7 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                 resource->priv->dlna_ns = g_value_get_pointer (value);
                 break;
         case PROP_CLEAR_TEXT_SIZE:
-                gupnp_didl_lite_resource_set_clear_text_size (resource,
+                gupnp_didl_lite_resource_set_cleartext_size (resource,
                                                      g_value_get_int64 (value));
                 break;
         case PROP_DURATION:
@@ -279,7 +279,7 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
         case PROP_CLEAR_TEXT_SIZE:
                 g_value_set_int64
                          (value,
-                          gupnp_didl_lite_resource_get_clear_text_size (resource));
+                          gupnp_didl_lite_resource_get_cleartext_size (resource));
                 break;
         case PROP_DURATION:
                 g_value_set_long
@@ -518,7 +518,7 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
         g_object_class_install_property
                 (object_class,
                  PROP_CLEAR_TEXT_SIZE,
-                 g_param_spec_int64 ("cleartextSize",
+                 g_param_spec_int64 ("cleartext-size",
                                     "ClearTextSize",
                                     "The clear text size (in bytes) of this resource.",
                                     -1,
@@ -927,7 +927,7 @@ gupnp_didl_lite_resource_get_size64 (GUPnPDIDLLiteResource *resource)
 }
 
 /**
- * gupnp_didl_lite_resource_get_clear_text_size:
+ * gupnp_didl_lite_resource_get_cleartext_size:
  * @resource: A #GUPnPDIDLLiteResource
  *
  * Get the size (in bytes) of the @resource.
@@ -935,7 +935,7 @@ gupnp_didl_lite_resource_get_size64 (GUPnPDIDLLiteResource *resource)
  * Return value: The size (in bytes) of the @resource or -1.
  **/
 gint64
-gupnp_didl_lite_resource_get_clear_text_size (GUPnPDIDLLiteResource *resource)
+gupnp_didl_lite_resource_get_cleartext_size (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
 
@@ -1334,9 +1334,9 @@ gupnp_didl_lite_resource_set_size64 (GUPnPDIDLLiteResource *resource,
 }
 
 /**
- * gupnp_didl_lite_resource_set_clear_text_size:
+ * gupnp_didl_lite_resource_set_cleartext_size:
  * @resource: A #GUPnPDIDLLiteResource
- * @clear_text_size: The size (in bytes)
+ * @cleartext_size: The size (in bytes)
  *
  * Set the size (in bytes) of the @resource. Passing a negative number will
  * unset this property.
@@ -1344,19 +1344,19 @@ gupnp_didl_lite_resource_set_size64 (GUPnPDIDLLiteResource *resource,
  * Return value: None.
  **/
 void
-gupnp_didl_lite_resource_set_clear_text_size
+gupnp_didl_lite_resource_set_cleartext_size
                                         (GUPnPDIDLLiteResource *resource,
-                                         gint64                 clear_text_size)
+                                         gint64                 cleartext_size)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
 
-        if (clear_text_size < 0)
+        if (cleartext_size < 0)
                 xmlUnsetNsProp (resource->priv->xml_node,
                                 resource->priv->dlna_ns,
                                 (unsigned char *) "cleartextSize");
         else {
                 char *str;
-                str = g_strdup_printf ("%" G_GINT64_FORMAT, clear_text_size);
+                str = g_strdup_printf ("%" G_GINT64_FORMAT, cleartext_size);
                 xmlSetNsProp (resource->priv->xml_node,
                               resource->priv->dlna_ns,
                               (unsigned char *) "cleartextSize",

@@ -103,9 +103,9 @@ gupnp_didl_lite_resource_set_size64     (GUPnPDIDLLiteResource *resource,
                                          gint64                 size);
 
 void
-gupnp_didl_lite_resource_set_clear_text_size
+gupnp_didl_lite_resource_set_cleartext_size
                                         (GUPnPDIDLLiteResource *resource,
-                                         gint64                 clear_text_size);
+                                         gint64                 cleartext_size);
 
 void
 gupnp_didl_lite_resource_set_duration   (GUPnPDIDLLiteResource *resource,
@@ -188,7 +188,7 @@ gint64
 gupnp_didl_lite_resource_get_size64     (GUPnPDIDLLiteResource *resource);
 
 gint64
-gupnp_didl_lite_resource_get_clear_text_size
+gupnp_didl_lite_resource_get_cleartext_size
                                         (GUPnPDIDLLiteResource *resource);
 
 long
