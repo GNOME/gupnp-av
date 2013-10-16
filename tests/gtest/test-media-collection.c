@@ -91,7 +91,6 @@
 "<DIDL-Lite " \
         "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
         "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
-        "xmlns:dlna=\"urn:schemas-dlna-org:metadata-1-0/\" " \
         "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
     "<item restricted=\"1\">" \
       "<dc:title>Song1</dc:title>" \
@@ -114,7 +113,6 @@
 "<DIDL-Lite " \
         "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
         "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
-        "xmlns:dlna=\"urn:schemas-dlna-org:metadata-1-0/\" " \
         "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
     "<container>" \
       "<dc:title>TestCollection1</dc:title>" \
@@ -141,7 +139,6 @@
 "<DIDL-Lite " \
         "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
         "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
-        "xmlns:dlna=\"urn:schemas-dlna-org:metadata-1-0/\" " \
         "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
     "<container>" \
       "<item restricted=\"1\">" \
