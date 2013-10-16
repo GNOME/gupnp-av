@@ -76,7 +76,8 @@ enum {
         PROP_HEIGHT,
         PROP_COLOR_DEPTH,
 
-        PROP_UPDATE_COUNT
+        PROP_UPDATE_COUNT,
+        PROP_TRACK_TOTAL
 };
 
 static void
@@ -220,6 +221,11 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                                         (resource,
                                          g_value_get_uint (value));
                 break;
+        case PROP_TRACK_TOTAL:
+                gupnp_didl_lite_resource_set_track_total
+                                        (resource,
+                                         g_value_get_uint (value));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -325,6 +331,11 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
                 g_value_set_uint
                          (value,
                           gupnp_didl_lite_resource_get_update_count (resource));
+                break;
+        case PROP_TRACK_TOTAL:
+                g_value_set_uint
+                         (value,
+                          gupnp_didl_lite_resource_get_track_total (resource));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -729,6 +740,23 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
                                            G_PARAM_STATIC_NAME |
                                            G_PARAM_STATIC_NICK |
                                            G_PARAM_STATIC_BLURB));
+        /**
+         * GUPnPDIDLLiteResource:track-total:
+         *
+         * Number of tracks in a DIDL_S or DIDL_V resource.
+         **/
+        g_object_class_install_property
+                       (object_class,
+                        PROP_TRACK_TOTAL,
+                        g_param_spec_uint ("track-total",
+                                           "TrackTotal",
+                                           "The number of tracks of this "
+                                           "resource.",
+                                           0,
+                                           G_MAXUINT,
+                                           0,
+                                           G_PARAM_READWRITE |
+                                           G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -1105,6 +1133,24 @@ gupnp_didl_lite_resource_get_update_count (GUPnPDIDLLiteResource *resource)
 }
 
 /**
+ * gupnp_didl_lite_resource_get_track_total:
+ * @resource: A #GUPnPDIDLLiteResource
+ *
+ * Get the total track count of this resource.
+ *
+ * Return value: The total track count of the @resource.
+ **/
+guint
+gupnp_didl_lite_resource_get_track_total (GUPnPDIDLLiteResource *resource)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), 0);
+
+        return xml_util_get_uint_attribute (resource->priv->xml_node,
+                                            "trackTotal",
+                                            -1);
+}
+
+/**
  * gupnp_didl_lite_resource_update_count_is_set:
  * @resource: A #GUPnPDIDLLiteResource
  *
@@ -1123,6 +1169,27 @@ gupnp_didl_lite_resource_update_count_is_set (GUPnPDIDLLiteResource *resource)
                                                   "updateCount");
         return content != NULL;
 }
+
+/**
+ * gupnp_didl_lite_resource_track_total_is_set:
+ * @resource: A #GUPnPDIDLLiteResource
+ *
+ * Check whether the total track count property of this resource is set.
+ *
+ * Return value: %TRUE if set, otherwise %FALSE.
+ **/
+gboolean
+gupnp_didl_lite_resource_track_total_is_set (GUPnPDIDLLiteResource *resource)
+{
+        const char *content;
+
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), FALSE);
+
+        content = xml_util_get_attribute_content (resource->priv->xml_node,
+                                                  "trackTotal");
+        return content != NULL;
+}
+
 
 /**
  * gupnp_didl_lite_resource_set_uri:
@@ -1613,6 +1680,34 @@ gupnp_didl_lite_resource_set_update_count (GUPnPDIDLLiteResource *resource,
         g_object_notify (G_OBJECT (resource), "update-count");
 }
 
+/*
+ * gupnp_didl_lite_resource_set_track_total:
+ * @resource: A #GUPnPDIDLLiteResource
+ * @track_total: The total number of tracks in this resource
+ *
+ * Set the total number of tracks in this resource.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_resource_set_track_total (GUPnPDIDLLiteResource *resource,
+                                          guint                  track_total)
+{
+        char *str;
+
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+
+        str = g_strdup_printf ("%u", track_total);
+        xmlSetNsProp (resource->priv->xml_node,
+                      resource->priv->dlna_ns,
+                      (unsigned char *) "trackTotal",
+                      (unsigned char *) str);
+        g_free (str);
+
+        g_object_notify (G_OBJECT (resource), "track-total");
+}
+
+
 /**
  * gupnp_didl_lite_resource_unset_update_count:
  * @resource: A #GUPnPDIDLLiteResource
@@ -1630,4 +1725,24 @@ gupnp_didl_lite_resource_unset_update_count (GUPnPDIDLLiteResource *resource)
                       (unsigned char *) "updateCount");
 
         g_object_notify (G_OBJECT (resource), "update-count");
+}
+
+/**
+ * gupnp_didl_lite_resource_unset_track_total:
+ * @resource: A #GUPnPDIDLLiteResource
+ *
+ * Unset the total track count of this resource.
+ *
+ * Return value: None.
+ **/
+void
+gupnp_didl_lite_resource_unset_track_total (GUPnPDIDLLiteResource *resource)
+{
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+
+        xmlUnsetNsProp (resource->priv->xml_node,
+                        resource->priv->dlna_ns,
+                        (unsigned char *) "trackTotal");
+
+        g_object_notify (G_OBJECT (resource), "track-total");
 }

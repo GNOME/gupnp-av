@@ -153,6 +153,14 @@ gupnp_didl_lite_resource_set_update_count
                                          guint                  update_count);
 
 void
+gupnp_didl_lite_resource_set_track_total
+                                        (GUPnPDIDLLiteResource *resource,
+                                         guint                  track_total);
+void
+gupnp_didl_lite_resource_unset_track_total
+                                        (GUPnPDIDLLiteResource *resource);
+
+void
 gupnp_didl_lite_resource_unset_update_count
                                         (GUPnPDIDLLiteResource *resource);
 
@@ -220,6 +228,14 @@ gupnp_didl_lite_resource_get_update_count
 
 gboolean
 gupnp_didl_lite_resource_update_count_is_set
+                                        (GUPnPDIDLLiteResource *resource);
+
+guint
+gupnp_didl_lite_resource_get_track_total
+                                        (GUPnPDIDLLiteResource *resource);
+
+gboolean
+gupnp_didl_lite_resource_track_total_is_set
                                         (GUPnPDIDLLiteResource *resource);
 
 G_END_DECLS
