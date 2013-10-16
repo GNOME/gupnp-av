@@ -1,6 +1,6 @@
 AC_PREREQ([2.63])
 AC_INIT([gupnp-av],
-        [0.12.2],
+        [0.12.3],
         [https://bugzilla.gnome.org/enter_bug.cgi?product=GUPnP],
         [gupnp-av],
         [http://www.gupnp.org/])

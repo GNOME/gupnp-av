@@ -1,3 +1,25 @@
+0.12.3
+======
+
+Changes since 0.12.2:
+- Add support for link protection DLNA flags.
+- Fix DLNA.ORG_PS generation.
+- Add res@dlna:cleartextSize attribute.
+- Only use DLNA XML namespace when it's actually used.
+- Add res@dlna:trackTotal attribute.
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=705564
+ - https://bugzilla.gnome.org/show_bug.cgi?id=707495
+ - https://bugzilla.gnome.org/show_bug.cgi?id=702557
+ - https://bugzilla.gnome.org/show_bug.cgi?id=706926
+ - https://bugzilla.gnome.org/show_bug.cgi?id=706928
+
+All contributors to this release:
+ - Parthiban Balasubramanian <p.balasubramanian@cablelabs.com>
+ - Jens Georg <mail@jensge.org>
+ - Craig Pratt <craig@ecaspia.com>
+
 0.12.2
 ======
 
