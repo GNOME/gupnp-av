@@ -164,11 +164,25 @@ void
 gupnp_didl_lite_resource_unset_update_count
                                         (GUPnPDIDLLiteResource *resource);
 
+void
+gupnp_didl_lite_resource_set_subtitle_file_uri
+                                        (GUPnPDIDLLiteResource *resource,
+                                         const char            *uri);
+
+void
+gupnp_didl_lite_resource_set_subtitle_file_type
+                                        (GUPnPDIDLLiteResource *resource,
+                                         const char            *type);
+
 xmlNode *
 gupnp_didl_lite_resource_get_xml_node   (GUPnPDIDLLiteResource *resource);
 
 xmlNsPtr
 gupnp_didl_lite_resource_get_dlna_namespace
+                                        (GUPnPDIDLLiteResource *resource);
+
+xmlNsPtr
+gupnp_didl_lite_resource_get_pv_namespace
                                         (GUPnPDIDLLiteResource *resource);
 
 const char *
@@ -238,6 +252,13 @@ gboolean
 gupnp_didl_lite_resource_track_total_is_set
                                         (GUPnPDIDLLiteResource *resource);
 
+const char *
+gupnp_didl_lite_resource_get_subtitle_file_uri
+                                        (GUPnPDIDLLiteResource *resource);
+
+const char *
+gupnp_didl_lite_resource_get_subtitle_file_type
+                                        (GUPnPDIDLLiteResource *resource);
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_RESOURCE_H__ */

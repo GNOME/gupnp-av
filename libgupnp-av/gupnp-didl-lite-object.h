@@ -94,6 +94,9 @@ xmlNsPtr
 gupnp_didl_lite_object_get_dlna_namespace
                                         (GUPnPDIDLLiteObject *object);
 
+xmlNsPtr
+gupnp_didl_lite_object_get_pv_namespace
+                                        (GUPnPDIDLLiteObject *object);
 const char *
 gupnp_didl_lite_object_get_upnp_class   (GUPnPDIDLLiteObject *object);
 

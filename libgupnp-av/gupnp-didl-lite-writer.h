@@ -80,6 +80,7 @@ typedef struct {
 #define GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC   "dc"
 #define GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP "upnp"
 #define GUPNP_DIDL_LITE_WRITER_NAMESPACE_DLNA "dlna"
+#define GUPNP_DIDL_LITE_WRITER_NAMESPACE_PV "pv"
 
 GUPnPDIDLLiteWriter *
 gupnp_didl_lite_writer_new              (const char *language);

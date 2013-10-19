@@ -49,6 +49,7 @@ struct _GUPnPDIDLLiteWriterPrivate {
         xmlNs       *upnp_ns;
         xmlNs       *dc_ns;
         xmlNs       *dlna_ns;
+        xmlNs       *pv_ns;
 
         char        *language;
 
@@ -416,6 +417,11 @@ gupnp_didl_lite_writer_constructed (GObject *object)
                                   "urn:schemas-dlna-org:metadata-1-0/",
                                   (unsigned char *)
                                   GUPNP_DIDL_LITE_WRITER_NAMESPACE_DLNA);
+        priv->pv_ns = xmlNewNs (priv->xml_node,
+                                 (unsigned char *)
+                                 "http://www.pv.com/pvns/",
+                                 (unsigned char *)
+                                 GUPNP_DIDL_LITE_WRITER_NAMESPACE_PV);
         xmlNewNs (priv->xml_node,
                   (unsigned char *)
                   "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/",
@@ -520,7 +526,10 @@ gupnp_didl_lite_writer_class_init (GUPnPDIDLLiteWriterClass *klass)
 
 /**
  * gupnp_didl_lite_writer_new:
- * @language: (allow-none):The language the DIDL-Lite fragment is in, or NULL
+ * @language: (allow-none):The language the DIDL-Lite fragment is in, or %NULL
+ *
+ * Note: @language should always be set to %NULL, DLNA does not support the
+ * language parameter.
  *
  * Return value: A new #GUPnPDIDLLiteWriter object.
  **/
@@ -557,7 +566,8 @@ gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
                                                       writer->priv->xml_doc,
                                                       writer->priv->upnp_ns,
                                                       writer->priv->dc_ns,
-                                                      writer->priv->dlna_ns);
+                                                      writer->priv->dlna_ns,
+                                                      writer->priv->pv_ns);
         return GUPNP_DIDL_LITE_ITEM (object);
 }
 
@@ -594,7 +604,8 @@ gupnp_didl_lite_writer_add_container_child_item
                                                       writer->priv->xml_doc,
                                                       writer->priv->upnp_ns,
                                                       writer->priv->dc_ns,
-                                                      writer->priv->dlna_ns);
+                                                      writer->priv->dlna_ns,
+                                                      writer->priv->pv_ns);
         return GUPNP_DIDL_LITE_ITEM (object);
 }
 
@@ -623,7 +634,8 @@ gupnp_didl_lite_writer_add_container (GUPnPDIDLLiteWriter *writer)
                                                       writer->priv->xml_doc,
                                                       writer->priv->upnp_ns,
                                                       writer->priv->dc_ns,
-                                                      writer->priv->dlna_ns);
+                                                      writer->priv->dlna_ns,
+                                                      writer->priv->pv_ns);
         return GUPNP_DIDL_LITE_CONTAINER (object);
 }
 

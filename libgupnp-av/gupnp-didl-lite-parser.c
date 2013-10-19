@@ -83,6 +83,7 @@ parse_elements (GUPnPDIDLLiteParser *parser,
                 xmlNs               *upnp_ns,
                 xmlNs               *dc_ns,
                 xmlNs               *dlna_ns,
+                xmlNs               *pv_ns,
                 gboolean             recursive,
                 GError             **error);
 
@@ -230,7 +231,8 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
         xmlNs       **ns_list;
         xmlNs        *upnp_ns = NULL;
         xmlNs        *dc_ns   = NULL;
-        xmlNs        *dlna_ns   = NULL;
+        xmlNs        *dlna_ns = NULL;
+        xmlNs        *pv_ns   = NULL;
         GUPnPXMLDoc  *xml_doc;
         gboolean      result;
 
@@ -292,6 +294,9 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
                         else if (! dlna_ns &&
                                  g_ascii_strcasecmp (prefix, "dlna") == 0)
                                 dlna_ns = ns_list[i];
+                        else if (! pv_ns &&
+                                g_ascii_strcasecmp (prefix, "pv") == 0)
+                                pv_ns = ns_list[i];
                 }
 
                 xmlFree (ns_list);
@@ -316,6 +321,12 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
                                     "urn:schemas-dlna-org:metadata-2-0/",
                                     (unsigned char *)
                                     GUPNP_DIDL_LITE_WRITER_NAMESPACE_DLNA);
+        if (! pv_ns)
+                dlna_ns = xmlNewNs (xmlDocGetRootElement (doc),
+                                    (unsigned char *)
+                                    "http://www.pv.com/pvns/",
+                                    (unsigned char *)
+                                    GUPNP_DIDL_LITE_WRITER_NAMESPACE_PV);
 
         xml_doc = gupnp_xml_doc_new (doc);
 
@@ -325,6 +336,7 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
                                  upnp_ns,
                                  dc_ns,
                                  dlna_ns,
+                                 pv_ns,
                                  recursive,
                                  error);
         g_object_unref (xml_doc);
@@ -339,6 +351,7 @@ parse_elements (GUPnPDIDLLiteParser *parser,
                 xmlNs               *upnp_ns,
                 xmlNs               *dc_ns,
                 xmlNs               *dlna_ns,
+                xmlNs               *pv_ns,
                 gboolean             recursive,
                 GError             **error)
 {
@@ -349,7 +362,7 @@ parse_elements (GUPnPDIDLLiteParser *parser,
 
                 object = gupnp_didl_lite_object_new_from_xml (element, xml_doc,
                                                               upnp_ns, dc_ns,
-                                                              dlna_ns);
+                                                              dlna_ns, pv_ns);
 
                 if (object == NULL)
                         continue;
@@ -366,6 +379,7 @@ parse_elements (GUPnPDIDLLiteParser *parser,
                                              upnp_ns,
                                              dc_ns,
                                              dlna_ns,
+                                             pv_ns,
                                              recursive,
                                              error)) {
                                 g_object_unref (object);

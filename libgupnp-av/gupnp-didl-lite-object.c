@@ -54,6 +54,7 @@ struct _GUPnPDIDLLiteObjectPrivate {
         xmlNs *upnp_ns;
         xmlNs *dc_ns;
         xmlNs *dlna_ns;
+        xmlNs *pv_ns;
 };
 
 static XSDData *didl_lite_xsd;
@@ -65,6 +66,7 @@ enum {
         PROP_UPNP_NAMESPACE,
         PROP_DC_NAMESPACE,
         PROP_DLNA_NAMESPACE,
+        PROP_PV_NAMESPACE,
         PROP_ID,
         PROP_PARENT_ID,
         PROP_RESTRICTED,
@@ -132,6 +134,9 @@ gupnp_didl_lite_object_set_property (GObject      *object,
                 break;
         case PROP_DLNA_NAMESPACE:
                 didl_object->priv->dlna_ns = g_value_get_pointer (value);
+                break;
+        case PROP_PV_NAMESPACE:
+                didl_object->priv->pv_ns = g_value_get_pointer (value);
                 break;
         case PROP_ID:
                 gupnp_didl_lite_object_set_id (didl_object,
@@ -255,6 +260,12 @@ gupnp_didl_lite_object_get_property (GObject    *object,
                 g_value_set_pointer
                         (value,
                          gupnp_didl_lite_object_get_dlna_namespace
+                                (didl_object));
+                break;
+        case PROP_PV_NAMESPACE:
+                g_value_set_pointer
+                        (value,
+                         gupnp_didl_lite_object_get_pv_namespace
                                 (didl_object));
                 break;
         case PROP_ID:
@@ -481,6 +492,25 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
                                        G_PARAM_STATIC_NAME |
                                        G_PARAM_STATIC_NICK |
                                        G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPDIDLLiteObject:pv-namespace:
+         *
+         * Pointer to the PV metadata namespace registered with the XML
+         * document containing this object.
+         *
+         **/
+        g_object_class_install_property
+                (object_class,
+                 PROP_PV_NAMESPACE,
+                 g_param_spec_pointer ("pv-namespace",
+                                       "XML namespace",
+                                       "Pointer to the PV metadata namespace "
+                                       "registered with the XML document "
+                                       "containing this object.",
+                                       G_PARAM_READWRITE |
+                                       G_PARAM_CONSTRUCT_ONLY |
+                                       G_PARAM_STATIC_STRINGS));
 
         /**
          * GUPnPDIDLLiteObject:id:
@@ -914,6 +944,7 @@ unset_contributors_by_name (GUPnPDIDLLiteObject *object, const char *name)
  * @upnp_ns: The pointer to 'upnp' namespace in XML document
  * @dc_ns: The pointer to 'dc' namespace in XML document
  * @dlna_ns: The pointer to 'dlna' namespace in XML document
+ * @pv_ns: The pointer to 'pv' namespace in XML document
  *
  * Creates a new #GUPnPDIDLLiteObject for the @xml_node.
  *
@@ -924,7 +955,8 @@ gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
                                      GUPnPXMLDoc *xml_doc,
                                      xmlNs       *upnp_ns,
                                      xmlNs       *dc_ns,
-                                     xmlNs       *dlna_ns)
+                                     xmlNs       *dlna_ns,
+                                     xmlNs       *pv_ns)
 {
         g_return_val_if_fail (xml_node != NULL, NULL);
         g_return_val_if_fail (xml_node->name != NULL, NULL);
@@ -939,6 +971,7 @@ gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
                                      "upnp-namespace", upnp_ns,
                                      "dc-namespace", dc_ns,
                                      "dlna-namespace", dlna_ns,
+                                     "pv-namespace", pv_ns,
                                      NULL);
         else if (g_ascii_strcasecmp ((char *) xml_node->name, "item") == 0)
                 return g_object_new (GUPNP_TYPE_DIDL_LITE_ITEM,
@@ -947,6 +980,7 @@ gupnp_didl_lite_object_new_from_xml (xmlNode     *xml_node,
                                      "upnp-namespace", upnp_ns,
                                      "dc-namespace", dc_ns,
                                      "dlna-namespace", dlna_ns,
+                                     "pv-namespace", pv_ns,
                                      NULL);
         else
                 return NULL;
@@ -1051,6 +1085,24 @@ gupnp_didl_lite_object_get_dlna_namespace (GUPnPDIDLLiteObject *object)
 
         return object->priv->dlna_ns;
 }
+
+/**
+ * gupnp_didl_lite_object_get_pv_namespace:
+ * @object: The #GUPnPDIDLLiteObject
+ *
+ * Get the pointer to the PV metadata namespace registered with the XML
+ * document containing this object.
+ *
+ * Returns: (transfer none): The pointer to PV namespace in XML document.
+ **/
+xmlNsPtr
+gupnp_didl_lite_object_get_pv_namespace (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+
+        return object->priv->pv_ns;
+}
+
 
 /**
  * gupnp_didl_lite_object_get_id:
@@ -1514,7 +1566,8 @@ gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
                 resource = gupnp_didl_lite_resource_new_from_xml
                                         (res_node,
                                          object->priv->xml_doc,
-                                         object->priv->dlna_ns);
+                                         object->priv->dlna_ns,
+                                         object->priv->pv_ns);
 
                 ret = g_list_append (ret, resource);
         }
@@ -2136,7 +2189,8 @@ gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
 
         return gupnp_didl_lite_resource_new_from_xml (res_node,
                                                       object->priv->xml_doc,
-                                                      object->priv->dlna_ns);
+                                                      object->priv->dlna_ns,
+                                                      object->priv->pv_ns);
 }
 
 /**

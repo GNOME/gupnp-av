@@ -35,7 +35,8 @@ gupnp_didl_lite_object_new_from_xml     (xmlNode     *xml_node,
                                          GUPnPXMLDoc *xml_doc,
                                          xmlNs       *upnp_ns,
                                          xmlNs       *dc_ns,
-                                         xmlNs       *dlna_ns);
+                                         xmlNs       *dlna_ns,
+                                         xmlNs       *pv_ns);
 
 G_GNUC_INTERNAL GUPnPXMLDoc *
 gupnp_didl_lite_object_get_gupnp_xml_doc
