@@ -1,3 +1,15 @@
+0.12.4
+======
+
+Changes since 0.12.3:
+- Add support for pv:subtitleFileUri and pv:subtitleFileType
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=695990
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+
 0.12.3
 ======
 
