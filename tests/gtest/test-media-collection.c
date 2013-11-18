@@ -1,7 +1,9 @@
 /*
  * Copyright (C) 2012 Intel Corporation.
+ * Copyright (C) 2013 Jens Georg <mail@jensge.org>
  *
  * Author: Jens Georg <jensg@openismus.com>
+ *         Jens Georg <mail@jensge.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +32,7 @@
 "    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" \
 "    xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\"" \
 "    xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"" \
+"    xmlns:pv=\"http://www.pv.com/pvns/\"" \
 "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" \
 "    xsi:schemaLocation=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/" \
 "        http://www.upnp.org/schemas/av/didl-lite-v2-20060531.xsd" \
@@ -60,6 +63,7 @@
 "    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" \
 "    xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\"" \
 "    xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"" \
+"    xmlns:pv=\"http://www.pv.com/pvns/\"" \
 "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" \
 "    xsi:schemaLocation=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/" \
 "        http://www.upnp.org/schemas/av/didl-lite-v2-20060531.xsd" \
@@ -91,6 +95,7 @@
 "<DIDL-Lite " \
         "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
         "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
+        "xmlns:pv=\"http://www.pv.com/pvns/\" " \
         "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
     "<item restricted=\"1\">" \
       "<dc:title>Song1</dc:title>" \
@@ -113,6 +118,7 @@
 "<DIDL-Lite " \
         "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
         "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
+        "xmlns:pv=\"http://www.pv.com/pvns/\" " \
         "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
     "<container>" \
       "<dc:title>TestCollection1</dc:title>" \
@@ -139,6 +145,7 @@
 "<DIDL-Lite " \
         "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
         "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
+        "xmlns:pv=\"http://www.pv.com/pvns/\" " \
         "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
     "<container>" \
       "<item restricted=\"1\">" \
