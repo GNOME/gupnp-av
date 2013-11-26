@@ -1469,7 +1469,7 @@ gupnp_didl_lite_resource_set_cleartext_size
                 g_free (str);
         }
 
-        g_object_notify (G_OBJECT (resource), "cleartextSize");
+        g_object_notify (G_OBJECT (resource), "cleartext-size");
 }
 
 /**
