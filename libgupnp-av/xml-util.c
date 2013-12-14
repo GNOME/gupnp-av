@@ -494,3 +494,34 @@ xml_util_lookup_namespace (xmlDocPtr doc, GUPnPXMLNamespace ns)
 
         return retval;
 }
+
+/**
+ * xml_util_get_ns:
+ * @doc: A #xmlDoc.
+ * @ns: A #GUPnPXMLNamespace.
+ * @ns_out: (out) (allow-none): return location for the namespace or %NULL.
+ *
+ * Lazy-create a XML namespace on @doc.
+ *
+ * If @ns_out is non-%NULL, the function will return @ns_out immediately.
+ * @returns: either the existing #xmlNsPtr or a newly created one.
+ */
+xmlNsPtr
+xml_util_get_ns (xmlDocPtr doc, GUPnPXMLNamespace ns, xmlNsPtr *ns_out)
+{
+        xmlNsPtr tmp_ns;
+
+        /* User supplied namespace, just return that */
+        if (ns_out != NULL && *ns_out != NULL)
+                return *ns_out;
+
+        tmp_ns = xml_util_lookup_namespace (doc, ns);
+        if (!tmp_ns)
+                tmp_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
+                                                    ns);
+
+        if (ns_out != NULL)
+                *ns_out = tmp_ns;
+
+        return tmp_ns;
+}

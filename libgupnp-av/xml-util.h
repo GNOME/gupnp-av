@@ -134,6 +134,12 @@ xml_util_create_namespace               (xmlNodePtr root,
 G_GNUC_INTERNAL xmlNsPtr
 xml_util_lookup_namespace               (xmlDocPtr doc,
                                          GUPnPXMLNamespace ns);
+
+G_GNUC_INTERNAL xmlNsPtr
+xml_util_get_ns                         (xmlDocPtr doc,
+                                         GUPnPXMLNamespace ns,
+                                         xmlNsPtr *ns_out);
+
 G_END_DECLS
 
 #endif /* __XML_UTIL_H__ */
