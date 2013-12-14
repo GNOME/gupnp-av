@@ -272,46 +272,22 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
                 return FALSE;
         }
 
-        /* Lookup UPnP and DC namespaces */
-        ns_list = xmlGetNsList (doc,
-                                xmlDocGetRootElement (doc));
-
-        if (ns_list) {
-                short i;
-
-                for (i = 0; ns_list[i] != NULL; i++) {
-                        const char *prefix = (const char *) ns_list[i]->prefix;
-
-                        if (prefix == NULL)
-                                continue;
-
-                        if (! upnp_ns &&
-                            g_ascii_strcasecmp (prefix, "upnp") == 0)
-                                upnp_ns = ns_list[i];
-                        else if (! dc_ns &&
-                                 g_ascii_strcasecmp (prefix, "dc") == 0)
-                                dc_ns = ns_list[i];
-                        else if (! dlna_ns &&
-                                 g_ascii_strcasecmp (prefix, "dlna") == 0)
-                                dlna_ns = ns_list[i];
-                        else if (! pv_ns &&
-                                g_ascii_strcasecmp (prefix, "pv") == 0)
-                                pv_ns = ns_list[i];
-                }
-
-                xmlFree (ns_list);
-        }
-
-        /* Create UPnP and DC namespaces if they don't exist */
+        /* Create namespaces if they don't exist */
+        upnp_ns = xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_UPNP);
         if (! upnp_ns)
                 upnp_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
                                                      GUPNP_XML_NAMESPACE_UPNP);
+
+        dc_ns = xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_DC);
         if (! dc_ns)
                 dc_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
                                                    GUPNP_XML_NAMESPACE_DC);
+        dlna_ns = xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_DLNA);
         if (! dlna_ns)
                 dlna_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
                                                    GUPNP_XML_NAMESPACE_DLNA);
+
+        pv_ns = xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_PV);
         if (! pv_ns)
                 pv_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
                                                    GUPNP_XML_NAMESPACE_PV);
