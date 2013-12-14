@@ -399,18 +399,6 @@ gupnp_didl_lite_writer_constructed (GObject *object)
                                         (unsigned char *) "DIDL-Lite",
                                         NULL);
         xmlDocSetRootElement (priv->xml_doc->doc, priv->xml_node);
-        priv->dc_ns = xml_util_create_namespace (priv->xml_node,
-                                                 GUPNP_XML_NAMESPACE_DC);
-
-        priv->upnp_ns = xml_util_create_namespace (priv->xml_node,
-                                                   GUPNP_XML_NAMESPACE_UPNP);
-        /* Not adding dlna namespace declaration to any node yet.
-           Add the namespace to Didl-Lite element only if any of the child
-           nodes have dlna namespace prefix attributes */
-        priv->dlna_ns = xml_util_create_namespace (NULL,
-                                                   GUPNP_XML_NAMESPACE_DLNA);
-        priv->pv_ns = xml_util_create_namespace (priv->xml_node,
-                                                 GUPNP_XML_NAMESPACE_PV);
 
         xml_util_create_namespace (priv->xml_node,
                                    GUPNP_XML_NAMESPACE_DIDL_LITE);

@@ -223,7 +223,12 @@ gupnp_didl_lite_item_set_lifetime (GUPnPDIDLLiteItem *item,
                 char *str;
 
                 str = seconds_to_time (lifetime);
-                xml_util_set_child (node, ns, doc->doc, "lifetime", str);
+                xml_util_set_child (node,
+                                    GUPNP_XML_NAMESPACE_DLNA,
+                                    &ns,
+                                    doc->doc,
+                                    "lifetime",
+                                    str);
                 g_free (str);
         }
 

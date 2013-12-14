@@ -647,7 +647,8 @@ gupnp_didl_lite_container_set_container_update_id
 
         str = g_strdup_printf ("%u", update_id);
         xml_util_set_child (xml_node,
-                            upnp_ns,
+                            GUPNP_XML_NAMESPACE_UPNP,
+                            &upnp_ns,
                             xml_doc->doc,
                             "containerUpdateID",
                             str);
@@ -706,7 +707,8 @@ gupnp_didl_lite_container_set_total_deleted_child_count
 
         str = g_strdup_printf ("%u", count);
         xml_util_set_child (xml_node,
-                            upnp_ns,
+                            GUPNP_XML_NAMESPACE_UPNP,
+                            &upnp_ns,
                             xml_doc->doc,
                             "totalDeletedChildCount",
                             str);
