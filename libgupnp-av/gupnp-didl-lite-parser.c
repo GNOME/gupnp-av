@@ -322,7 +322,7 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
                                     (unsigned char *)
                                     GUPNP_DIDL_LITE_WRITER_NAMESPACE_DLNA);
         if (! pv_ns)
-                dlna_ns = xmlNewNs (xmlDocGetRootElement (doc),
+                pv_ns = xmlNewNs (xmlDocGetRootElement (doc),
                                     (unsigned char *)
                                     "http://www.pv.com/pvns/",
                                     (unsigned char *)
