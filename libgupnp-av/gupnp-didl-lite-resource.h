@@ -80,7 +80,6 @@ typedef struct {
         void (* _gupnp_reserved4) (void);
 } GUPnPDIDLLiteResourceClass;
 
-
 void
 gupnp_didl_lite_resource_set_uri        (GUPnPDIDLLiteResource *resource,
                                          const char            *uri);

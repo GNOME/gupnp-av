@@ -52,8 +52,6 @@ struct _GUPnPDIDLLiteWriterPrivate {
         xmlNs       *pv_ns;
 
         char        *language;
-
-        gboolean    dlna_attr_present;
 };
 
 enum {
@@ -209,19 +207,6 @@ filter_attributes (xmlNode             *node,
 }
 
 static void
-check_dlna_attr (xmlNode             *node,
-                 GUPnPDIDLLiteWriter *writer)
-{
-        xmlAttr *attr;
-
-        /* check if dlna prefix is present for a node */
-        for (attr = node->properties; attr != NULL; attr = attr->next) {
-                if (attr->ns && g_strcmp0 (attr->ns->prefix, "dlna") == 0)
-                        writer->priv->dlna_attr_present = TRUE;
-        }
-}
-
-static void
 filter_node (xmlNode             *node,
              GList               *allowed,
              GUPnPDIDLLiteWriter *writer,
@@ -235,10 +220,6 @@ filter_node (xmlNode             *node,
 
         if (!tags_only)
                 filter_attributes (node, allowed);
-
-        // Check if dlna namespace attribute is present
-        if (!writer->priv->dlna_attr_present)
-                check_dlna_attr (node, writer);
 
         if (strcmp ((const char *) node->name, "container") == 0) {
                 is_container = TRUE;
@@ -298,13 +279,8 @@ apply_filter (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (filter != NULL);
 
-        if (filter[0] == '*') {
-                /* Create DLNA namespace as we include anything anyway */
-                xmlNewNs (writer->priv->xml_node,
-                          writer->priv->dlna_ns->href,
-                          writer->priv->dlna_ns->prefix);
+        if (filter[0] == '*')
                 return;         /* Wildcard */
-        }
 
         tokens = g_strsplit (filter, ",", -1);
         g_return_if_fail (tokens != NULL);
@@ -316,12 +292,6 @@ apply_filter (GUPnPDIDLLiteWriter *writer,
              node != NULL;
              node = node->next)
                 filter_node (node, allowed, writer, tags_only);
-
-        if (writer->priv->dlna_attr_present) {
-                xmlNewNs (writer->priv->xml_node,
-                          writer->priv->dlna_ns->href,
-                          writer->priv->dlna_ns->prefix);
-        }
 
         g_list_free (allowed);
         g_strfreev (tokens);
@@ -407,8 +377,6 @@ gupnp_didl_lite_writer_constructed (GObject *object)
                 xmlSetProp (priv->xml_node,
                             (unsigned char *) "lang",
                             (unsigned char *) priv->language);
-
-        priv->dlna_attr_present = FALSE;
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
         if (object_class->constructed != NULL)
