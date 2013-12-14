@@ -444,3 +444,53 @@ xml_util_create_namespace (xmlNodePtr root, GUPnPXMLNamespace ns)
                          (const xmlChar *) gupnp_xml_namespaces[ns].uri,
                          (const xmlChar *) gupnp_xml_namespaces[ns].prefix);
 }
+
+/**
+ * xml_util_lookup_namespace:
+ * @doc: #xmlDoc
+ * @ns: namespace to look up (except DIDL-Lite, which doesn't have a prefix)
+ * @returns: %NULL if namespace does not exist, a pointer to the namespace
+ * otherwise.
+ */
+xmlNsPtr
+xml_util_lookup_namespace (xmlDocPtr doc, GUPnPXMLNamespace ns)
+{
+        xmlNsPtr *ns_list, *it, retval = NULL;
+        const char *ns_prefix = NULL;
+        const char *ns_uri = NULL;
+
+        g_return_val_if_fail (ns < GUPNP_XML_NAMESPACE_COUNT, NULL);
+
+        ns_prefix = gupnp_xml_namespaces[ns].prefix;
+        ns_uri = gupnp_xml_namespaces[ns].uri;
+
+        ns_list = xmlGetNsList (doc, xmlDocGetRootElement (doc));
+        if (ns_list == NULL)
+                return NULL;
+
+        for (it = ns_list; *it != NULL; it++) {
+                const char *it_prefix = (const char *) (*it)->prefix;
+                const char *it_uri = (const char *) (*it)->href;
+
+                if (it_prefix == NULL) {
+                        if (ns_prefix != NULL)
+                                continue;
+
+                        if (g_ascii_strcasecmp (it_uri, ns_uri) == 0) {
+                                retval = *it;
+                                break;
+                        }
+
+                        continue;
+                }
+
+                if (g_ascii_strcasecmp (it_prefix, ns_prefix) == 0) {
+                        retval = *it;
+                        break;
+                }
+        }
+
+        xmlFree (ns_list);
+
+        return retval;
+}
