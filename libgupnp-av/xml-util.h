@@ -94,11 +94,12 @@ xml_util_get_int64_attribute            (xmlNode    *node,
                                          gint64      default_value);
 
 G_GNUC_INTERNAL xmlNode *
-xml_util_set_child                      (xmlNode    *parent_node,
-                                         xmlNs      *namespace,
-                                         xmlDoc     *doc,
-                                         const char *name,
-                                         const char *value);
+xml_util_set_child                      (xmlNode          *parent_node,
+                                         GUPnPXMLNamespace ns,
+                                         xmlNsPtr         *namespace,
+                                         xmlDoc           *doc,
+                                         const char       *name,
+                                         const char       *value);
 
 G_GNUC_INTERNAL void
 xml_util_unset_child                    (xmlNode    *parent_node,

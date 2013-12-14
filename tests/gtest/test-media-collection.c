@@ -32,7 +32,6 @@
 "    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" \
 "    xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\"" \
 "    xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"" \
-"    xmlns:pv=\"http://www.pv.com/pvns/\"" \
 "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" \
 "    xsi:schemaLocation=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/" \
 "        http://www.upnp.org/schemas/av/didl-lite-v2-20060531.xsd" \
@@ -60,10 +59,9 @@
 #define TEST_PARSE_COLLECTION_2 \
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" \
 "<DIDL-Lite" \
-"    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" \
 "    xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\"" \
+"    xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" \
 "    xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\"" \
-"    xmlns:pv=\"http://www.pv.com/pvns/\"" \
 "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" \
 "    xsi:schemaLocation=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/" \
 "        http://www.upnp.org/schemas/av/didl-lite-v2-20060531.xsd" \
@@ -93,10 +91,9 @@
 
 #define TEST_CREATE_FLAT \
 "<DIDL-Lite " \
+        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" " \
         "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
-        "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
-        "xmlns:pv=\"http://www.pv.com/pvns/\" " \
-        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
+        "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\">" \
     "<item restricted=\"1\">" \
       "<dc:title>Song1</dc:title>" \
       "<upnp:class>object.item.audioItem</upnp:class>" \
@@ -116,10 +113,9 @@
 
 #define TEST_CREATE_FULL \
 "<DIDL-Lite " \
+        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" " \
         "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
-        "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
-        "xmlns:pv=\"http://www.pv.com/pvns/\" " \
-        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
+        "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\">" \
     "<container>" \
       "<dc:title>TestCollection1</dc:title>" \
       "<dc:creator>TestCollection1Author</dc:creator>" \
@@ -143,10 +139,9 @@
 
 #define TEST_CREATE_FULL_REPARENT \
 "<DIDL-Lite " \
+        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" " \
         "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
-        "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
-        "xmlns:pv=\"http://www.pv.com/pvns/\" " \
-        "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" \
+        "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\">" \
     "<container>" \
       "<item restricted=\"1\">" \
         "<dc:title>Song1</dc:title>" \

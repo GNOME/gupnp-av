@@ -236,7 +236,8 @@ xml_util_get_int64_attribute (xmlNode    *node,
 
 xmlNode *
 xml_util_set_child (xmlNode    *parent_node,
-                    xmlNs      *namespace,
+                    GUPnPXMLNamespace ns,
+                    xmlNsPtr   *xmlns,
                     xmlDoc     *doc,
                     const char *name,
                     const char *value)
@@ -245,11 +246,15 @@ xml_util_set_child (xmlNode    *parent_node,
         xmlChar *escaped;
 
         node = xml_util_get_element (parent_node, name, NULL);
-        if (node == NULL)
+        if (node == NULL) {
+                xmlNsPtr ns_ptr = NULL;
+
+                ns_ptr = xml_util_get_ns (doc, ns, xmlns);
                 node = xmlNewChild (parent_node,
-                                    namespace,
+                                    ns_ptr,
                                     (unsigned char *) name,
                                     NULL);
+        }
 
         escaped = xmlEncodeSpecialChars (doc, (const unsigned char *) value);
         xmlNodeSetContent (node, escaped);
