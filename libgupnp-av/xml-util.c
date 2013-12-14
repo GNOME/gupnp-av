@@ -27,6 +27,23 @@
 
 #include "xml-util.h"
 
+typedef struct _GUPnPXMLNamespaceDescription
+{
+        char *uri;
+        char *prefix;
+} GUPnPXMLNamespaceDescription;
+
+
+static GUPnPXMLNamespaceDescription gupnp_xml_namespaces[] =
+{
+        { "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/", NULL },
+        { "http://purl.org/dc/elements/1.1/", "dc" },
+        { "urn:schemas-dlna-org:metadata-1-0/", "dlna" },
+        { "http://www.pv.com/pvns/", "pv" },
+        { "urn:schemas-upnp-org:metadata-1-0/upnp/", "upnp" },
+        NULL
+};
+
 xmlNode *
 xml_util_get_element (xmlNode *node,
                       ...)
@@ -410,4 +427,20 @@ xml_util_get_attributes_map (xmlNode *node)
                                      (gpointer) attribute->children->content);
 
         return attributes_map;
+}
+
+/**
+ * xml_util_create_namespace:
+ * @root: (allow-none): Document root node or %NULL for anonymous ns.
+ * @ns: Namespace
+ * @returns: Newly created namespace on root node
+ */
+xmlNsPtr
+xml_util_create_namespace (xmlNodePtr root, GUPnPXMLNamespace ns)
+{
+        g_return_val_if_fail (ns < GUPNP_XML_NAMESPACE_COUNT, NULL);
+
+        return xmlNewNs (root,
+                         (const xmlChar *) gupnp_xml_namespaces[ns].uri,
+                         (const xmlChar *) gupnp_xml_namespaces[ns].prefix);
 }

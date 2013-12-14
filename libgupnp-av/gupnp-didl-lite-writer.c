@@ -399,33 +399,21 @@ gupnp_didl_lite_writer_constructed (GObject *object)
                                         (unsigned char *) "DIDL-Lite",
                                         NULL);
         xmlDocSetRootElement (priv->xml_doc->doc, priv->xml_node);
-        priv->dc_ns = xmlNewNs (priv->xml_node,
-                                (unsigned char *)
-                                "http://purl.org/dc/elements/1.1/",
-                                (unsigned char *)
-                                GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC);
-        priv->upnp_ns = xmlNewNs (priv->xml_node,
-                                  (unsigned char *)
-                                  "urn:schemas-upnp-org:metadata-1-0/upnp/",
-                                  (unsigned char *)
-                                  GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP);
+        priv->dc_ns = xml_util_create_namespace (priv->xml_node,
+                                                 GUPNP_XML_NAMESPACE_DC);
+
+        priv->upnp_ns = xml_util_create_namespace (priv->xml_node,
+                                                   GUPNP_XML_NAMESPACE_UPNP);
         /* Not adding dlna namespace declaration to any node yet.
            Add the namespace to Didl-Lite element only if any of the child
            nodes have dlna namespace prefix attributes */
-        priv->dlna_ns = xmlNewNs (NULL,
-                                  (unsigned char *)
-                                  "urn:schemas-dlna-org:metadata-1-0/",
-                                  (unsigned char *)
-                                  GUPNP_DIDL_LITE_WRITER_NAMESPACE_DLNA);
-        priv->pv_ns = xmlNewNs (priv->xml_node,
-                                 (unsigned char *)
-                                 "http://www.pv.com/pvns/",
-                                 (unsigned char *)
-                                 GUPNP_DIDL_LITE_WRITER_NAMESPACE_PV);
-        xmlNewNs (priv->xml_node,
-                  (unsigned char *)
-                  "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/",
-                  NULL);
+        priv->dlna_ns = xml_util_create_namespace (NULL,
+                                                   GUPNP_XML_NAMESPACE_DLNA);
+        priv->pv_ns = xml_util_create_namespace (priv->xml_node,
+                                                 GUPNP_XML_NAMESPACE_PV);
+
+        xml_util_create_namespace (priv->xml_node,
+                                   GUPNP_XML_NAMESPACE_DIDL_LITE);
 
         if (priv->language)
                 xmlSetProp (priv->xml_node,

@@ -304,29 +304,17 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
 
         /* Create UPnP and DC namespaces if they don't exist */
         if (! upnp_ns)
-                upnp_ns = xmlNewNs (xmlDocGetRootElement (doc),
-                                    (unsigned char *)
-                                    "urn:schemas-upnp-org:metadata-1-0/upnp/",
-                                    (unsigned char *)
-                                    GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP);
+                upnp_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
+                                                     GUPNP_XML_NAMESPACE_UPNP);
         if (! dc_ns)
-                dc_ns = xmlNewNs (xmlDocGetRootElement (doc),
-                                  (unsigned char *)
-                                  "http://purl.org/dc/elements/1.1/",
-                                  (unsigned char *)
-                                  GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC);
+                dc_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
+                                                   GUPNP_XML_NAMESPACE_DC);
         if (! dlna_ns)
-                dlna_ns = xmlNewNs (xmlDocGetRootElement (doc),
-                                    (unsigned char *)
-                                    "urn:schemas-dlna-org:metadata-2-0/",
-                                    (unsigned char *)
-                                    GUPNP_DIDL_LITE_WRITER_NAMESPACE_DLNA);
+                dlna_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
+                                                   GUPNP_XML_NAMESPACE_DLNA);
         if (! pv_ns)
-                pv_ns = xmlNewNs (xmlDocGetRootElement (doc),
-                                    (unsigned char *)
-                                    "http://www.pv.com/pvns/",
-                                    (unsigned char *)
-                                    GUPNP_DIDL_LITE_WRITER_NAMESPACE_PV);
+                pv_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
+                                                   GUPNP_XML_NAMESPACE_PV);
 
         xml_doc = gupnp_xml_doc_new (doc);
 

@@ -30,6 +30,16 @@
 #include <libxml/tree.h>
 #include <stdarg.h>
 
+typedef enum _GUPnPXMLNamespace
+{
+        GUPNP_XML_NAMESPACE_DIDL_LITE,
+        GUPNP_XML_NAMESPACE_DC,
+        GUPNP_XML_NAMESPACE_DLNA,
+        GUPNP_XML_NAMESPACE_PV,
+        GUPNP_XML_NAMESPACE_UPNP,
+        GUPNP_XML_NAMESPACE_COUNT
+} GUPnPXMLNamespace;
+
 G_BEGIN_DECLS
 
 /* Misc utilities for inspecting xmlNodes */
@@ -116,6 +126,10 @@ xml_util_copy_node                      (xmlNode *node);
 
 G_GNUC_INTERNAL GHashTable *
 xml_util_get_attributes_map             (xmlNode *node);
+
+G_GNUC_INTERNAL xmlNsPtr
+xml_util_create_namespace               (xmlNodePtr root,
+                                         GUPnPXMLNamespace ns);
 
 G_END_DECLS
 
