@@ -1470,6 +1470,7 @@ gupnp_didl_lite_resource_set_cleartext_size
                               resource->priv->dlna_ns,
                               (unsigned char *) "cleartextSize",
                               (unsigned char *) str);
+
                 g_free (str);
         }
 
