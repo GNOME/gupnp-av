@@ -710,6 +710,31 @@ fragment_util_check_fragments (DocNode     *original,
                 goto out;
         }
 
+        /* Assuming current_doc->children is non-NULL. */
+        if (current_doc->children != NULL &&
+            current_doc->children->children != NULL) {
+            /* If the child element is title or class,
+             * it must not be set to empty or removed.
+             */
+            if (g_strrstr (current_doc->children->children->name,
+                           "title") != NULL ||
+                g_strrstr (current_doc->children->children->name,
+                           "class") != NULL) {
+                /* If the new tag has no corresponding title or class element */
+                if (new_doc->children->children == NULL) {
+                    result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG;
+
+                    goto out;
+                }
+                /* If the new tag has an empty value for title or class */
+                if (new_doc->children->children->children == NULL) {
+                    result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_REQUIRED_TAG;
+
+                    goto out;
+                }
+            }
+        }
+
         if (!is_current_doc_part_of_original_doc (original, current_doc)) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_INVALID;
 
