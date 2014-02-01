@@ -41,6 +41,17 @@
 "    </item>" \
 "</DIDL-Lite>"
 
+#define TEST_DIDL_BGO705564 \
+"<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" " \
+           "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
+           "xmlns:dlna=\"urn:schemas-dlna-org:metadata-1-0/\">" \
+        "<item>" \
+                "<upnp:albumArtURI dlna:profileID=\"JPEG_TN\">" \
+                "http://example.com/album.jpg"\
+                "</upnp:albumArtURI>"\
+        "</item>" \
+"</DIDL-Lite>"
+
 static void
 test_bgo674319_on_object_available (G_GNUC_UNUSED GUPnPDIDLLiteParser *parser,
                                     GUPnPDIDLLiteObject               *object,
@@ -90,6 +101,26 @@ test_bgo687462 (void)
         g_assert (gupnp_didl_lite_object_get_album_art (object) == NULL);
 }
 
+static void
+test_bgo705564 (void)
+{
+        GUPnPDIDLLiteWriter *writer;
+        GUPnPDIDLLiteObject *object;
+        char *xml;
+
+        writer = gupnp_didl_lite_writer_new (NULL);
+        object = (GUPnPDIDLLiteObject *)
+                        gupnp_didl_lite_writer_add_item (writer);
+        gupnp_didl_lite_object_set_album_art (object,
+                                              "http://example.com/album.jpg");
+
+        xml = gupnp_didl_lite_writer_get_string (writer);
+        g_assert_cmpstr (xml, ==, TEST_DIDL_BGO705564);
+        g_free (xml);
+        g_object_unref (object);
+        g_object_unref (writer);
+}
+
 int main (int argc, char *argv[])
 {
 #if !GLIB_CHECK_VERSION (2, 35, 0)
@@ -99,6 +130,7 @@ int main (int argc, char *argv[])
 
         g_test_add_func ("/bugs/gnome/674319", test_bgo674319);
         g_test_add_func ("/bugs/gnome/687462", test_bgo687462);
+        g_test_add_func ("/bugs/gnome/705564", test_bgo705564);
 
         g_test_run ();
 
