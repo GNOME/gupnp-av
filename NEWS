@@ -1,3 +1,20 @@
+0.12.6
+======
+
+Changes since 0.12.5:
+
+- Fix some coverity issues.
+- lazy-create XML namespaces so only used-ones are declared.
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=705564
+ - https://bugzilla.gnome.org/show_bug.cgi?id=730590
+ - https://bugzilla.gnome.org/show_bug.cgi?id=730591
+ - https://bugzilla.gnome.org/show_bug.cgi?id=731033
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+
 0.12.5
 ======
 
