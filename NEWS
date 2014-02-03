@@ -1,3 +1,20 @@
+0.12.5
+======
+
+Changes since 0.12.4:
+
+- Fix name of cleartext-size property.
+- Fix creation of pv namespace in DIDLLite parser.
+- Check for empty mandatory tags in UpdateObject.
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=705522
+ - https://bugzilla.gnome.org/show_bug.cgi?id=719377
+
+All contributors to this release:
+ - Parthiban Balasubramanian <p.balasubramanian@cablelabs.com>
+ - Jens Georg <mail@jensge.org>
+
 0.12.4
 ======
 
