@@ -321,8 +321,6 @@ gupnp_didl_lite_descriptor_new_from_xml (xmlNode     *xml_node,
                              "xml-node", xml_node,
                              "xml-doc", xml_doc,
                              NULL);
-
-        return descriptor;
 }
 
 /**

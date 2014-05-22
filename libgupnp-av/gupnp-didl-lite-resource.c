@@ -867,8 +867,6 @@ gupnp_didl_lite_resource_new_from_xml (xmlNode     *xml_node,
                              "dlna-namespace", dlna_ns,
                              "pv-namespace", pv_ns,
                              NULL);
-
-        return resource;
 }
 
 /**
