@@ -73,7 +73,7 @@ reparent_children (GUPnPMediaCollection *collection)
                 node = gupnp_didl_lite_object_get_xml_node
                                         (GUPNP_DIDL_LITE_OBJECT (it->data));
                 xmlUnlinkNode (node);
-                node = xmlAddChild (container_node, node);
+                xmlAddChild (container_node, node);
 
                 it = it->prev;
         }
