@@ -699,20 +699,20 @@ fragment_util_check_fragments (DocNode     *original,
                                         XML_PARSE_NONET);
         GUPnPDIDLLiteFragmentResult result;
 
-        if (current_doc == NULL) {
+        if (current_doc == NULL || current_doc->children == NULL) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_CURRENT_BAD_XML;
 
                 goto out;
         }
-        if (new_doc == NULL) {
+
+        if (new_doc == NULL || new_doc->children == NULL) {
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_NEW_BAD_XML;
 
                 goto out;
         }
 
         /* Assuming current_doc->children is non-NULL. */
-        if (current_doc->children != NULL &&
-            current_doc->children->children != NULL) {
+        if (current_doc->children->children != NULL) {
             /* If the child element is title or class,
              * it must not be set to empty or removed.
              */
