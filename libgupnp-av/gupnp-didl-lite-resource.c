@@ -1883,7 +1883,7 @@ gupnp_didl_lite_resource_set_subtitle_file_uri
                 xmlSetNsProp (resource->priv->xml_node,
                               resource->priv->pv_ns,
                               (unsigned char *) "subtitleFileUri",
-                              (unsigned char *) uri);
+                              (xmlChar *) uri);
         }
 
         g_object_notify (G_OBJECT (resource), "subtitle-file-uri");
@@ -1920,7 +1920,7 @@ gupnp_didl_lite_resource_set_subtitle_file_type
                 xmlSetNsProp (resource->priv->xml_node,
                               resource->priv->pv_ns,
                               (unsigned char *) "subtitleFileType",
-                              (unsigned char *) type);
+                              (xmlChar *) type);
         }
 
         g_object_notify (G_OBJECT (resource), "subtitle-file-type");

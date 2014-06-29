@@ -717,9 +717,9 @@ fragment_util_check_fragments (DocNode     *original,
             /* If the child element is title or class,
              * it must not be set to empty or removed.
              */
-            if (g_strrstr ((char *) current_doc->children->children->name,
+            if (g_strrstr ((const char *) current_doc->children->children->name,
                            "title") != NULL ||
-                g_strrstr ((char *) current_doc->children->children->name,
+                g_strrstr ((const char *) current_doc->children->children->name,
                            "class") != NULL) {
                 /* If the new tag has no corresponding title or class element */
                 if (new_doc->children->children == NULL) {
