@@ -980,7 +980,8 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
         protocol_info = xml_util_get_attribute_content
                                         (resource->priv->xml_node,
                                          "protocolInfo");
-        g_return_val_if_fail (protocol_info != NULL, NULL);
+        if (protocol_info == NULL)
+                return NULL;
 
         error = NULL;
         info = gupnp_protocol_info_new_from_string (protocol_info, &error);

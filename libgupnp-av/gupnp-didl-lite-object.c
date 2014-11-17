@@ -835,6 +835,9 @@ is_resource_compatible (GUPnPDIDLLiteResource *resource,
 
                 res_info = gupnp_didl_lite_resource_get_protocol_info
                                                         (resource);
+                if (res_info == NULL)
+                        continue;
+
                 ret = gupnp_protocol_info_is_compatible (info, res_info);
 
                 g_object_unref (info);
