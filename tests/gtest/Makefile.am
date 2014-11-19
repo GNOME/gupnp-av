@@ -6,11 +6,14 @@ TESTS=$(check_PROGRAMS)
 
 check_PROGRAMS = \
 	test-regression \
+	test-didl-lite-object \
 	test-media-collection \
 	test-last-change-parser \
 	test-cds-last-change-parser
 
 test_regression_SOURCES = test-regression.c
+
+test_didl_lite_object_SOURCES = test-didl-lite-object.c
 
 test_media_collection_SOURCES =  \
 	test-media-collection.c
