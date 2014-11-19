@@ -1029,7 +1029,9 @@ gupnp_didl_lite_object_get_upnp_namespace (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
-        return object->priv->upnp_ns;
+        return xml_util_get_ns (object->priv->xml_doc->doc,
+                                GUPNP_XML_NAMESPACE_UPNP,
+                                &(object->priv->upnp_ns));
 }
 
 /**
@@ -1046,7 +1048,9 @@ gupnp_didl_lite_object_get_dc_namespace (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
-        return object->priv->dc_ns;
+        return xml_util_get_ns (object->priv->xml_doc->doc,
+                                GUPNP_XML_NAMESPACE_DC,
+                                &(object->priv->dc_ns));
 }
 
 /**
@@ -1080,7 +1084,9 @@ gupnp_didl_lite_object_get_dlna_namespace (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
-        return object->priv->dlna_ns;
+        return xml_util_get_ns (object->priv->xml_doc->doc,
+                                GUPNP_XML_NAMESPACE_DLNA,
+                                &(object->priv->dlna_ns));
 }
 
 /**
@@ -1097,7 +1103,9 @@ gupnp_didl_lite_object_get_pv_namespace (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
-        return object->priv->pv_ns;
+        return xml_util_get_ns (object->priv->xml_doc->doc,
+                                GUPNP_XML_NAMESPACE_PV,
+                                &(object->priv->pv_ns));
 }
 
 
