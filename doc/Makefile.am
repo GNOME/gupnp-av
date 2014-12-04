@@ -78,7 +78,8 @@ expand_content_files=
 # signals and properties.
 # e.g. INCLUDES=-I$(top_srcdir) -I$(top_builddir) $(GTK_DEBUG_FLAGS)
 # e.g. GTKDOC_LIBS=$(top_builddir)/gtk/$(gtktargetlib)
-INCLUDES=-I$(top_srcdir) $(LIBGUPNP_CFLAGS)
+AM_CPPFLAGS = -I$(top_srcdir)
+AM_CFLAGS = $(LIBGUPNP_CFLAGS)
 GTKDOC_LIBS=$(top_builddir)/libgupnp-av/libgupnp-av-1.0.la $(LIBGUPNP_LIBS)
 
 # This includes the standard gtk-doc make rules, copied by gtkdocize.
