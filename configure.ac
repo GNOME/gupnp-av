@@ -53,7 +53,7 @@ AS_IF([test "x$found_introspection" = "xyes"],
        AS_IF([pkg-config --atleast-version=1.36.0 gobject-introspection-1.0],
              [
               AC_MSG_RESULT([yes])
-              VAPIGEN_MIN_VERSION=0.20
+              VAPIGEN_MIN_VERSION=0.22
              ],[AC_MSG_RESULT([no])]
        )
        GUPNP_PROG_VAPIGEN([$VAPIGEN_MIN_VERSION])
