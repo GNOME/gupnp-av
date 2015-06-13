@@ -9,7 +9,7 @@
 # age to 0.
 LTVERSION = 2:0:0
 
-AM_CFLAGS = $(LIBGUPNP_CFLAGS) -I$(top_srcdir) -DDATADIR="\"$(pkgdatadir)\""
+AM_CFLAGS = $(LIBGUPNP_CFLAGS) -I$(top_srcdir) -DDATADIR="\"$(pkgdatadir)\"" $(WARN_CFLAGS)
 
 libgupnp_av_incdir = $(includedir)/gupnp-av-1.0/libgupnp-av
 
@@ -47,7 +47,7 @@ gupnp-av-marshal.h: gupnp-av-marshal.list
 
 BUILT_SOURCES = gupnp-av-marshal.c gupnp-av-marshal.h
 
-libgupnp_av_1_0_la_LDFLAGS = -version-info $(LTVERSION) -no-undefined
+libgupnp_av_1_0_la_LDFLAGS = -version-info $(LTVERSION) -no-undefined $(WARN_LDFLAGS)
 
 libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 			     gupnp-didl-lite-object-private.h \
@@ -125,7 +125,7 @@ GUPnPAV_1_0_gir_INCLUDES = GObject-2.0 GSSDP-1.0 Soup-2.4 libxml2-2.0 GUPnP-1.0
 GUPnPAV_1_0_gir_CFLAGS = $(AM_CFLAGS)
 GUPnPAV_1_0_gir_LIBS = libgupnp-av-1.0.la
 GUPnPAV_1_0_gir_NAMESPACE = GUPnPAV
-GUPnPAV_1_0_gir_SCANNERFLAGS = --identifier-prefix=GUPnP --symbol-prefix=gupnp --pkg-export=gupnp-av-1.0
+GUPnPAV_1_0_gir_SCANNERFLAGS = --identifier-prefix=GUPnP --symbol-prefix=gupnp --pkg-export=gupnp-av-1.0 $(WARN_SCANNERFLAGS)
 GUPnPAV_1_0_gir_FILES = $(introspection_sources)
 INTROSPECTION_GIRS += GUPnPAV-1.0.gir
 

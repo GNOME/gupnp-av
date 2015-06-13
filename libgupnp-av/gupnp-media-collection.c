@@ -503,11 +503,11 @@ gupnp_media_collection_get_author (GUPnPMediaCollection *collection)
 GUPnPDIDLLiteItem *
 gupnp_media_collection_add_item (GUPnPMediaCollection *collection)
 {
+        GUPnPDIDLLiteItem *item = NULL;
+
         g_return_val_if_fail (collection != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_MEDIA_COLLECTION (collection), NULL);
         g_return_val_if_fail (collection->priv->mutable, NULL);
-
-        GUPnPDIDLLiteItem *item = NULL;
 
         if (collection->priv->container != NULL)
                 item = gupnp_didl_lite_writer_add_container_child_item
@@ -566,10 +566,10 @@ gupnp_media_collection_get_string (GUPnPMediaCollection *collection)
 GList *
 gupnp_media_collection_get_items (GUPnPMediaCollection *collection)
 {
+        GList *tmp = NULL, *iter;
+
         g_return_val_if_fail (collection != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_MEDIA_COLLECTION (collection), NULL);
-
-        GList *tmp = NULL, *iter;
 
         for (iter = collection->priv->items; iter != NULL; iter = iter->next) {
                 tmp = g_list_prepend (tmp, g_object_ref (iter->data));

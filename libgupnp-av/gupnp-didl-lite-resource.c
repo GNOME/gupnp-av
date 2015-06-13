@@ -859,8 +859,6 @@ gupnp_didl_lite_resource_new_from_xml (xmlNode     *xml_node,
                                        xmlNs       *dlna_ns,
                                        xmlNs       *pv_ns)
 {
-        GUPnPDIDLLiteResource *resource;
-
         return g_object_new (GUPNP_TYPE_DIDL_LITE_RESOURCE,
                              "xml-node", xml_node,
                              "xml-doc", xml_doc,
@@ -1924,7 +1922,7 @@ gupnp_didl_lite_resource_set_subtitle_file_uri
                 xmlSetNsProp (resource->priv->xml_node,
                               resource->priv->pv_ns,
                               (unsigned char *) "subtitleFileUri",
-                              uri);
+                              (unsigned char *) uri);
         }
 
         g_object_notify (G_OBJECT (resource), "subtitle-file-uri");
@@ -1961,7 +1959,7 @@ gupnp_didl_lite_resource_set_subtitle_file_type
                 xmlSetNsProp (resource->priv->xml_node,
                               resource->priv->pv_ns,
                               (unsigned char *) "subtitleFileType",
-                              type);
+                              (unsigned char *) type);
         }
 
         g_object_notify (G_OBJECT (resource), "subtitle-file-type");

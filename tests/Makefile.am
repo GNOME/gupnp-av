@@ -2,7 +2,9 @@ SUBDIRS = gtest
 
 common_cflags = \
 	$(LIBGUPNP_CFLAGS) \
-	-I$(top_srcdir) -Wno-unused-parameters
+	-I$(top_srcdir) \
+	$(WARN_CFLAGS) \
+	-Wno-unused-parameters
 common_ldadd = \
 	$(top_builddir)/libgupnp-av/libgupnp-av-1.0.la \
 	$(LIBGUPNP_LIBS)
@@ -21,13 +23,16 @@ check_PROGRAMS = \
 check_search_SOURCES = check-search.c
 check_search_LDADD = $(common_ldadd)
 check_search_CFLAGS = $(common_cflags)
+check_search_LDFLAGS = $(WARN_LDFLAGS)
 
 check_feature_list_parser_SOURCES = check-feature-list-parser.c
 check_feature_list_parser_LDADD = $(common_ldadd)
 check_feature_list_parser_CFLAGS = $(common_cflags)
+check_feature_list_parser_LDFLAGS = $(WARN_LDFLAGS)
 
 fragments_SOURCES = fragments.c
 fragments_LDADD = $(common_ldadd)
 fragments_CFLAGS = $(common_cflags) -DABS_TOP_SRCDIR="\"$(abs_top_srcdir)\""
+fragments_LDFLAGS = $(WARN_LDFLAGS)
 
 TESTS = $(check_PROGRAMS)

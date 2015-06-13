@@ -228,7 +228,6 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
 {
         xmlDoc       *doc;
         xmlNode      *element;
-        xmlNs       **ns_list;
         xmlNs        *upnp_ns = NULL;
         xmlNs        *dc_ns   = NULL;
         xmlNs        *dlna_ns = NULL;

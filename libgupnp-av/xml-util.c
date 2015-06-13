@@ -29,8 +29,8 @@
 
 typedef struct _GUPnPXMLNamespaceDescription
 {
-        char *uri;
-        char *prefix;
+        const char *uri;
+        const char *prefix;
 } GUPnPXMLNamespaceDescription;
 
 
@@ -41,7 +41,7 @@ static GUPnPXMLNamespaceDescription gupnp_xml_namespaces[] =
         { "urn:schemas-dlna-org:metadata-1-0/", "dlna" },
         { "http://www.pv.com/pvns/", "pv" },
         { "urn:schemas-upnp-org:metadata-1-0/upnp/", "upnp" },
-        NULL
+        { NULL }
 };
 
 xmlNode *

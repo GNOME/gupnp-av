@@ -85,7 +85,7 @@ get_item (GUPnPDIDLLiteWriter *writer, guint id, guint parent_id)
         return object;
 }
 
-static gchar *current_fragments[] = {
+static const gchar *current_fragments[] = {
         /* 1 */
         "<upnp:class>object.item.audioItem.musicTrack</upnp:class>",
         /* 2 */
@@ -96,7 +96,7 @@ static gchar *current_fragments[] = {
         "<dc:title>Try a little tenderness</dc:title>"
 };
 
-static gchar *new_fragments[] = {
+static const gchar *new_fragments[] = {
         /* 1 */
         "<upnp:class>object.item.audioItem.musicTrack</upnp:class>"
         "<upnp:genre>Obscure</upnp:genre>",
@@ -141,9 +141,9 @@ int main (void)
         object = get_item (writer, 18, 13);
         debug_dump (object);
         result = gupnp_didl_lite_object_apply_fragments (object,
-                                                         current_fragments,
+                                                         (char **) current_fragments,
                                                          G_N_ELEMENTS (current_fragments),
-                                                         new_fragments,
+                                                         (char **) new_fragments,
                                                          G_N_ELEMENTS (new_fragments));
         debug_dump (object);
         if (result != GUPNP_DIDL_LITE_FRAGMENT_RESULT_OK) {

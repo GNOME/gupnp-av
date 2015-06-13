@@ -165,8 +165,8 @@
 
 #define TEST_PARSE_NO_XML "This is just some random text"
 
-void
-test_didl_collection_construction ()
+static void
+test_didl_collection_construction (void)
 {
         GUPnPMediaCollection *collection;
 
@@ -217,8 +217,8 @@ test_didl_collection_construction ()
         g_object_unref (collection);
 }
 
-void
-test_didl_collection_parse_flat ()
+static void
+test_didl_collection_parse_flat (void)
 {
         GUPnPMediaCollection *collection;
         GList *items, *it;
@@ -245,8 +245,8 @@ test_didl_collection_parse_flat ()
         g_list_free_full (items, (GDestroyNotify) g_object_unref);
 }
 
-void
-test_didl_collection_parse_full ()
+static void
+test_didl_collection_parse_full (void)
 {
         GUPnPMediaCollection *collection;
         GList *items, *it;
@@ -290,8 +290,8 @@ ignore_xml_parse_error (G_GNUC_UNUSED const gchar   *log_domain,
         return TRUE;
 }
 
-void
-test_didl_collection_parse_invalid ()
+static void
+test_didl_collection_parse_invalid (void)
 {
         GUPnPMediaCollection *collection;
         GList *items;
@@ -304,8 +304,8 @@ test_didl_collection_parse_invalid ()
         g_object_unref (collection);
 }
 
-void
-test_didl_collection_create_flat ()
+static void
+test_didl_collection_create_flat (void)
 {
         GUPnPMediaCollection *collection;
         GUPnPDIDLLiteItem *item;
@@ -355,8 +355,8 @@ test_didl_collection_create_flat ()
                          TEST_CREATE_FLAT);
 }
 
-void
-test_didl_collection_create_full ()
+static void
+test_didl_collection_create_full (void)
 {
         GUPnPMediaCollection *collection;
         GUPnPDIDLLiteItem *item;
@@ -409,8 +409,8 @@ test_didl_collection_create_full ()
                          TEST_CREATE_FULL);
 }
 
-void
-test_didl_collection_create_reparent ()
+static void
+test_didl_collection_create_reparent (void)
 {
         GUPnPMediaCollection *collection;
         GUPnPDIDLLiteItem *item;

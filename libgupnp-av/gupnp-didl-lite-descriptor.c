@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include "gupnp-didl-lite-descriptor.h"
+#include "gupnp-didl-lite-descriptor-private.h"
 #include "xml-util.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteDescriptor,
@@ -315,8 +316,6 @@ GUPnPDIDLLiteDescriptor *
 gupnp_didl_lite_descriptor_new_from_xml (xmlNode     *xml_node,
                                          GUPnPXMLDoc *xml_doc)
 {
-        GUPnPDIDLLiteDescriptor *descriptor;
-
         return g_object_new (GUPNP_TYPE_DIDL_LITE_DESCRIPTOR,
                              "xml-node", xml_node,
                              "xml-doc", xml_doc,

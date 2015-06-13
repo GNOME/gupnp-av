@@ -111,8 +111,6 @@ gvalue_util_set_value_from_string (GValue     *value,
                          g_ascii_strcasecmp (str, "no") == 0)
                         g_value_set_boolean (value, FALSE);
                 else {
-                        int i;
-
                         i = atoi (str);
                         g_value_set_boolean (value, i ? TRUE : FALSE);
                 }

@@ -27,20 +27,20 @@ namespace_getters (void)
 
   namespace = gupnp_didl_lite_object_get_upnp_namespace (object);
   g_assert (namespace != NULL);
-  g_assert_cmpstr (namespace->prefix, ==, "upnp");
+  g_assert_cmpstr ((char *) namespace->prefix, ==, "upnp");
 
   namespace = gupnp_didl_lite_object_get_dlna_namespace (object);
   g_assert (namespace != NULL);
-  g_assert_cmpstr (namespace->prefix, ==, "dlna");
+  g_assert_cmpstr ((char *) namespace->prefix, ==, "dlna");
 
 
   namespace = gupnp_didl_lite_object_get_dc_namespace (object);
   g_assert (namespace != NULL);
-  g_assert_cmpstr (namespace->prefix, ==, "dc");
+  g_assert_cmpstr ((char *) namespace->prefix, ==, "dc");
 
   namespace = gupnp_didl_lite_object_get_pv_namespace (object);
   g_assert (namespace != NULL);
-  g_assert_cmpstr (namespace->prefix, ==, "pv");
+  g_assert_cmpstr ((char *) namespace->prefix, ==, "pv");
 }
 
 int

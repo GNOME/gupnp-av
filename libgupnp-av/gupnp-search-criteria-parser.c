@@ -179,13 +179,13 @@ gupnp_search_criteria_parser_init (GUPnPSearchCriteriaParser *parser)
         /* Set up GScanner */
         parser->priv->scanner = g_scanner_new (NULL);
 
-        parser->priv->scanner->config->cset_skip_characters  = " \t\n\r\012"
+        parser->priv->scanner->config->cset_skip_characters  = (char *)" \t\n\r\012"
                                                                "\013\014\015";
         parser->priv->scanner->config->scan_identifier_1char = TRUE;
-        parser->priv->scanner->config->cset_identifier_first = G_CSET_a_2_z
+        parser->priv->scanner->config->cset_identifier_first = (char *) G_CSET_a_2_z
                                                                "_*<>=!@"
                                                                G_CSET_A_2_Z;
-        parser->priv->scanner->config->cset_identifier_nth =   G_CSET_a_2_z
+        parser->priv->scanner->config->cset_identifier_nth =   (char *)G_CSET_a_2_z
                                                                "_0123456789=:@"
                                                                G_CSET_A_2_Z
                                                                G_CSET_LATINS

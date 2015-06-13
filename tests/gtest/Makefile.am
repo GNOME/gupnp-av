@@ -12,17 +12,22 @@ check_PROGRAMS = \
 	test-cds-last-change-parser
 
 test_regression_SOURCES = test-regression.c
+test_regression_LDFLAGS = $(WARN_LDFLAGS)
 
 test_didl_lite_object_SOURCES = test-didl-lite-object.c
+test_didl_lite_object_LDFLAGS = $(WARN_LDFLAGS)
 
 test_media_collection_SOURCES =  \
 	test-media-collection.c
+test_media_collection_LDFLAGS = $(WARN_LDFLAGS)
 
 test_last_change_parser_SOURCES = \
 	test-last-change-parser.c
+test_last_change_parser_LDFLAGS = $(WARN_LDFLAGS)
 
 test_cds_last_change_parser_SOURCES = \
 	test-cds-last-change-parser.c
+test_cds_last_change_parser_LDFLAGS = $(WARN_LDFLAGS)
 
 LDADD = \
 	$(top_builddir)/libgupnp-av/libgupnp-av-1.0.la \
@@ -31,7 +36,8 @@ LDADD = \
 AM_CFLAGS = \
 	    $(LIBGUPNP_CFLAGS) \
 	    -I $(top_srcdir) \
-	    -DDATA_PATH="\"$(srcdir)\""
+	    -DDATA_PATH="\"$(srcdir)\"" \
+	    $(WARN_CFLAGS)
 
 EXTRA_DIST = data/cds-last-change/00-cds-last-change.xml \
 	data/cds-last-change/01-cds-last-change.xml \

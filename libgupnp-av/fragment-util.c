@@ -136,41 +136,41 @@ is_read_only (const gchar *changed_element,
                 readonly_props = g_hash_table_new (g_str_hash,
                                                    g_str_equal);
 
-                hash_table_add (readonly_props, "@id");
-                hash_table_add (readonly_props, "@parentID");
-                hash_table_add (readonly_props, "@refID");
-                hash_table_add (readonly_props, "@restricted");
-                hash_table_add (readonly_props, "@searchable");
-                hash_table_add (readonly_props, "@childCount");
-                hash_table_add (readonly_props, "searchClass");
-                hash_table_add (readonly_props, "searchClass@name");
-                hash_table_add (readonly_props, "searchClass@includeDerived");
-                hash_table_add (readonly_props, "createClass");
-                hash_table_add (readonly_props, "createClass@name");
-                hash_table_add (readonly_props, "createClass@includeDerived");
-                hash_table_add (readonly_props, "writeStatus");
-                hash_table_add (readonly_props, "res@importUri");
-                hash_table_add (readonly_props, "storageTotal");
-                hash_table_add (readonly_props, "storageUsed");
-                hash_table_add (readonly_props, "storageFree");
-                hash_table_add (readonly_props, "storageMaxPartition");
-                hash_table_add (readonly_props, "storageMedium");
-                hash_table_add (readonly_props, "playbackCount");
-                hash_table_add (readonly_props, "srsRecordScheduleID");
-                hash_table_add (readonly_props, "srsRecordTaskID");
-                hash_table_add (readonly_props, "price");
-                hash_table_add (readonly_props, "price@currency");
-                hash_table_add (readonly_props, "payPerView");
-                hash_table_add (readonly_props, "dateTimeRange");
-                hash_table_add (readonly_props,
+                hash_table_add (readonly_props, (gpointer)  "@id");
+                hash_table_add (readonly_props, (gpointer)  "@parentID");
+                hash_table_add (readonly_props, (gpointer)  "@refID");
+                hash_table_add (readonly_props, (gpointer)  "@restricted");
+                hash_table_add (readonly_props, (gpointer)  "@searchable");
+                hash_table_add (readonly_props, (gpointer)  "@childCount");
+                hash_table_add (readonly_props, (gpointer)  "searchClass");
+                hash_table_add (readonly_props, (gpointer)  "searchClass@name");
+                hash_table_add (readonly_props, (gpointer)  "searchClass@includeDerived");
+                hash_table_add (readonly_props, (gpointer)  "createClass");
+                hash_table_add (readonly_props, (gpointer)  "createClass@name");
+                hash_table_add (readonly_props, (gpointer)  "createClass@includeDerived");
+                hash_table_add (readonly_props, (gpointer)  "writeStatus");
+                hash_table_add (readonly_props, (gpointer)  "res@importUri");
+                hash_table_add (readonly_props, (gpointer)  "storageTotal");
+                hash_table_add (readonly_props, (gpointer)  "storageUsed");
+                hash_table_add (readonly_props, (gpointer)  "storageFree");
+                hash_table_add (readonly_props, (gpointer)  "storageMaxPartition");
+                hash_table_add (readonly_props, (gpointer)  "storageMedium");
+                hash_table_add (readonly_props, (gpointer)  "playbackCount");
+                hash_table_add (readonly_props, (gpointer)  "srsRecordScheduleID");
+                hash_table_add (readonly_props, (gpointer)  "srsRecordTaskID");
+                hash_table_add (readonly_props, (gpointer)  "price");
+                hash_table_add (readonly_props, (gpointer)  "price@currency");
+                hash_table_add (readonly_props, (gpointer)  "payPerView");
+                hash_table_add (readonly_props, (gpointer)  "dateTimeRange");
+                hash_table_add (readonly_props, (gpointer)
                                 "dateTimeRange@daylightSaving");
-                hash_table_add (readonly_props, "signalStrength");
-                hash_table_add (readonly_props, "signalLocked");
-                hash_table_add (readonly_props, "tuned");
-                hash_table_add (readonly_props, "containerUpdateID");
-                hash_table_add (readonly_props, "objectUpdateID");
-                hash_table_add (readonly_props, "totalDeletedChildCount");
-                hash_table_add (readonly_props, "res@updateCount");
+                hash_table_add (readonly_props, (gpointer)  "signalStrength");
+                hash_table_add (readonly_props, (gpointer)  "signalLocked");
+                hash_table_add (readonly_props, (gpointer)  "tuned");
+                hash_table_add (readonly_props, (gpointer)  "containerUpdateID");
+                hash_table_add (readonly_props, (gpointer)  "objectUpdateID");
+                hash_table_add (readonly_props, (gpointer)  "totalDeletedChildCount");
+                hash_table_add (readonly_props, (gpointer)  "res@updateCount");
                 g_once_init_leave (&readonly_props_loaded, 1);
         }
         if (changed_element != NULL) {
@@ -335,7 +335,7 @@ independent_property_new (gboolean required)
 
 static void
 insert_indep_prop (GHashTable          *props,
-                   gchar               *name,
+                   const gchar         *name,
                    IndependentProperty *prop)
 {
         g_hash_table_insert (props, g_strdup (name), prop);
@@ -343,7 +343,7 @@ insert_indep_prop (GHashTable          *props,
 
 static void
 insert_indep_prop_to_indep (IndependentProperty *prop,
-                            gchar               *name,
+                            const gchar         *name,
                             IndependentProperty *req_prop)
 {
         insert_indep_prop (prop->required_indep_props, name, req_prop);
@@ -351,21 +351,21 @@ insert_indep_prop_to_indep (IndependentProperty *prop,
 
 static void
 add_dep_prop (IndependentProperty *indep,
-              gchar               *name)
+              const gchar         *name)
 {
         hash_table_add (indep->required_dep_props, g_strdup (name));
 }
 
 static IndependentProperty *
-create_prop_with_required_dep_props (gboolean  required,
-                                     gchar    *dep_prop,
+create_prop_with_required_dep_props (gboolean     required,
+                                     const gchar *dep_prop,
                                      ...)
 {
         IndependentProperty *indep = independent_property_new (required);
 
         if (dep_prop != NULL) {
                 va_list var_args;
-                gchar *name = dep_prop;
+                const gchar *name = dep_prop;
 
                 va_start (var_args, dep_prop);
                 do {
@@ -716,9 +716,9 @@ fragment_util_check_fragments (DocNode     *original,
             /* If the child element is title or class,
              * it must not be set to empty or removed.
              */
-            if (g_strrstr (current_doc->children->children->name,
+            if (g_strrstr ((char *) current_doc->children->children->name,
                            "title") != NULL ||
-                g_strrstr (current_doc->children->children->name,
+                g_strrstr ((char *) current_doc->children->children->name,
                            "class") != NULL) {
                 /* If the new tag has no corresponding title or class element */
                 if (new_doc->children->children == NULL) {

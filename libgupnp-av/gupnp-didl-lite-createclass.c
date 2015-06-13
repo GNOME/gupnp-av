@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include "gupnp-didl-lite-createclass.h"
+#include "gupnp-didl-lite-createclass-private.h"
 #include "xml-util.h"
 
 G_DEFINE_TYPE (GUPnPDIDLLiteCreateClass,
@@ -416,8 +417,6 @@ GUPnPDIDLLiteCreateClass *
 gupnp_didl_lite_create_class_new_from_xml (xmlNode     *xml_node,
                                            GUPnPXMLDoc *xml_doc)
 {
-        GUPnPDIDLLiteCreateClass *create_class;
-
         return g_object_new (GUPNP_TYPE_DIDL_LITE_CREATE_CLASS,
                              "xml-node", xml_node,
                              "xml-doc", xml_doc,

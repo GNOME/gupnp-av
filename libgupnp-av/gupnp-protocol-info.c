@@ -603,7 +603,7 @@ gupnp_protocol_info_class_init (GUPnPProtocolInfoClass *klass)
  * Return value: A new #GUPnPProtocolInfo object. Unref after usage.
  **/
 GUPnPProtocolInfo *
-gupnp_protocol_info_new ()
+gupnp_protocol_info_new (void)
 {
         return g_object_new (GUPNP_TYPE_PROTOCOL_INFO,
                              NULL);
