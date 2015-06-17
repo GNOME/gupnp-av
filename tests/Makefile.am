@@ -4,7 +4,7 @@ common_cflags = \
 	$(LIBGUPNP_CFLAGS) \
 	-I$(top_srcdir) \
 	$(WARN_CFLAGS) \
-	-Wno-unused-parameters
+	-Wno-unused-parameter
 common_ldadd = \
 	$(top_builddir)/libgupnp-av/libgupnp-av-1.0.la \
 	$(LIBGUPNP_LIBS)
