@@ -73,7 +73,12 @@ verify_didl_attributes (xmlNode *node)
                 }
         }
 
-        return xml_util_verify_attribute_is_boolean (node, "restricted");
+        if (xml_util_get_attribute_content (node, "restricted") != NULL) {
+                return xml_util_verify_attribute_is_boolean (node,
+                                                             "restricted");
+        }
+
+        return TRUE;
 }
 
 static gboolean

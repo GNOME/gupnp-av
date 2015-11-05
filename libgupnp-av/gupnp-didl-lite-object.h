@@ -111,6 +111,9 @@ gupnp_didl_lite_object_get_properties   (GUPnPDIDLLiteObject *object,
                                          const char          *name);
 
 gboolean
+gupnp_didl_lite_object_is_restricted_set (GUPnPDIDLLiteObject *object);
+
+gboolean
 gupnp_didl_lite_object_get_restricted   (GUPnPDIDLLiteObject *object);
 
 const char *

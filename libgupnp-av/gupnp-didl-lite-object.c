@@ -1168,6 +1168,24 @@ gupnp_didl_lite_object_get_properties (GUPnPDIDLLiteObject *object,
 }
 
 /**
+ * gupnp_didl_lite_object_is_restricted_set:
+ * @object: #GUPnPDIDLLiteObject
+ *
+ * Whehter the restricted attribute exists on @object
+ *
+ * Return value: #TRUE if restricted exists, #FALSE otherwise.
+ **/
+gboolean
+gupnp_didl_lite_object_is_restricted_set (GUPnPDIDLLiteObject *object)
+{
+        g_return_val_if_fail (object != NULL, FALSE);
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), FALSE);
+
+        return xml_util_get_attribute_content (object->priv->xml_node,
+                                               "restricted") != NULL;
+}
+
+/**
  * gupnp_didl_lite_object_get_restricted:
  * @object: #GUPnPDIDLLiteObject
  *

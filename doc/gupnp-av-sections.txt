@@ -66,6 +66,7 @@ gupnp_didl_lite_object_set_update_id
 gupnp_didl_lite_object_unset_artists
 gupnp_didl_lite_object_unset_update_id
 gupnp_didl_lite_object_update_id_is_set
+gupnp_didl_lite_object_is_restricted_set
 <SUBSECTION Standard>
 GUPnPDIDLLiteObjectClass
 GUPNP_TYPE_OCM_FLAGS
