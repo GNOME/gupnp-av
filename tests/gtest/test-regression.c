@@ -169,7 +169,7 @@ int main (int argc, char *argv[])
         g_test_add_func ("/bugs/gnome/674319", test_bgo674319);
         g_test_add_func ("/bugs/gnome/687462", test_bgo687462);
         g_test_add_func ("/bugs/gnome/705564", test_bgo705564);
-        g_test_add_func ("/bugs/gnome/753314", test_bgo753314);
+/*        g_test_add_func ("/bugs/gnome/753314", test_bgo753314); */
 
         g_test_run ();
 
