@@ -1,3 +1,22 @@
+0.12.8
+======
+
+Changes since 0.12.7:
+
+- Remove gnome-common.
+- Use -Wno-unused-parameter
+- Make DIDL-Lite check less restrictive
+- Distribute VAPI file
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=740266
+ - https://bugzilla.gnome.org/show_bug.cgi?id=751102
+ - https://bugzilla.gnome.org/show_bug.cgi?id=753382
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+ - Ting-Wei Lan <lantw@src.gnome.org>
+
 0.12.7
 ======
 
