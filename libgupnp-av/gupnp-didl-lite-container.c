@@ -745,8 +745,6 @@ gupnp_didl_lite_container_unset_total_deleted_child_count
  * @create_class: The createClass to add.
  *
  * Add a new create class to the @container. includeDerived defaults to "0".
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_container_add_create_class (
@@ -766,8 +764,6 @@ gupnp_didl_lite_container_add_create_class (
  * this container or not.
  *
  * Add a new create class to the @container.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_container_add_create_class_full (
@@ -807,8 +803,6 @@ gupnp_didl_lite_container_add_create_class_full (
  * @search_class: The searchClass to add.
  *
  * Add a new search class to the @container.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_container_add_search_class (
@@ -827,8 +821,6 @@ gupnp_didl_lite_container_add_search_class (
  * @include_derived: includeDerived attribute of the DIDL
  *
  * Add a new search class to the @container.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_container_add_search_class_full (

@@ -412,8 +412,6 @@ gupnp_didl_lite_descriptor_get_name_space (GUPnPDIDLLiteDescriptor *descriptor)
  * @content: The content as string
  *
  * Set the content of the @descriptor.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_descriptor_set_content (GUPnPDIDLLiteDescriptor *descriptor,
@@ -438,8 +436,6 @@ gupnp_didl_lite_descriptor_set_content (GUPnPDIDLLiteDescriptor *descriptor,
  * @id: The ID as string
  *
  * Set the ID of the @descriptor.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_descriptor_set_id (GUPnPDIDLLiteDescriptor *descriptor,
@@ -461,8 +457,6 @@ gupnp_didl_lite_descriptor_set_id (GUPnPDIDLLiteDescriptor *descriptor,
  * @type: The metadata type as string
  *
  * Set the metadata type of the @descriptor.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_descriptor_set_metadata_type
@@ -485,8 +479,6 @@ gupnp_didl_lite_descriptor_set_metadata_type
  * @name_space: The name space URI as string
  *
  * Set the name space associated with the @descriptor.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_descriptor_set_name_space (GUPnPDIDLLiteDescriptor *descriptor,

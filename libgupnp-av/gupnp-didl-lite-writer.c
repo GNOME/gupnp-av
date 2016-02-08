@@ -678,8 +678,6 @@ gupnp_didl_lite_writer_get_language (GUPnPDIDLLiteWriter *writer)
  * argument of Browse or Search actions from a ContentDirectory control point.
  * Please refer to Section 2.3.15 of UPnP AV ContentDirectory version 3
  * specification for details on this string.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_writer_filter (GUPnPDIDLLiteWriter *writer,

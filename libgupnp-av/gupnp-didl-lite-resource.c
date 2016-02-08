@@ -1299,8 +1299,6 @@ gupnp_didl_lite_resource_track_total_is_set (GUPnPDIDLLiteResource *resource)
  * @uri: The URI as string
  *
  * Set the URI associated with the @resource.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_uri (GUPnPDIDLLiteResource *resource,
@@ -1325,8 +1323,6 @@ gupnp_didl_lite_resource_set_uri (GUPnPDIDLLiteResource *resource,
  * @import_uri: The URI as string
  *
  * Set the import URI associated with the @resource.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_import_uri (GUPnPDIDLLiteResource *resource,
@@ -1347,8 +1343,6 @@ gupnp_didl_lite_resource_set_import_uri (GUPnPDIDLLiteResource *resource,
  * @info: The protocol string
  *
  * Set the protocol info associated with the @resource.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
@@ -1392,8 +1386,6 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
  *
  * Set the size (in bytes) of the @resource. Passing a negative number will
  * unset this property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_size (GUPnPDIDLLiteResource *resource,
@@ -1409,8 +1401,6 @@ gupnp_didl_lite_resource_set_size (GUPnPDIDLLiteResource *resource,
  *
  * Set the size (in bytes) of the @resource. Passing a negative number will
  * unset this property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_size64 (GUPnPDIDLLiteResource *resource,
@@ -1442,8 +1432,6 @@ gupnp_didl_lite_resource_set_size64 (GUPnPDIDLLiteResource *resource,
  *
  * Set the size (in bytes) of the @resource. Passing a negative number will
  * unset this property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_cleartext_size
@@ -1481,8 +1469,6 @@ gupnp_didl_lite_resource_set_cleartext_size
  *
  * Set the duration (in seconds) of the @resource. Passing a negative number
  * will unset this property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_duration (GUPnPDIDLLiteResource *resource,
@@ -1513,8 +1499,6 @@ gupnp_didl_lite_resource_set_duration (GUPnPDIDLLiteResource *resource,
  *
  * Set the bitrate (in bytes per second) of the @resource. Passing a negative
  * number will unset this property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_bitrate (GUPnPDIDLLiteResource *resource,
@@ -1545,8 +1529,6 @@ gupnp_didl_lite_resource_set_bitrate (GUPnPDIDLLiteResource *resource,
  *
  * Set the sample frequency of the @resource. Passing a negative number will
  * unset this property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_sample_freq (GUPnPDIDLLiteResource *resource,
@@ -1577,8 +1559,6 @@ gupnp_didl_lite_resource_set_sample_freq (GUPnPDIDLLiteResource *resource,
  *
  * Set the sample size of the @resource. Passing a negative number will unset
  * this property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_bits_per_sample
@@ -1610,8 +1590,6 @@ gupnp_didl_lite_resource_set_bits_per_sample
  *
  * Set the protection system used by the @resource. Passing a negative number
  * will unset this property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_protection (GUPnPDIDLLiteResource *resource,
@@ -1633,8 +1611,6 @@ gupnp_didl_lite_resource_set_protection (GUPnPDIDLLiteResource *resource,
  *
  * Set the number of audio channels in the @resource. Passing a negative number
  * will unset this property.
- *
- * Return value: The number of audio channels in the @resource or -1.
  **/
 void
 gupnp_didl_lite_resource_set_audio_channels (GUPnPDIDLLiteResource *resource,
@@ -1665,8 +1641,6 @@ gupnp_didl_lite_resource_set_audio_channels (GUPnPDIDLLiteResource *resource,
  *
  * Set the width of this image/video resource. Setting both width and height to
  * a negative number will unset the resolution property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_width (GUPnPDIDLLiteResource *resource,
@@ -1700,8 +1674,6 @@ gupnp_didl_lite_resource_set_width (GUPnPDIDLLiteResource *resource,
  *
  * Set the height of this image/video resource. Setting both width and height to
  * a negative number will unset the resolution property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_height (GUPnPDIDLLiteResource *resource,
@@ -1736,8 +1708,6 @@ gupnp_didl_lite_resource_set_height (GUPnPDIDLLiteResource *resource,
  *
  * Set the color-depth of this image/video resource. Passing a negative number
  * will unset this property.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_color_depth (GUPnPDIDLLiteResource *resource,
@@ -1767,8 +1737,6 @@ gupnp_didl_lite_resource_set_color_depth (GUPnPDIDLLiteResource *resource,
  * @update_count: The update_count
  *
  * Set the update count of this resource.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_update_count (GUPnPDIDLLiteResource *resource,
@@ -1793,8 +1761,6 @@ gupnp_didl_lite_resource_set_update_count (GUPnPDIDLLiteResource *resource,
  * @track_total: The total number of tracks in this resource
  *
  * Set the total number of tracks in this resource.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_set_track_total (GUPnPDIDLLiteResource *resource,
@@ -1824,8 +1790,6 @@ gupnp_didl_lite_resource_set_track_total (GUPnPDIDLLiteResource *resource,
  * @resource: A #GUPnPDIDLLiteResource
  *
  * Unset the update count of this resource.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_unset_update_count (GUPnPDIDLLiteResource *resource)
@@ -1843,8 +1807,6 @@ gupnp_didl_lite_resource_unset_update_count (GUPnPDIDLLiteResource *resource)
  * @resource: A #GUPnPDIDLLiteResource
  *
  * Unset the total track count of this resource.
- *
- * Return value: None.
  **/
 void
 gupnp_didl_lite_resource_unset_track_total (GUPnPDIDLLiteResource *resource)
