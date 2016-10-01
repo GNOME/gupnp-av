@@ -32,7 +32,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <libgupnp/gupnp.h>
 #include "gupnp-protocol-info.h"
 #include "gupnp-av-error.h"
 

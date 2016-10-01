@@ -43,8 +43,8 @@ G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
                G_TYPE_OBJECT);
 
 struct _GUPnPDIDLLiteWriterPrivate {
-        xmlNode     *xml_node;
-        GUPnPXMLDoc *xml_doc;
+        xmlNode       *xml_node;
+        GUPnPAVXMLDoc *xml_doc;
 
         xmlNs       *upnp_ns;
         xmlNs       *dc_ns;
@@ -362,7 +362,7 @@ gupnp_didl_lite_writer_constructed (GObject *object)
         priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
 
         doc = xmlNewDoc ((unsigned char *) "1.0");
-        priv->xml_doc = gupnp_xml_doc_new (doc);
+        priv->xml_doc = xml_doc_new (doc);
 
         priv->xml_node = xmlNewDocNode (priv->xml_doc->doc,
                                         NULL,
@@ -391,10 +391,7 @@ gupnp_didl_lite_writer_dispose (GObject *object)
 
         priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
 
-        if (priv->xml_doc) {
-                g_object_unref (priv->xml_doc);
-                priv->xml_doc = NULL;
-        }
+        g_clear_pointer (&priv->xml_doc, xml_doc_unref);
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
         object_class->dispose (object);

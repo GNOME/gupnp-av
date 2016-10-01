@@ -44,6 +44,42 @@ static GUPnPXMLNamespaceDescription gupnp_xml_namespaces[] =
         { NULL }
 };
 
+GUPnPAVXMLDoc *
+xml_doc_new (xmlDoc *doc)
+{
+        GUPnPAVXMLDoc *ret = NULL;
+
+        g_return_val_if_fail (doc, NULL);
+
+        ret = g_new0 (GUPnPAVXMLDoc, 1);
+        ret->refcount = 1;
+        ret->doc = doc;
+
+        return ret;
+}
+
+GUPnPAVXMLDoc *
+xml_doc_ref (GUPnPAVXMLDoc *doc)
+{
+        g_return_val_if_fail (doc, NULL);
+        g_return_val_if_fail (doc->refcount > 0, NULL);
+        g_atomic_int_inc (&doc->refcount);
+
+        return doc;
+}
+
+void
+xml_doc_unref (GUPnPAVXMLDoc *doc)
+{
+        g_return_if_fail (doc);
+        g_return_if_fail (doc->refcount > 0);
+
+        if (g_atomic_int_dec_and_test (&doc->refcount)) {
+                xmlFreeDoc (doc->doc);
+                doc->doc = NULL;
+        }
+}
+
 xmlNode *
 xml_util_get_element (xmlNode *node,
                       ...)
@@ -530,3 +566,5 @@ xml_util_get_ns (xmlDocPtr doc, GUPnPXMLNamespace ns, xmlNsPtr *ns_out)
 
         return tmp_ns;
 }
+
+G_DEFINE_BOXED_TYPE (GUPnPAVXMLDoc, xml_doc, xml_doc_ref, xml_doc_unref)

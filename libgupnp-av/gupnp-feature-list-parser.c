@@ -130,8 +130,8 @@ gupnp_feature_list_parser_parse_text
         doc = xmlRecoverMemory (text, strlen (text));
         if (doc == NULL) {
                 g_set_error (error,
-                             GUPNP_XML_ERROR,
-                             GUPNP_XML_ERROR_PARSE,
+                             G_MARKUP_ERROR,
+                             G_MARKUP_ERROR_PARSE,
                              "Could not parse FeatureList XML:\n%s", text);
 
                 return NULL;
@@ -141,8 +141,8 @@ gupnp_feature_list_parser_parse_text
         element = xml_util_get_element ((xmlNode *) doc, "Features", NULL);
         if (element == NULL) {
                 g_set_error (error,
-                             GUPNP_XML_ERROR,
-                             GUPNP_XML_ERROR_NO_NODE,
+                             G_MARKUP_ERROR,
+                             G_MARKUP_ERROR_PARSE,
                              "No 'Features' node in the XML:\n%s",
                              text);
                 xmlFreeDoc (doc);
@@ -163,8 +163,8 @@ gupnp_feature_list_parser_parse_text
                                                                   "version");
                         if (!name || !version) {
                                 g_set_error (error,
-                                             GUPNP_XML_ERROR,
-                                             GUPNP_XML_ERROR_INVALID_ATTRIBUTE,
+                                             G_MARKUP_ERROR,
+                                             G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
                                              "Invalid attributes in 'Feature' "
                                              "node in the XML:\n%s",
                                              text);

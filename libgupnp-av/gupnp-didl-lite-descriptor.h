@@ -26,7 +26,6 @@
 #include <stdarg.h>
 #include <glib-object.h>
 #include <libxml/tree.h>
-#include <libgupnp/gupnp.h>
 
 G_BEGIN_DECLS
 

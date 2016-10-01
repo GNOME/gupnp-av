@@ -29,8 +29,6 @@
  *
  */
 
-#include <libgupnp/gupnp-error.h>
-
 #include "xml-util.h"
 #include "gupnp-cds-last-change-parser.h"
 
@@ -114,8 +112,8 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
         doc = xmlParseDoc ((const xmlChar *) last_change);
         if (doc == NULL) {
                 g_set_error (error,
-                             GUPNP_XML_ERROR,
-                             GUPNP_XML_ERROR_PARSE,
+                             G_MARKUP_ERROR,
+                             G_MARKUP_ERROR_PARSE,
                              "Could not parse LastChange XML");
 
                 goto out;
@@ -126,8 +124,8 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                                             NULL);
         if (state_event == NULL) {
                 g_set_error (error,
-                             GUPNP_XML_ERROR,
-                             GUPNP_XML_ERROR_PARSE,
+                             G_MARKUP_ERROR,
+                             G_MARKUP_ERROR_PARSE,
                              "Missing StateEvent node");
 
                 goto out;

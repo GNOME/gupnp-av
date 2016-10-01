@@ -29,6 +29,7 @@
 #include <glib.h>
 #include <libxml/tree.h>
 #include <stdarg.h>
+#include <glib-object.h>
 
 typedef enum _GUPnPXMLNamespace
 {
@@ -41,6 +42,24 @@ typedef enum _GUPnPXMLNamespace
 } GUPnPXMLNamespace;
 
 G_BEGIN_DECLS
+
+typedef struct _GPnPAVXMLDoc
+{
+    volatile int refcount;
+    xmlDoc *doc;
+} GUPnPAVXMLDoc;
+
+G_GNUC_INTERNAL GUPnPAVXMLDoc *
+xml_doc_new                             (xmlDoc *doc);
+
+G_GNUC_INTERNAL GUPnPAVXMLDoc *
+xml_doc_ref                             (GUPnPAVXMLDoc *doc);
+
+G_GNUC_INTERNAL void
+xml_doc_unref                           (GUPnPAVXMLDoc *doc);
+
+G_GNUC_INTERNAL GType
+xml_doc_get_type                        (void) G_GNUC_CONST;
 
 /* Misc utilities for inspecting xmlNodes */
 G_GNUC_INTERNAL xmlNode *

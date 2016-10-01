@@ -121,6 +121,7 @@ test_bgo705564 (void)
         g_object_unref (writer);
 }
 
+#if 0
 static void
 test_bgo753314 (void)
 {
@@ -158,6 +159,7 @@ test_bgo753314 (void)
         g_object_unref (object);
         g_object_unref (writer);
 }
+#endif
 
 int main (int argc, char *argv[])
 {

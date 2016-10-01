@@ -31,7 +31,6 @@
 #include <glib-object.h>
 #include <glib.h>
 #include <libxml/tree.h>
-#include <libgupnp/gupnp.h>
 
 #include "gupnp-dlna.h"
 #include "gupnp-protocol-info.h"

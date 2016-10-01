@@ -22,10 +22,8 @@
 #ifndef __GUPNP_DIDL_LITE_WRITER_H__
 #define __GUPNP_DIDL_LITE_WRITER_H__
 
-
 #include <stdarg.h>
 #include <glib-object.h>
-#include <libsoup/soup-uri.h>
 
 #include "gupnp-dlna.h"
 #include "gupnp-didl-lite-item.h"
