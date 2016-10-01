@@ -207,7 +207,7 @@ gupnp_didl_lite_item_set_lifetime (GUPnPDIDLLiteItem *item,
 {
         xmlNode *node = NULL;
         xmlNs *ns = NULL;
-        GUPnPXMLDoc *doc = NULL;
+        GUPnPAVXMLDoc *doc = NULL;
         GUPnPDIDLLiteObject *object = NULL;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_ITEM (item));

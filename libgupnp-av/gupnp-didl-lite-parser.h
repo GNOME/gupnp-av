@@ -22,7 +22,6 @@
 #ifndef __GUPNP_DIDL_LITE_PARSER_H__
 #define __GUPNP_DIDL_LITE_PARSER_H__
 
-#include <libgupnp/gupnp.h>
 #include "gupnp-didl-lite-container.h"
 #include "gupnp-didl-lite-item.h"
 

@@ -126,7 +126,7 @@ bogus_text (void)
   g_object_unref (parser);
 
   g_assert (r == FALSE);
-  g_assert_error (error, GUPNP_XML_ERROR, GUPNP_XML_ERROR_PARSE);
+  g_assert_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE);
   g_assert_cmpint (whatever, ==, -1);
 }
 

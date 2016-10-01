@@ -45,7 +45,7 @@ G_DEFINE_TYPE (GUPnPDIDLLiteResource,
 
 struct _GUPnPDIDLLiteResourcePrivate {
         xmlNode     *xml_node;
-        GUPnPXMLDoc *xml_doc;
+        GUPnPAVXMLDoc *xml_doc;
         xmlNs       *dlna_ns;
         xmlNs       *pv_ns;
 
@@ -148,7 +148,7 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                 resource->priv->xml_node = g_value_get_pointer (value);
                 break;
         case PROP_XML_DOC:
-                resource->priv->xml_doc = g_value_dup_object (value);
+                resource->priv->xml_doc = g_value_dup_boxed (value);
                 break;
         case PROP_URI:
                 gupnp_didl_lite_resource_set_uri (resource,
@@ -386,10 +386,7 @@ gupnp_didl_lite_resource_dispose (GObject *object)
 
         priv = GUPNP_DIDL_LITE_RESOURCE (object)->priv;
 
-        if (priv->xml_doc) {
-                g_object_unref (priv->xml_doc);
-                priv->xml_doc = NULL;
-        }
+        g_clear_pointer (&priv->xml_doc, xml_doc_unref);
 
         if (priv->protocol_info != NULL) {
                 g_object_unref (priv->protocol_info);
@@ -443,11 +440,11 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
         g_object_class_install_property
                 (object_class,
                  PROP_XML_DOC,
-                 g_param_spec_object ("xml-doc",
+                 g_param_spec_boxed ("xml-doc",
                                       "XMLDoc",
                                       "The reference to XML document"
                                       " containing this object.",
-                                      GUPNP_TYPE_XML_DOC,
+                                      xml_doc_get_type (),
                                       G_PARAM_WRITABLE |
                                       G_PARAM_CONSTRUCT_ONLY |
                                       G_PARAM_STATIC_NAME |
@@ -854,10 +851,10 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
  * Return value: A new #GUPnPDIDLLiteResource object. Unref after usage.
  **/
 GUPnPDIDLLiteResource *
-gupnp_didl_lite_resource_new_from_xml (xmlNode     *xml_node,
-                                       GUPnPXMLDoc *xml_doc,
-                                       xmlNs       *dlna_ns,
-                                       xmlNs       *pv_ns)
+gupnp_didl_lite_resource_new_from_xml (xmlNode       *xml_node,
+                                       GUPnPAVXMLDoc *xml_doc,
+                                       xmlNs         *dlna_ns,
+                                       xmlNs         *pv_ns)
 {
         return g_object_new (GUPNP_TYPE_DIDL_LITE_RESOURCE,
                              "xml-node", xml_node,

@@ -464,7 +464,7 @@ gupnp_didl_lite_container_get_create_classes_full (
         for (l = cc_list; l; l = l->next) {
                 GUPnPDIDLLiteCreateClass *cc;
                 xmlNode *cc_node;
-                GUPnPXMLDoc *cc_doc;
+                GUPnPAVXMLDoc *cc_doc;
 
                 cc_node = (xmlNode *) l->data;
                 if (!cc_node->children)
@@ -633,7 +633,7 @@ gupnp_didl_lite_container_set_container_update_id
 {
         xmlNode *xml_node;
         xmlNsPtr upnp_ns;
-        GUPnPXMLDoc *xml_doc;
+        GUPnPAVXMLDoc *xml_doc;
         char *str;
         GUPnPDIDLLiteObject *self_as_object;
 
@@ -693,7 +693,7 @@ gupnp_didl_lite_container_set_total_deleted_child_count
 {
         xmlNode *xml_node;
         xmlNsPtr upnp_ns;
-        GUPnPXMLDoc *xml_doc;
+        GUPnPAVXMLDoc *xml_doc;
         char *str;
         GUPnPDIDLLiteObject *self_as_object;
 

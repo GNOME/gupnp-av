@@ -162,8 +162,8 @@ gupnp_last_change_parser_parse_last_change_valist
         doc = xmlParseDoc ((const xmlChar *) last_change_xml);
         if (doc == NULL) {
                 g_set_error (error,
-                             GUPNP_XML_ERROR,
-                             GUPNP_XML_ERROR_PARSE,
+                             G_MARKUP_ERROR,
+                             G_MARKUP_ERROR_PARSE,
                              "Could not parse LastChange xml");
 
                 return FALSE;

@@ -23,6 +23,8 @@
 #ifndef __GUPNP_DIDL_LITE_RESOURCE_PRIVATE_H__
 #define __GUPNP_DIDL_LITE_RESOURCE_PRIVATE_H__
 
+#include "xml-util.h"
+
 #include <stdarg.h>
 #include <glib-object.h>
 #include <libxml/tree.h>
@@ -31,7 +33,7 @@ G_BEGIN_DECLS
 
 GUPnPDIDLLiteResource *
 gupnp_didl_lite_resource_new_from_xml   (xmlNode     *xml_node,
-                                         GUPnPXMLDoc *xml_doc,
+                                         GUPnPAVXMLDoc *xml_doc,
                                          xmlNs       *dlna_ns,
                                          xmlNs       *pv_ns);
 

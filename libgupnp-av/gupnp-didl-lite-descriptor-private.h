@@ -23,16 +23,17 @@
 #ifndef __GUPNP_DIDL_LITE_DESCRIPTOR_PRIVATE_H__
 #define __GUPNP_DIDL_LITE_DESCRIPTOR_PRIVATE_H__
 
+#include "xml-util.h"
+
 #include <stdarg.h>
 #include <glib-object.h>
 #include <libxml/tree.h>
-#include <libgupnp/gupnp.h>
 
 G_BEGIN_DECLS
 
 GUPnPDIDLLiteDescriptor *
 gupnp_didl_lite_descriptor_new_from_xml (xmlNode     *xml_node,
-                                         GUPnPXMLDoc *xml_doc);
+                                         GUPnPAVXMLDoc *xml_doc);
 
 G_END_DECLS
 
