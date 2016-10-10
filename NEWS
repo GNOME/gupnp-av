@@ -1,3 +1,13 @@
+0.12.9
+======
+
+Changes since 0.12.8:
+
+- Drop dependency on GUPnP
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+
 0.12.8
 ======
 
