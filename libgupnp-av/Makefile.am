@@ -121,7 +121,7 @@ introspection_sources = \
 	    $(top_srcdir)/libgupnp-av/gupnp-av-error.c
 
 GUPnPAV-1.0.gir: libgupnp-av-1.0.la
-GUPnPAV_1_0_gir_INCLUDES = GObject-2.0 GSSDP-1.0 libxml2-2.0
+GUPnPAV_1_0_gir_INCLUDES = GObject-2.0 libxml2-2.0
 GUPnPAV_1_0_gir_CFLAGS = $(AM_CFLAGS)
 GUPnPAV_1_0_gir_LIBS = libgupnp-av-1.0.la
 GUPnPAV_1_0_gir_NAMESPACE = GUPnPAV
