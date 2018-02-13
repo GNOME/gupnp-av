@@ -537,25 +537,17 @@ gupnp_didl_lite_container_get_search_classes (GUPnPDIDLLiteContainer *container)
 gint64
 gupnp_didl_lite_container_get_storage_used (GUPnPDIDLLiteContainer *container)
 {
-        GList *storage = NULL;
         xmlNode *xml_node;
         const char *str;
 
         g_return_val_if_fail (container != NULL, 0);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container), 0);
 
-        storage = gupnp_didl_lite_object_get_properties (
-                                        GUPNP_DIDL_LITE_OBJECT (container),
-                                        "storageUsed");
-        if (storage == NULL)
+        xml_node = gupnp_didl_lite_object_get_xml_node
+                                (GUPNP_DIDL_LITE_OBJECT (container));
+        str = xml_util_get_child_element_content (xml_node, "storageUsed");
+        if (str == NULL)
                 return -1;
-
-        /* only return value from first node */
-        xml_node = (xmlNode *) storage->data;
-
-        g_list_free (storage);
-
-        str = (const char *) xml_node->content;
 
         return g_ascii_strtoll (str, NULL, 10);
 }

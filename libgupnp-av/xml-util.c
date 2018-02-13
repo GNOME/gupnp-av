@@ -77,7 +77,7 @@ xml_doc_unref (GUPnPAVXMLDoc *doc)
         if (g_atomic_int_dec_and_test (&doc->refcount)) {
                 xmlFreeDoc (doc->doc);
                 doc->doc = NULL;
-                g_free(doc);
+                g_free (doc);
         }
 }
 
