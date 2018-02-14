@@ -223,8 +223,8 @@ filter_node (xmlNode             *node,
 
         if (strcmp ((const char *) node->name, "container") == 0) {
                 is_container = TRUE;
-                container_class = xml_util_get_child_element_content (node,
-                                                                      "class");
+                container_class = av_xml_util_get_child_element_content
+                                        (node, "class");
         }
 
         forbidden = NULL;
@@ -362,7 +362,7 @@ gupnp_didl_lite_writer_constructed (GObject *object)
         priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
 
         doc = xmlNewDoc ((unsigned char *) "1.0");
-        priv->xml_doc = xml_doc_new (doc);
+        priv->xml_doc = av_xml_doc_new (doc);
 
         priv->xml_node = xmlNewDocNode (priv->xml_doc->doc,
                                         NULL,
@@ -370,8 +370,8 @@ gupnp_didl_lite_writer_constructed (GObject *object)
                                         NULL);
         xmlDocSetRootElement (priv->xml_doc->doc, priv->xml_node);
 
-        xml_util_create_namespace (priv->xml_node,
-                                   GUPNP_XML_NAMESPACE_DIDL_LITE);
+        av_xml_util_create_namespace (priv->xml_node,
+                                      GUPNP_XML_NAMESPACE_DIDL_LITE);
 
         if (priv->language)
                 xmlSetProp (priv->xml_node,
@@ -391,7 +391,7 @@ gupnp_didl_lite_writer_dispose (GObject *object)
 
         priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
 
-        g_clear_pointer (&priv->xml_doc, xml_doc_unref);
+        g_clear_pointer (&priv->xml_doc, av_xml_doc_unref);
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
         object_class->dispose (object);

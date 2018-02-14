@@ -50,115 +50,115 @@ typedef struct _GPnPAVXMLDoc
 } GUPnPAVXMLDoc;
 
 G_GNUC_INTERNAL GUPnPAVXMLDoc *
-xml_doc_new                             (xmlDoc *doc);
+av_xml_doc_new                             (xmlDoc *doc);
 
 G_GNUC_INTERNAL GUPnPAVXMLDoc *
-xml_doc_ref                             (GUPnPAVXMLDoc *doc);
+av_xml_doc_ref                             (GUPnPAVXMLDoc *doc);
 
 G_GNUC_INTERNAL void
-xml_doc_unref                           (GUPnPAVXMLDoc *doc);
+av_xml_doc_unref                           (GUPnPAVXMLDoc *doc);
 
 G_GNUC_INTERNAL GType
-xml_doc_get_type                        (void) G_GNUC_CONST;
+av_xml_doc_get_type                        (void) G_GNUC_CONST;
 
 /* Misc utilities for inspecting xmlNodes */
 G_GNUC_INTERNAL xmlNode *
-xml_util_get_element                    (xmlNode    *node,
-                                         ...) G_GNUC_NULL_TERMINATED;
+av_xml_util_get_element                    (xmlNode    *node,
+                                             ...) G_GNUC_NULL_TERMINATED;
 
 G_GNUC_INTERNAL GList *
-xml_util_get_child_elements_by_name     (xmlNode *node,
-                                         const char *name);
+av_xml_util_get_child_elements_by_name     (xmlNode *node,
+                                            const char *name);
 
 G_GNUC_INTERNAL const char *
-xml_util_get_child_element_content      (xmlNode    *node,
-                                         const char *child_name);
+av_xml_util_get_child_element_content      (xmlNode    *node,
+                                            const char *child_name);
 
 G_GNUC_INTERNAL guint
-xml_util_get_uint_child_element         (xmlNode    *node,
-                                         const char *child_name,
-                                         guint       default_value);
+av_xml_util_get_uint_child_element         (xmlNode    *node,
+                                            const char *child_name,
+                                            guint       default_value);
 
 G_GNUC_INTERNAL guint64
-xml_util_get_uint64_child_element       (xmlNode    *node,
-                                         const char *child_name,
-                                         guint64     default_value);
+av_xml_util_get_uint64_child_element       (xmlNode    *node,
+                                            const char *child_name,
+                                            guint64     default_value);
 
 G_GNUC_INTERNAL const char *
-xml_util_get_attribute_content          (xmlNode    *node,
-                                         const char *attribute_name);
+av_xml_util_get_attribute_content          (xmlNode    *node,
+                                            const char *attribute_name);
 
 G_GNUC_INTERNAL gboolean
-xml_util_get_boolean_attribute          (xmlNode    *node,
-                                         const char *attribute_name);
+av_xml_util_get_boolean_attribute          (xmlNode    *node,
+                                            const char *attribute_name);
 
 G_GNUC_INTERNAL guint
-xml_util_get_uint_attribute             (xmlNode    *node,
-                                         const char *attribute_name,
-                                         guint       default_value);
+av_xml_util_get_uint_attribute             (xmlNode    *node,
+                                            const char *attribute_name,
+                                            guint       default_value);
 
 G_GNUC_INTERNAL gint
-xml_util_get_int_attribute              (xmlNode    *node,
-                                         const char *attribute_name,
-                                         gint        default_value);
+av_xml_util_get_int_attribute              (xmlNode    *node,
+                                            const char *attribute_name,
+                                            gint        default_value);
 
 G_GNUC_INTERNAL glong
-xml_util_get_long_attribute             (xmlNode    *node,
-                                         const char *attribute_name,
-                                         glong       default_value);
+av_xml_util_get_long_attribute             (xmlNode    *node,
+                                            const char *attribute_name,
+                                            glong       default_value);
 
 G_GNUC_INTERNAL gint64
-xml_util_get_int64_attribute            (xmlNode    *node,
-                                         const char *attribute_name,
-                                         gint64      default_value);
+av_xml_util_get_int64_attribute            (xmlNode    *node,
+                                            const char *attribute_name,
+                                            gint64      default_value);
 
 G_GNUC_INTERNAL xmlNode *
-xml_util_set_child                      (xmlNode          *parent_node,
-                                         GUPnPXMLNamespace ns,
-                                         xmlNsPtr         *namespace,
-                                         xmlDoc           *doc,
-                                         const char       *name,
-                                         const char       *value);
+av_xml_util_set_child                      (xmlNode          *parent_node,
+                                            GUPnPXMLNamespace ns,
+                                            xmlNsPtr         *namespace,
+                                            xmlDoc           *doc,
+                                            const char       *name,
+                                            const char       *value);
 
 G_GNUC_INTERNAL void
-xml_util_unset_child                    (xmlNode    *parent_node,
-                                         const char *name);
+av_xml_util_unset_child                    (xmlNode    *parent_node,
+                                            const char *name);
 
 G_GNUC_INTERNAL gboolean
-xml_util_verify_attribute_is_boolean    (xmlNode    *node,
-                                         const char *attribute_name);
+av_xml_util_verify_attribute_is_boolean    (xmlNode    *node,
+                                            const char *attribute_name);
 
 G_GNUC_INTERNAL char *
-xml_util_get_child_string               (xmlNode    *parent_node,
-                                         xmlDoc     *doc,
-                                         const char *name);
+av_xml_util_get_child_string               (xmlNode    *parent_node,
+                                            xmlDoc     *doc,
+                                            const char *name);
 
 G_GNUC_INTERNAL gboolean
-xml_util_node_deep_equal                (xmlNode *first,
-                                         xmlNode *second);
+av_xml_util_node_deep_equal                (xmlNode *first,
+                                            xmlNode *second);
 
 G_GNUC_INTERNAL xmlNode *
-xml_util_find_node                      (xmlNode *haystack,
-                                         xmlNode *needle);
+av_xml_util_find_node                      (xmlNode *haystack,
+                                            xmlNode *needle);
 
 G_GNUC_INTERNAL xmlNode *
-xml_util_copy_node                      (xmlNode *node);
+av_xml_util_copy_node                      (xmlNode *node);
 
 G_GNUC_INTERNAL GHashTable *
-xml_util_get_attributes_map             (xmlNode *node);
+av_xml_util_get_attributes_map             (xmlNode *node);
 
 G_GNUC_INTERNAL xmlNsPtr
-xml_util_create_namespace               (xmlNodePtr root,
-                                         GUPnPXMLNamespace ns);
+av_xml_util_create_namespace               (xmlNodePtr root,
+                                            GUPnPXMLNamespace ns);
 
 G_GNUC_INTERNAL xmlNsPtr
-xml_util_lookup_namespace               (xmlDocPtr doc,
-                                         GUPnPXMLNamespace ns);
+av_xml_util_lookup_namespace               (xmlDocPtr doc,
+                                            GUPnPXMLNamespace ns);
 
 G_GNUC_INTERNAL xmlNsPtr
-xml_util_get_ns                         (xmlDocPtr doc,
-                                         GUPnPXMLNamespace ns,
-                                         xmlNsPtr *ns_out);
+av_xml_util_get_ns                         (xmlDocPtr doc,
+                                            GUPnPXMLNamespace ns,
+                                            xmlNsPtr *ns_out);
 
 G_END_DECLS
 

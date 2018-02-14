@@ -269,7 +269,7 @@ gupnp_didl_lite_container_get_searchable (GUPnPDIDLLiteContainer *container)
         xml_node = gupnp_didl_lite_object_get_xml_node
                                 (GUPNP_DIDL_LITE_OBJECT (container));
 
-        return xml_util_get_boolean_attribute (xml_node, "searchable");
+        return av_xml_util_get_boolean_attribute (xml_node, "searchable");
 }
 
 /**
@@ -292,7 +292,7 @@ gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
         xml_node = gupnp_didl_lite_object_get_xml_node
                                 (GUPNP_DIDL_LITE_OBJECT (container));
 
-        return xml_util_get_int_attribute (xml_node, "childCount", -1);
+        return av_xml_util_get_int_attribute (xml_node, "childCount", -1);
 }
 
 /**
@@ -315,9 +315,9 @@ gupnp_didl_lite_container_get_container_update_id
         xml_node = gupnp_didl_lite_object_get_xml_node
                                 (GUPNP_DIDL_LITE_OBJECT (container));
 
-        return xml_util_get_uint_child_element (xml_node,
-                                                "containerUpdateID",
-                                                0);
+        return av_xml_util_get_uint_child_element (xml_node,
+                                                   "containerUpdateID",
+                                                   0);
 }
 
 /**
@@ -340,8 +340,8 @@ gupnp_didl_lite_container_container_update_id_is_set
 
         xml_node = gupnp_didl_lite_object_get_xml_node
                                         (GUPNP_DIDL_LITE_OBJECT (container));
-        content = xml_util_get_child_element_content (xml_node,
-                                                      "containerUpdateID");
+        content = av_xml_util_get_child_element_content (xml_node,
+                                                         "containerUpdateID");
         return content != NULL;
 }
 
@@ -365,9 +365,9 @@ gupnp_didl_lite_container_get_total_deleted_child_count
         xml_node = gupnp_didl_lite_object_get_xml_node
                                 (GUPNP_DIDL_LITE_OBJECT (container));
 
-        return xml_util_get_uint_child_element (xml_node,
-                                                "totalDeletedChildCount",
-                                                -1);
+        return av_xml_util_get_uint_child_element (xml_node,
+                                                   "totalDeletedChildCount",
+                                                   -1);
 }
 
 /**
@@ -390,8 +390,8 @@ gupnp_didl_lite_container_total_deleted_child_count_is_set
 
         xml_node = gupnp_didl_lite_object_get_xml_node
                                         (GUPNP_DIDL_LITE_OBJECT (container));
-        content = xml_util_get_child_element_content (xml_node,
-                                                      "totalDeletedChildCount");
+        content = av_xml_util_get_child_element_content (xml_node,
+                                                         "totalDeletedChildCount");
         return content != NULL;
 }
 /**
@@ -545,7 +545,7 @@ gupnp_didl_lite_container_get_storage_used (GUPnPDIDLLiteContainer *container)
 
         xml_node = gupnp_didl_lite_object_get_xml_node
                                 (GUPNP_DIDL_LITE_OBJECT (container));
-        str = xml_util_get_child_element_content (xml_node, "storageUsed");
+        str = av_xml_util_get_child_element_content (xml_node, "storageUsed");
         if (str == NULL)
                 return -1;
 
@@ -638,12 +638,12 @@ gupnp_didl_lite_container_set_container_update_id
         upnp_ns = gupnp_didl_lite_object_get_upnp_namespace (self_as_object);
 
         str = g_strdup_printf ("%u", update_id);
-        xml_util_set_child (xml_node,
-                            GUPNP_XML_NAMESPACE_UPNP,
-                            &upnp_ns,
-                            xml_doc->doc,
-                            "containerUpdateID",
-                            str);
+        av_xml_util_set_child (xml_node,
+                               GUPNP_XML_NAMESPACE_UPNP,
+                               &upnp_ns,
+                               xml_doc->doc,
+                               "containerUpdateID",
+                               str);
         g_free (str);
 
         g_object_notify (G_OBJECT (container), "container-update-id");
@@ -666,7 +666,7 @@ gupnp_didl_lite_container_unset_container_update_id
 
         xml_node = gupnp_didl_lite_object_get_xml_node
                                         (GUPNP_DIDL_LITE_OBJECT (container));
-        xml_util_unset_child (xml_node, "containerUpdateID");
+        av_xml_util_unset_child (xml_node, "containerUpdateID");
 
         g_object_notify (G_OBJECT (container), "container-update-id");
 }
@@ -698,12 +698,12 @@ gupnp_didl_lite_container_set_total_deleted_child_count
         upnp_ns = gupnp_didl_lite_object_get_upnp_namespace (self_as_object);
 
         str = g_strdup_printf ("%u", count);
-        xml_util_set_child (xml_node,
-                            GUPNP_XML_NAMESPACE_UPNP,
-                            &upnp_ns,
-                            xml_doc->doc,
-                            "totalDeletedChildCount",
-                            str);
+        av_xml_util_set_child (xml_node,
+                               GUPNP_XML_NAMESPACE_UPNP,
+                               &upnp_ns,
+                               xml_doc->doc,
+                               "totalDeletedChildCount",
+                               str);
         g_free (str);
 
         g_object_notify (G_OBJECT (container), "total-deleted-child-count");
@@ -726,7 +726,7 @@ gupnp_didl_lite_container_unset_total_deleted_child_count
 
         xml_node = gupnp_didl_lite_object_get_xml_node
                                         (GUPNP_DIDL_LITE_OBJECT (container));
-        xml_util_unset_child (xml_node, "totalDeletedChildCount");
+        av_xml_util_unset_child (xml_node, "totalDeletedChildCount");
 
         g_object_notify (G_OBJECT (container), "total-deleted-child-count");
 }

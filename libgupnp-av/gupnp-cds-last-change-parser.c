@@ -119,9 +119,9 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                 goto out;
         }
 
-        state_event = xml_util_get_element ((xmlNode *) doc,
-                                            "StateEvent",
-                                            NULL);
+        state_event = av_xml_util_get_element ((xmlNode *) doc,
+                                               "StateEvent",
+                                               NULL);
         if (state_event == NULL) {
                 g_set_error (error,
                              G_MARKUP_ERROR,
@@ -142,22 +142,22 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                         entry->ref_count = 1;
                         entry->event = GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_ADDED;
 
-                        tmp = xml_util_get_attribute_content (it, "objID");
+                        tmp = av_xml_util_get_attribute_content (it, "objID");
                         entry->object_id = g_strdup (tmp);
 
-                        tmp = xml_util_get_attribute_content (it,
-                                                              "objParentID");
+                        tmp = av_xml_util_get_attribute_content (it,
+                                                                 "objParentID");
                         entry->parent_id = g_strdup (tmp);
 
-                        tmp = xml_util_get_attribute_content (it, "objClass");
+                        tmp = av_xml_util_get_attribute_content (it, "objClass");
                         entry->class = g_strdup (tmp);
 
-                        entry->update_id = (guint32) xml_util_get_uint_attribute
+                        entry->update_id = (guint32) av_xml_util_get_uint_attribute
                                         (it,
                                          "updateID",
                                          0);
                         entry->is_subtree_update =
-                                        xml_util_get_boolean_attribute
+                                        av_xml_util_get_boolean_attribute
                                                 (it,
                                                  "stUpdate");
                 } else if (g_ascii_strcasecmp ((const char *) it->name,
@@ -168,17 +168,17 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                         entry->ref_count = 1;
                         entry->event = GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_MODIFIED;
 
-                        tmp = xml_util_get_attribute_content (it, "objID");
+                        tmp = av_xml_util_get_attribute_content (it, "objID");
                         entry->object_id = g_strdup (tmp);
 
-                        entry->update_id = (guint32) xml_util_get_uint_attribute
+                        entry->update_id = (guint32) av_xml_util_get_uint_attribute
                                         (it,
                                          "updateID",
                                          0);
                         entry->is_subtree_update =
-                                        xml_util_get_boolean_attribute
-                                                (it,
-                                                 "stUpdate");
+                                        av_xml_util_get_boolean_attribute
+                                        (it,
+                                         "stUpdate");
                 } else if (g_ascii_strcasecmp ((const char *) it->name,
                                                "objDel") == 0) {
                         const char *tmp;
@@ -187,17 +187,17 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                         entry->ref_count = 1;
                         entry->event = GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_REMOVED;
 
-                        tmp = xml_util_get_attribute_content (it, "objID");
+                        tmp = av_xml_util_get_attribute_content (it, "objID");
                         entry->object_id = g_strdup (tmp);
 
-                        entry->update_id = (guint32) xml_util_get_uint_attribute
+                        entry->update_id = (guint32) av_xml_util_get_uint_attribute
                                         (it,
                                          "updateID",
                                          0);
                         entry->is_subtree_update =
-                                        xml_util_get_boolean_attribute
-                                                (it,
-                                                 "stUpdate");
+                                        av_xml_util_get_boolean_attribute
+                                        (it,
+                                         "stUpdate");
                 } else if (g_ascii_strcasecmp ((const char *) it->name,
                                                "stDone") == 0) {
                         const char *tmp;
@@ -206,10 +206,10 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                         entry->ref_count = 1;
                         entry->event = GUPNP_CDS_LAST_CHANGE_EVENT_ST_DONE;
 
-                        tmp = xml_util_get_attribute_content (it, "objID");
+                        tmp = av_xml_util_get_attribute_content (it, "objID");
                         entry->object_id = g_strdup (tmp);
 
-                        entry->update_id = (guint32) xml_util_get_uint_attribute
+                        entry->update_id = (guint32) av_xml_util_get_uint_attribute
                                         (it,
                                          "updateID",
                                          0);

@@ -167,7 +167,7 @@ gupnp_didl_lite_item_get_ref_id (GUPnPDIDLLiteItem *item)
         xml_node = gupnp_didl_lite_object_get_xml_node
                                         (GUPNP_DIDL_LITE_OBJECT (item));
 
-        return xml_util_get_attribute_content (xml_node, "refID");
+        return av_xml_util_get_attribute_content (xml_node, "refID");
 }
 
 /**
@@ -218,17 +218,17 @@ gupnp_didl_lite_item_set_lifetime (GUPnPDIDLLiteItem *item,
         g_object_get (G_OBJECT (object), "xml-doc", &doc, NULL);
 
         if (lifetime < 0)
-                xml_util_unset_child (node, "lifetime");
+                av_xml_util_unset_child (node, "lifetime");
         else {
                 char *str;
 
                 str = seconds_to_time (lifetime);
-                xml_util_set_child (node,
-                                    GUPNP_XML_NAMESPACE_DLNA,
-                                    &ns,
-                                    doc->doc,
-                                    "lifetime",
-                                    str);
+                av_xml_util_set_child (node,
+                                       GUPNP_XML_NAMESPACE_DLNA,
+                                       &ns,
+                                       doc->doc,
+                                       "lifetime",
+                                       str);
                 g_free (str);
         }
 
@@ -254,7 +254,8 @@ gupnp_didl_lite_item_get_lifetime (GUPnPDIDLLiteItem *item)
         object = GUPNP_DIDL_LITE_OBJECT (item);
         node = gupnp_didl_lite_object_get_xml_node (object);
 
-        lifetime_str = xml_util_get_child_element_content (node, "lifetime");
+        lifetime_str = av_xml_util_get_child_element_content (node,
+                                                              "lifetime");
         lifetime = seconds_from_time (lifetime_str);
 
         return lifetime;

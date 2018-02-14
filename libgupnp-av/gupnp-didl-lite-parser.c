@@ -52,7 +52,7 @@ verify_didl_attributes (xmlNode *node)
 {
         const char *content;
 
-        content = xml_util_get_child_element_content (node, "date");
+        content = av_xml_util_get_child_element_content (node, "date");
         if (content) {
                 /* try to roughly verify the passed date with ^\d{4}-\d{2}-\d{2} */
                 char *ptr = (char *) content;
@@ -73,9 +73,9 @@ verify_didl_attributes (xmlNode *node)
                 }
         }
 
-        if (xml_util_get_attribute_content (node, "restricted") != NULL) {
-                return xml_util_verify_attribute_is_boolean (node,
-                                                             "restricted");
+        if (av_xml_util_get_attribute_content (node, "restricted") != NULL) {
+                return av_xml_util_verify_attribute_is_boolean (node,
+                                                                "restricted");
         }
 
         return TRUE;
@@ -251,9 +251,9 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
         }
 
         /* Get a pointer to root element */
-        element = xml_util_get_element ((xmlNode *) doc,
-                                        "DIDL-Lite",
-                                        NULL);
+        element = av_xml_util_get_element ((xmlNode *) doc,
+                                           "DIDL-Lite",
+                                           NULL);
         if (element == NULL) {
                 g_set_error (error,
                              G_MARKUP_ERROR,
@@ -277,26 +277,30 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
         }
 
         /* Create namespaces if they don't exist */
-        upnp_ns = xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_UPNP);
+        upnp_ns = av_xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_UPNP);
         if (! upnp_ns)
-                upnp_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
-                                                     GUPNP_XML_NAMESPACE_UPNP);
+                upnp_ns = av_xml_util_create_namespace
+                                        (xmlDocGetRootElement (doc),
+                                         GUPNP_XML_NAMESPACE_UPNP);
 
-        dc_ns = xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_DC);
+        dc_ns = av_xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_DC);
         if (! dc_ns)
-                dc_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
-                                                   GUPNP_XML_NAMESPACE_DC);
-        dlna_ns = xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_DLNA);
+                dc_ns = av_xml_util_create_namespace
+                                        (xmlDocGetRootElement (doc),
+                                         GUPNP_XML_NAMESPACE_DC);
+        dlna_ns = av_xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_DLNA);
         if (! dlna_ns)
-                dlna_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
-                                                   GUPNP_XML_NAMESPACE_DLNA);
+                dlna_ns = av_xml_util_create_namespace
+                                        (xmlDocGetRootElement (doc),
+                                         GUPNP_XML_NAMESPACE_DLNA);
 
-        pv_ns = xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_PV);
+        pv_ns = av_xml_util_lookup_namespace (doc, GUPNP_XML_NAMESPACE_PV);
         if (! pv_ns)
-                pv_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
-                                                   GUPNP_XML_NAMESPACE_PV);
+                pv_ns = av_xml_util_create_namespace
+                                        (xmlDocGetRootElement (doc),
+                                         GUPNP_XML_NAMESPACE_PV);
 
-        xml_doc = xml_doc_new (doc);
+        xml_doc = av_xml_doc_new (doc);
 
         result = parse_elements (parser,
                                  element,
@@ -307,7 +311,7 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
                                  pv_ns,
                                  recursive,
                                  error);
-        xml_doc_unref (xml_doc);
+        av_xml_doc_unref (xml_doc);
 
         return result;
 }

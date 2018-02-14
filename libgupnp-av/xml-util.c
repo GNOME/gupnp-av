@@ -45,7 +45,7 @@ static GUPnPXMLNamespaceDescription gupnp_xml_namespaces[] =
 };
 
 GUPnPAVXMLDoc *
-xml_doc_new (xmlDoc *doc)
+av_xml_doc_new (xmlDoc *doc)
 {
         GUPnPAVXMLDoc *ret = NULL;
 
@@ -59,7 +59,7 @@ xml_doc_new (xmlDoc *doc)
 }
 
 GUPnPAVXMLDoc *
-xml_doc_ref (GUPnPAVXMLDoc *doc)
+av_xml_doc_ref (GUPnPAVXMLDoc *doc)
 {
         g_return_val_if_fail (doc, NULL);
         g_return_val_if_fail (doc->refcount > 0, NULL);
@@ -69,7 +69,7 @@ xml_doc_ref (GUPnPAVXMLDoc *doc)
 }
 
 void
-xml_doc_unref (GUPnPAVXMLDoc *doc)
+av_xml_doc_unref (GUPnPAVXMLDoc *doc)
 {
         g_return_if_fail (doc);
         g_return_if_fail (doc->refcount > 0);
@@ -82,8 +82,8 @@ xml_doc_unref (GUPnPAVXMLDoc *doc)
 }
 
 xmlNode *
-xml_util_get_element (xmlNode *node,
-                      ...)
+av_xml_util_get_element (xmlNode *node,
+                         ...)
 {
         va_list var_args;
 
@@ -114,7 +114,7 @@ xml_util_get_element (xmlNode *node,
 }
 
 GList *
-xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
+av_xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
 {
        GList *children = NULL;
 
@@ -131,13 +131,13 @@ xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
 }
 
 const char *
-xml_util_get_child_element_content (xmlNode    *node,
-                                    const char *child_name)
+av_xml_util_get_child_element_content (xmlNode    *node,
+                                       const char *child_name)
 {
         xmlNode *child_node;
         const char *content;
 
-        child_node = xml_util_get_element (node, child_name, NULL);
+        child_node = av_xml_util_get_element (node, child_name, NULL);
         if (!child_node || !(child_node->children))
                 return NULL;
 
@@ -149,13 +149,13 @@ xml_util_get_child_element_content (xmlNode    *node,
 }
 
 guint
-xml_util_get_uint_child_element (xmlNode    *node,
-                                 const char *child_name,
-                                 guint       default_value)
+av_xml_util_get_uint_child_element (xmlNode    *node,
+                                    const char *child_name,
+                                    guint       default_value)
 {
         const char *content;
 
-        content = xml_util_get_child_element_content (node, child_name);
+        content = av_xml_util_get_child_element_content (node, child_name);
         if (!content)
                 return default_value;
 
@@ -163,13 +163,13 @@ xml_util_get_uint_child_element (xmlNode    *node,
 }
 
 guint64
-xml_util_get_uint64_child_element (xmlNode    *node,
-                                   const char *child_name,
-                                   guint64     default_value)
+av_xml_util_get_uint64_child_element (xmlNode    *node,
+                                      const char *child_name,
+                                      guint64     default_value)
 {
         const char *content;
 
-        content = xml_util_get_child_element_content (node, child_name);
+        content = av_xml_util_get_child_element_content (node, child_name);
         if (!content)
                 return default_value;
 
@@ -177,8 +177,8 @@ xml_util_get_uint64_child_element (xmlNode    *node,
 }
 
 const char *
-xml_util_get_attribute_content (xmlNode    *node,
-                                const char *attribute_name)
+av_xml_util_get_attribute_content (xmlNode    *node,
+                                   const char *attribute_name)
 {
         xmlAttr *attribute;
 
@@ -199,14 +199,14 @@ xml_util_get_attribute_content (xmlNode    *node,
 }
 
 gboolean
-xml_util_get_boolean_attribute (xmlNode    *node,
-                                const char *attribute_name)
+av_xml_util_get_boolean_attribute (xmlNode    *node,
+                                   const char *attribute_name)
 {
         const char *content;
         gchar   *str;
         gboolean ret;
 
-        content = xml_util_get_attribute_content (node, attribute_name);
+        content = av_xml_util_get_attribute_content (node, attribute_name);
         if (!content)
                 return FALSE;
 
@@ -228,43 +228,43 @@ xml_util_get_boolean_attribute (xmlNode    *node,
 }
 
 guint
-xml_util_get_uint_attribute (xmlNode    *node,
-                             const char *attribute_name,
-                             guint       default_value)
+av_xml_util_get_uint_attribute (xmlNode    *node,
+                                const char *attribute_name,
+                                guint       default_value)
 {
-        return (guint) xml_util_get_long_attribute (node,
+        return (guint) av_xml_util_get_long_attribute (node,
                                                     attribute_name,
                                                     (glong) default_value);
 }
 
 gint
-xml_util_get_int_attribute (xmlNode    *node,
-                            const char *attribute_name,
-                            gint        default_value)
+av_xml_util_get_int_attribute (xmlNode    *node,
+                               const char *attribute_name,
+                               gint        default_value)
 {
-        return (gint) xml_util_get_long_attribute (node,
+        return (gint) av_xml_util_get_long_attribute (node,
                                                    attribute_name,
                                                    (glong) default_value);
 }
 
 glong
-xml_util_get_long_attribute (xmlNode    *node,
-                             const char *attribute_name,
-                             glong       default_value)
+av_xml_util_get_long_attribute (xmlNode    *node,
+                                const char *attribute_name,
+                                glong       default_value)
 {
-    return (glong) xml_util_get_int64_attribute (node,
+    return (glong) av_xml_util_get_int64_attribute (node,
                                                  attribute_name,
                                                  (gint64) default_value);
 }
 
 gint64
-xml_util_get_int64_attribute (xmlNode    *node,
-                              const char *attribute_name,
-                              gint64      default_value)
+av_xml_util_get_int64_attribute (xmlNode    *node,
+                                 const char *attribute_name,
+                                 gint64      default_value)
 {
         const char *content;
 
-        content = xml_util_get_attribute_content (node, attribute_name);
+        content = av_xml_util_get_attribute_content (node, attribute_name);
         if (!content)
                 return default_value;
 
@@ -272,21 +272,21 @@ xml_util_get_int64_attribute (xmlNode    *node,
 }
 
 xmlNode *
-xml_util_set_child (xmlNode    *parent_node,
-                    GUPnPXMLNamespace ns,
-                    xmlNsPtr   *xmlns,
-                    xmlDoc     *doc,
-                    const char *name,
-                    const char *value)
+av_xml_util_set_child (xmlNode    *parent_node,
+                       GUPnPXMLNamespace ns,
+                       xmlNsPtr   *xmlns,
+                       xmlDoc     *doc,
+                       const char *name,
+                       const char *value)
 {
         xmlNode *node;
         xmlChar *escaped;
 
-        node = xml_util_get_element (parent_node, name, NULL);
+        node = av_xml_util_get_element (parent_node, name, NULL);
         if (node == NULL) {
                 xmlNsPtr ns_ptr = NULL;
 
-                ns_ptr = xml_util_get_ns (doc, ns, xmlns);
+                ns_ptr = av_xml_util_get_ns (doc, ns, xmlns);
                 node = xmlNewChild (parent_node,
                                     ns_ptr,
                                     (unsigned char *) name,
@@ -301,12 +301,12 @@ xml_util_set_child (xmlNode    *parent_node,
 }
 
 void
-xml_util_unset_child (xmlNode    *parent_node,
-                      const char *name)
+av_xml_util_unset_child (xmlNode    *parent_node,
+                         const char *name)
 {
         xmlNode *node;
 
-        node = xml_util_get_element (parent_node, name, NULL);
+        node = av_xml_util_get_element (parent_node, name, NULL);
         if (node != NULL) {
                 xmlUnlinkNode (node);
                 xmlFreeNode (node);
@@ -314,13 +314,13 @@ xml_util_unset_child (xmlNode    *parent_node,
 }
 
 gboolean
-xml_util_verify_attribute_is_boolean (xmlNode    *node,
-                                      const char *attribute_name)
+av_xml_util_verify_attribute_is_boolean (xmlNode    *node,
+                                         const char *attribute_name)
 {
         const char *content;
         char *str;
 
-        content = xml_util_get_attribute_content (node, attribute_name);
+        content = av_xml_util_get_attribute_content (node, attribute_name);
         if (content == NULL)
             return FALSE;
 
@@ -335,15 +335,15 @@ xml_util_verify_attribute_is_boolean (xmlNode    *node,
 }
 
 char *
-xml_util_get_child_string (xmlNode    *parent_node,
-                           xmlDoc     *doc,
-                           const char *name)
+av_xml_util_get_child_string (xmlNode    *parent_node,
+                              xmlDoc     *doc,
+                              const char *name)
 {
         xmlBuffer *buffer;
         char      *ret;
         xmlNode   *node;
 
-        node = xml_util_get_element (parent_node, name, NULL);
+        node = av_xml_util_get_element (parent_node, name, NULL);
         if (!node)
                 return NULL;
 
@@ -361,8 +361,8 @@ xml_util_get_child_string (xmlNode    *parent_node,
 }
 
 gboolean
-xml_util_node_deep_equal (xmlNode *first,
-                          xmlNode *second)
+av_xml_util_node_deep_equal (xmlNode *first,
+                             xmlNode *second)
 {
         GHashTable *first_attributes;
         xmlAttr *attribute;
@@ -377,7 +377,7 @@ xml_util_node_deep_equal (xmlNode *first,
                 return FALSE;
 
         equal = FALSE;
-        first_attributes = xml_util_get_attributes_map (first);
+        first_attributes = av_xml_util_get_attributes_map (first);
         /* compare attributes */
         for (attribute = second->properties;
              attribute != NULL;
@@ -416,7 +416,8 @@ xml_util_node_deep_equal (xmlNode *first,
                      first_child != NULL && second_child != NULL;
                      first_child = first_child->next,
                      second_child = second_child->next)
-                        if (!xml_util_node_deep_equal (first_child, second_child))
+                        if (!av_xml_util_node_deep_equal (first_child,
+                                                          second_child))
                                 return FALSE;
                 if (first_child != NULL || second_child != NULL)
                         return FALSE;
@@ -426,16 +427,16 @@ xml_util_node_deep_equal (xmlNode *first,
 }
 
 xmlNode *
-xml_util_find_node (xmlNode *haystack,
-                    xmlNode *needle)
+av_xml_util_find_node (xmlNode *haystack,
+                       xmlNode *needle)
 {
         xmlNodePtr iter;
 
-        if (xml_util_node_deep_equal (haystack, needle))
+        if (av_xml_util_node_deep_equal (haystack, needle))
                 return haystack;
 
         for (iter = haystack->children; iter != NULL; iter = iter->next) {
-                xmlNodePtr found_node = xml_util_find_node (iter, needle);
+                xmlNodePtr found_node = av_xml_util_find_node (iter, needle);
 
                 if (found_node != NULL)
                         return found_node;
@@ -445,7 +446,7 @@ xml_util_find_node (xmlNode *haystack,
 }
 
 xmlNode *
-xml_util_copy_node (xmlNode *node)
+av_xml_util_copy_node (xmlNode *node)
 {
         xmlNode *dup = xmlCopyNode (node, 1);
 
@@ -455,7 +456,7 @@ xml_util_copy_node (xmlNode *node)
 }
 
 GHashTable *
-xml_util_get_attributes_map (xmlNode *node)
+av_xml_util_get_attributes_map (xmlNode *node)
 {
         xmlAttr *attribute;
         GHashTable *attributes_map = g_hash_table_new (g_str_hash,
@@ -472,13 +473,13 @@ xml_util_get_attributes_map (xmlNode *node)
 }
 
 /**
- * xml_util_create_namespace:
+ * av_xml_util_create_namespace:
  * @root: (allow-none): Document root node or %NULL for anonymous ns.
  * @ns: Namespace
  * @returns: Newly created namespace on root node
  */
 xmlNsPtr
-xml_util_create_namespace (xmlNodePtr root, GUPnPXMLNamespace ns)
+av_xml_util_create_namespace (xmlNodePtr root, GUPnPXMLNamespace ns)
 {
         g_return_val_if_fail (ns < GUPNP_XML_NAMESPACE_COUNT, NULL);
 
@@ -488,14 +489,14 @@ xml_util_create_namespace (xmlNodePtr root, GUPnPXMLNamespace ns)
 }
 
 /**
- * xml_util_lookup_namespace:
+ * av_xml_util_lookup_namespace:
  * @doc: #xmlDoc
  * @ns: namespace to look up (except DIDL-Lite, which doesn't have a prefix)
  * @returns: %NULL if namespace does not exist, a pointer to the namespace
  * otherwise.
  */
 xmlNsPtr
-xml_util_lookup_namespace (xmlDocPtr doc, GUPnPXMLNamespace ns)
+av_xml_util_lookup_namespace (xmlDocPtr doc, GUPnPXMLNamespace ns)
 {
         xmlNsPtr *ns_list, *it, retval = NULL;
         const char *ns_prefix = NULL;
@@ -538,7 +539,7 @@ xml_util_lookup_namespace (xmlDocPtr doc, GUPnPXMLNamespace ns)
 }
 
 /**
- * xml_util_get_ns:
+ * av_xml_util_get_ns:
  * @doc: A #xmlDoc.
  * @ns: A #GUPnPXMLNamespace.
  * @ns_out: (out) (allow-none): return location for the namespace or %NULL.
@@ -549,7 +550,7 @@ xml_util_lookup_namespace (xmlDocPtr doc, GUPnPXMLNamespace ns)
  * @returns: either the existing #xmlNsPtr or a newly created one.
  */
 xmlNsPtr
-xml_util_get_ns (xmlDocPtr doc, GUPnPXMLNamespace ns, xmlNsPtr *ns_out)
+av_xml_util_get_ns (xmlDocPtr doc, GUPnPXMLNamespace ns, xmlNsPtr *ns_out)
 {
         xmlNsPtr tmp_ns;
 
@@ -557,10 +558,11 @@ xml_util_get_ns (xmlDocPtr doc, GUPnPXMLNamespace ns, xmlNsPtr *ns_out)
         if (ns_out != NULL && *ns_out != NULL)
                 return *ns_out;
 
-        tmp_ns = xml_util_lookup_namespace (doc, ns);
+        tmp_ns = av_xml_util_lookup_namespace (doc, ns);
         if (!tmp_ns)
-                tmp_ns = xml_util_create_namespace (xmlDocGetRootElement (doc),
-                                                    ns);
+                tmp_ns = av_xml_util_create_namespace
+                                        (xmlDocGetRootElement (doc),
+                                         ns);
 
         if (ns_out != NULL)
                 *ns_out = tmp_ns;
@@ -568,4 +570,4 @@ xml_util_get_ns (xmlDocPtr doc, GUPnPXMLNamespace ns, xmlNsPtr *ns_out)
         return tmp_ns;
 }
 
-G_DEFINE_BOXED_TYPE (GUPnPAVXMLDoc, xml_doc, xml_doc_ref, xml_doc_unref)
+G_DEFINE_BOXED_TYPE (GUPnPAVXMLDoc, av_xml_doc, av_xml_doc_ref, av_xml_doc_unref)

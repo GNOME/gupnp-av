@@ -57,7 +57,7 @@ get_toplevel_changes (xmlNodePtr current_node,
                       xmlNodePtr new_node)
 {
         xmlAttrPtr attribute;
-        GHashTable *current_attributes = xml_util_get_attributes_map
+        GHashTable *current_attributes = av_xml_util_get_attributes_map
                                         (current_node);
         GList *changes = NULL;
         const xmlChar *name = new_node->name;
@@ -228,9 +228,9 @@ apply_temporary_modification (DocNode    *modified,
                               xmlNodePtr  new_node,
                               XSDData    *xsd_data)
 {
-        xmlNodePtr mod_cur_node = xml_util_find_node (modified->node,
-                                                      current_node);
-        xmlNodePtr new_node_copy = xml_util_copy_node (new_node);
+        xmlNodePtr mod_cur_node = av_xml_util_find_node (modified->node,
+                                                         current_node);
+        xmlNodePtr new_node_copy = av_xml_util_copy_node (new_node);
 
         if (mod_cur_node == NULL) {
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
@@ -254,12 +254,12 @@ apply_temporary_addition (DocNode    *modified,
                           XSDData    *xsd_data)
 {
         xmlNodePtr mod_sibling;
-        xmlNodePtr new_node_copy = xml_util_copy_node (new_node);
+        xmlNodePtr new_node_copy = av_xml_util_copy_node (new_node);
 
         if (sibling->doc == modified->doc)
                 mod_sibling = sibling;
         else
-                mod_sibling = xml_util_find_node (modified->node, sibling);
+                mod_sibling = av_xml_util_find_node (modified->node, sibling);
 
         if (mod_sibling == NULL)
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
@@ -283,8 +283,8 @@ apply_temporary_removal (DocNode    *modified,
                          xmlNodePtr  current_node,
                          XSDData    *xsd_data)
 {
-        xmlNodePtr mod_cur_node = xml_util_find_node (modified->node,
-                                                      current_node);
+        xmlNodePtr mod_cur_node = av_xml_util_find_node (modified->node,
+                                                         current_node);
 
         if (mod_cur_node == NULL)
                 return GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
@@ -561,7 +561,8 @@ new_doc_is_valid_modification (DocNode   *modified,
                  */
                 new_node = new_node->next;
                 current_node = current_node->next;
-                if (xml_util_node_deep_equal (temp_current_node, temp_new_node))
+                if (av_xml_util_node_deep_equal (temp_current_node,
+                                                 temp_new_node))
                         /* This is just a context, skip the checks. */
                         continue;
                 if (xmlStrcmp (temp_current_node->name, temp_new_node->name))
@@ -666,7 +667,7 @@ is_current_doc_part_of_original_doc (DocNode   *original,
         if (current_node == NULL)
                 return TRUE;
 
-        this_node = xml_util_find_node (original->node, current_node);
+        this_node = av_xml_util_find_node (original->node, current_node);
 
         if (this_node == NULL)
                 return FALSE;
@@ -674,7 +675,7 @@ is_current_doc_part_of_original_doc (DocNode   *original,
         for (current_node = current_node->next, this_node = this_node->next;
              current_node != NULL && this_node != NULL;
              current_node = current_node->next, this_node = this_node->next)
-                if (!xml_util_node_deep_equal (current_node, this_node))
+                if (!av_xml_util_node_deep_equal (current_node, this_node))
                         return FALSE;
 
         return TRUE;
@@ -825,7 +826,7 @@ fragment_util_apply_modification (xmlNodePtr *node_ptr,
         if (node_ptr == NULL || *node_ptr == NULL)
                 return FALSE;
 
-        node_copy = xml_util_copy_node (modified->node);
+        node_copy = av_xml_util_copy_node (modified->node);
 
         if (node_copy == NULL)
                 return FALSE;

@@ -149,7 +149,7 @@ gupnp_didl_lite_create_class_dispose (GObject *object)
 
         priv = GUPNP_DIDL_LITE_CREATE_CLASS (object)->priv;
 
-        g_clear_pointer (&priv->xml_doc, xml_doc_unref);
+        g_clear_pointer (&priv->xml_doc, av_xml_doc_unref);
 
         object_class = G_OBJECT_CLASS
                                    (gupnp_didl_lite_create_class_parent_class);
@@ -206,7 +206,7 @@ gupnp_didl_lite_create_class_class_init (GUPnPDIDLLiteCreateClassClass *klass)
                                     "XMLDoc",
                                     "The reference to XML document"
                                     " containing this object.",
-                                    xml_doc_get_type (),
+                                    av_xml_doc_get_type (),
                                     G_PARAM_WRITABLE |
                                     G_PARAM_CONSTRUCT_ONLY |
                                     G_PARAM_STATIC_NAME |
@@ -329,8 +329,8 @@ gupnp_didl_lite_create_class_get_include_derived
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CREATE_CLASS (create_class),
                               FALSE);
 
-        return xml_util_get_boolean_attribute (create_class->priv->xml_node,
-                                               "includeDerived");
+        return av_xml_util_get_boolean_attribute (create_class->priv->xml_node,
+                                                  "includeDerived");
 }
 
 /**
@@ -375,8 +375,8 @@ gupnp_didl_lite_create_class_get_friendly_name
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CREATE_CLASS (create_class),
                               NULL);
-        return xml_util_get_attribute_content (create_class->priv->xml_node,
-                                               "name");
+        return av_xml_util_get_attribute_content (create_class->priv->xml_node,
+                                                  "name");
 }
 
 /**

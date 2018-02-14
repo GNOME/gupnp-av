@@ -133,7 +133,7 @@ gupnp_didl_lite_contributor_dispose (GObject *object)
 
         priv = GUPNP_DIDL_LITE_CONTRIBUTOR (object)->priv;
 
-        g_clear_pointer (&priv->xml_doc, xml_doc_unref);
+        g_clear_pointer (&priv->xml_doc, av_xml_doc_unref);
 
         object_class = G_OBJECT_CLASS
                         (gupnp_didl_lite_contributor_parent_class);
@@ -188,7 +188,7 @@ gupnp_didl_lite_contributor_class_init (GUPnPDIDLLiteContributorClass *klass)
                                       "XMLDoc",
                                       "The reference to XML document"
                                       " containing this contributor.",
-                                      xml_doc_get_type (),
+                                      av_xml_doc_get_type (),
                                       G_PARAM_WRITABLE |
                                       G_PARAM_CONSTRUCT_ONLY |
                                       G_PARAM_STATIC_NAME |
@@ -245,8 +245,8 @@ gupnp_didl_lite_contributor_get_role (GUPnPDIDLLiteContributor *contributor)
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTRIBUTOR (contributor),
                               NULL);
 
-        return xml_util_get_attribute_content (contributor->priv->xml_node,
-                                               "role");
+        return av_xml_util_get_attribute_content (contributor->priv->xml_node,
+                                                  "role");
 }
 
 /**

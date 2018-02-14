@@ -138,7 +138,7 @@ gupnp_feature_list_parser_parse_text
         }
 
         /* Get a pointer to root element */
-        element = xml_util_get_element ((xmlNode *) doc, "Features", NULL);
+        element = av_xml_util_get_element ((xmlNode *) doc, "Features", NULL);
         if (element == NULL) {
                 g_set_error (error,
                              G_MARKUP_ERROR,
@@ -158,9 +158,10 @@ gupnp_feature_list_parser_parse_text
 
                 if (g_ascii_strcasecmp ((char *) element->name,
                                         "Feature") == 0) {
-                        name = xml_util_get_attribute_content (element, "name");
-                        version = xml_util_get_attribute_content (element,
-                                                                  "version");
+                        name = av_xml_util_get_attribute_content (element,
+                                                                  "name");
+                        version = av_xml_util_get_attribute_content (element,
+                                                                     "version");
                         if (!name || !version) {
                                 g_set_error (error,
                                              G_MARKUP_ERROR,

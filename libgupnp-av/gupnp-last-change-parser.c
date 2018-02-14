@@ -75,13 +75,13 @@ read_state_variable (const char *variable_name,
         xmlNode    *variable_node;
         const char *val_str;
 
-        variable_node = xml_util_get_element (instance_node,
-                                              variable_name,
-                                              NULL);
+        variable_node = av_xml_util_get_element (instance_node,
+                                                 variable_name,
+                                                 NULL);
         if (!variable_node)
                 return FALSE;
 
-        val_str = xml_util_get_attribute_content (variable_node, "val");
+        val_str = av_xml_util_get_attribute_content (variable_node, "val");
         if (!val_str) {
                 g_warning ("No value provided for variable \"%s\" in "
                            "LastChange event",
@@ -111,7 +111,8 @@ get_instance_node (xmlDoc *doc,
                         continue;
 
                 if (!xmlStrcmp (node->name, BAD_CAST ("InstanceID")) &&
-                    xml_util_get_uint_attribute (node, "val", 0) == instance_id)
+                    av_xml_util_get_uint_attribute (node, "val", 0) ==
+                                        instance_id)
                         break;
         }
 
