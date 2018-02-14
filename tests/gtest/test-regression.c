@@ -52,6 +52,21 @@
         "</item>" \
 "</DIDL-Lite>"
 
+#define TEST_DIDL_BGO770174 \
+"<DIDL-Lite xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
+           "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " \
+           "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" " \
+           "xmlns:dlna=\"urn:schemas-dlna-org:metadata-1-0/\">\n" \
+    "<container id=\"0\" parentID=\"-1\" restricted=\"1\" childCount=\"4\" searchable=\"1\">" \
+        "<upnp:searchClass includeDerived=\"1\">object.item.audioItem</upnp:searchClass>" \
+        "<upnp:searchClass includeDerived=\"1\">object.item.imageItem</upnp:searchClass>" \
+        "<upnp:searchClass includeDerived=\"1\">object.item.videoItem</upnp:searchClass>" \
+        "<dc:title>root</dc:title>" \
+        "<upnp:class>object.container.storageFolder</upnp:class>" \
+        "<upnp:storageUsed>-1</upnp:storageUsed>" \
+    "</container>" \
+"</DIDL-Lite>"
+
 static void
 test_bgo674319_on_object_available (G_GNUC_UNUSED GUPnPDIDLLiteParser *parser,
                                     GUPnPDIDLLiteObject               *object,
@@ -161,6 +176,35 @@ test_bgo753314 (void)
 }
 #endif
 
+static void
+test_bgo770174_on_object_available (G_GNUC_UNUSED GUPnPDIDLLiteParser *parser,
+                                    GUPnPDIDLLiteObject               *object,
+                                    gpointer                           user_data)
+{
+        GUPnPDIDLLiteObject **out = (GUPnPDIDLLiteObject **) user_data;
+        *out = g_object_ref (object);
+}
+
+static void
+test_bgo770174 (void)
+{
+        GUPnPDIDLLiteParser *parser;
+        GUPnPDIDLLiteObject *object = NULL;
+        gint storage_used = 0;
+
+        parser = gupnp_didl_lite_parser_new ();
+        g_signal_connect (parser,
+                          "object-available",
+                          G_CALLBACK (test_bgo770174_on_object_available),
+                          &object);
+        g_assert (gupnp_didl_lite_parser_parse_didl (parser, TEST_DIDL_BGO770174, NULL));
+        g_assert (object != NULL);
+
+        storage_used = gupnp_didl_lite_container_get_storage_used
+                                        (GUPNP_DIDL_LITE_CONTAINER (object));
+        g_assert_cmpint (storage_used, ==, -1);
+}
+
 int main (int argc, char *argv[])
 {
 #if !GLIB_CHECK_VERSION (2, 35, 0)
@@ -172,6 +216,7 @@ int main (int argc, char *argv[])
         g_test_add_func ("/bugs/gnome/687462", test_bgo687462);
         g_test_add_func ("/bugs/gnome/705564", test_bgo705564);
 /*        g_test_add_func ("/bugs/gnome/753314", test_bgo753314); */
+        g_test_add_func ("/bugs/gnome/770174", test_bgo770174);
 
         g_test_run ();
 
