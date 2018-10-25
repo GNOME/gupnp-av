@@ -86,7 +86,7 @@ enum {
 };
 
 static int
-is_non_transcoded_resource (GUPnPDIDLLiteResource *resource)
+is_non_transcoded_resource (GUPnPDIDLLiteResource *resource, gpointer data)
 {
         GUPnPProtocolInfo *info;
 
