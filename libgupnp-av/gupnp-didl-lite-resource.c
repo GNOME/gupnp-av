@@ -39,10 +39,6 @@
 #include "time-utils.h"
 #include "xsd-data.h"
 
-G_DEFINE_TYPE (GUPnPDIDLLiteResource,
-               gupnp_didl_lite_resource,
-               G_TYPE_OBJECT);
-
 struct _GUPnPDIDLLiteResourcePrivate {
         xmlNode     *xml_node;
         GUPnPAVXMLDoc *xml_doc;
@@ -51,6 +47,10 @@ struct _GUPnPDIDLLiteResourcePrivate {
 
         GUPnPProtocolInfo *protocol_info;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GUPnPDIDLLiteResource,
+                            gupnp_didl_lite_resource,
+                            G_TYPE_OBJECT);
 
 enum {
         PROP_0,
@@ -408,8 +408,6 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
         object_class->set_property = gupnp_didl_lite_resource_set_property;
         object_class->get_property = gupnp_didl_lite_resource_get_property;
         object_class->dispose = gupnp_didl_lite_resource_dispose;
-
-        g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteResourcePrivate));
 
         /**
          * GUPnPDIDLLiteResource:xml-node:

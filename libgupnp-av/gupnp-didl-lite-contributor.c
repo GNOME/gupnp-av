@@ -32,14 +32,14 @@
 #include "gupnp-didl-lite-contributor-private.h"
 #include "xml-util.h"
 
-G_DEFINE_TYPE (GUPnPDIDLLiteContributor,
-               gupnp_didl_lite_contributor,
-               G_TYPE_OBJECT);
-
 struct _GUPnPDIDLLiteContributorPrivate {
         xmlNode     *xml_node;
         GUPnPAVXMLDoc *xml_doc;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GUPnPDIDLLiteContributor,
+                            gupnp_didl_lite_contributor,
+                            G_TYPE_OBJECT);
 
 enum {
         PROP_0,
@@ -150,9 +150,6 @@ gupnp_didl_lite_contributor_class_init (GUPnPDIDLLiteContributorClass *klass)
         object_class->get_property = gupnp_didl_lite_contributor_get_property;
         object_class->set_property = gupnp_didl_lite_contributor_set_property;
         object_class->dispose = gupnp_didl_lite_contributor_dispose;
-
-        g_type_class_add_private (klass,
-                                  sizeof (GUPnPDIDLLiteContributorPrivate));
 
         /**
          * GUPnPDIDLLiteContributor:xml-node:

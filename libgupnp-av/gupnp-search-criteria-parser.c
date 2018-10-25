@@ -94,14 +94,14 @@ gupnp_search_criteria_parser_error_quark (void)
                 ("gupnp-search-criteria-parser-error-quark");
 }
 
-/* GUPnPSearchCriteriaParser */
-G_DEFINE_TYPE (GUPnPSearchCriteriaParser,
-               gupnp_search_criteria_parser,
-               G_TYPE_OBJECT);
-
 struct _GUPnPSearchCriteriaParserPrivate {
         GScanner *scanner;
 };
+
+/* GUPnPSearchCriteriaParser */
+G_DEFINE_TYPE_WITH_PRIVATE (GUPnPSearchCriteriaParser,
+                         gupnp_search_criteria_parser,
+                         G_TYPE_OBJECT);
 
 enum {
         BEGIN_PARENS,
@@ -329,9 +329,6 @@ gupnp_search_criteria_parser_class_init
                               GUPNP_TYPE_SEARCH_CRITERIA_OP,
                               G_TYPE_STRING,
                               G_TYPE_POINTER);
-
-        g_type_class_add_private (klass,
-                                  sizeof (GUPnPSearchCriteriaParserPrivate));
 }
 
 /**

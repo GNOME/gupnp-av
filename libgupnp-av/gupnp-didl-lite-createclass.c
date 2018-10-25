@@ -35,14 +35,14 @@
 #include "gupnp-didl-lite-createclass-private.h"
 #include "xml-util.h"
 
-G_DEFINE_TYPE (GUPnPDIDLLiteCreateClass,
-               gupnp_didl_lite_create_class,
-               G_TYPE_OBJECT);
-
 struct _GUPnPDIDLLiteCreateClassPrivate {
         xmlNode     *xml_node;
         GUPnPAVXMLDoc *xml_doc;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GUPnPDIDLLiteCreateClass,
+                            gupnp_didl_lite_create_class,
+                            G_TYPE_OBJECT);
 
 enum {
         PROP_0,
@@ -166,9 +166,6 @@ gupnp_didl_lite_create_class_class_init (GUPnPDIDLLiteCreateClassClass *klass)
         object_class->get_property = gupnp_didl_lite_create_class_get_property;
         object_class->set_property = gupnp_didl_lite_create_class_set_property;
         object_class->dispose = gupnp_didl_lite_create_class_dispose;
-
-        g_type_class_add_private (klass,
-                                  sizeof (GUPnPDIDLLiteCreateClassPrivate));
 
         /**
          * GUPnPDIDLLiteCreateClass:xml-node:

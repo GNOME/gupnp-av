@@ -28,15 +28,15 @@
 
 #include "gupnp-feature.h"
 
-G_DEFINE_TYPE (GUPnPFeature,
-               gupnp_feature,
-               G_TYPE_OBJECT);
-
 struct _GUPnPFeaturePrivate {
         char *name;
         char *version;
         char *object_ids;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GUPnPFeature,
+                            gupnp_feature,
+                            G_TYPE_OBJECT);
 
 enum {
         PROP_0,
@@ -131,8 +131,6 @@ gupnp_feature_class_init (GUPnPFeatureClass *klass)
         object_class->get_property = gupnp_feature_get_property;
         object_class->set_property = gupnp_feature_set_property;
         object_class->finalize = gupnp_feature_finalize;
-
-        g_type_class_add_private (klass, sizeof (GUPnPFeaturePrivate));
 
         /**
          * GUPnPFeature:name:

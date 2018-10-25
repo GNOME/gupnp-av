@@ -35,10 +35,6 @@
 #include "gupnp-protocol-info.h"
 #include "gupnp-av-error.h"
 
-G_DEFINE_TYPE (GUPnPProtocolInfo,
-               gupnp_protocol_info,
-               G_TYPE_OBJECT);
-
 struct _GUPnPProtocolInfoPrivate {
         char  *protocol;
         char  *network;
@@ -50,6 +46,10 @@ struct _GUPnPProtocolInfoPrivate {
         GUPnPDLNAOperation  dlna_operation;
         GUPnPDLNAFlags      dlna_flags;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GUPnPProtocolInfo,
+                            gupnp_protocol_info,
+                            G_TYPE_OBJECT);
 
 enum {
         PROP_0,
@@ -449,8 +449,6 @@ gupnp_protocol_info_class_init (GUPnPProtocolInfoClass *klass)
         object_class->set_property = gupnp_protocol_info_set_property;
         object_class->get_property = gupnp_protocol_info_get_property;
         object_class->finalize = gupnp_protocol_info_finalize;
-
-        g_type_class_add_private (klass, sizeof (GUPnPProtocolInfoPrivate));
 
         /**
          * GUPnPProtocolInfo:protocol:

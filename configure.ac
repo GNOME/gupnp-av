@@ -32,7 +32,7 @@ AX_COMPILER_FLAGS([WARN_CFLAGS])
 LT_PREREQ([2.2])
 LT_INIT([win32-dll])
 
-PKG_CHECK_MODULES(LIBGUPNP, gobject-2.0 >= 2.34 \
+PKG_CHECK_MODULES(LIBGUPNP, gobject-2.0 >= 2.38 \
                             libxml-2.0)
 
 # glib-genmarshal

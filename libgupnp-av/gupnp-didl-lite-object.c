@@ -42,10 +42,6 @@
 #include "fragment-util.h"
 #include "xsd-data.h"
 
-G_DEFINE_ABSTRACT_TYPE (GUPnPDIDLLiteObject,
-                        gupnp_didl_lite_object,
-                        G_TYPE_OBJECT);
-
 struct _GUPnPDIDLLiteObjectPrivate {
         xmlNode       *xml_node;
         GUPnPAVXMLDoc *xml_doc;
@@ -55,6 +51,10 @@ struct _GUPnPDIDLLiteObjectPrivate {
         xmlNs *dlna_ns;
         xmlNs *pv_ns;
 };
+
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GUPnPDIDLLiteObject,
+                                     gupnp_didl_lite_object,
+                                     G_TYPE_OBJECT);
 
 static XSDData *didl_lite_xsd;
 
@@ -382,8 +382,6 @@ gupnp_didl_lite_object_class_init (GUPnPDIDLLiteObjectClass *klass)
         object_class->set_property = gupnp_didl_lite_object_set_property;
         object_class->get_property = gupnp_didl_lite_object_get_property;
         object_class->dispose = gupnp_didl_lite_object_dispose;
-
-        g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteObjectPrivate));
 
         /**
          * GUPnPDIDLLiteObject:xml-node:

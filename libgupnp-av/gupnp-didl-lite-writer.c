@@ -38,10 +38,6 @@
 
 #include "xml-util.h"
 
-G_DEFINE_TYPE (GUPnPDIDLLiteWriter,
-               gupnp_didl_lite_writer,
-               G_TYPE_OBJECT);
-
 struct _GUPnPDIDLLiteWriterPrivate {
         xmlNode       *xml_node;
         GUPnPAVXMLDoc *xml_doc;
@@ -53,6 +49,10 @@ struct _GUPnPDIDLLiteWriterPrivate {
 
         char        *language;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GUPnPDIDLLiteWriter,
+                            gupnp_didl_lite_writer,
+                            G_TYPE_OBJECT);
 
 enum {
         PROP_0,
@@ -424,8 +424,6 @@ gupnp_didl_lite_writer_class_init (GUPnPDIDLLiteWriterClass *klass)
         object_class->constructed = gupnp_didl_lite_writer_constructed;
         object_class->dispose = gupnp_didl_lite_writer_dispose;
         object_class->finalize = gupnp_didl_lite_writer_finalize;
-
-        g_type_class_add_private (klass, sizeof (GUPnPDIDLLiteWriterPrivate));
 
         /**
          * GUPnPDIDLLiteWriter:xml-node:

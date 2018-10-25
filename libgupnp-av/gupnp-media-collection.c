@@ -36,10 +36,6 @@
 #define DIDL_S_FILTER "dc:title,dc:creator,upnp:class,upnp:album,res,item," \
                       "container,dlna:lifetime"
 
-G_DEFINE_TYPE (GUPnPMediaCollection,
-               gupnp_media_collection,
-               G_TYPE_OBJECT);
-
 struct _GUPnPMediaCollectionPrivate {
         GUPnPDIDLLiteWriter *writer;
         GUPnPDIDLLiteObject *container;
@@ -47,6 +43,10 @@ struct _GUPnPMediaCollectionPrivate {
         gboolean             mutable;
         char                *data;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GUPnPMediaCollection,
+                            gupnp_media_collection,
+                            G_TYPE_OBJECT);
 
 enum {
         PROP_0,
@@ -283,8 +283,6 @@ gupnp_media_collection_class_init (GUPnPMediaCollectionClass *klass)
         object_class->get_property = gupnp_media_collection_get_property;
         object_class->constructed = gupnp_media_collection_constructed;
         object_class->dispose = gupnp_media_collection_dispose;
-
-        g_type_class_add_private (klass, sizeof (GUPnPMediaCollectionPrivate));
 
         /**
          * GUPnPMediaCollection:author:
