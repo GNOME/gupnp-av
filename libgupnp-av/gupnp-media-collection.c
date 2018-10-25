@@ -89,7 +89,7 @@ on_container_available (GUPnPMediaCollection   *self,
         if (self->priv->container != NULL)
                 g_object_unref (self->priv->container);
 
-        self->priv->container = g_object_ref (container);
+        self->priv->container = GUPNP_DIDL_LITE_OBJECT (g_object_ref (container));
 }
 
 static void
