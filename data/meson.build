@@ -1,0 +1,9 @@
+install_data(
+    [
+        'av.xsd',
+        'didl-lite-v2.xsd',
+        'simpledc20021212.xsd',
+        'upnp.xsd',
+        'xml.xsd'
+    ]
+)
