@@ -1,3 +1,24 @@
+0.12.11
+=======
+
+Changes since 0.12.10:
+
+- Fix memory leak in GUPnPAVXMLDoc
+- Fix parsing of storageUsed
+- Fix name clash of internal XML utility functions
+- Fix multiple compiler warnings with recent GCC
+- Remove deprecated g_type_class_add_private
+- Bump GLib requirement to 2.38
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=770174
+ - https://bugzilla.gnome.org/show_bug.cgi?id=778396
+ - https://bugzilla.gnome.org/show_bug.cgi?id=784511
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+ - Thomas Martinez <thomas.martinez@parrot.com>
+
 0.12.10
 =======
 
