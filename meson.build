@@ -1,4 +1,4 @@
-project('gupnp-av', 'c', version : '0.12.11')
+project('gupnp-av', 'c', version : '0.12.12')
 
 gnome = import('gnome')
 
