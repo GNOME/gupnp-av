@@ -56,10 +56,8 @@ enum {
 static void
 gupnp_didl_lite_descriptor_init (GUPnPDIDLLiteDescriptor *descriptor)
 {
-        descriptor->priv = G_TYPE_INSTANCE_GET_PRIVATE
-                                        (descriptor,
-                                         GUPNP_TYPE_DIDL_LITE_DESCRIPTOR,
-                                         GUPnPDIDLLiteDescriptorPrivate);
+        descriptor->priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 }
 
 static void

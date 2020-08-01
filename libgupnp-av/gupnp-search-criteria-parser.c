@@ -171,10 +171,8 @@ gupnp_search_criteria_parser_init (GUPnPSearchCriteriaParser *parser)
 {
         int i;
 
-        parser->priv = G_TYPE_INSTANCE_GET_PRIVATE
-                         (parser,
-                          GUPNP_TYPE_SEARCH_CRITERIA_PARSER,
-                          GUPnPSearchCriteriaParserPrivate);
+        parser->priv =
+                gupnp_search_criteria_parser_get_instance_private (parser);
 
         /* Set up GScanner */
         parser->priv->scanner = g_scanner_new (NULL);

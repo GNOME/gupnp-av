@@ -101,10 +101,7 @@ is_non_transcoded_resource (GUPnPDIDLLiteResource *resource, gpointer data)
 static void
 gupnp_didl_lite_object_init (GUPnPDIDLLiteObject *object)
 {
-        object->priv = G_TYPE_INSTANCE_GET_PRIVATE
-                                        (object,
-                                         GUPNP_TYPE_DIDL_LITE_OBJECT,
-                                         GUPnPDIDLLiteObjectPrivate);
+        object->priv = gupnp_didl_lite_object_get_instance_private (object);
 }
 
 static void

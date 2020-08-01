@@ -56,10 +56,8 @@ enum {
 static void
 gupnp_didl_lite_create_class_init (GUPnPDIDLLiteCreateClass *create_class)
 {
-        create_class->priv = G_TYPE_INSTANCE_GET_PRIVATE
-                                        (create_class,
-                                         GUPNP_TYPE_DIDL_LITE_CREATE_CLASS,
-                                         GUPnPDIDLLiteCreateClassPrivate);
+        create_class->priv = gupnp_didl_lite_create_class_get_instance_private (
+                create_class);
 }
 
 static void

@@ -48,9 +48,7 @@ enum {
 static void
 gupnp_feature_init (GUPnPFeature *object)
 {
-        object->priv = G_TYPE_INSTANCE_GET_PRIVATE (object,
-                                                    GUPNP_TYPE_FEATURE,
-                                                    GUPnPFeaturePrivate);
+        object->priv = gupnp_feature_get_instance_private (object);
 }
 
 static void

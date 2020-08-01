@@ -302,9 +302,7 @@ apply_filter (GUPnPDIDLLiteWriter *writer,
 static void
 gupnp_didl_lite_writer_init (GUPnPDIDLLiteWriter *writer)
 {
-        writer->priv = G_TYPE_INSTANCE_GET_PRIVATE (writer,
-                                                    GUPNP_TYPE_DIDL_LITE_WRITER,
-                                                    GUPnPDIDLLiteWriterPrivate);
+        writer->priv = gupnp_didl_lite_writer_get_instance_private (writer);
 }
 
 static void

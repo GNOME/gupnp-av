@@ -128,10 +128,8 @@ on_protocol_info_changed (GUPnPProtocolInfo        *info,
 static void
 gupnp_didl_lite_resource_init (GUPnPDIDLLiteResource *resource)
 {
-        resource->priv = G_TYPE_INSTANCE_GET_PRIVATE
-                                        (resource,
-                                         GUPNP_TYPE_DIDL_LITE_RESOURCE,
-                                         GUPnPDIDLLiteResourcePrivate);
+        resource->priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 }
 
 static void

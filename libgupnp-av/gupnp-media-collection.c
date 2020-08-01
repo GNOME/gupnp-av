@@ -141,10 +141,8 @@ parse_data (GUPnPMediaCollection *collection, const char *data)
 static void
 gupnp_media_collection_init (GUPnPMediaCollection *collection)
 {
-        collection->priv = G_TYPE_INSTANCE_GET_PRIVATE
-                                        (collection,
-                                         GUPNP_TYPE_MEDIA_COLLECTION,
-                                         GUPnPMediaCollectionPrivate);
+        collection->priv =
+                gupnp_media_collection_get_instance_private (collection);
         /* Initialize as mutable and decide later on in constructed() if we
          * really are. */
         collection->priv->mutable = TRUE;

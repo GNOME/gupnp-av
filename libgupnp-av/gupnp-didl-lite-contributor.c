@@ -52,10 +52,8 @@ enum {
 static void
 gupnp_didl_lite_contributor_init (GUPnPDIDLLiteContributor *contributor)
 {
-        contributor->priv = G_TYPE_INSTANCE_GET_PRIVATE
-                                        (contributor,
-                                         GUPNP_TYPE_DIDL_LITE_CONTRIBUTOR,
-                                         GUPnPDIDLLiteContributorPrivate);
+        contributor->priv =
+                gupnp_didl_lite_contributor_get_instance_private (contributor);
 }
 
 static void

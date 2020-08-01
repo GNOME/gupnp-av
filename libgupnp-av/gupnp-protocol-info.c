@@ -300,10 +300,7 @@ add_dlna_info (GString           *str,
 static void
 gupnp_protocol_info_init (GUPnPProtocolInfo *info)
 {
-        info->priv = G_TYPE_INSTANCE_GET_PRIVATE
-                                        (info,
-                                         GUPNP_TYPE_PROTOCOL_INFO,
-                                         GUPnPProtocolInfoPrivate);
+        info->priv = gupnp_protocol_info_get_instance_private (info);
 
         info->priv->dlna_conversion = GUPNP_DLNA_CONVERSION_NONE;
         info->priv->dlna_operation  = GUPNP_DLNA_OPERATION_NONE;
