@@ -1,3 +1,4 @@
+EXTRA_DIST = meson.build
 if HAVE_INTROSPECTION
 if HAVE_VAPIGEN
 gupnp-av-1.0.vapi: gupnp-av-1.0.stamp
@@ -17,6 +18,6 @@ gupnp-av-1.0.stamp: $(top_builddir)/libgupnp-av/GUPnPAV-1.0.gir \
 vapidir = $(datadir)/vala/vapi
 vapi_DATA = gupnp-av-1.0.vapi $(srcdir)/gupnp-av-1.0.deps
 CLEANFILES = gupnp-av-1.0.vapi gupnp-av-1.0.stamp
-EXTRA_DIST = gupnp-av-1.0.deps GUPnPAV-1.0.metadata gupnp-av-1.0-custom.vala gupnp-av-1.0.vapi gupnp-av-1.0.stamp
+EXTRA_DIST += gupnp-av-1.0.deps GUPnPAV-1.0.metadata gupnp-av-1.0-custom.vala gupnp-av-1.0.vapi gupnp-av-1.0.stamp
 endif
 endif

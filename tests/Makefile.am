@@ -36,3 +36,5 @@ fragments_CFLAGS = $(common_cflags) -DABS_TOP_SRCDIR="\"$(abs_top_srcdir)\""
 fragments_LDFLAGS = $(WARN_LDFLAGS)
 
 TESTS = $(check_PROGRAMS)
+
+EXTRA_DIST = meson.build

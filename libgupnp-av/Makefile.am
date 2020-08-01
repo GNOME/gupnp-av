@@ -88,7 +88,7 @@ libgupnp_av_1_0_la_SOURCES = gupnp-didl-lite-object.c \
 
 libgupnp_av_1_0_la_LIBADD = $(LIBGUPNP_LIBS)
 
-EXTRA_DIST = gupnp-av-marshal.list
+EXTRA_DIST = gupnp-av-marshal.list meson.build
 
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =

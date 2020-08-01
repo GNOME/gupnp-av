@@ -46,4 +46,5 @@ EXTRA_DIST = data/cds-last-change/00-cds-last-change.xml \
 	data/cds-last-change/04-cds-last-change.xml \
 	data/cds-last-change/05-cds-last-change.xml \
 	data/cds-last-change/06-cds-last-change.xml \
-	data/cds-last-change/07-cds-last-change.xml
+	data/cds-last-change/07-cds-last-change.xml \
+	meson.build
