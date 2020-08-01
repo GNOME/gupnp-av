@@ -2,7 +2,7 @@ project('gupnp-av', 'c', version : '0.12.12')
 
 gnome = import('gnome')
 
-gobject = dependency('gobject-2.0', version : '>= 2.38')
+gobject = dependency('gobject-2.0', version : '>= 2.58')
 libxml = dependency('libxml-2.0')
 
 cc = meson.get_compiler('c')
