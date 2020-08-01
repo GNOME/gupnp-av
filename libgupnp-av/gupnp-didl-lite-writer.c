@@ -175,6 +175,7 @@ is_standard_prop (const char *name,
         return strcmp (name, "id") == 0 ||
                strcmp (name, "parentID") == 0 ||
                strcmp (name, "restricted") == 0 ||
+               strcmp (name, "refID") == 0 ||
                (g_strcmp0 (namespace, "dc") == 0 &&
                 strcmp (name, "title") == 0) ||
                (g_strcmp0 (namespace, "upnp") == 0 &&
