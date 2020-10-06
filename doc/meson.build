@@ -9,10 +9,7 @@ version_xml = configure_file(
 
 gnome.gtkdoc(
     'gupnp-av',
-    src_dir : [
-        join_paths(meson.source_root(), 'libgupnp-av'),
-        join_paths(meson.build_root(), 'libgupnp-av'),
-    ],
+    src_dir : ['libgupnp-av'],
     main_sgml : 'gupnp-av-docs.sgml',
     content_files : version_xml,
     scan_args : ['--deprecated-guards=GUPNP_DISABLE_DEPRECATED'],
