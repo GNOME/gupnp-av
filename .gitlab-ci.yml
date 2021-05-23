@@ -62,7 +62,7 @@ check-merge-request:
 .gupnpav.fedora@common:
   variables:
     BASE_TAG: '2021-05-23.0'
-    FDO_UPSTREAM_REPO: GNOME/gupnp
+    FDO_UPSTREAM_REPO: GNOME/gupnp-av
     FDO_DISTRIBUTION_PACKAGES: 'clang clang-analyzer gcovr git libasan libubsan python3-gobject python3-pip xmlto gobject-introspection-devel gtk-doc libxml2-devel vala ninja-build'
     FDO_DISTRIBUTION_EXEC: |
       dnf clean all &&
@@ -116,7 +116,7 @@ build-fedora@x86_64:
       echo "G_MESSAGES_DEBUG: ${G_MESSAGES_DEBUG}"
       echo "MESON_TEST_EXTRA_ARGS: ${MESON_TEST_EXTRA_ARGS}"
       echo
-      echo "These values can be set at https://gitlab.gnome.org/GNOME/gupnp/pipelines/new"
+      echo "These values can be set at https://gitlab.gnome.org/GNOME/gupnp-av/pipelines/new"
   artifacts:
     expire_in: 1 day
     when: always
