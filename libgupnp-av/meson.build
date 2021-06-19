@@ -39,7 +39,7 @@ gupnp_av_lib = library('gupnp-av-1.0',
 )
 gupnp_av = declare_dependency(link_with : gupnp_av_lib, include_directories : include_directories('..'))
 
-meson.override_dependency('gunp-av-1.0', gupnp_av)
+meson.override_dependency('gupnp-av-1.0', gupnp_av)
 
 public_headers = [
         'gupnp-av-enums.h',
