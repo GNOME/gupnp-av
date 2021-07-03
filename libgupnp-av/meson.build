@@ -21,6 +21,20 @@ introspection_sources = [
     'gupnp-search-criteria-parser.c'
 ]
 
+v = meson.project_version().split('.')
+soversion = 2
+library_minor = v[0].to_int() * 100 + v[1].to_int()
+library_micro = v[2].to_int()
+
+version = '@0@.@1@.@2@'.format(soversion, library_minor, library_micro)
+version_arr = version.split('.')
+major_version = version_arr[0].to_int()
+minor_version = version_arr[1].to_int()
+micro_version = version_arr[2].to_int()
+current = major_version + minor_version + 1
+interface_age = micro_version
+darwin_versions = [current, '@0@.@1@'.format(current, interface_age)]
+
 
 gupnp_av_lib = library('gupnp-av-1.0',
         [
@@ -33,9 +47,10 @@ gupnp_av_lib = library('gupnp-av-1.0',
             marshall_sources
         ],
         install: true,
-        version : '2.0.0',
+        version : version,
         c_args : common_cflags + ['-DDATADIR="@0@"'.format(join_paths(get_option('prefix'), get_option('datadir'), 'gupnp-av'))],
-        dependencies : [gobject, libxml]
+        dependencies : [gobject, libxml],
+        darwin_versions : darwin_versions,
 )
 gupnp_av = declare_dependency(link_with : gupnp_av_lib, include_directories : include_directories('..'))
 
