@@ -1,4 +1,4 @@
-project('gupnp-av', 'c', version : '0.12.12', default_options: ['c_std=c11'])
+project('gupnp-av', 'c', version : '0.13.0', default_options: ['c_std=c11'])
 
 gnome = import('gnome')
 
