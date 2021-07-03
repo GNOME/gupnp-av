@@ -18,12 +18,20 @@
 
 #include "gupnp-feature.h"
 
+struct _GUPnPFeatureClass {
+        GObjectClass parent_class;
+};
+
 struct _GUPnPFeaturePrivate {
         char *name;
         char *version;
         char *object_ids;
 };
 typedef struct _GUPnPFeaturePrivate GUPnPFeaturePrivate;
+
+struct _GUPnPFeature {
+        GObject parent;
+};
 
 G_DEFINE_TYPE_WITH_PRIVATE (GUPnPFeature,
                             gupnp_feature,

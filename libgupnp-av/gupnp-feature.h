@@ -14,17 +14,10 @@
 
 G_BEGIN_DECLS
 
-G_DECLARE_DERIVABLE_TYPE(GUPnPFeature,
-                          gupnp_feature,
-                          GUPNP,
-                          FEATURE,
-                          GObject)
+typedef struct _GUPnPFeature GUPnPFeature;
+G_DECLARE_FINAL_TYPE (GUPnPFeature, gupnp_feature, GUPNP, FEATURE, GObject)
 
 #define GUPNP_TYPE_FEATURE (gupnp_feature_get_type ())
-
-struct _GUPnPFeatureClass {
-        GObjectClass parent_class;
-};
 
 const char *
 gupnp_feature_get_name       (GUPnPFeature *feature);

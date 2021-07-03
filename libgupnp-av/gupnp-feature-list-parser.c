@@ -23,6 +23,10 @@
 #include "gupnp-av.h"
 #include "xml-util.h"
 
+struct _GUPnPFeatureListParser {
+        GObject parent;
+};
+
 /* GUPnPFeatureListParser */
 G_DEFINE_TYPE (GUPnPFeatureListParser,
                gupnp_feature_list_parser,

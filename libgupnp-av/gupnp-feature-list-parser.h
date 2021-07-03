@@ -15,18 +15,13 @@
 
 G_BEGIN_DECLS
 
-G_DECLARE_DERIVABLE_TYPE(GUPnPFeatureListParser,
-                          gupnp_feature_list_parser,
-                          GUPNP,
-                          FEATURE_LIST_PARSER,
-                          GObject)
+G_DECLARE_FINAL_TYPE (GUPnPFeatureListParser,
+                      gupnp_feature_list_parser,
+                      GUPNP,
+                      FEATURE_LIST_PARSER,
+                      GObject)
 
-#define GUPNP_TYPE_FEATURE_LIST_PARSER \
-                (gupnp_feature_list_parser_get_type ())
-
-struct _GUPnPFeatureListParserClass{
-        GObjectClass parent_class;
-};
+#define GUPNP_TYPE_FEATURE_LIST_PARSER (gupnp_feature_list_parser_get_type ())
 
 GUPnPFeatureListParser *
 gupnp_feature_list_parser_new        (void);
