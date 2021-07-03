@@ -27,37 +27,18 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_feature_list_parser_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE(GUPnPFeatureListParser,
+                          gupnp_feature_list_parser,
+                          GUPNP,
+                          FEATURE_LIST_PARSER,
+                          GObject)
 
 #define GUPNP_TYPE_FEATURE_LIST_PARSER \
                 (gupnp_feature_list_parser_get_type ())
-#define GUPNP_FEATURE_LIST_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_FEATURE_LIST_PARSER, \
-                 GUPnPFeatureListParser))
-#define GUPNP_FEATURE_LIST_PARSER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_FEATURE_LIST_PARSER, \
-                 GUPnPFeatureListParserClass))
-#define GUPNP_IS_FEATURE_LIST_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_FEATURE_LIST_PARSER))
-#define GUPNP_IS_FEATURE_LIST_PARSER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_FEATURE_LIST_PARSER))
-#define GUPNP_FEATURE_LIST_PARSER_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_FEATURE_LIST_PARSER, \
-                 GUPnPFeatureListParserClass))
 
-typedef struct {
-        GObject parent;
-} GUPnPFeatureListParser;
-
-typedef struct {
+struct _GUPnPFeatureListParserClass{
         GObjectClass parent_class;
-} GUPnPFeatureListParserClass;
+};
 
 GUPnPFeatureListParser *
 gupnp_feature_list_parser_new        (void);

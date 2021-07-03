@@ -40,9 +40,11 @@ struct _GUPnPDIDLLiteCreateClassPrivate {
         GUPnPAVXMLDoc *xml_doc;
 };
 
+typedef struct _GUPnPDIDLLiteCreateClassPrivate GUPnPDIDLLiteCreateClassPrivate;
+
 G_DEFINE_TYPE_WITH_PRIVATE (GUPnPDIDLLiteCreateClass,
                             gupnp_didl_lite_create_class,
-                            G_TYPE_OBJECT);
+                            G_TYPE_OBJECT)
 
 enum {
         PROP_0,
@@ -56,8 +58,6 @@ enum {
 static void
 gupnp_didl_lite_create_class_init (GUPnPDIDLLiteCreateClass *create_class)
 {
-        create_class->priv = gupnp_didl_lite_create_class_get_instance_private (
-                create_class);
 }
 
 static void
@@ -110,13 +110,16 @@ gupnp_didl_lite_create_class_set_property (GObject      *object,
         GUPnPDIDLLiteCreateClass *create_class;
 
         create_class = GUPNP_DIDL_LITE_CREATE_CLASS (object);
+        GUPnPDIDLLiteCreateClassPrivate *priv =
+                gupnp_didl_lite_create_class_get_instance_private (
+                        create_class);
 
         switch (property_id) {
         case PROP_XML_NODE:
-                create_class->priv->xml_node = g_value_get_pointer (value);
+                priv->xml_node = g_value_get_pointer (value);
                 break;
         case PROP_XML_DOC:
-                create_class->priv->xml_doc = g_value_dup_boxed (value);
+                priv->xml_doc = g_value_dup_boxed (value);
                 break;
         case PROP_CONTENT:
                 gupnp_didl_lite_create_class_set_content
@@ -143,9 +146,9 @@ static void
 gupnp_didl_lite_create_class_dispose (GObject *object)
 {
         GObjectClass                    *object_class;
-        GUPnPDIDLLiteCreateClassPrivate *priv;
-
-        priv = GUPNP_DIDL_LITE_CREATE_CLASS (object)->priv;
+        GUPnPDIDLLiteCreateClassPrivate *priv =
+                gupnp_didl_lite_create_class_get_instance_private (
+                        GUPNP_DIDL_LITE_CREATE_CLASS (object));
 
         g_clear_pointer (&priv->xml_doc, av_xml_doc_unref);
 
@@ -277,11 +280,14 @@ gupnp_didl_lite_create_class_get_content
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CREATE_CLASS (create_class),
                               NULL);
+        GUPnPDIDLLiteCreateClassPrivate *priv =
+                gupnp_didl_lite_create_class_get_instance_private (
+                        create_class);
 
-        if (G_UNLIKELY (create_class->priv->xml_node->children == NULL))
+        if (G_UNLIKELY (priv->xml_node->children == NULL))
                 return NULL;
 
-        return (const char *) create_class->priv->xml_node->children->content;
+        return (const char *) priv->xml_node->children->content;
 }
 
 /**
@@ -296,14 +302,16 @@ gupnp_didl_lite_create_class_set_content
                                     (GUPnPDIDLLiteCreateClass *create_class,
                                      const char               *content)
 {
-        xmlChar *escaped;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_CREATE_CLASS (create_class));
         g_return_if_fail (create_class != NULL);
 
-        escaped = xmlEncodeSpecialChars (create_class->priv->xml_doc->doc,
-                                         (const unsigned char *) content);
-        xmlNodeSetContent (create_class->priv->xml_node, escaped);
+        GUPnPDIDLLiteCreateClassPrivate *priv =
+                gupnp_didl_lite_create_class_get_instance_private (
+                        create_class);
+        xmlChar *escaped =
+                xmlEncodeSpecialChars (priv->xml_doc->doc,
+                                       (const unsigned char *) content);
+        xmlNodeSetContent (priv->xml_node, escaped);
         xmlFree (escaped);
 
         g_object_notify (G_OBJECT (create_class), "content");
@@ -323,8 +331,11 @@ gupnp_didl_lite_create_class_get_include_derived
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CREATE_CLASS (create_class),
                               FALSE);
+        GUPnPDIDLLiteCreateClassPrivate *priv =
+                gupnp_didl_lite_create_class_get_instance_private (
+                        create_class);
 
-        return av_xml_util_get_boolean_attribute (create_class->priv->xml_node,
+        return av_xml_util_get_boolean_attribute (priv->xml_node,
                                                   "includeDerived");
 }
 
@@ -345,11 +356,16 @@ gupnp_didl_lite_create_class_set_include_derived
         g_return_if_fail (create_class != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_CREATE_CLASS (create_class));
 
+        GUPnPDIDLLiteCreateClassPrivate *priv =
+                gupnp_didl_lite_create_class_get_instance_private (
+                        create_class);
+
         if (include_derived)
                 str = "1";
         else
                 str = "0";
-        xmlSetProp (create_class->priv->xml_node,
+
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "includeDerived",
                     (unsigned char *) str);
 
@@ -370,8 +386,11 @@ gupnp_didl_lite_create_class_get_friendly_name
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CREATE_CLASS (create_class),
                               NULL);
-        return av_xml_util_get_attribute_content (create_class->priv->xml_node,
-                                                  "name");
+        GUPnPDIDLLiteCreateClassPrivate *priv =
+                gupnp_didl_lite_create_class_get_instance_private (
+                        create_class);
+
+        return av_xml_util_get_attribute_content (priv->xml_node, "name");
 }
 
 /**
@@ -389,7 +408,11 @@ gupnp_didl_lite_create_class_set_friendly_name
         g_return_if_fail (create_class != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_CREATE_CLASS (create_class));
 
-        xmlSetProp (create_class->priv->xml_node,
+        GUPnPDIDLLiteCreateClassPrivate *priv =
+                gupnp_didl_lite_create_class_get_instance_private (
+                        create_class);
+
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "name",
                     (const unsigned char *) friendly_name);
 
@@ -429,6 +452,9 @@ gupnp_didl_lite_create_class_get_xml_node
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CREATE_CLASS (create_class),
                               NULL);
+        GUPnPDIDLLiteCreateClassPrivate *priv =
+                gupnp_didl_lite_create_class_get_instance_private (
+                        create_class);
 
-        return create_class->priv->xml_node;
+        return priv->xml_node;
 }

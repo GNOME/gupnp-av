@@ -37,10 +37,12 @@ struct _GUPnPDIDLLiteDescriptorPrivate {
         xmlNode       *xml_node;
         GUPnPAVXMLDoc *xml_doc;
 };
+typedef struct _GUPnPDIDLLiteDescriptorPrivate GUPnPDIDLLiteDescriptorPrivate;
+
 
 G_DEFINE_TYPE_WITH_PRIVATE (GUPnPDIDLLiteDescriptor,
                             gupnp_didl_lite_descriptor,
-                            G_TYPE_OBJECT);
+                            G_TYPE_OBJECT)
 
 enum {
         PROP_0,
@@ -56,8 +58,6 @@ enum {
 static void
 gupnp_didl_lite_descriptor_init (GUPnPDIDLLiteDescriptor *descriptor)
 {
-        descriptor->priv =
-                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 }
 
 static void
@@ -69,13 +69,15 @@ gupnp_didl_lite_descriptor_set_property (GObject      *object,
         GUPnPDIDLLiteDescriptor *descriptor;
 
         descriptor = GUPNP_DIDL_LITE_DESCRIPTOR (object);
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
         switch (property_id) {
         case PROP_XML_NODE:
-                descriptor->priv->xml_node = g_value_get_pointer (value);
+                priv->xml_node = g_value_get_pointer (value);
                 break;
         case PROP_XML_DOC:
-                descriptor->priv->xml_doc = g_value_dup_boxed (value);
+                priv->xml_doc = g_value_dup_boxed (value);
                 break;
         case PROP_ID:
                 gupnp_didl_lite_descriptor_set_id
@@ -151,9 +153,9 @@ static void
 gupnp_didl_lite_descriptor_dispose (GObject *object)
 {
         GObjectClass                 *object_class;
-        GUPnPDIDLLiteDescriptorPrivate *priv;
-
-        priv = GUPNP_DIDL_LITE_DESCRIPTOR (object)->priv;
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (
+                        GUPNP_DIDL_LITE_DESCRIPTOR (object));
 
         g_clear_pointer (&priv->xml_doc, av_xml_doc_unref);
 
@@ -326,8 +328,10 @@ xmlNode *
 gupnp_didl_lite_descriptor_get_xml_node (GUPnPDIDLLiteDescriptor *descriptor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
-        return descriptor->priv->xml_node;
+        return priv->xml_node;
 }
 
 /**
@@ -342,8 +346,10 @@ const char *
 gupnp_didl_lite_descriptor_get_content (GUPnPDIDLLiteDescriptor *descriptor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
-        return (const char *) descriptor->priv->xml_node->children;
+        return (const char *) priv->xml_node->children;
 }
 
 /**
@@ -358,9 +364,10 @@ const char *
 gupnp_didl_lite_descriptor_get_id (GUPnPDIDLLiteDescriptor *descriptor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
-        return av_xml_util_get_attribute_content (descriptor->priv->xml_node,
-                                                  "id");
+        return av_xml_util_get_attribute_content (priv->xml_node, "id");
 }
 
 /**
@@ -376,9 +383,10 @@ gupnp_didl_lite_descriptor_get_metadata_type
                                         (GUPnPDIDLLiteDescriptor *descriptor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
-        return av_xml_util_get_attribute_content (descriptor->priv->xml_node,
-                                                  "type");
+        return av_xml_util_get_attribute_content (priv->xml_node, "type");
 }
 
 /**
@@ -393,9 +401,10 @@ const char *
 gupnp_didl_lite_descriptor_get_name_space (GUPnPDIDLLiteDescriptor *descriptor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor), NULL);
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
-        return av_xml_util_get_attribute_content (descriptor->priv->xml_node,
-                                                  "nameSpace");
+        return av_xml_util_get_attribute_content (priv->xml_node, "nameSpace");
 }
 
 /**
@@ -413,10 +422,12 @@ gupnp_didl_lite_descriptor_set_content (GUPnPDIDLLiteDescriptor *descriptor,
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor));
         g_return_if_fail (content != NULL);
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
-        escaped = xmlEncodeSpecialChars (descriptor->priv->xml_doc->doc,
+        escaped = xmlEncodeSpecialChars (priv->xml_doc->doc,
                                          (const unsigned char *) content);
-        xmlNodeSetContent (descriptor->priv->xml_node, escaped);
+        xmlNodeSetContent (priv->xml_node, escaped);
         xmlFree (escaped);
 
         g_object_notify (G_OBJECT (descriptor), "content");
@@ -435,8 +446,10 @@ gupnp_didl_lite_descriptor_set_id (GUPnPDIDLLiteDescriptor *descriptor,
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor));
         g_return_if_fail (id != NULL);
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
-        xmlSetProp (descriptor->priv->xml_node,
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "id",
                     (const unsigned char *) id);
 
@@ -457,8 +470,10 @@ gupnp_didl_lite_descriptor_set_metadata_type
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor));
         g_return_if_fail (type != NULL);
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
-        xmlSetProp (descriptor->priv->xml_node,
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "type",
                     (const unsigned char *) type);
 
@@ -479,7 +494,10 @@ gupnp_didl_lite_descriptor_set_name_space (GUPnPDIDLLiteDescriptor *descriptor,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_DESCRIPTOR (descriptor));
         g_return_if_fail (name_space != NULL);
 
-        xmlSetProp (descriptor->priv->xml_node,
+        GUPnPDIDLLiteDescriptorPrivate *priv =
+                gupnp_didl_lite_descriptor_get_instance_private (descriptor);
+
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "nameSpace",
                     (const unsigned char *) name_space);
 

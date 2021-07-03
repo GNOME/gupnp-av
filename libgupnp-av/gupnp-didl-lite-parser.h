@@ -27,37 +27,16 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_didl_lite_parser_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE(GUPnPDIDLLiteParser,
+                          gupnp_didl_lite_parser,
+                          GUPNP,
+                          DIDL_LITE_PARSER,
+                          GObject)
 
 #define GUPNP_TYPE_DIDL_LITE_PARSER \
                 (gupnp_didl_lite_parser_get_type ())
-#define GUPNP_DIDL_LITE_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_PARSER, \
-                 GUPnPDIDLLiteParser))
-#define GUPNP_DIDL_LITE_PARSER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_PARSER, \
-                 GUPnPDIDLLiteParserClass))
-#define GUPNP_IS_DIDL_LITE_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_PARSER))
-#define GUPNP_IS_DIDL_LITE_PARSER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_PARSER))
-#define GUPNP_DIDL_LITE_PARSER_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_PARSER, \
-                 GUPnPDIDLLiteParserClass))
 
-typedef struct {
-        GObject parent;
-
-        gpointer gupnp_reserved;
-} GUPnPDIDLLiteParser;
-
-typedef struct {
+struct _GUPnPDIDLLiteParserClass {
         GObjectClass parent_class;
 
         /* signals */
@@ -74,7 +53,7 @@ typedef struct {
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
         void (* _gupnp_reserved5) (void);
-} GUPnPDIDLLiteParserClass;
+};
 
 GUPnPDIDLLiteParser *
 gupnp_didl_lite_parser_new              (void);

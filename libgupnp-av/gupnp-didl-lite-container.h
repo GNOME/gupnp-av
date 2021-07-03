@@ -31,35 +31,16 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_didl_lite_container_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE(GUPnPDIDLLiteContainer,
+                         gupnp_didl_lite_container,
+                         GUPNP,
+                         DIDL_LITE_CONTAINER,
+                         GUPnPDIDLLiteObject)
 
 #define GUPNP_TYPE_DIDL_LITE_CONTAINER \
                 (gupnp_didl_lite_container_get_type ())
-#define GUPNP_DIDL_LITE_CONTAINER(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTAINER, \
-                 GUPnPDIDLLiteContainer))
-#define GUPNP_DIDL_LITE_CONTAINER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTAINER, \
-                 GUPnPDIDLLiteContainerClass))
-#define GUPNP_IS_DIDL_LITE_CONTAINER(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTAINER))
-#define GUPNP_IS_DIDL_LITE_CONTAINER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTAINER))
-#define GUPNP_DIDL_LITE_CONTAINER_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTAINER, \
-                 GUPnPDIDLLiteContainerClass))
 
-typedef struct {
-        GUPnPDIDLLiteObject parent;
-} GUPnPDIDLLiteContainer;
-
-typedef struct {
+struct _GUPnPDIDLLiteContainerClass {
         GUPnPDIDLLiteObjectClass parent_class;
 
         /* future padding */
@@ -67,7 +48,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPDIDLLiteContainerClass;
+};
 
 gboolean
 gupnp_didl_lite_container_get_searchable

@@ -19,36 +19,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GUPNP_SEARCH_CRITERIA_PARSER_H__
-#define __GUPNP_SEARCH_CRITERIA_PARSER_H__
+#ifndef GUPNP_SEARCH_CRITERIA_PARSER_H
+#define GUPNP_SEARCH_CRITERIA_PARSER_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-GType
-gupnp_search_criteria_parser_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE(GUPnPSearchCriteriaParser,
+                          gupnp_search_criteria_parser,
+                          GUPNP,
+                          SEARCH_CRITERIA_PARSER,
+                          GObject)
 
-#define GUPNP_TYPE_SEARCH_CRITERIA_PARSER \
-                (gupnp_search_criteria_parser_get_type ())
-#define GUPNP_SEARCH_CRITERIA_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_SEARCH_CRITERIA_PARSER, \
-                 GUPnPSearchCriteriaParser))
-#define GUPNP_SEARCH_CRITERIA_PARSER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_SEARCH_CRITERIA_PARSER, \
-                 GUPnPSearchCriteriaParserClass))
-#define GUPNP_IS_SEARCH_CRITERIA_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_SEARCH_CRITERIA_PARSER))
-#define GUPNP_IS_SEARCH_CRITERIA_PARSER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_SEARCH_CRITERIA_PARSER))
-#define GUPNP_SEARCH_CRITERIA_PARSER_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_SEARCH_CRITERIA_PARSER, \
-                 GUPnPSearchCriteriaParserClass))
+#define GUPNP_TYPE_SEARCH_CRITERIA_PARSER                                      \
+        (gupnp_search_criteria_parser_get_type ())
 
 /**
  * GUPnPSearchCriteriaOp:
@@ -87,8 +72,8 @@ gupnp_search_criteria_op_get_type (void) G_GNUC_CONST;
 
 #define GUPNP_TYPE_SEARCH_CRITERIA_OP (gupnp_search_criteria_op_get_type ())
 
-#define GUPNP_SEARCH_CRITERIA_PARSER_ERROR \
-                (gupnp_search_criteria_parser_error_quark ())
+#define GUPNP_SEARCH_CRITERIA_PARSER_ERROR                                     \
+        (gupnp_search_criteria_parser_error_quark ())
 
 GQuark
 gupnp_search_criteria_parser_error_quark (void);
@@ -102,16 +87,8 @@ typedef enum {
         GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED
 } GUPnPSearchCriteriaParserError;
 
-typedef struct _GUPnPSearchCriteriaParserPrivate
-                GUPnPSearchCriteriaParserPrivate;
 
-typedef struct {
-        GObject parent;
-
-        GUPnPSearchCriteriaParserPrivate *priv;
-} GUPnPSearchCriteriaParser;
-
-typedef struct {
+struct _GUPnPSearchCriteriaParserClass {
         GObjectClass parent_class;
 
         /* signals */
@@ -130,7 +107,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPSearchCriteriaParserClass;
+};
 
 GUPnPSearchCriteriaParser *
 gupnp_search_criteria_parser_new        (void);
@@ -142,4 +119,4 @@ gupnp_search_criteria_parser_parse_text (GUPnPSearchCriteriaParser *parser,
 
 G_END_DECLS
 
-#endif /* __GUPNP_SEARCH_CRITERIA_PARSER_H__ */
+#endif /* GUPNP_SEARCH_CRITERIA_PARSER_H */

@@ -32,14 +32,14 @@
 #include "gupnp-didl-lite-contributor-private.h"
 #include "xml-util.h"
 
-struct _GUPnPDIDLLiteContributorPrivate {
+typedef struct _GUPnPDIDLLiteContributorPrivate {
         xmlNode     *xml_node;
         GUPnPAVXMLDoc *xml_doc;
-};
+} GUPnPDIDLLiteContributorPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GUPnPDIDLLiteContributor,
                             gupnp_didl_lite_contributor,
-                            G_TYPE_OBJECT);
+                            G_TYPE_OBJECT)
 
 enum {
         PROP_0,
@@ -52,8 +52,6 @@ enum {
 static void
 gupnp_didl_lite_contributor_init (GUPnPDIDLLiteContributor *contributor)
 {
-        contributor->priv =
-                gupnp_didl_lite_contributor_get_instance_private (contributor);
 }
 
 static void
@@ -96,16 +94,17 @@ gupnp_didl_lite_contributor_set_property (GObject      *object,
                                           GParamSpec   *pspec)
 
 {
-        GUPnPDIDLLiteContributor *contributor;
-
-        contributor = GUPNP_DIDL_LITE_CONTRIBUTOR (object);
+        GUPnPDIDLLiteContributor *contributor =
+                GUPNP_DIDL_LITE_CONTRIBUTOR (object);
+        GUPnPDIDLLiteContributorPrivate *priv =
+                gupnp_didl_lite_contributor_get_instance_private (contributor);
 
         switch (property_id) {
         case PROP_XML_NODE:
-                contributor->priv->xml_node = g_value_get_pointer (value);
+                priv->xml_node = g_value_get_pointer (value);
                 break;
         case PROP_XML_DOC:
-                contributor->priv->xml_doc = g_value_dup_boxed (value);
+                priv->xml_doc = g_value_dup_boxed (value);
                 break;
         case PROP_ROLE:
                 gupnp_didl_lite_contributor_set_role
@@ -127,9 +126,11 @@ static void
 gupnp_didl_lite_contributor_dispose (GObject *object)
 {
         GObjectClass                    *object_class;
-        GUPnPDIDLLiteContributorPrivate *priv;
 
-        priv = GUPNP_DIDL_LITE_CONTRIBUTOR (object)->priv;
+        GUPnPDIDLLiteContributor *contributor =
+                GUPNP_DIDL_LITE_CONTRIBUTOR (object);
+        GUPnPDIDLLiteContributorPrivate *priv =
+                gupnp_didl_lite_contributor_get_instance_private (contributor);
 
         g_clear_pointer (&priv->xml_doc, av_xml_doc_unref);
 
@@ -239,9 +240,10 @@ gupnp_didl_lite_contributor_get_role (GUPnPDIDLLiteContributor *contributor)
         g_return_val_if_fail (contributor != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTRIBUTOR (contributor),
                               NULL);
+        GUPnPDIDLLiteContributorPrivate *priv =
+                gupnp_didl_lite_contributor_get_instance_private (contributor);
 
-        return av_xml_util_get_attribute_content (contributor->priv->xml_node,
-                                                  "role");
+        return av_xml_util_get_attribute_content (priv->xml_node, "role");
 }
 
 /**
@@ -257,8 +259,10 @@ gupnp_didl_lite_contributor_get_name (GUPnPDIDLLiteContributor *contributor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTRIBUTOR (contributor),
                               NULL);
+        GUPnPDIDLLiteContributorPrivate *priv =
+                gupnp_didl_lite_contributor_get_instance_private (contributor);
 
-        return (const char *) contributor->priv->xml_node->children->content;
+        return (const char *) priv->xml_node->children->content;
 }
 
 /**
@@ -275,7 +279,10 @@ gupnp_didl_lite_contributor_set_role (GUPnPDIDLLiteContributor *contributor,
         g_return_if_fail (contributor != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_CONTRIBUTOR (contributor));
 
-        xmlSetProp (contributor->priv->xml_node,
+        GUPnPDIDLLiteContributorPrivate *priv =
+                gupnp_didl_lite_contributor_get_instance_private (contributor);
+
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "role",
                     (unsigned char *) role);
 
@@ -298,9 +305,12 @@ gupnp_didl_lite_contributor_set_name (GUPnPDIDLLiteContributor *contributor,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_CONTRIBUTOR (contributor));
         g_return_if_fail (name != NULL);
 
-        escaped = xmlEncodeSpecialChars (contributor->priv->xml_doc->doc,
+        GUPnPDIDLLiteContributorPrivate *priv =
+                gupnp_didl_lite_contributor_get_instance_private (contributor);
+
+        escaped = xmlEncodeSpecialChars (priv->xml_doc->doc,
                                          (const unsigned char *) name);
-        xmlNodeSetContent (contributor->priv->xml_node, escaped);
+        xmlNodeSetContent (priv->xml_node, escaped);
         xmlFree (escaped);
 
         g_object_notify (G_OBJECT (contributor), "name");
@@ -338,6 +348,8 @@ gupnp_didl_lite_contributor_get_xml_node (GUPnPDIDLLiteContributor *contributor)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTRIBUTOR (contributor),
                               NULL);
+        GUPnPDIDLLiteContributorPrivate *priv =
+                gupnp_didl_lite_contributor_get_instance_private (contributor);
 
-        return contributor->priv->xml_node;
+        return priv->xml_node;
 }

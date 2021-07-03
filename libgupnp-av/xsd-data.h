@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __XSD_DATA_H__
-#define __XSD_DATA_H__
+#ifndef XSD_DATA_H
+#define XSD_DATA_H
 
 #include <glib.h>
 #include <libxml/tree.h>

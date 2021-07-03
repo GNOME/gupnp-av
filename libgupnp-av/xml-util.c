@@ -24,6 +24,7 @@
  */
 
 #include <string.h>
+#include <glib/gprintf.h>
 
 #include "xml-util.h"
 
@@ -41,7 +42,7 @@ static GUPnPXMLNamespaceDescription gupnp_xml_namespaces[] =
         { "urn:schemas-dlna-org:metadata-1-0/", "dlna" },
         { "http://www.pv.com/pvns/", "pv" },
         { "urn:schemas-upnp-org:metadata-1-0/upnp/", "upnp" },
-        { NULL }
+        { NULL, NULL }
 };
 
 GUPnPAVXMLDoc *
@@ -556,6 +557,49 @@ av_xml_util_get_ns (xmlDocPtr doc, GUPnPXMLNamespace ns, xmlNsPtr *ns_out)
                 *ns_out = tmp_ns;
 
         return tmp_ns;
+}
+
+void
+av_xml_util_set_int_prop (xmlNodePtr node, const char *name, int value)
+{
+        char *str;
+
+        str = g_strdup_printf ("%d", value);
+        xmlSetProp (node, (unsigned char *) name, (unsigned char *) str);
+        g_free (str);
+}
+
+void
+av_xml_util_set_prop (xmlNodePtr node,
+                      const char *name,
+                      const char *format,
+                      ...)
+{
+        va_list args;
+
+        va_start (args, format);
+        char *str = NULL;
+        g_vasprintf (&str, format, args);
+        xmlSetProp (node, (xmlChar *) name, (xmlChar *) str);
+        g_free (str);
+        va_end (args);
+}
+
+void
+av_xml_util_set_ns_prop (xmlNodePtr node,
+                         xmlNsPtr ns,
+                         const char *name,
+                         const char *format,
+                         ...)
+{
+        va_list args;
+
+        va_start (args, format);
+        char *str = NULL;
+        g_vasprintf(&str, format, args);
+        xmlSetNsProp (node, ns, (xmlChar *) name, (xmlChar *) str);
+        g_free (str);
+        va_end (args);
 }
 
 G_DEFINE_BOXED_TYPE (GUPnPAVXMLDoc, av_xml_doc, g_rc_box_acquire, av_xml_doc_unref)

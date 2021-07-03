@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GUPNP_DLNA_H__
-#define __GUPNP_DLNA_H__
+#ifndef GUPNP_DLNA_H
+#define GUPNP_DLNA_H
 
 #include <glib-object.h>
 
@@ -152,4 +152,4 @@ gupnp_ocm_flags_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GUPNP_DLNA_H__ */
+#endif /* GUPNP_DLNA_H */

@@ -33,39 +33,17 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_didl_lite_writer_get_type (void) G_GNUC_CONST;
+
+G_DECLARE_DERIVABLE_TYPE(GUPnPDIDLLiteWriter,
+                          gupnp_didl_lite_writer,
+                          GUPNP,
+                          DIDL_LITE_WRITER,
+                          GObject)
 
 #define GUPNP_TYPE_DIDL_LITE_WRITER \
                 (gupnp_didl_lite_writer_get_type ())
-#define GUPNP_DIDL_LITE_WRITER(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_WRITER, \
-                 GUPnPDIDLLiteWriter))
-#define GUPNP_DIDL_LITE_WRITER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_WRITER, \
-                 GUPnPDIDLLiteWriterClass))
-#define GUPNP_IS_DIDL_LITE_WRITER(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_WRITER))
-#define GUPNP_IS_DIDL_LITE_WRITER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_WRITER))
-#define GUPNP_DIDL_LITE_WRITER_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_WRITER, \
-                 GUPnPDIDLLiteWriterClass))
 
-typedef struct _GUPnPDIDLLiteWriterPrivate GUPnPDIDLLiteWriterPrivate;
-
-typedef struct {
-        GObject parent;
-
-        GUPnPDIDLLiteWriterPrivate *priv;
-} GUPnPDIDLLiteWriter;
-
-typedef struct {
+struct _GUPnPDIDLLiteWriterClass {
         GObjectClass parent_class;
 
         /* future padding */
@@ -73,7 +51,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPDIDLLiteWriterClass;
+};
 
 #define GUPNP_DIDL_LITE_WRITER_NAMESPACE_DC   "dc"
 #define GUPNP_DIDL_LITE_WRITER_NAMESPACE_UPNP "upnp"
@@ -107,4 +85,4 @@ gupnp_didl_lite_writer_filter           (GUPnPDIDLLiteWriter   *writer,
 
 G_END_DECLS
 
-#endif /* __GUPNP_DIDL_LITE_WRITER_H__ */
+#endif /* GUPNP_DIDL_LITE_WRITER_H */

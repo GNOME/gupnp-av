@@ -46,10 +46,11 @@ struct _GUPnPProtocolInfoPrivate {
         GUPnPDLNAOperation  dlna_operation;
         GUPnPDLNAFlags      dlna_flags;
 };
+typedef struct _GUPnPProtocolInfoPrivate GUPnPProtocolInfoPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GUPnPProtocolInfo,
                             gupnp_protocol_info,
-                            G_TYPE_OBJECT);
+                            G_TYPE_OBJECT)
 
 enum {
         PROP_0,
@@ -300,11 +301,6 @@ add_dlna_info (GString           *str,
 static void
 gupnp_protocol_info_init (GUPnPProtocolInfo *info)
 {
-        info->priv = gupnp_protocol_info_get_instance_private (info);
-
-        info->priv->dlna_conversion = GUPNP_DLNA_CONVERSION_NONE;
-        info->priv->dlna_operation  = GUPNP_DLNA_OPERATION_NONE;
-        info->priv->dlna_flags      = GUPNP_DLNA_FLAGS_NONE;
 }
 
 static void
@@ -417,20 +413,15 @@ static void
 gupnp_protocol_info_finalize (GObject *object)
 {
         GObjectClass                 *object_class;
-        GUPnPProtocolInfoPrivate *priv;
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (
+                        GUPNP_PROTOCOL_INFO (object));
 
-        priv = GUPNP_PROTOCOL_INFO (object)->priv;
-
-        if (priv->protocol)
-                g_free (priv->protocol);
-        if (priv->network)
-                g_free (priv->network);
-        if (priv->mime_type)
-                g_free (priv->mime_type);
-        if (priv->dlna_profile)
-                g_free (priv->dlna_profile);
-        if (priv->play_speeds)
-                g_strfreev (priv->play_speeds);
+        g_free (priv->protocol);
+        g_free (priv->network);
+        g_free (priv->mime_type);
+        g_free (priv->dlna_profile);
+        g_clear_pointer(&priv->play_speeds,g_strfreev);
 
         object_class = G_OBJECT_CLASS (gupnp_protocol_info_parent_class);
         object_class->finalize (object);
@@ -541,54 +532,48 @@ gupnp_protocol_info_class_init (GUPnPProtocolInfoClass *klass)
          *
          * The DLNA conversion flags.
          **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_DLNA_CONVERSION,
-                 g_param_spec_flags ("dlna-conversion",
-                                     "DLNAConversion",
-                                     "The DLNA conversion flags.",
-                                     GUPNP_TYPE_DLNA_CONVERSION,
-                                     GUPNP_DLNA_CONVERSION_NONE,
-                                     G_PARAM_READWRITE |
-                                     G_PARAM_STATIC_NAME |
-                                     G_PARAM_STATIC_NICK |
-                                     G_PARAM_STATIC_BLURB));
+        g_object_class_install_property (
+                object_class,
+                PROP_DLNA_CONVERSION,
+                g_param_spec_flags ("dlna-conversion",
+                                    "DLNAConversion",
+                                    "The DLNA conversion flags.",
+                                    GUPNP_TYPE_DLNA_CONVERSION,
+                                    GUPNP_DLNA_CONVERSION_NONE,
+                                    G_PARAM_READWRITE | G_PARAM_CONSTRUCT |
+                                            G_PARAM_STATIC_STRINGS));
 
         /**
          * GUPnPProtocolInfo:dlna-operation:
          *
          * The DLNA operation flags.
          **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_DLNA_OPERATION,
-                 g_param_spec_flags ("dlna-operation",
-                                     "DLNAOperation",
-                                     "The DLNA operation flags.",
-                                     GUPNP_TYPE_DLNA_OPERATION,
-                                     GUPNP_DLNA_OPERATION_NONE,
-                                     G_PARAM_READWRITE |
-                                     G_PARAM_STATIC_NAME |
-                                     G_PARAM_STATIC_NICK |
-                                     G_PARAM_STATIC_BLURB));
+        g_object_class_install_property (
+                object_class,
+                PROP_DLNA_OPERATION,
+                g_param_spec_flags ("dlna-operation",
+                                    "DLNAOperation",
+                                    "The DLNA operation flags.",
+                                    GUPNP_TYPE_DLNA_OPERATION,
+                                    GUPNP_DLNA_OPERATION_NONE,
+                                    G_PARAM_READWRITE | G_PARAM_CONSTRUCT |
+                                            G_PARAM_STATIC_STRINGS));
 
         /**
          * GUPnPProtocolInfo:dlna-flags:
          *
          * Various generic DLNA flags.
          **/
-        g_object_class_install_property
-                (object_class,
-                 PROP_DLNA_FLAGS,
-                 g_param_spec_flags ("dlna-flags",
-                                     "DLNAFlags",
-                                     "Various generic DLNA flags.",
-                                     GUPNP_TYPE_DLNA_FLAGS,
-                                     GUPNP_DLNA_FLAGS_NONE,
-                                     G_PARAM_READWRITE |
-                                     G_PARAM_STATIC_NAME |
-                                     G_PARAM_STATIC_NICK |
-                                     G_PARAM_STATIC_BLURB));
+        g_object_class_install_property (
+                object_class,
+                PROP_DLNA_FLAGS,
+                g_param_spec_flags ("dlna-flags",
+                                    "DLNAFlags",
+                                    "Various generic DLNA flags.",
+                                    GUPNP_TYPE_DLNA_FLAGS,
+                                    GUPNP_DLNA_FLAGS_NONE,
+                                    G_PARAM_READWRITE | G_PARAM_CONSTRUCT |
+                                            G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -617,6 +602,7 @@ GUPnPProtocolInfo *
 gupnp_protocol_info_new_from_string (const char *protocol_info,
                                      GError    **error)
 {
+        // FIXME: make a property...
         GUPnPProtocolInfo *info;
         char **tokens;
 
@@ -657,7 +643,8 @@ gupnp_protocol_info_new_from_string (const char *protocol_info,
  *
  * Provides the string representation of @info.
  *
- * Return value: String representation of @info. #g_free after usage.
+ * Return value:(transfer full)(nullable): String representation of @info.
+ * #g_free after usage.
  **/
 char *
 gupnp_protocol_info_to_string (GUPnPProtocolInfo *info)
@@ -698,15 +685,17 @@ gupnp_protocol_info_to_string (GUPnPProtocolInfo *info)
  *
  * Get the protocol of this info.
  *
- * Return value: The protocol of this info or %NULL. This string should not
+ * Return value:(transfer none)(nullable): The protocol of this info or %NULL. This string should not
  * be freed.
  **/
 const char *
 gupnp_protocol_info_get_protocol (GUPnPProtocolInfo *info)
 {
         g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info), NULL);
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        return info->priv->protocol;
+        return priv->protocol;
 }
 
 /**
@@ -715,14 +704,16 @@ gupnp_protocol_info_get_protocol (GUPnPProtocolInfo *info)
  *
  * Get the network this info is associated with.
  *
- * Return value: The network string or %NULL. This string should not be freed.
+ * Return value:(transfer none)(nullable): The network string or %NULL. This string should not be freed.
  **/
 const char *
 gupnp_protocol_info_get_network (GUPnPProtocolInfo *info)
 {
         g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info), NULL);
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        return info->priv->network;
+        return priv->network;
 }
 
 /**
@@ -731,15 +722,17 @@ gupnp_protocol_info_get_network (GUPnPProtocolInfo *info)
  *
  * Get the MIME-type of this info.
  *
- * Return value: The MIME-type of this info or %NULL. This string should not
+ * Return value:(transfer none)(nullable): The MIME-type of this info or %NULL. This string should not
  * be freed.
  **/
 const char *
 gupnp_protocol_info_get_mime_type (GUPnPProtocolInfo *info)
 {
         g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info), NULL);
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        return info->priv->mime_type;
+        return priv->mime_type;
 }
 
 /**
@@ -748,15 +741,17 @@ gupnp_protocol_info_get_mime_type (GUPnPProtocolInfo *info)
  *
  * Get the DLNA profile of this info.
  *
- * Return value: The DLNA profile of this info or %NULL. This string should
+ * Return value:(transfer none)(nullable): The DLNA profile of this info or %NULL. This string should
  * not be freed.
  **/
 const char *
 gupnp_protocol_info_get_dlna_profile (GUPnPProtocolInfo *info)
 {
         g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info), NULL);
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        return info->priv->dlna_profile;
+        return priv->dlna_profile;
 }
 
 /**
@@ -765,15 +760,17 @@ gupnp_protocol_info_get_dlna_profile (GUPnPProtocolInfo *info)
  *
  * Get the allowed play speeds on this info in the form of array of strings.
  *
- * Returns: (transfer none): The allowed play speeds as array of strings or %NULL. This
+ * Returns: (transfer none)(nullable): The allowed play speeds as array of strings or %NULL. This
  * return array and it's content must not be modified or freed.
  **/
 const char **
 gupnp_protocol_info_get_play_speeds (GUPnPProtocolInfo *info)
 {
         g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info), NULL);
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        return (const char **) info->priv->play_speeds;
+        return (const char **) priv->play_speeds;
 }
 
 /**
@@ -789,8 +786,10 @@ gupnp_protocol_info_get_dlna_conversion (GUPnPProtocolInfo *info)
 {
         g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info),
                               GUPNP_DLNA_CONVERSION_NONE);
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        return info->priv->dlna_conversion;
+        return priv->dlna_conversion;
 }
 
 /**
@@ -806,8 +805,10 @@ gupnp_protocol_info_get_dlna_operation (GUPnPProtocolInfo *info)
 {
         g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info),
                               GUPNP_DLNA_OPERATION_NONE);
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        return info->priv->dlna_operation;
+        return priv->dlna_operation;
 }
 
 /**
@@ -823,8 +824,10 @@ gupnp_protocol_info_get_dlna_flags (GUPnPProtocolInfo *info)
 {
         g_return_val_if_fail (GUPNP_IS_PROTOCOL_INFO (info),
                               GUPNP_DLNA_FLAGS_NONE);
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        return info->priv->dlna_flags;
+        return priv->dlna_flags;
 }
 
 /**
@@ -839,10 +842,11 @@ gupnp_protocol_info_set_protocol (GUPnPProtocolInfo *info,
                                   const char        *protocol)
 {
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        if (info->priv->protocol)
-                g_free (info->priv->protocol);
-        info->priv->protocol = g_strdup (protocol);
+        g_free (priv->protocol);
+        priv->protocol = g_strdup (protocol);
 
         g_object_notify (G_OBJECT (info), "protocol");
 }
@@ -859,10 +863,11 @@ gupnp_protocol_info_set_network (GUPnPProtocolInfo *info,
                                  const char        *network)
 {
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        if (info->priv->network)
-                g_free (info->priv->network);
-        info->priv->network = g_strdup (network);
+        g_free (priv->network);
+        priv->network = g_strdup (network);
 
         g_object_notify (G_OBJECT (info), "network");
 }
@@ -879,10 +884,11 @@ gupnp_protocol_info_set_mime_type (GUPnPProtocolInfo *info,
                                    const char        *mime_type)
 {
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        if (info->priv->mime_type)
-                g_free (info->priv->mime_type);
-        info->priv->mime_type = g_strdup (mime_type);
+        g_free (priv->mime_type);
+        priv->mime_type = g_strdup (mime_type);
 
         g_object_notify (G_OBJECT (info), "mime-type");
 }
@@ -899,10 +905,11 @@ gupnp_protocol_info_set_dlna_profile (GUPnPProtocolInfo *info,
                                       const char        *profile)
 {
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        if (info->priv->dlna_profile)
-                g_free (info->priv->dlna_profile);
-        info->priv->dlna_profile = g_strdup (profile);
+        g_free (priv->dlna_profile);
+        priv->dlna_profile = g_strdup (profile);
 
         g_object_notify (G_OBJECT (info), "dlna-profile");
 }
@@ -919,10 +926,12 @@ gupnp_protocol_info_set_play_speeds (GUPnPProtocolInfo *info,
                                      const char       **speeds)
 {
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        if (info->priv->play_speeds)
-                g_strfreev (info->priv->play_speeds);
-        info->priv->play_speeds = (char **) g_boxed_copy (G_TYPE_STRV, speeds);
+        if (priv->play_speeds)
+                g_strfreev (priv->play_speeds);
+        priv->play_speeds = (char **) g_boxed_copy (G_TYPE_STRV, speeds);
 
         g_object_notify (G_OBJECT (info), "play-speeds");
 }
@@ -939,8 +948,10 @@ gupnp_protocol_info_set_dlna_conversion (GUPnPProtocolInfo  *info,
                                          GUPnPDLNAConversion conversion)
 {
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        info->priv->dlna_conversion = conversion;
+        priv->dlna_conversion = conversion;
 
         g_object_notify (G_OBJECT (info), "dlna-conversion");
 }
@@ -957,8 +968,10 @@ gupnp_protocol_info_set_dlna_operation (GUPnPProtocolInfo *info,
                                         GUPnPDLNAOperation operation)
 {
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        info->priv->dlna_operation = operation;
+        priv->dlna_operation = operation;
 
         g_object_notify (G_OBJECT (info), "dlna-operation");
 }
@@ -975,8 +988,10 @@ gupnp_protocol_info_set_dlna_flags (GUPnPProtocolInfo  *info,
                                     GUPnPDLNAFlags      flags)
 {
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+        GUPnPProtocolInfoPrivate *priv =
+                gupnp_protocol_info_get_instance_private (info);
 
-        info->priv->dlna_flags = flags;
+        priv->dlna_flags = flags;
 
         g_object_notify (G_OBJECT (info), "dlna-flags");
 }

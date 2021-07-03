@@ -22,7 +22,7 @@ introspection_sources = [
 ]
 
 v = meson.project_version().split('.')
-soversion = 2
+soversion = 3
 library_minor = v[0].to_int() * 100 + v[1].to_int()
 library_micro = v[2].to_int()
 

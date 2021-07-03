@@ -22,8 +22,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GUPNP_DIDL_LITE_CREATE_CLASS_H__
-#define __GUPNP_DIDL_LITE_CREATE_CLASS_H__
+#ifndef GUPNP_DIDL_LITE_CREATE_CLASS_H
+#define GUPNP_DIDL_LITE_CREATE_CLASS_H
 
 #include <glib-object.h>
 #include <libxml/tree.h>
@@ -31,43 +31,16 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_didl_lite_create_class_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE(GUPnPDIDLLiteCreateClass,
+                          gupnp_didl_lite_create_class,
+                          GUPNP,
+                          DIDL_LITE_CREATE_CLASS,
+                          GObject)
 
 #define GUPNP_TYPE_DIDL_LITE_CREATE_CLASS \
                 (gupnp_didl_lite_create_class_get_type ())
-#define GUPNP_DIDL_LITE_CREATE_CLASS(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CREATE_CLASS, \
-                 GUPnPDIDLLiteCreateClass))
-#define GUPNP_DIDL_LITE_CREATE_CLASS_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CREATE_CLASS, \
-                 GUPnPDIDLLiteCreateClassClass))
-#define GUPNP_IS_DIDL_LITE_CREATE_CLASS(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CREATE_CLASS))
-#define GUPNP_IS_DIDL_LITE_CREATE_CLASS_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CREATE_CLASS))
-#define GUPNP_DIDL_LITE_CREATE_CLASS_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CREATE_CLASS, \
-                 GUPnPDIDLLiteCreateClassClass))
 
-typedef struct _GUPnPDIDLLiteCreateClassPrivate GUPnPDIDLLiteCreateClassPrivate;
-
-/**
- * GUPnPDIDLLiteCreateClass:
- **/
-typedef struct {
-        GObject parent;
-
-        /*< private >*/
-        GUPnPDIDLLiteCreateClassPrivate *priv;
-} GUPnPDIDLLiteCreateClass;
-
-typedef struct {
+struct _GUPnPDIDLLiteCreateClassClass {
         GObjectClass parent_class;
 
         /* future padding */
@@ -75,7 +48,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPDIDLLiteCreateClassClass;
+};
 
 const char *
 gupnp_didl_lite_create_class_get_content

@@ -22,43 +22,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GUPNP_DIDL_LITE_ITEM_H__
-#define __GUPNP_DIDL_LITE_ITEM_H__
+#ifndef GUPNP_DIDL_LITE_ITEM_H
+#define GUPNP_DIDL_LITE_ITEM_H
 
 #include <glib-object.h>
 #include "gupnp-didl-lite-object.h"
 
 G_BEGIN_DECLS
 
-GType
-gupnp_didl_lite_item_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE(GUPnPDIDLLiteItem,
+                          gupnp_didl_lite_item,
+                          GUPNP,
+                          DIDL_LITE_ITEM,
+                          GUPnPDIDLLiteObject)
 
 #define GUPNP_TYPE_DIDL_LITE_ITEM \
                 (gupnp_didl_lite_item_get_type ())
-#define GUPNP_DIDL_LITE_ITEM(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_ITEM, \
-                 GUPnPDIDLLiteItem))
-#define GUPNP_DIDL_LITE_ITEM_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_ITEM, \
-                 GUPnPDIDLLiteItemClass))
-#define GUPNP_IS_DIDL_LITE_ITEM(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_ITEM))
-#define GUPNP_IS_DIDL_LITE_ITEM_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_ITEM))
-#define GUPNP_DIDL_LITE_ITEM_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_ITEM, \
-                 GUPnPDIDLLiteItemClass))
 
-typedef struct {
-        GUPnPDIDLLiteObject parent;
-} GUPnPDIDLLiteItem;
-
-typedef struct {
+struct _GUPnPDIDLLiteItemClass {
         GUPnPDIDLLiteObjectClass parent_class;
 
         /* future padding */
@@ -66,7 +47,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPDIDLLiteItemClass;
+};
 
 const char *
 gupnp_didl_lite_item_get_ref_id         (GUPnPDIDLLiteItem *item);
@@ -84,4 +65,4 @@ gupnp_didl_lite_item_get_lifetime       (GUPnPDIDLLiteItem *item);
 
 G_END_DECLS
 
-#endif /* __GUPNP_DIDL_LITE_ITEM_H__ */
+#endif /* GUPNP_DIDL_LITE_ITEM_H */

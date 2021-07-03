@@ -39,7 +39,7 @@
 
 G_DEFINE_TYPE (GUPnPLastChangeParser,
                gupnp_last_change_parser,
-               G_TYPE_OBJECT);
+               G_TYPE_OBJECT)
 
 static void
 gupnp_last_change_parser_init (G_GNUC_UNUSED GUPnPLastChangeParser *parser)
@@ -90,7 +90,7 @@ read_state_variable (const char *variable_name,
                 return FALSE;
         }
 
-        gvalue_util_set_value_from_string (value, val_str);
+        av_gvalue_util_set_value_from_string (value, val_str);
 
         return TRUE;
 }

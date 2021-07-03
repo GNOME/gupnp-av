@@ -54,7 +54,7 @@ struct _GUPnPDIDLLiteObjectPrivate {
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GUPnPDIDLLiteObject,
                                      gupnp_didl_lite_object,
-                                     G_TYPE_OBJECT);
+                                     G_TYPE_OBJECT)
 
 static XSDData *didl_lite_xsd;
 
@@ -101,7 +101,6 @@ is_non_transcoded_resource (GUPnPDIDLLiteResource *resource, gpointer data)
 static void
 gupnp_didl_lite_object_init (GUPnPDIDLLiteObject *object)
 {
-        object->priv = gupnp_didl_lite_object_get_instance_private (object);
 }
 
 static void
@@ -112,27 +111,29 @@ gupnp_didl_lite_object_set_property (GObject      *object,
 
 {
         GUPnPDIDLLiteObject *didl_object;
+        GUPnPDIDLLiteObjectPrivate *priv;
 
-        didl_object = GUPNP_DIDL_LITE_OBJECT (object);
+        didl_object = GUPNP_DIDL_LITE_OBJECT(object);
+        priv = gupnp_didl_lite_object_get_instance_private(didl_object);
 
         switch (property_id) {
         case PROP_XML_NODE:
-                didl_object->priv->xml_node = g_value_get_pointer (value);
+                priv->xml_node = g_value_get_pointer (value);
                 break;
         case PROP_XML_DOC:
-                didl_object->priv->xml_doc = g_value_dup_boxed (value);
+                priv->xml_doc = g_value_dup_boxed (value);
                 break;
         case PROP_UPNP_NAMESPACE:
-                didl_object->priv->upnp_ns = g_value_get_pointer (value);
+                priv->upnp_ns = g_value_get_pointer (value);
                 break;
         case PROP_DC_NAMESPACE:
-                didl_object->priv->dc_ns = g_value_get_pointer (value);
+                priv->dc_ns = g_value_get_pointer (value);
                 break;
         case PROP_DLNA_NAMESPACE:
-                didl_object->priv->dlna_ns = g_value_get_pointer (value);
+                priv->dlna_ns = g_value_get_pointer (value);
                 break;
         case PROP_PV_NAMESPACE:
-                didl_object->priv->pv_ns = g_value_get_pointer (value);
+                priv->pv_ns = g_value_get_pointer (value);
                 break;
         case PROP_ID:
                 gupnp_didl_lite_object_set_id (didl_object,
@@ -360,8 +361,9 @@ gupnp_didl_lite_object_dispose (GObject *object)
 {
         GObjectClass               *object_class;
         GUPnPDIDLLiteObjectPrivate *priv;
+        GUPnPDIDLLiteObject *self = GUPNP_DIDL_LITE_OBJECT (object);
 
-        priv = GUPNP_DIDL_LITE_OBJECT (object)->priv;
+        priv = gupnp_didl_lite_object_get_instance_private (self);
 
         g_clear_pointer (&priv->xml_doc, av_xml_doc_unref);
 
@@ -844,6 +846,8 @@ get_contributor_list_by_name (GUPnPDIDLLiteObject *object,
         GList *contributors = NULL;
         GList *ret = NULL;
         GList *l;
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
         contributors = gupnp_didl_lite_object_get_properties (object, name);
 
@@ -857,7 +861,7 @@ get_contributor_list_by_name (GUPnPDIDLLiteObject *object,
 
                 contributor = gupnp_didl_lite_contributor_new_from_xml
                                         (contributor_node,
-                                         object->priv->xml_doc);
+                                         priv->xml_doc);
 
                 ret = g_list_append (ret, contributor);
         }
@@ -875,6 +879,8 @@ get_contributors_xml_string_by_name (GUPnPDIDLLiteObject *object,
         char      *ret = NULL;
         GList     *l;
         xmlBuffer *buffer;
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
         contributors = gupnp_didl_lite_object_get_properties (object, name);
         if (contributors == NULL)
@@ -890,7 +896,7 @@ get_contributors_xml_string_by_name (GUPnPDIDLLiteObject *object,
                         continue;
 
                 xmlNodeDump (buffer,
-                             object->priv->xml_doc->doc,
+                             priv->xml_doc->doc,
                              node,
                              0,
                              0);
@@ -990,8 +996,10 @@ GUPnPAVXMLDoc *
 gupnp_didl_lite_object_get_gupnp_xml_doc (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return object->priv->xml_doc;
+        return priv->xml_doc;
 }
 
 /**
@@ -1006,8 +1014,10 @@ xmlNode *
 gupnp_didl_lite_object_get_xml_node (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return object->priv->xml_node;
+        return priv->xml_node;
 }
 
 /**
@@ -1022,10 +1032,12 @@ xmlNsPtr
 gupnp_didl_lite_object_get_upnp_namespace (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_ns (object->priv->xml_doc->doc,
+        return av_xml_util_get_ns (priv->xml_doc->doc,
                                    GUPNP_XML_NAMESPACE_UPNP,
-                                   &(object->priv->upnp_ns));
+                                   &(priv->upnp_ns));
 }
 
 /**
@@ -1041,10 +1053,12 @@ xmlNsPtr
 gupnp_didl_lite_object_get_dc_namespace (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_ns (object->priv->xml_doc->doc,
+        return av_xml_util_get_ns (priv->xml_doc->doc,
                                    GUPNP_XML_NAMESPACE_DC,
-                                   &(object->priv->dc_ns));
+                                   &(priv->dc_ns));
 }
 
 /**
@@ -1059,8 +1073,10 @@ const char *
 gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
+        return av_xml_util_get_child_element_content (priv->xml_node,
                                                       "class");
 }
 
@@ -1077,10 +1093,12 @@ xmlNsPtr
 gupnp_didl_lite_object_get_dlna_namespace (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_ns (object->priv->xml_doc->doc,
+        return av_xml_util_get_ns (priv->xml_doc->doc,
                                    GUPNP_XML_NAMESPACE_DLNA,
-                                   &(object->priv->dlna_ns));
+                                   &(priv->dlna_ns));
 }
 
 /**
@@ -1096,10 +1114,12 @@ xmlNsPtr
 gupnp_didl_lite_object_get_pv_namespace (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_ns (object->priv->xml_doc->doc,
+        return av_xml_util_get_ns (priv->xml_doc->doc,
                                    GUPNP_XML_NAMESPACE_PV,
-                                   &(object->priv->pv_ns));
+                                   &(priv->pv_ns));
 }
 
 
@@ -1115,9 +1135,10 @@ const char *
 gupnp_didl_lite_object_get_id (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_attribute_content (object->priv->xml_node,
-                                                  "id");
+        return av_xml_util_get_attribute_content (priv->xml_node, "id");
 }
 
 /**
@@ -1132,9 +1153,10 @@ const char *
 gupnp_didl_lite_object_get_parent_id (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_attribute_content (object->priv->xml_node,
-                                               "parentID");
+        return av_xml_util_get_attribute_content (priv->xml_node, "parentID");
 }
 
 /**
@@ -1154,9 +1176,10 @@ gupnp_didl_lite_object_get_properties (GUPnPDIDLLiteObject *object,
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
         g_return_val_if_fail (name != NULL, NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_elements_by_name (object->priv->xml_node,
-                                                       name);
+        return av_xml_util_get_child_elements_by_name (priv->xml_node, name);
 }
 
 /**
@@ -1172,8 +1195,10 @@ gupnp_didl_lite_object_is_restricted_set (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (object != NULL, FALSE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), FALSE);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_attribute_content (object->priv->xml_node,
+        return av_xml_util_get_attribute_content (priv->xml_node,
                                                   "restricted") != NULL;
 }
 
@@ -1189,9 +1214,10 @@ gboolean
 gupnp_didl_lite_object_get_restricted (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), FALSE);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_boolean_attribute (object->priv->xml_node,
-                                                  "restricted");
+        return av_xml_util_get_boolean_attribute (priv->xml_node, "restricted");
 }
 
 /**
@@ -1206,9 +1232,10 @@ const char *
 gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
-                                                      "title");
+        return av_xml_util_get_child_element_content (priv->xml_node, "title");
 }
 
 /**
@@ -1223,8 +1250,10 @@ const char *
 gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
+        return av_xml_util_get_child_element_content (priv->xml_node,
                                                       "creator");
 }
 
@@ -1261,9 +1290,10 @@ const char *
 gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
-                                                      "artist");
+        return av_xml_util_get_child_element_content (priv->xml_node, "artist");
 }
 
 /**
@@ -1298,9 +1328,10 @@ const char *
 gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
-                                                      "author");
+        return av_xml_util_get_child_element_content (priv->xml_node, "author");
 }
 
 /**
@@ -1337,6 +1368,8 @@ gupnp_didl_lite_object_get_descriptors (GUPnPDIDLLiteObject *object)
         GList *descriptors = NULL;
         GList *ret = NULL;
         GList *l;
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
 
@@ -1348,9 +1381,9 @@ gupnp_didl_lite_object_get_descriptors (GUPnPDIDLLiteObject *object)
 
                 descriptor_node = (xmlNode *) l->data;
 
-                descriptor = gupnp_didl_lite_descriptor_new_from_xml
-                                        (descriptor_node,
-                                         object->priv->xml_doc);
+                descriptor = gupnp_didl_lite_descriptor_new_from_xml (
+                        descriptor_node,
+                        priv->xml_doc);
 
                 ret = g_list_append (ret, descriptor);
         }
@@ -1372,9 +1405,10 @@ const char *
 gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
-                                                      "genre");
+        return av_xml_util_get_child_element_content (priv->xml_node, "genre");
 }
 
 /**
@@ -1389,8 +1423,10 @@ const char *
 gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
+        return av_xml_util_get_child_element_content (priv->xml_node,
                                                       "writeStatus");
 }
 
@@ -1406,9 +1442,10 @@ const char *
 gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
-                                                      "album");
+        return av_xml_util_get_child_element_content (priv->xml_node, "album");
 }
 
 /**
@@ -1423,8 +1460,10 @@ const char *
 gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
+        return av_xml_util_get_child_element_content (priv->xml_node,
                                                       "albumArtURI");
 }
 
@@ -1440,8 +1479,10 @@ const char *
 gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
+        return av_xml_util_get_child_element_content (priv->xml_node,
                                                       "description");
 }
 
@@ -1457,9 +1498,10 @@ const char *
 gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_element_content (object->priv->xml_node,
-                                                      "date");
+        return av_xml_util_get_child_element_content (priv->xml_node, "date");
 }
 
 /**
@@ -1476,8 +1518,10 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
         const char *str;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), -1);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        str = av_xml_util_get_child_element_content (object->priv->xml_node,
+        str = av_xml_util_get_child_element_content (priv->xml_node,
                                                      "originalTrackNumber");
         if (str == NULL)
                 return -1;
@@ -1502,8 +1546,10 @@ gupnp_didl_lite_object_get_dlna_managed (GUPnPDIDLLiteObject *object)
         g_return_val_if_fail (object != NULL, GUPNP_OCM_FLAGS_NONE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object),
                               GUPNP_OCM_FLAGS_NONE);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        str = av_xml_util_get_attribute_content (object->priv->xml_node,
+        str = av_xml_util_get_attribute_content (priv->xml_node,
                                                  "dlnaManaged");
         if (str == NULL)
                 return GUPNP_OCM_FLAGS_NONE;
@@ -1526,8 +1572,10 @@ gupnp_didl_lite_object_get_update_id (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (object != NULL, 0);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), 0);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_uint_child_element (object->priv->xml_node,
+        return av_xml_util_get_uint_child_element (priv->xml_node,
                                                    "objectUpdateID",
                                                    0);
 }
@@ -1547,8 +1595,10 @@ gupnp_didl_lite_object_update_id_is_set (GUPnPDIDLLiteObject *object)
 
         g_return_val_if_fail (object != NULL, FALSE);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), FALSE);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        content = av_xml_util_get_child_element_content (object->priv->xml_node,
+        content = av_xml_util_get_child_element_content (priv->xml_node,
                                                          "objectUpdateID");
         return content != NULL;
 }
@@ -1571,6 +1621,8 @@ gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
         GList *ret = NULL;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
         resources = gupnp_didl_lite_object_get_properties (object, "res");
 
@@ -1581,11 +1633,10 @@ gupnp_didl_lite_object_get_resources (GUPnPDIDLLiteObject *object)
                 res_node = (xmlNode *) res->data;
 
                 /* Create a resource struct out of DIDLLite XML */
-                resource = gupnp_didl_lite_resource_new_from_xml
-                                        (res_node,
-                                         object->priv->xml_doc,
-                                         object->priv->dlna_ns,
-                                         object->priv->pv_ns);
+                resource = gupnp_didl_lite_resource_new_from_xml (res_node,
+                                                                  priv->xml_doc,
+                                                                  priv->dlna_ns,
+                                                                  priv->pv_ns);
 
                 ret = g_list_append (ret, resource);
         }
@@ -1689,11 +1740,13 @@ gupnp_didl_lite_object_set_upnp_class (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_UPNP,
-                               &(object->priv->upnp_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->upnp_ns),
+                               priv->xml_doc->doc,
                                "class",
                                upnp_class);
 
@@ -1713,8 +1766,10 @@ gupnp_didl_lite_object_set_id (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        xmlSetProp (object->priv->xml_node,
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "id",
                     (unsigned char *) id);
 
@@ -1734,8 +1789,10 @@ gupnp_didl_lite_object_set_parent_id (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        xmlSetProp (object->priv->xml_node,
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "parentID",
                     (unsigned char *) parent_id);
 
@@ -1757,12 +1814,14 @@ gupnp_didl_lite_object_set_restricted (GUPnPDIDLLiteObject *object,
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
         if (restricted)
                 str = "1";
         else
                 str = "0";
-        xmlSetProp (object->priv->xml_node,
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "restricted",
                     (unsigned char *) str);
 
@@ -1782,11 +1841,13 @@ gupnp_didl_lite_object_set_title (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_DC,
-                               &(object->priv->dc_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->dc_ns),
+                               priv->xml_doc->doc,
                                "title",
                                title);
 
@@ -1806,11 +1867,13 @@ gupnp_didl_lite_object_set_creator (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_DC,
-                               &(object->priv->dc_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->dc_ns),
+                               priv->xml_doc->doc,
                                "creator",
                                creator);
 
@@ -1833,14 +1896,16 @@ gupnp_didl_lite_object_add_creator (GUPnPDIDLLiteObject *object)
 
         g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        res_node = xmlNewChild (object->priv->xml_node,
-                                object->priv->dc_ns,
+        res_node = xmlNewChild (priv->xml_node,
+                                priv->dc_ns,
                                 (unsigned char *) "creator",
                                 NULL);
 
         return gupnp_didl_lite_contributor_new_from_xml (res_node,
-                                                         object->priv->xml_doc);
+                                                         priv->xml_doc);
 }
 
 
@@ -1859,11 +1924,13 @@ gupnp_didl_lite_object_set_artist (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_UPNP,
-                               &(object->priv->upnp_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->upnp_ns),
+                               priv->xml_doc->doc,
                                "artist",
                                artist);
 
@@ -1886,14 +1953,16 @@ gupnp_didl_lite_object_add_artist (GUPnPDIDLLiteObject *object)
 
         g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        res_node = xmlNewChild (object->priv->xml_node,
-                                object->priv->upnp_ns,
+        res_node = xmlNewChild (priv->xml_node,
+                                priv->upnp_ns,
                                 (unsigned char *) "artist",
                                 NULL);
 
         return gupnp_didl_lite_contributor_new_from_xml (res_node,
-                                                         object->priv->xml_doc);
+                                                         priv->xml_doc);
 }
 
 /**
@@ -1911,11 +1980,13 @@ gupnp_didl_lite_object_set_author (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_DC,
-                               &(object->priv->upnp_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->upnp_ns),
+                               priv->xml_doc->doc,
                                "author",
                                author);
 
@@ -1938,14 +2009,16 @@ gupnp_didl_lite_object_add_author (GUPnPDIDLLiteObject *object)
 
         g_return_val_if_fail (object != NULL, NULL);
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        res_node = xmlNewChild (object->priv->xml_node,
-                                object->priv->upnp_ns,
+        res_node = xmlNewChild (priv->xml_node,
+                                priv->upnp_ns,
                                 (unsigned char *) "author",
                                 NULL);
 
         return gupnp_didl_lite_contributor_new_from_xml (res_node,
-                                                         object->priv->xml_doc);
+                                                         priv->xml_doc);
 }
 
 /**
@@ -1961,11 +2034,13 @@ gupnp_didl_lite_object_set_genre (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_UPNP,
-                               &(object->priv->upnp_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->upnp_ns),
+                               priv->xml_doc->doc,
                                "genre",
                                genre);
 
@@ -1985,11 +2060,13 @@ gupnp_didl_lite_object_set_write_status (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_DC,
-                               &(object->priv->dc_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->dc_ns),
+                               priv->xml_doc->doc,
                                "writeStatus",
                                write_status);
 
@@ -2009,11 +2086,13 @@ gupnp_didl_lite_object_set_album (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_UPNP,
-                               &(object->priv->upnp_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->upnp_ns),
+                               priv->xml_doc->doc,
                                "album",
                                album);
 
@@ -2035,20 +2114,22 @@ gupnp_didl_lite_object_set_album_art (GUPnPDIDLLiteObject *object,
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        node = av_xml_util_set_child (object->priv->xml_node,
+        node = av_xml_util_set_child (priv->xml_node,
                                       GUPNP_XML_NAMESPACE_UPNP,
-                                      &(object->priv->upnp_ns),
-                                      object->priv->xml_doc->doc,
+                                      &(priv->upnp_ns),
+                                      priv->xml_doc->doc,
                                       "albumArtURI",
                                       album_art);
 
-        av_xml_util_get_ns (object->priv->xml_doc->doc,
+        av_xml_util_get_ns (priv->xml_doc->doc,
                             GUPNP_XML_NAMESPACE_DLNA,
-                            &(object->priv->dlna_ns));
+                            &(priv->dlna_ns));
 
         xmlSetNsProp (node,
-                      object->priv->dlna_ns,
+                      priv->dlna_ns,
                       (const unsigned char *) "profileID",
                       (const unsigned char *) "JPEG_TN");
 
@@ -2068,11 +2149,13 @@ gupnp_didl_lite_object_set_description (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_DC,
-                               &(object->priv->dc_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->dc_ns),
+                               priv->xml_doc->doc,
                                "description",
                                description);
 
@@ -2092,11 +2175,13 @@ gupnp_didl_lite_object_set_date (GUPnPDIDLLiteObject *object,
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_DC,
-                               &(object->priv->dc_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->dc_ns),
+                               priv->xml_doc->doc,
                                "date",
                                date);
 
@@ -2118,12 +2203,14 @@ gupnp_didl_lite_object_set_track_number (GUPnPDIDLLiteObject *object,
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
         str = g_strdup_printf ("%d", track_number);
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_UPNP,
-                               &(object->priv->upnp_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->upnp_ns),
+                               priv->xml_doc->doc,
                                "originalTrackNumber",
                                str);
         g_free (str);
@@ -2146,16 +2233,18 @@ gupnp_didl_lite_object_set_dlna_managed (GUPnPDIDLLiteObject *object,
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_get_ns (object->priv->xml_doc->doc,
+        av_xml_util_get_ns (priv->xml_doc->doc,
                             GUPNP_XML_NAMESPACE_DLNA,
-                            &(object->priv->dlna_ns));
+                            &(priv->dlna_ns));
 
         str = g_strdup_printf ("%08x", dlna_managed);
-        xmlSetNsProp (object->priv->xml_node,
-                      object->priv->dlna_ns,
-                      (const unsigned char *) "dlnaManaged",
-                      (const unsigned char *) str);
+        xmlSetNsProp (priv->xml_node,
+                      priv->dlna_ns,
+                      (xmlChar *) "dlnaManaged",
+                      (xmlChar *) str);
         g_free (str);
 
         g_object_notify (G_OBJECT (object), "dlna-managed");
@@ -2176,12 +2265,14 @@ gupnp_didl_lite_object_set_update_id (GUPnPDIDLLiteObject *object,
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
         str = g_strdup_printf ("%u", update_id);
-        av_xml_util_set_child (object->priv->xml_node,
+        av_xml_util_set_child (priv->xml_node,
                                GUPNP_XML_NAMESPACE_UPNP,
-                               &(object->priv->upnp_ns),
-                               object->priv->xml_doc->doc,
+                               &(priv->upnp_ns),
+                               priv->xml_doc->doc,
                                "objectUpdateID",
                                str);
         g_free (str);
@@ -2200,8 +2291,10 @@ gupnp_didl_lite_object_unset_update_id (GUPnPDIDLLiteObject *object)
 {
         g_return_if_fail (object != NULL);
         g_return_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object));
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        av_xml_util_unset_child (object->priv->xml_node,
+        av_xml_util_unset_child (priv->xml_node,
                                  "objectUpdateID");
 
         g_object_notify (G_OBJECT (object), "update-id");
@@ -2221,16 +2314,18 @@ gupnp_didl_lite_object_add_resource (GUPnPDIDLLiteObject *object)
         xmlNode *res_node;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        res_node = xmlNewChild (object->priv->xml_node,
+        res_node = xmlNewChild (priv->xml_node,
                                 NULL,
                                 (unsigned char *) "res",
                                 NULL);
 
         return gupnp_didl_lite_resource_new_from_xml (res_node,
-                                                      object->priv->xml_doc,
-                                                      object->priv->dlna_ns,
-                                                      object->priv->pv_ns);
+                                                      priv->xml_doc,
+                                                      priv->dlna_ns,
+                                                      priv->pv_ns);
 }
 
 /**
@@ -2247,14 +2342,14 @@ gupnp_didl_lite_object_add_descriptor (GUPnPDIDLLiteObject *object)
         xmlNode *desc_node;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        desc_node = xmlNewChild (object->priv->xml_node,
-                                NULL,
-                                (unsigned char *) "desc",
-                                NULL);
+        desc_node =
+                xmlNewChild (priv->xml_node, NULL, (xmlChar *) "desc", NULL);
 
         return gupnp_didl_lite_descriptor_new_from_xml (desc_node,
-                                                        object->priv->xml_doc);
+                                                        priv->xml_doc);
 }
 
 /**
@@ -2270,9 +2365,11 @@ char *
 gupnp_didl_lite_object_get_title_xml_string (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_string (object->priv->xml_node,
-                                             object->priv->xml_doc->doc,
+        return av_xml_util_get_child_string (priv->xml_node,
+                                             priv->xml_doc->doc,
                                              "title");
 }
 
@@ -2289,9 +2386,11 @@ char *
 gupnp_didl_lite_object_get_date_xml_string (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_string (object->priv->xml_node,
-                                             object->priv->xml_doc->doc,
+        return av_xml_util_get_child_string (priv->xml_node,
+                                             priv->xml_doc->doc,
                                              "date");
 }
 
@@ -2308,9 +2407,11 @@ char *
 gupnp_didl_lite_object_get_upnp_class_xml_string (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_string (object->priv->xml_node,
-                                             object->priv->xml_doc->doc,
+        return av_xml_util_get_child_string (priv->xml_node,
+                                             priv->xml_doc->doc,
                                              "class");
 }
 
@@ -2327,9 +2428,11 @@ char *
 gupnp_didl_lite_object_get_album_xml_string (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_string (object->priv->xml_node,
-                                             object->priv->xml_doc->doc,
+        return av_xml_util_get_child_string (priv->xml_node,
+                                             priv->xml_doc->doc,
                                              "album");
 }
 
@@ -2346,9 +2449,11 @@ char *
 gupnp_didl_lite_object_get_track_number_xml_string (GUPnPDIDLLiteObject *object)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        return av_xml_util_get_child_string (object->priv->xml_node,
-                                             object->priv->xml_doc->doc,
+        return av_xml_util_get_child_string (priv->xml_node,
+                                             priv->xml_doc->doc,
                                              "originalTrackNumber");
 }
 
@@ -2481,9 +2586,11 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
 
                 goto out;
         }
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
-        original.doc = object->priv->xml_doc->doc;
-        original.node = object->priv->xml_node;
+        original.doc = priv->xml_doc->doc;
+        original.node = priv->xml_node;
         modified.doc = xmlCopyDoc (original.doc, 1);
 
         if (modified.doc == NULL) {
@@ -2515,7 +2622,7 @@ gupnp_didl_lite_object_apply_fragments (GUPnPDIDLLiteObject  *object,
                         goto out;
         }
 
-        if (!fragment_util_apply_modification (&object->priv->xml_node,
+        if (!fragment_util_apply_modification (&priv->xml_node,
                                                &modified))
                 result = GUPNP_DIDL_LITE_FRAGMENT_RESULT_UNKNOWN_ERROR;
  out:
@@ -2536,13 +2643,11 @@ gupnp_didl_lite_object_get_xml_string (GUPnPDIDLLiteObject *object)
 {
         xmlBuffer *buffer = NULL;
         char *ret = NULL;
+        GUPnPDIDLLiteObjectPrivate *priv;
+        priv = gupnp_didl_lite_object_get_instance_private (object);
 
         buffer = xmlBufferCreate ();
-        xmlNodeDump (buffer,
-                     object->priv->xml_doc->doc,
-                     object->priv->xml_node,
-                     0,
-                     0);
+        xmlNodeDump (buffer, priv->xml_doc->doc, priv->xml_node, 0, 0);
 
         ret = g_strndup ((char *) xmlBufferContent (buffer),
                          xmlBufferLength (buffer));

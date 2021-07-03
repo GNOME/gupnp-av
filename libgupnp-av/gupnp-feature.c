@@ -33,10 +33,11 @@ struct _GUPnPFeaturePrivate {
         char *version;
         char *object_ids;
 };
+typedef struct _GUPnPFeaturePrivate GUPnPFeaturePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GUPnPFeature,
                             gupnp_feature,
-                            G_TYPE_OBJECT);
+                            G_TYPE_OBJECT)
 
 enum {
         PROP_0,
@@ -48,7 +49,6 @@ enum {
 static void
 gupnp_feature_init (GUPnPFeature *object)
 {
-        object->priv = gupnp_feature_get_instance_private (object);
 }
 
 static void
@@ -57,7 +57,8 @@ gupnp_feature_finalize (GObject *object)
         GObjectClass        *object_class;
         GUPnPFeaturePrivate *priv;
 
-        priv = GUPNP_FEATURE (object)->priv;
+        priv = gupnp_feature_get_instance_private (GUPNP_FEATURE (object));
+
         g_free (priv->name);
         g_free (priv->version);
         g_free (priv->object_ids);
@@ -99,19 +100,18 @@ gupnp_feature_set_property (GObject      *object,
                             const GValue *value,
                             GParamSpec   *pspec)
 {
-        GUPnPFeature *feature;
-
-        feature = GUPNP_FEATURE (object);
+        GUPnPFeaturePrivate *priv =
+                gupnp_feature_get_instance_private (GUPNP_FEATURE (object));
 
         switch (property_id) {
         case PROP_NAME:
-                feature->priv->name = g_value_dup_string (value);
+                priv->name = g_value_dup_string (value);
                 break;
         case PROP_VERSION:
-                feature->priv->version = g_value_dup_string (value);
+                priv->version = g_value_dup_string (value);
                 break;
         case PROP_OBJECT_IDS:
-                feature->priv->object_ids = g_value_dup_string (value);
+                priv->object_ids = g_value_dup_string (value);
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -196,7 +196,10 @@ gupnp_feature_class_init (GUPnPFeatureClass *klass)
 const char *
 gupnp_feature_get_name (GUPnPFeature *feature)
 {
-        return feature->priv->name;
+        GUPnPFeaturePrivate *priv =
+                gupnp_feature_get_instance_private (GUPNP_FEATURE (feature));
+
+        return priv->name;
 }
 
 /**
@@ -210,7 +213,10 @@ gupnp_feature_get_name (GUPnPFeature *feature)
 const char *
 gupnp_feature_get_version (GUPnPFeature *feature)
 {
-        return feature->priv->version;
+        GUPnPFeaturePrivate *priv =
+                gupnp_feature_get_instance_private (GUPNP_FEATURE (feature));
+
+        return priv->version;
 }
 
 /**
@@ -224,5 +230,8 @@ gupnp_feature_get_version (GUPnPFeature *feature)
 const char *
 gupnp_feature_get_object_ids (GUPnPFeature *feature)
 {
-        return feature->priv->object_ids;
+        GUPnPFeaturePrivate *priv =
+                gupnp_feature_get_instance_private (GUPNP_FEATURE (feature));
+
+        return priv->object_ids;
 }

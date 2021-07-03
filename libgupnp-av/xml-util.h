@@ -23,8 +23,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __XML_UTIL_H__
-#define __XML_UTIL_H__
+#ifndef XML_UTIL_H
+#define XML_UTIL_H
 
 #include <glib.h>
 #include <libxml/tree.h>
@@ -45,7 +45,6 @@ G_BEGIN_DECLS
 
 typedef struct _GPnPAVXMLDoc
 {
-    volatile int refcount;
     xmlDoc *doc;
 } GUPnPAVXMLDoc;
 
@@ -159,6 +158,14 @@ G_GNUC_INTERNAL xmlNsPtr
 av_xml_util_get_ns                         (xmlDocPtr doc,
                                             GUPnPXMLNamespace ns,
                                             xmlNsPtr *ns_out);
+G_GNUC_INTERNAL void
+av_xml_util_set_int_prop (xmlNodePtr node, const char *name, int value);
+
+G_GNUC_INTERNAL void
+av_xml_util_set_prop (xmlNodePtr node, const char *name, const char *format, ...) G_GNUC_PRINTF(3, 4);
+
+G_GNUC_INTERNAL void
+av_xml_util_set_ns_prop (xmlNodePtr node, xmlNsPtr ns, const char *name, const char *format, ...) G_GNUC_PRINTF(4, 5);
 
 G_END_DECLS
 

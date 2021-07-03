@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GUPNP_DIDL_LITE_MEDIA_COLLECTION_H__
-#define __GUPNP_DIDL_LITE_MEDIA_COLLECTION_H__
+#ifndef GUPNP_DIDL_LITE_MEDIA_COLLECTION_H
+#define GUPNP_DIDL_LITE_MEDIA_COLLECTION_H
 
 #include <glib-object.h>
 
@@ -28,39 +28,13 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_media_collection_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE (GUPnPMediaCollection,
+                          gupnp_media_collection,
+                          GUPNP,
+                          MEDIA_COLLECTION,
+                          GObject)
 
-#define GUPNP_TYPE_MEDIA_COLLECTION \
-                (gupnp_media_collection_get_type ())
-#define GUPNP_MEDIA_COLLECTION(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_MEDIA_COLLECTION, \
-                 GUPnPMediaCollection))
-#define GUPNP_MEDIA_COLLECTION_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_MEDIA_COLLECTION, \
-                 GUPnPMediaCollectionClass))
-#define GUPNP_IS_MEDIA_COLLECTION(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_MEDIA_COLLECTION))
-#define GUPNP_IS_MEDIA_COLLECTION_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_MEDIA_COLLECTION))
-#define GUPNP_MEDIA_COLLECTION_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_MEDIA_COLLECTION, \
-                 GUPnPMediaCollectionClass))
-
-typedef struct _GUPnPMediaCollectionPrivate GUPnPMediaCollectionPrivate;
-typedef struct _GUPnPMediaCollection GUPnPMediaCollection;
-typedef struct _GUPnPMediaCollectionClass GUPnPMediaCollectionClass;
-
-struct _GUPnPMediaCollection {
-        GObject parent;
-
-        GUPnPMediaCollectionPrivate *priv;
-};
+#define GUPNP_TYPE_MEDIA_COLLECTION (gupnp_media_collection_get_type ())
 
 struct _GUPnPMediaCollectionClass {
         GObjectClass parent_class;
@@ -106,4 +80,4 @@ gupnp_media_collection_get_mutable     (GUPnPMediaCollection *collection);
 
 G_END_DECLS
 
-#endif /* __GUPNP_DIDL_LITE_MEDIA_COLLECTION_H__ */
+#endif /* GUPNP_DIDL_LITE_MEDIA_COLLECTION_H */

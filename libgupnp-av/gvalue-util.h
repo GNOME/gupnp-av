@@ -19,14 +19,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GVALUE_UTIL_H__
-#define __GVALUE_UTIL_H__
+#ifndef GVALUE_UTIL_H
+#define GVALUE_UTIL_H
 
 #include <glib-object.h>
 
 G_GNUC_INTERNAL gboolean
-gvalue_util_set_value_from_string      (GValue       *value,
-                                        const char   *str);
+av_gvalue_util_set_value_from_string (GValue *value, const char *str);
 
 #endif /* __GVALUE_UTIL_H__ */
 

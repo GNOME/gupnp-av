@@ -71,10 +71,6 @@ main (int argc, char **argv)
 
         g_assert (argc == 2);
 
-#if !GLIB_CHECK_VERSION (2, 35, 0)
-        g_type_init ();
-#endif
-
         parser = gupnp_search_criteria_parser_new ();
 
         g_signal_connect (parser,

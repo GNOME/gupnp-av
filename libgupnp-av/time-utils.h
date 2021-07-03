@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __TIME_UTILS_H__
-#define __TIME_UTILS_H__
+#ifndef TIME_UTILS_H
+#define TIME_UTILS_H
 
 G_BEGIN_DECLS
 

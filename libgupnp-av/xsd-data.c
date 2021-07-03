@@ -64,10 +64,9 @@ xsd_data_free (XSDData *xsd_data)
 {
         if (xsd_data == NULL)
                 return;
-        if (xsd_data->valid_context != NULL)
-                xmlSchemaFreeValidCtxt (xsd_data->valid_context);
-        if (xsd_data->schema != NULL)
-                xmlSchemaFree (xsd_data->schema);
+        g_clear_pointer (&xsd_data->valid_context, xmlSchemaFreeValidCtxt);
+        g_clear_pointer (&xsd_data->schema, xmlSchemaFree);
+
         g_slice_free (XSDData, xsd_data);
 }
 

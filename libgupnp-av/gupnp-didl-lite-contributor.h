@@ -28,39 +28,16 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_didl_lite_contributor_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE(GUPnPDIDLLiteContributor,
+                         gupnp_didl_lite_contributor,
+                         GUPNP,
+                         DIDL_LITE_CONTRIBUTOR,
+                         GObject)
 
 #define GUPNP_TYPE_DIDL_LITE_CONTRIBUTOR \
                 (gupnp_didl_lite_contributor_get_type ())
-#define GUPNP_DIDL_LITE_CONTRIBUTOR(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTRIBUTOR, \
-                 GUPnPDIDLLiteContributor))
-#define GUPNP_DIDL_LITE_CONTRIBUTOR_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTRIBUTOR, \
-                 GUPnPDIDLLiteContributorClass))
-#define GUPNP_IS_DIDL_LITE_CONTRIBUTOR(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTRIBUTOR))
-#define GUPNP_IS_DIDL_LITE_CONTRIBUTOR_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTRIBUTOR))
-#define GUPNP_DIDL_LITE_CONTRIBUTOR_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_CONTRIBUTOR, \
-                 GUPnPDIDLLiteContributorClass))
 
-typedef struct _GUPnPDIDLLiteContributorPrivate GUPnPDIDLLiteContributorPrivate;
-
-typedef struct {
-        GObject parent;
-
-        GUPnPDIDLLiteContributorPrivate *priv;
-} GUPnPDIDLLiteContributor;
-
-typedef struct {
+struct _GUPnPDIDLLiteContributorClass{
         GObjectClass parent_class;
 
         /* future padding */
@@ -68,7 +45,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPDIDLLiteContributorClass;
+};
 
 const char *
 gupnp_didl_lite_contributor_get_role    (GUPnPDIDLLiteContributor *contributor);

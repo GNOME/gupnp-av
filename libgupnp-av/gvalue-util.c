@@ -25,8 +25,7 @@
 #include "gvalue-util.h"
 
 gboolean
-gvalue_util_set_value_from_string (GValue     *value,
-                                   const char *str)
+av_gvalue_util_set_value_from_string (GValue *value, const char *str)
 {
         GValue tmp_value = {0, };
         int i;
@@ -42,11 +41,7 @@ gvalue_util_set_value_from_string (GValue     *value,
                 break;
 
         case G_TYPE_CHAR:
-#if GLIB_CHECK_VERSION(2,32,0)
                 g_value_set_schar (value, *str);
-#else
-                g_value_set_char (value, *str);
-#endif
 
                 break;
 

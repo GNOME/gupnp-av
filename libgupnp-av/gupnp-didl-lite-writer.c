@@ -49,10 +49,11 @@ struct _GUPnPDIDLLiteWriterPrivate {
 
         char        *language;
 };
+typedef struct _GUPnPDIDLLiteWriterPrivate GUPnPDIDLLiteWriterPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GUPnPDIDLLiteWriter,
                             gupnp_didl_lite_writer,
-                            G_TYPE_OBJECT);
+                            G_TYPE_OBJECT)
 
 enum {
         PROP_0,
@@ -210,7 +211,6 @@ filter_attributes (xmlNode             *node,
 static void
 filter_node (xmlNode             *node,
              GList               *allowed,
-             GUPnPDIDLLiteWriter *writer,
              gboolean             tags_only)
 {
         xmlNode *child;
@@ -264,7 +264,7 @@ filter_node (xmlNode             *node,
         /* Recurse */
         for (child = node->children; child != NULL; child = child->next)
                 if (!xmlNodeIsText (child))
-                        filter_node (child, allowed, writer, tags_only);
+                        filter_node (child, allowed, tags_only);
 }
 
 static void
@@ -280,6 +280,9 @@ apply_filter (GUPnPDIDLLiteWriter *writer,
         g_return_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer));
         g_return_if_fail (filter != NULL);
 
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (writer);
+
         if (filter[0] == '*')
                 return;         /* Wildcard */
 
@@ -289,10 +292,8 @@ apply_filter (GUPnPDIDLLiteWriter *writer,
         for (i = 0; tokens[i] != NULL; i++)
                 allowed = g_list_append (allowed, tokens[i]);
 
-        for (node = writer->priv->xml_node->children;
-             node != NULL;
-             node = node->next)
-                filter_node (node, allowed, writer, tags_only);
+        for (node = priv->xml_node->children; node != NULL; node = node->next)
+                filter_node (node, allowed, tags_only);
 
         g_list_free (allowed);
         g_strfreev (tokens);
@@ -302,7 +303,6 @@ apply_filter (GUPnPDIDLLiteWriter *writer,
 static void
 gupnp_didl_lite_writer_init (GUPnPDIDLLiteWriter *writer)
 {
-        writer->priv = gupnp_didl_lite_writer_get_instance_private (writer);
 }
 
 static void
@@ -315,10 +315,12 @@ gupnp_didl_lite_writer_set_property (GObject      *object,
         GUPnPDIDLLiteWriter *writer;
 
         writer = GUPNP_DIDL_LITE_WRITER (object);
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (writer);
 
         switch (property_id) {
         case PROP_LANGUAGE:
-                writer->priv->language = g_value_dup_string (value);
+                priv->language = g_value_dup_string (value);
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -355,10 +357,11 @@ static void
 gupnp_didl_lite_writer_constructed (GObject *object)
 {
         GObjectClass               *object_class;
-        GUPnPDIDLLiteWriterPrivate *priv;
         xmlDoc                     *doc;
 
-        priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (
+                        GUPNP_DIDL_LITE_WRITER (object));
 
         doc = xmlNewDoc ((unsigned char *) "1.0");
         priv->xml_doc = av_xml_doc_new (doc);
@@ -386,9 +389,9 @@ static void
 gupnp_didl_lite_writer_dispose (GObject *object)
 {
         GObjectClass               *object_class;
-        GUPnPDIDLLiteWriterPrivate *priv;
-
-        priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (
+                        GUPNP_DIDL_LITE_WRITER (object));
 
         g_clear_pointer (&priv->xml_doc, av_xml_doc_unref);
 
@@ -400,12 +403,11 @@ static void
 gupnp_didl_lite_writer_finalize (GObject *object)
 {
         GObjectClass               *object_class;
-        GUPnPDIDLLiteWriterPrivate *priv;
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (
+                        GUPNP_DIDL_LITE_WRITER (object));
 
-        priv = GUPNP_DIDL_LITE_WRITER (object)->priv;
-
-        if (priv->language)
-                g_free (priv->language);
+        g_free (priv->language);
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_writer_parent_class);
         object_class->finalize (object);
@@ -492,20 +494,22 @@ gupnp_didl_lite_writer_add_item (GUPnPDIDLLiteWriter *writer)
 {
         xmlNode *item_node;
         GUPnPDIDLLiteObject *object;
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (writer);
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
-        item_node = xmlNewChild (writer->priv->xml_node,
-                                NULL,
-                                (unsigned char *) "item",
-                                NULL);
+        item_node = xmlNewChild (priv->xml_node,
+                                 NULL,
+                                 (unsigned char *) "item",
+                                 NULL);
 
         object = gupnp_didl_lite_object_new_from_xml (item_node,
-                                                      writer->priv->xml_doc,
-                                                      writer->priv->upnp_ns,
-                                                      writer->priv->dc_ns,
-                                                      writer->priv->dlna_ns,
-                                                      writer->priv->pv_ns);
+                                                      priv->xml_doc,
+                                                      priv->upnp_ns,
+                                                      priv->dc_ns,
+                                                      priv->dlna_ns,
+                                                      priv->pv_ns);
         return GUPNP_DIDL_LITE_ITEM (object);
 }
 
@@ -527,6 +531,8 @@ gupnp_didl_lite_writer_add_container_child_item
 {
         xmlNode *item_node, *container_node;
         GUPnPDIDLLiteObject *object;
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (writer);
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_CONTAINER (container), NULL);
 
@@ -539,11 +545,11 @@ gupnp_didl_lite_writer_add_container_child_item
                                  NULL);
 
         object = gupnp_didl_lite_object_new_from_xml (item_node,
-                                                      writer->priv->xml_doc,
-                                                      writer->priv->upnp_ns,
-                                                      writer->priv->dc_ns,
-                                                      writer->priv->dlna_ns,
-                                                      writer->priv->pv_ns);
+                                                      priv->xml_doc,
+                                                      priv->upnp_ns,
+                                                      priv->dc_ns,
+                                                      priv->dlna_ns,
+                                                      priv->pv_ns);
         return GUPNP_DIDL_LITE_ITEM (object);
 }
 
@@ -560,20 +566,22 @@ gupnp_didl_lite_writer_add_container (GUPnPDIDLLiteWriter *writer)
 {
         xmlNode *container_node;
         GUPnPDIDLLiteObject *object;
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (writer);
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
 
-        container_node = xmlNewChild (writer->priv->xml_node,
+        container_node = xmlNewChild (priv->xml_node,
                                       NULL,
                                       (unsigned char *) "container",
                                       NULL);
 
         object = gupnp_didl_lite_object_new_from_xml (container_node,
-                                                      writer->priv->xml_doc,
-                                                      writer->priv->upnp_ns,
-                                                      writer->priv->dc_ns,
-                                                      writer->priv->dlna_ns,
-                                                      writer->priv->pv_ns);
+                                                      priv->xml_doc,
+                                                      priv->upnp_ns,
+                                                      priv->dc_ns,
+                                                      priv->dlna_ns,
+                                                      priv->pv_ns);
         return GUPNP_DIDL_LITE_CONTAINER (object);
 }
 
@@ -591,14 +599,16 @@ gupnp_didl_lite_writer_add_descriptor (GUPnPDIDLLiteWriter *writer)
         xmlNode *desc_node;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (writer);
 
-        desc_node = xmlNewChild (writer->priv->xml_node,
+        desc_node = xmlNewChild (priv->xml_node,
                                  NULL,
                                  (unsigned char *) "desc",
                                  NULL);
 
         return gupnp_didl_lite_descriptor_new_from_xml (desc_node,
-                                                        writer->priv->xml_doc);
+                                                        priv->xml_doc);
 }
 
 /**
@@ -616,13 +626,11 @@ gupnp_didl_lite_writer_get_string (GUPnPDIDLLiteWriter *writer)
         char      *ret;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (writer);
 
         buffer = xmlBufferCreate ();
-        xmlNodeDump (buffer,
-                     writer->priv->xml_doc->doc,
-                     writer->priv->xml_node,
-                     0,
-                     0);
+        xmlNodeDump (buffer, priv->xml_doc->doc, priv->xml_node, 0, 0);
         ret = g_strndup ((char *) xmlBufferContent (buffer),
                          xmlBufferLength (buffer));
         xmlBufferFree (buffer);
@@ -642,8 +650,10 @@ xmlNode *
 gupnp_didl_lite_writer_get_xml_node (GUPnPDIDLLiteWriter *writer)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (writer);
 
-        return writer->priv->xml_node;
+        return priv->xml_node;
 }
 
 /**
@@ -658,8 +668,10 @@ const char *
 gupnp_didl_lite_writer_get_language (GUPnPDIDLLiteWriter *writer)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_WRITER (writer), NULL);
+        GUPnPDIDLLiteWriterPrivate *priv =
+                gupnp_didl_lite_writer_get_instance_private (writer);
 
-        return writer->priv->language;
+        return priv->language;
 }
 
 /**

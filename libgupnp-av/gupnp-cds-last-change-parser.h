@@ -26,47 +26,23 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_cds_last_change_parser_get_type (void) G_GNUC_CONST;
 
 GType
 gupnp_cds_last_change_entry_get_type (void) G_GNUC_CONST;
 
-#define GUPNP_TYPE_CDS_LAST_CHANGE_PARSER \
-                (gupnp_cds_last_change_parser_get_type ())
-#define GUPNP_CDS_LAST_CHANGE_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_CDS_LAST_CHANGE_PARSER, \
-                 GUPnPCDSLastChangeParser))
-#define GUPNP_CDS_LAST_CHANGE_PARSER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_CDS_LAST_CHANGE_PARSER, \
-                 GUPnPCDSLastChangeParserClass))
-#define GUPNP_IS_CDS_LAST_CHANGE_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_CDS_LAST_CHANGE_PARSER))
-#define GUPNP_IS_CDS_LAST_CHANGE_PARSER_CLASS(klass) \
-                (G_TYPE_CHECK_CLASS_TYPE ((klass), \
-                 GUPNP_TYPE_CDS_LAST_CHANGE_PARSER))
-#define GUPNP_CDS_LAST_CHANGE_PARSER_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_CDS_LAST_CHANGE_PARSER, \
-                 GUPnPCDSLastChangeParserClass))
+G_DECLARE_DERIVABLE_TYPE(GUPnPCDSLastChangeParser,
+                         gupnp_cds_last_change_parser,
+                         GUPNP,
+                         CDS_LAST_CHANGE_PARSER,
+                         GObject)
+#define GUPNP_TYPE_CDS_LAST_CHANGE_PARSER gupnp_cds_last_change_parser_get_type()
 
-typedef struct _GUPnPCDSLastChangeParser GUPnPCDSLastChangeParser;
-typedef struct _GUPnPCDSLastChangeParserClass GUPnPCDSLastChangeParserClass;
-typedef struct _GUPnPCDSLastChangeParserPrivate GUPnPCDSLastChangeParserPrivate;
+struct _GUPnPCDSLastChangeParserClass
+{
+    GObjectClass parent_class;
+};
+
 typedef struct _GUPnPCDSLastChangeEntry GUPnPCDSLastChangeEntry;
-
-struct _GUPnPCDSLastChangeParser {
-        GObject parent;
-
-        GUPnPCDSLastChangeParserPrivate *priv;
-};
-
-struct _GUPnPCDSLastChangeParserClass {
-        GObjectClass parent_class;
-};
 
 /**
  * GUPnPCDSLastChangeEvent:

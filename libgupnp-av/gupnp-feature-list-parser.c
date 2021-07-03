@@ -36,7 +36,7 @@
 /* GUPnPFeatureListParser */
 G_DEFINE_TYPE (GUPnPFeatureListParser,
                gupnp_feature_list_parser,
-               G_TYPE_OBJECT);
+               G_TYPE_OBJECT)
 
 static void
 gupnp_feature_list_parser_init (G_GNUC_UNUSED GUPnPFeatureListParser *parser)
@@ -78,31 +78,24 @@ static char *
 get_feature_object_ids (xmlNode *feature)
 {
         xmlNode    *element;
-        char       *object_ids = NULL;
         const char *content;
-
-        object_ids = (char *) g_malloc0(1);
+        GString *object_ids = g_string_new ("");
 
         for (element = feature->children; element; element = element->next) {
-                gsize new_size;
-
-                if (g_ascii_strcasecmp ((char *) element->name,
-                                        "objectIDs") == 0) {
+                const char *name = (const char *) element->name;
+                if (g_ascii_strcasecmp (name, "objectIDs") == 0) {
                         content = (const char *) xmlNodeGetContent (element);
+                        if (strlen (content) == 0)
+                                continue;
 
-                        new_size = strlen (object_ids) + strlen (content) + 1;
-                        if (*object_ids)
-                                new_size++;
+                        if (object_ids->len > 0)
+                                g_string_append_c (object_ids, ',');
 
-                        object_ids = g_realloc (object_ids, new_size);
-
-                        if (*object_ids)
-                                strcat (object_ids, ",");
-                        strcat (object_ids, content);
+                        g_string_append (object_ids, content);
                 }
         }
 
-        return object_ids;
+        return g_string_free (object_ids, FALSE);
 }
 
 /**
@@ -114,7 +107,7 @@ get_feature_object_ids (xmlNode *feature)
  * Parses @text and returns the list of available features.
  * If an error occured @error will be set.
  *
- * Return value: (transfer full) (element-type GUPnPFeature): The list of
+ * Return value: (transfer full) (element-type GUPnPFeature)(nullable): The list of
  * features or %NULL if an error occured.
  **/
 GList *

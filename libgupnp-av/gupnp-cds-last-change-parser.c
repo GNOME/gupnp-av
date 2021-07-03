@@ -50,8 +50,6 @@ G_DEFINE_TYPE (GUPnPCDSLastChangeParser,
                gupnp_cds_last_change_parser,
                G_TYPE_OBJECT)
 
-#define GUPNP_TYPE_CDS_LAST_CHANGE_PARSER (gupnp_cds_last_change_entry_get_type())
-
 G_DEFINE_BOXED_TYPE (GUPnPCDSLastChangeEntry,
                      gupnp_cds_last_change_entry,
                      gupnp_cds_last_change_entry_ref,

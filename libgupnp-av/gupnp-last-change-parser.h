@@ -21,42 +21,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GUPNP_LAST_CHANGE_PARSER_H__
-#define __GUPNP_LAST_CHANGE_PARSER_H__
+#ifndef GUPNP_LAST_CHANGE_PARSER_H
+#define GUPNP_LAST_CHANGE_PARSER_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-GType
-gupnp_last_change_parser_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE (GUPnPLastChangeParser,
+                          gupnp_last_change_parser,
+                          GUPNP,
+                          LAST_CHANGE_PARSER,
+                          GObject)
 
-#define GUPNP_TYPE_LAST_CHANGE_PARSER \
-                (gupnp_last_change_parser_get_type ())
-#define GUPNP_LAST_CHANGE_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_LAST_CHANGE_PARSER, \
-                 GUPnPLastChangeParser))
-#define GUPNP_LAST_CHANGE_PARSER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_LAST_CHANGE_PARSER, \
-                 GUPnPLastChangeParserClass))
-#define GUPNP_IS_LAST_CHANGE_PARSER(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_LAST_CHANGE_PARSER))
-#define GUPNP_IS_LAST_CHANGE_PARSER_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_LAST_CHANGE_PARSER))
-#define GUPNP_LAST_CHANGE_PARSER_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_LAST_CHANGE_PARSER, \
-                 GUPnPLastChangeParserClass))
+#define GUPNP_TYPE_LAST_CHANGE_PARSER (gupnp_last_change_parser_get_type ())
 
-typedef struct {
-        GObject parent;
-} GUPnPLastChangeParser;
-
-typedef struct {
+struct _GUPnPLastChangeParserClass {
         GObjectClass parent_class;
 
         /* future padding */
@@ -64,7 +44,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPLastChangeParserClass;
+};
 
 GUPnPLastChangeParser *
 gupnp_last_change_parser_new           (void);

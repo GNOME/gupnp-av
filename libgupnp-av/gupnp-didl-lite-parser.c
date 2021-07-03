@@ -36,7 +36,7 @@
 
 G_DEFINE_TYPE (GUPnPDIDLLiteParser,
                gupnp_didl_lite_parser,
-               G_TYPE_OBJECT);
+               G_TYPE_OBJECT)
 
 enum {
         OBJECT_AVAILABLE,

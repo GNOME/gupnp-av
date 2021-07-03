@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GUPNP_DIDL_LITE_DESCRIPTOR_H__
-#define __GUPNP_DIDL_LITE_DESCRIPTOR_H__
+#ifndef GUPNP_DIDL_LITE_DESCRIPTOR_H
+#define GUPNP_DIDL_LITE_DESCRIPTOR_H
 
 #include <stdarg.h>
 #include <glib-object.h>
@@ -29,39 +29,15 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_didl_lite_descriptor_get_type (void) G_GNUC_CONST;
+#define GUPNP_TYPE_DIDL_LITE_DESCRIPTOR gupnp_didl_lite_descriptor_get_type ()
 
-#define GUPNP_TYPE_DIDL_LITE_DESCRIPTOR \
-                (gupnp_didl_lite_descriptor_get_type ())
-#define GUPNP_DIDL_LITE_DESCRIPTOR(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_DESCRIPTOR, \
-                 GUPnPDIDLLiteDescriptor))
-#define GUPNP_DIDL_LITE_DESCRIPTOR_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_DESCRIPTOR, \
-                 GUPnPDIDLLiteDescriptorClass))
-#define GUPNP_IS_DIDL_LITE_DESCRIPTOR(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_DESCRIPTOR))
-#define GUPNP_IS_DIDL_LITE_DESCRIPTOR_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_DESCRIPTOR))
-#define GUPNP_DIDL_LITE_DESCRIPTOR_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_DESCRIPTOR, \
-                 GUPnPDIDLLiteDescriptorClass))
+G_DECLARE_DERIVABLE_TYPE (GUPnPDIDLLiteDescriptor,
+                          gupnp_didl_lite_descriptor,
+                          GUPNP,
+                          DIDL_LITE_DESCRIPTOR,
+                          GObject)
 
-typedef struct _GUPnPDIDLLiteDescriptorPrivate GUPnPDIDLLiteDescriptorPrivate;
-
-typedef struct {
-        GObject parent;
-
-        GUPnPDIDLLiteDescriptorPrivate *priv;
-} GUPnPDIDLLiteDescriptor;
-
-typedef struct {
+struct _GUPnPDIDLLiteDescriptorClass {
         GObjectClass parent_class;
 
         /* future padding */
@@ -69,7 +45,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPDIDLLiteDescriptorClass;
+};
 
 GUPnPDIDLLiteDescriptor *
 gupnp_didl_lite_descriptor_new (void);

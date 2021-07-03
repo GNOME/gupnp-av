@@ -19,48 +19,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GUPNP_FEATURE_H_
-#define __GUPNP_FEATURE_H_
+#ifndef GUPNP_FEATURE_H
+#define GUPNP_FEATURE_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-GType
-gupnp_feature_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE(GUPnPFeature,
+                          gupnp_feature,
+                          GUPNP,
+                          FEATURE,
+                          GObject)
 
-#define GUPNP_TYPE_FEATURE \
-                (gupnp_feature_get_type ())
-#define GUPNP_FEATURE(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_FEATURE, \
-                 GUPnPFeature))
-#define GUPNP_FEATURE_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_FEATURE, \
-                 GUPnPFeatureClass))
-#define GUPNP_IS_FEATURE(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_FEATURE))
-#define GUPNP_IS_FEATURE_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_FEATURE))
-#define GUPNP_FEATURE_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_FEATURE, \
-                 GUPnPFeatureClass))
+#define GUPNP_TYPE_FEATURE (gupnp_feature_get_type ())
 
-typedef struct _GUPnPFeaturePrivate GUPnPFeaturePrivate;
-
-typedef struct {
-        GObject parent;
-
-        GUPnPFeaturePrivate *priv;
-} GUPnPFeature;
-
-typedef struct {
+struct _GUPnPFeatureClass {
         GObjectClass parent_class;
-} GUPnPFeatureClass;
+};
 
 const char *
 gupnp_feature_get_name       (GUPnPFeature *feature);
@@ -73,4 +49,4 @@ gupnp_feature_get_object_ids (GUPnPFeature *feature);
 
 G_END_DECLS
 
-#endif /* __GUPNP_FEATURE_H_ */
+#endif /* GUPNP_FEATURE_H */

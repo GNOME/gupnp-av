@@ -1,4 +1,4 @@
-project('gupnp-av', 'c', version : '0.12.12')
+project('gupnp-av', 'c', version : '0.12.12', default_options: ['c_std=c11'])
 
 gnome = import('gnome')
 
@@ -40,7 +40,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wnested-externs',
     '-Wbad-function-cast',
     '-Wold-style-definition',
-    '-Wdeclaration-after-statement',
     '-Wunused',
     '-Wuninitialized',
     '-Wshadow',

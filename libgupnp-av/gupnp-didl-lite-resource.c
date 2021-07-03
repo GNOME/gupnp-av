@@ -47,10 +47,11 @@ struct _GUPnPDIDLLiteResourcePrivate {
 
         GUPnPProtocolInfo *protocol_info;
 };
+typedef struct _GUPnPDIDLLiteResourcePrivate GUPnPDIDLLiteResourcePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GUPnPDIDLLiteResource,
                             gupnp_didl_lite_resource,
-                            G_TYPE_OBJECT);
+                            G_TYPE_OBJECT)
 
 enum {
         PROP_0,
@@ -86,32 +87,31 @@ enum {
 };
 
 static void
-get_resolution_info (GUPnPDIDLLiteResource *resource,
-                     int                   *width,
-                     int                   *height)
+get_resolution_info (xmlNodePtr xml_node, int *width, int *height)
 {
         const char *resolution;
         char **tokens;
 
-        resolution = av_xml_util_get_attribute_content
-                                        (resource->priv->xml_node,
-                                         "resolution");
+        if (width)
+                *width = 0;
+        if (height)
+                *height = 0;
+
+        resolution = av_xml_util_get_attribute_content (xml_node, "resolution");
         if (resolution == NULL)
                 return;
 
         tokens = g_strsplit (resolution, "x", -1);
         if (tokens == NULL || tokens[0] == NULL || tokens[1] == NULL) {
                 g_warning ("Failed to resolution string '%s'\n", resolution);
+        } else {
 
-                goto return_point;
+                if (width)
+                        *width = atoi (tokens[0]);
+                if (height)
+                        *height = atoi (tokens[1]);
         }
 
-        if (width)
-                *width = atoi (tokens[0]);
-        if (height)
-                *height = atoi (tokens[1]);
-
-return_point:
         g_strfreev (tokens);
 }
 
@@ -128,8 +128,6 @@ on_protocol_info_changed (GUPnPProtocolInfo        *info,
 static void
 gupnp_didl_lite_resource_init (GUPnPDIDLLiteResource *resource)
 {
-        resource->priv =
-                gupnp_didl_lite_resource_get_instance_private (resource);
 }
 
 static void
@@ -138,16 +136,16 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                                        const GValue *value,
                                        GParamSpec   *pspec)
 {
-        GUPnPDIDLLiteResource *resource;
-
-        resource = GUPNP_DIDL_LITE_RESOURCE (object);
+        GUPnPDIDLLiteResource *resource = GUPNP_DIDL_LITE_RESOURCE (object);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         switch (property_id) {
         case PROP_XML_NODE:
-                resource->priv->xml_node = g_value_get_pointer (value);
+                priv->xml_node = g_value_get_pointer (value);
                 break;
         case PROP_XML_DOC:
-                resource->priv->xml_doc = g_value_dup_boxed (value);
+                priv->xml_doc = g_value_dup_boxed (value);
                 break;
         case PROP_URI:
                 gupnp_didl_lite_resource_set_uri (resource,
@@ -172,10 +170,10 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                                                      g_value_get_int64 (value));
                 break;
         case PROP_DLNA_NAMESPACE:
-                resource->priv->dlna_ns = g_value_get_pointer (value);
+                priv->dlna_ns = g_value_get_pointer (value);
                 break;
         case PROP_PV_NAMESPACE:
-                resource->priv->pv_ns = g_value_get_pointer (value);
+                priv->pv_ns = g_value_get_pointer (value);
                 break;
         case PROP_CLEAR_TEXT_SIZE:
                 gupnp_didl_lite_resource_set_cleartext_size (resource,
@@ -381,16 +379,12 @@ static void
 gupnp_didl_lite_resource_dispose (GObject *object)
 {
         GObjectClass                 *object_class;
-        GUPnPDIDLLiteResourcePrivate *priv;
-
-        priv = GUPNP_DIDL_LITE_RESOURCE (object)->priv;
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (
+                        GUPNP_DIDL_LITE_RESOURCE (object));
 
         g_clear_pointer (&priv->xml_doc, av_xml_doc_unref);
-
-        if (priv->protocol_info != NULL) {
-                g_object_unref (priv->protocol_info);
-                priv->protocol_info = NULL;
-        }
+        g_clear_object (&priv->protocol_info);
 
         object_class = G_OBJECT_CLASS (gupnp_didl_lite_resource_parent_class);
         object_class->dispose (object);
@@ -873,8 +867,10 @@ xmlNode *
 gupnp_didl_lite_resource_get_xml_node (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return resource->priv->xml_node;
+        return priv->xml_node;
 }
 
 /**
@@ -890,8 +886,10 @@ xmlNsPtr
 gupnp_didl_lite_resource_get_dlna_namespace (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return resource->priv->dlna_ns;
+        return priv->dlna_ns;
 }
 
 /**
@@ -907,8 +905,10 @@ xmlNsPtr
 gupnp_didl_lite_resource_get_pv_namespace (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return resource->priv->pv_ns;
+        return priv->pv_ns;
 }
 
 
@@ -918,17 +918,19 @@ gupnp_didl_lite_resource_get_pv_namespace (GUPnPDIDLLiteResource *resource)
  *
  * Get the URI associated with the @resource.
  *
- * Return value: The of URI the @resource or %NULL.
+ * Return value:(transfer none)(nullable): The of URI the @resource or %NULL.
  **/
 const char *
 gupnp_didl_lite_resource_get_uri (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        if (G_UNLIKELY (resource->priv->xml_node->children == NULL))
+        if (G_UNLIKELY (priv->xml_node->children == NULL))
                 return NULL;
 
-        return (const char *) resource->priv->xml_node->children->content;
+        return (const char *) priv->xml_node->children->content;
 }
 
 /**
@@ -943,9 +945,10 @@ const char *
 gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_attribute_content (resource->priv->xml_node,
-                                                  "importUri");
+        return av_xml_util_get_attribute_content (priv->xml_node, "importUri");
 }
 
 /**
@@ -954,8 +957,8 @@ gupnp_didl_lite_resource_get_import_uri (GUPnPDIDLLiteResource *resource)
  *
  * Get the protocol info associated with the @resource.
  *
- * Returns: (transfer none): The protocol info associated with the @resource or %NULL. The
- * returned object must not be unrefed.
+ * Returns: (transfer none)(nullable): The protocol info associated with the
+ * @resource or %NULL. The returned object must not be unrefed.
  **/
 GUPnPProtocolInfo *
 gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
@@ -965,13 +968,14 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
         GError *error;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        if (resource->priv->protocol_info != NULL)
-                return resource->priv->protocol_info;
+        if (priv->protocol_info != NULL)
+                return priv->protocol_info;
 
-        protocol_info = av_xml_util_get_attribute_content
-                                        (resource->priv->xml_node,
-                                         "protocolInfo");
+        protocol_info = av_xml_util_get_attribute_content (priv->xml_node,
+                                                           "protocolInfo");
         if (protocol_info == NULL)
                 return NULL;
 
@@ -985,7 +989,7 @@ gupnp_didl_lite_resource_get_protocol_info (GUPnPDIDLLiteResource *resource)
                 g_error_free (error);
         }
 
-        resource->priv->protocol_info = info;
+        priv->protocol_info = info;
 
         return info;
 }
@@ -1016,10 +1020,10 @@ gint64
 gupnp_didl_lite_resource_get_size64 (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_int64_attribute (resource->priv->xml_node,
-                                                "size",
-                                                -1);
+        return av_xml_util_get_int64_attribute (priv->xml_node, "size", -1);
 }
 
 /**
@@ -1034,8 +1038,10 @@ gint64
 gupnp_didl_lite_resource_get_cleartext_size (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_int64_attribute (resource->priv->xml_node,
+        return av_xml_util_get_int64_attribute (priv->xml_node,
                                                 "cleartextSize",
                                                 -1);
 }
@@ -1055,10 +1061,11 @@ gupnp_didl_lite_resource_get_duration (GUPnPDIDLLiteResource *resource)
         long duration;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        duration_str = av_xml_util_get_attribute_content
-                                        (resource->priv->xml_node,
-                                         "duration");
+        duration_str =
+                av_xml_util_get_attribute_content (priv->xml_node, "duration");
         duration = seconds_from_time (duration_str);
 
         return duration;
@@ -1076,10 +1083,10 @@ int
 gupnp_didl_lite_resource_get_bitrate (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_long_attribute (resource->priv->xml_node,
-                                               "bitrate",
-                                               -1);
+        return av_xml_util_get_long_attribute (priv->xml_node, "bitrate", -1);
 }
 
 /**
@@ -1094,8 +1101,10 @@ int
 gupnp_didl_lite_resource_get_sample_freq (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_long_attribute (resource->priv->xml_node,
+        return av_xml_util_get_long_attribute (priv->xml_node,
                                                "sampleFrequency",
                                                -1);
 }
@@ -1112,8 +1121,10 @@ int
 gupnp_didl_lite_resource_get_bits_per_sample (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_long_attribute (resource->priv->xml_node,
+        return av_xml_util_get_long_attribute (priv->xml_node,
                                                "bitsPerSample",
                                                -1);
 }
@@ -1130,9 +1141,10 @@ const char *
 gupnp_didl_lite_resource_get_protection (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_attribute_content (resource->priv->xml_node,
-                                                  "protection");
+        return av_xml_util_get_attribute_content (priv->xml_node, "protection");
 }
 
 /**
@@ -1147,8 +1159,10 @@ int
 gupnp_didl_lite_resource_get_audio_channels (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_long_attribute (resource->priv->xml_node,
+        return av_xml_util_get_long_attribute (priv->xml_node,
                                                "nrAudioChannels",
                                                -1);
 }
@@ -1167,8 +1181,10 @@ gupnp_didl_lite_resource_get_width (GUPnPDIDLLiteResource *resource)
         int width = -1;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        get_resolution_info (resource, &width, NULL);
+        get_resolution_info (priv->xml_node, &width, NULL);
 
         return width;
 }
@@ -1187,8 +1203,10 @@ gupnp_didl_lite_resource_get_height (GUPnPDIDLLiteResource *resource)
         int height = -1;
 
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        get_resolution_info (resource, NULL, &height);
+        get_resolution_info (priv->xml_node, NULL, &height);
 
         return height;
 }
@@ -1205,8 +1223,10 @@ int
 gupnp_didl_lite_resource_get_color_depth (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), -1);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_long_attribute (resource->priv->xml_node,
+        return av_xml_util_get_long_attribute (priv->xml_node,
                                                "colorDepth",
                                                -1);
 }
@@ -1223,8 +1243,10 @@ guint
 gupnp_didl_lite_resource_get_update_count (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), 0);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_uint_attribute (resource->priv->xml_node,
+        return av_xml_util_get_uint_attribute (priv->xml_node,
                                                "updateCount",
                                                -1);
 }
@@ -1241,8 +1263,10 @@ guint
 gupnp_didl_lite_resource_get_track_total (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), 0);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_uint_attribute (resource->priv->xml_node,
+        return av_xml_util_get_uint_attribute (priv->xml_node,
                                                "trackTotal",
                                                -1);
 }
@@ -1258,13 +1282,12 @@ gupnp_didl_lite_resource_get_track_total (GUPnPDIDLLiteResource *resource)
 gboolean
 gupnp_didl_lite_resource_update_count_is_set (GUPnPDIDLLiteResource *resource)
 {
-        const char *content;
-
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), FALSE);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        content = av_xml_util_get_attribute_content (resource->priv->xml_node,
-                                                     "updateCount");
-        return content != NULL;
+        return av_xml_util_get_attribute_content (priv->xml_node,
+                                                  "updateCount") != NULL;
 }
 
 /**
@@ -1278,13 +1301,12 @@ gupnp_didl_lite_resource_update_count_is_set (GUPnPDIDLLiteResource *resource)
 gboolean
 gupnp_didl_lite_resource_track_total_is_set (GUPnPDIDLLiteResource *resource)
 {
-        const char *content;
-
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), FALSE);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        content = av_xml_util_get_attribute_content (resource->priv->xml_node,
-                                                     "trackTotal");
-        return content != NULL;
+        return av_xml_util_get_attribute_content (priv->xml_node,
+                                                  "trackTotal") != NULL;
 }
 
 
@@ -1303,10 +1325,12 @@ gupnp_didl_lite_resource_set_uri (GUPnPDIDLLiteResource *resource,
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
         g_return_if_fail (uri != NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        escaped = xmlEncodeSpecialChars (resource->priv->xml_doc->doc,
+        escaped = xmlEncodeSpecialChars (priv->xml_doc->doc,
                                          (const unsigned char *) uri);
-        xmlNodeSetContent (resource->priv->xml_node, escaped);
+        xmlNodeSetContent (priv->xml_node, escaped);
         xmlFree (escaped);
 
         g_object_notify (G_OBJECT (resource), "uri");
@@ -1324,8 +1348,11 @@ gupnp_didl_lite_resource_set_import_uri (GUPnPDIDLLiteResource *resource,
                                          const char            *import_uri)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        xmlSetProp (resource->priv->xml_node,
+        // FIXME: Why is this URI not escaped?
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "importUri",
                     (unsigned char *) import_uri);
 
@@ -1347,24 +1374,25 @@ gupnp_didl_lite_resource_set_protocol_info (GUPnPDIDLLiteResource *resource,
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
         g_return_if_fail (GUPNP_IS_PROTOCOL_INFO (info));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         str = gupnp_protocol_info_to_string (info);
-        xmlSetProp (resource->priv->xml_node,
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "protocolInfo",
                     (unsigned char *) str);
         g_free (str);
 
         /* Get a ref first in case it's the same object that we already have */
         g_object_ref (info);
-        if (resource->priv->protocol_info != NULL)
-                g_object_unref (resource->priv->protocol_info);
-        resource->priv->protocol_info = info;
+        g_clear_object (&priv->protocol_info);
+        priv->protocol_info = info;
 
         /* We need to listen to changes to properties so we update the
          * corresponding xml property.
          */
         g_signal_handlers_disconnect_by_func (info,
-                                              on_protocol_info_changed,
+                                              (gpointer) on_protocol_info_changed,
                                               resource);
         g_signal_connect (info,
                           "notify",
@@ -1402,15 +1430,16 @@ gupnp_didl_lite_resource_set_size64 (GUPnPDIDLLiteResource *resource,
                                      gint64                 size)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (size < 0)
-                xmlUnsetProp (resource->priv->xml_node,
-                              (unsigned char *) "size");
+                xmlUnsetProp (priv->xml_node, (unsigned char *) "size");
         else {
                 char *str;
 
                 str = g_strdup_printf ("%" G_GINT64_FORMAT, size);
-                xmlSetProp (resource->priv->xml_node,
+                xmlSetProp (priv->xml_node,
                             (unsigned char *) "size",
                             (unsigned char *) str);
                 g_free (str);
@@ -1434,20 +1463,22 @@ gupnp_didl_lite_resource_set_cleartext_size
                                          gint64                 cleartext_size)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (cleartext_size < 0)
-                xmlUnsetNsProp (resource->priv->xml_node,
-                                resource->priv->dlna_ns,
+                xmlUnsetNsProp (priv->xml_node,
+                                priv->dlna_ns,
                                 (unsigned char *) "cleartextSize");
         else {
                 char *str;
                 str = g_strdup_printf ("%" G_GINT64_FORMAT, cleartext_size);
-                av_xml_util_get_ns (resource->priv->xml_doc->doc,
+                av_xml_util_get_ns (priv->xml_doc->doc,
                                     GUPNP_XML_NAMESPACE_DLNA,
-                                    &(resource->priv->dlna_ns));
+                                    &(priv->dlna_ns));
 
-                xmlSetNsProp (resource->priv->xml_node,
-                              resource->priv->dlna_ns,
+                xmlSetNsProp (priv->xml_node,
+                              priv->dlna_ns,
                               (unsigned char *) "cleartextSize",
                               (unsigned char *) str);
 
@@ -1470,15 +1501,16 @@ gupnp_didl_lite_resource_set_duration (GUPnPDIDLLiteResource *resource,
                                        glong                  duration)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (duration < 0)
-                xmlUnsetProp (resource->priv->xml_node,
-                              (unsigned char *) "duration");
+                xmlUnsetProp (priv->xml_node, (unsigned char *) "duration");
         else {
                 char *str;
 
                 str = seconds_to_time (duration);
-                xmlSetProp (resource->priv->xml_node,
+                xmlSetProp (priv->xml_node,
                             (unsigned char *) "duration",
                             (unsigned char *) str);
                 g_free (str);
@@ -1500,15 +1532,16 @@ gupnp_didl_lite_resource_set_bitrate (GUPnPDIDLLiteResource *resource,
                                       int                    bitrate)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (bitrate < 0)
-                xmlUnsetProp (resource->priv->xml_node,
-                              (unsigned char *) "bitrate");
+                xmlUnsetProp (priv->xml_node, (unsigned char *) "bitrate");
         else {
                 char *str;
 
                 str = g_strdup_printf ("%d", bitrate);
-                xmlSetProp (resource->priv->xml_node,
+                xmlSetProp (priv->xml_node,
                             (unsigned char *) "bitrate",
                             (unsigned char *) str);
                 g_free (str);
@@ -1530,15 +1563,17 @@ gupnp_didl_lite_resource_set_sample_freq (GUPnPDIDLLiteResource *resource,
                                           int                    sample_freq)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (sample_freq < 0)
-                xmlUnsetProp (resource->priv->xml_node,
+                xmlUnsetProp (priv->xml_node,
                               (unsigned char *) "sampleFrequency");
         else {
                 char *str;
 
                 str = g_strdup_printf ("%d", sample_freq);
-                xmlSetProp (resource->priv->xml_node,
+                xmlSetProp (priv->xml_node,
                             (unsigned char *) "sampleFrequency",
                             (unsigned char *) str);
                 g_free (str);
@@ -1561,18 +1596,17 @@ gupnp_didl_lite_resource_set_bits_per_sample
                                          int                    sample_size)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (sample_size < 0)
-                xmlUnsetProp (resource->priv->xml_node,
+                xmlUnsetProp (priv->xml_node,
                               (unsigned char *) "bitsPerSample");
         else {
-                char *str;
-
-                str = g_strdup_printf ("%d", sample_size);
-                xmlSetProp (resource->priv->xml_node,
-                            (unsigned char *) "bitsPerSample",
-                            (unsigned char *) str);
-                g_free (str);
+                av_xml_util_set_prop (priv->xml_node,
+                                      "bitsPerSample",
+                                      "%d",
+                                      sample_size);
         }
 
         g_object_notify (G_OBJECT (resource), "bits-per-sample");
@@ -1591,8 +1625,10 @@ gupnp_didl_lite_resource_set_protection (GUPnPDIDLLiteResource *resource,
                                          const char            *protection)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        xmlSetProp (resource->priv->xml_node,
+        xmlSetProp (priv->xml_node,
                     (unsigned char *) "protection",
                     (unsigned char *) protection);
 
@@ -1612,18 +1648,16 @@ gupnp_didl_lite_resource_set_audio_channels (GUPnPDIDLLiteResource *resource,
                                              int                    n_channels)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (n_channels < 0)
-                xmlUnsetProp (resource->priv->xml_node,
+                xmlUnsetProp (priv->xml_node,
                               (unsigned char *) "nrAudioChannels");
         else {
-                char *str;
-
-                str = g_strdup_printf ("%d", n_channels);
-                xmlSetProp (resource->priv->xml_node,
-                            (unsigned char *) "nrAudioChannels",
-                            (unsigned char *) str);
-                g_free (str);
+                av_xml_util_set_int_prop (priv->xml_node,
+                                          "nrAudioChannels",
+                                          n_channels);
         }
 
         g_object_notify (G_OBJECT (resource), "audio-channels");
@@ -1641,22 +1675,19 @@ void
 gupnp_didl_lite_resource_set_width (GUPnPDIDLLiteResource *resource,
                                      int                   width)
 {
-        char *resolution;
         int height = -1;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        get_resolution_info (resource, NULL, &height);
+        get_resolution_info (priv->xml_node, NULL, &height);
 
         if (width < 0 && height < 0)
-                xmlUnsetProp (resource->priv->xml_node,
+                xmlUnsetProp (priv->xml_node,
                               (unsigned char *) "resolution");
         else {
-                resolution = g_strdup_printf ("%dx%d", width, height);
-                xmlSetProp (resource->priv->xml_node,
-                            (unsigned char *) "resolution",
-                            (unsigned char *) resolution);
-                g_free (resolution);
+                av_xml_util_set_prop (priv->xml_node, "resolution", "%dx%d", width, height);
         }
 
         g_object_notify (G_OBJECT (resource), "width");
@@ -1677,20 +1708,16 @@ gupnp_didl_lite_resource_set_height (GUPnPDIDLLiteResource *resource,
         int width = -1;
 
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        get_resolution_info (resource, &width, NULL);
+        get_resolution_info (priv->xml_node, &width, NULL);
 
         if (width < 0 && height < 0)
-                xmlUnsetProp (resource->priv->xml_node,
+                xmlUnsetProp (priv->xml_node,
                               (unsigned char *) "resolution");
         else {
-                char *resolution;
-
-                resolution = g_strdup_printf ("%dx%d", width, height);
-                xmlSetProp (resource->priv->xml_node,
-                                (unsigned char *) "resolution",
-                                (unsigned char *) resolution);
-                g_free (resolution);
+                av_xml_util_set_prop (priv->xml_node, "resolution", "%dx%d", width, height);
         }
 
         g_object_notify (G_OBJECT (resource), "height");
@@ -1709,18 +1736,16 @@ gupnp_didl_lite_resource_set_color_depth (GUPnPDIDLLiteResource *resource,
                                           int                    color_depth)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (color_depth < 0)
-                xmlUnsetProp (resource->priv->xml_node,
-                              (unsigned char *) "colorDepth");
+                xmlUnsetProp (priv->xml_node, (unsigned char *) "colorDepth");
         else {
-                char *str;
-
-                str = g_strdup_printf ("%d", color_depth);
-                xmlSetProp (resource->priv->xml_node,
-                            (unsigned char *) "colorDepth",
-                            (unsigned char *) str);
-                g_free (str);
+                av_xml_util_set_prop (priv->xml_node,
+                                      "colorDepth",
+                                      "%d",
+                                      color_depth);
         }
 
         g_object_notify (G_OBJECT (resource), "color-depth");
@@ -1737,15 +1762,13 @@ void
 gupnp_didl_lite_resource_set_update_count (GUPnPDIDLLiteResource *resource,
                                           guint                  update_count)
 {
-        char *str;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
-
-        str = g_strdup_printf ("%u", update_count);
-        xmlSetProp (resource->priv->xml_node,
-                    (unsigned char *) "updateCount",
-                    (unsigned char *) str);
-        g_free (str);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
+        av_xml_util_set_prop (priv->xml_node,
+                              "updateCount",
+                              "%u",
+                              update_count);
 
         g_object_notify (G_OBJECT (resource), "update-count");
 }
@@ -1761,21 +1784,18 @@ void
 gupnp_didl_lite_resource_set_track_total (GUPnPDIDLLiteResource *resource,
                                           guint                  track_total)
 {
-        char *str;
-
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        av_xml_util_get_ns (resource->priv->xml_doc->doc,
+        av_xml_util_get_ns (priv->xml_doc->doc,
                             GUPNP_XML_NAMESPACE_DLNA,
-                            &(resource->priv->dlna_ns));
-
-        str = g_strdup_printf ("%u", track_total);
-        xmlSetNsProp (resource->priv->xml_node,
-                      resource->priv->dlna_ns,
-                      (unsigned char *) "trackTotal",
-                      (unsigned char *) str);
-        g_free (str);
-
+                            &(priv->dlna_ns));
+        av_xml_util_set_ns_prop (priv->xml_node,
+                                 priv->dlna_ns,
+                                 "trackTotal",
+                                 "%u",
+                                 track_total);
         g_object_notify (G_OBJECT (resource), "track-total");
 }
 
@@ -1790,9 +1810,10 @@ void
 gupnp_didl_lite_resource_unset_update_count (GUPnPDIDLLiteResource *resource)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        xmlUnsetProp (resource->priv->xml_node,
-                      (unsigned char *) "updateCount");
+        xmlUnsetProp (priv->xml_node, (unsigned char *) "updateCount");
 
         g_object_notify (G_OBJECT (resource), "update-count");
 }
@@ -1807,9 +1828,15 @@ void
 gupnp_didl_lite_resource_unset_track_total (GUPnPDIDLLiteResource *resource)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        xmlUnsetNsProp (resource->priv->xml_node,
-                        resource->priv->dlna_ns,
+        av_xml_util_get_ns (priv->xml_doc->doc,
+                            GUPNP_XML_NAMESPACE_DLNA,
+                            &(priv->dlna_ns));
+
+        xmlUnsetNsProp (priv->xml_node,
+                        priv->dlna_ns,
                         (unsigned char *) "trackTotal");
 
         g_object_notify (G_OBJECT (resource), "track-total");
@@ -1828,8 +1855,10 @@ gupnp_didl_lite_resource_get_subtitle_file_uri
                                         (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_attribute_content (resource->priv->xml_node,
+        return av_xml_util_get_attribute_content (priv->xml_node,
                                                   "subtitleFileUri");
 }
 
@@ -1846,8 +1875,10 @@ gupnp_didl_lite_resource_get_subtitle_file_type
                                         (GUPnPDIDLLiteResource *resource)
 {
         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
-        return av_xml_util_get_attribute_content (resource->priv->xml_node,
+        return av_xml_util_get_attribute_content (priv->xml_node,
                                                   "subtitleFileType");
 }
 
@@ -1867,17 +1898,19 @@ gupnp_didl_lite_resource_set_subtitle_file_uri
                                          const char            *uri)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (uri == NULL)
-                xmlUnsetNsProp (resource->priv->xml_node,
-                                resource->priv->pv_ns,
+                xmlUnsetNsProp (priv->xml_node,
+                                priv->pv_ns,
                                 (unsigned char *) "subtitleFileUri");
         else {
-                av_xml_util_get_ns (resource->priv->xml_doc->doc,
+                av_xml_util_get_ns (priv->xml_doc->doc,
                                     GUPNP_XML_NAMESPACE_PV,
-                                    &(resource->priv->pv_ns));
-                xmlSetNsProp (resource->priv->xml_node,
-                              resource->priv->pv_ns,
+                                    &(priv->pv_ns));
+                xmlSetNsProp (priv->xml_node,
+                              priv->pv_ns,
                               (unsigned char *) "subtitleFileUri",
                               (xmlChar *) uri);
         }
@@ -1903,18 +1936,20 @@ gupnp_didl_lite_resource_set_subtitle_file_type
                                          const char            *type)
 {
         g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
 
         if (type == NULL)
-                xmlUnsetNsProp (resource->priv->xml_node,
-                                resource->priv->pv_ns,
+                xmlUnsetNsProp (priv->xml_node,
+                                priv->pv_ns,
                                 (unsigned char *) "subtitleFileUri");
         else {
-                av_xml_util_get_ns (resource->priv->xml_doc->doc,
+                av_xml_util_get_ns (priv->xml_doc->doc,
                                     GUPNP_XML_NAMESPACE_PV,
-                                    &(resource->priv->pv_ns));
+                                    &(priv->pv_ns));
 
-                xmlSetNsProp (resource->priv->xml_node,
-                              resource->priv->pv_ns,
+                xmlSetNsProp (priv->xml_node,
+                              priv->pv_ns,
                               (unsigned char *) "subtitleFileType",
                               (xmlChar *) type);
         }

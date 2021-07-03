@@ -24,8 +24,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GUPNP_DIDL_LITE_RESOURCE_H__
-#define __GUPNP_DIDL_LITE_RESOURCE_H__
+#ifndef GUPNP_DIDL_LITE_RESOURCE_H
+#define GUPNP_DIDL_LITE_RESOURCE_H
 
 #include <stdarg.h>
 #include <glib-object.h>
@@ -37,39 +37,18 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_didl_lite_resource_get_type (void) G_GNUC_CONST;
+
+G_DECLARE_DERIVABLE_TYPE(GUPnPDIDLLiteResource,
+                          gupnp_didl_lite_resource,
+                          GUPNP,
+                          DIDL_LITE_RESOURCE,
+                          GObject)
 
 #define GUPNP_TYPE_DIDL_LITE_RESOURCE \
                 (gupnp_didl_lite_resource_get_type ())
-#define GUPNP_DIDL_LITE_RESOURCE(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_RESOURCE, \
-                 GUPnPDIDLLiteResource))
-#define GUPNP_DIDL_LITE_RESOURCE_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_RESOURCE, \
-                 GUPnPDIDLLiteResourceClass))
-#define GUPNP_IS_DIDL_LITE_RESOURCE(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_RESOURCE))
-#define GUPNP_IS_DIDL_LITE_RESOURCE_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_RESOURCE))
-#define GUPNP_DIDL_LITE_RESOURCE_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_RESOURCE, \
-                 GUPnPDIDLLiteResourceClass))
 
-typedef struct _GUPnPDIDLLiteResourcePrivate GUPnPDIDLLiteResourcePrivate;
 
-typedef struct {
-        GObject parent;
-
-        GUPnPDIDLLiteResourcePrivate *priv;
-} GUPnPDIDLLiteResource;
-
-typedef struct {
+struct _GUPnPDIDLLiteResourceClass {
         GObjectClass parent_class;
 
         /* future padding */
@@ -77,7 +56,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPDIDLLiteResourceClass;
+};
 
 void
 gupnp_didl_lite_resource_set_uri        (GUPnPDIDLLiteResource *resource,

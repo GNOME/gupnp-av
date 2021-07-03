@@ -35,7 +35,7 @@
 
 G_DEFINE_TYPE (GUPnPDIDLLiteItem,
                gupnp_didl_lite_item,
-               GUPNP_TYPE_DIDL_LITE_OBJECT);
+               GUPNP_TYPE_DIDL_LITE_OBJECT)
 
 enum {
         PROP_0,

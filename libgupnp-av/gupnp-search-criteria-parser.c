@@ -98,10 +98,13 @@ struct _GUPnPSearchCriteriaParserPrivate {
         GScanner *scanner;
 };
 
+typedef struct _GUPnPSearchCriteriaParserPrivate
+        GUPnPSearchCriteriaParserPrivate;
+
 /* GUPnPSearchCriteriaParser */
 G_DEFINE_TYPE_WITH_PRIVATE (GUPnPSearchCriteriaParser,
                          gupnp_search_criteria_parser,
-                         G_TYPE_OBJECT);
+                         G_TYPE_OBJECT)
 
 enum {
         BEGIN_PARENS,
@@ -169,30 +172,28 @@ struct {
 static void
 gupnp_search_criteria_parser_init (GUPnPSearchCriteriaParser *parser)
 {
-        int i;
-
-        parser->priv =
+        GUPnPSearchCriteriaParserPrivate *priv =
                 gupnp_search_criteria_parser_get_instance_private (parser);
 
         /* Set up GScanner */
-        parser->priv->scanner = g_scanner_new (NULL);
+        priv->scanner = g_scanner_new (NULL);
 
-        parser->priv->scanner->config->cset_skip_characters  = (char *)" \t\n\r\012"
+        priv->scanner->config->cset_skip_characters  = (char *)" \t\n\r\012"
                                                                "\013\014\015";
-        parser->priv->scanner->config->scan_identifier_1char = TRUE;
-        parser->priv->scanner->config->cset_identifier_first = (char *) G_CSET_a_2_z
+        priv->scanner->config->scan_identifier_1char = TRUE;
+        priv->scanner->config->cset_identifier_first = (char *) G_CSET_a_2_z
                                                                "_*<>=!@"
                                                                G_CSET_A_2_Z;
-        parser->priv->scanner->config->cset_identifier_nth =   (char *)G_CSET_a_2_z
+        priv->scanner->config->cset_identifier_nth =   (char *)G_CSET_a_2_z
                                                                "_0123456789=:@"
                                                                G_CSET_A_2_Z
                                                                G_CSET_LATINS
                                                                G_CSET_LATINC;
-        parser->priv->scanner->config->symbol_2_token        = TRUE;
+        priv->scanner->config->symbol_2_token        = TRUE;
 
         /* Add symbols */
-        for (i = 0; i < NUM_SYMBOLS; i++) {
-                g_scanner_scope_add_symbol (parser->priv->scanner,
+        for (int i = 0; i < NUM_SYMBOLS; i++) {
+                g_scanner_scope_add_symbol (priv->scanner,
                                             0,
                                             symbols[i].name,
                                             GINT_TO_POINTER (symbols[i].token));
@@ -206,9 +207,11 @@ gupnp_search_criteria_parser_finalize (GObject *object)
         GUPnPSearchCriteriaParser *parser;
 
         parser = GUPNP_SEARCH_CRITERIA_PARSER (object);
+        GUPnPSearchCriteriaParserPrivate *priv =
+                gupnp_search_criteria_parser_get_instance_private (parser);
 
         /* Destroy GScanner */
-        g_scanner_destroy (parser->priv->scanner);
+        g_scanner_destroy (priv->scanner);
 
         gobject_class =
                 G_OBJECT_CLASS (gupnp_search_criteria_parser_parent_class);
@@ -350,14 +353,16 @@ scan_rel_exp (GUPnPSearchCriteriaParser *parser,
         guint token;
         GUPnPSearchCriteriaOp op;
         char *arg1;
+        GUPnPSearchCriteriaParserPrivate *priv =
+                gupnp_search_criteria_parser_get_instance_private (parser);
 
-        token = g_scanner_get_next_token (parser->priv->scanner);
+        token = g_scanner_get_next_token (priv->scanner);
         g_assert (token == G_TOKEN_IDENTIFIER); /* Already checked */
 
-        value = g_scanner_cur_value (parser->priv->scanner);
+        value = g_scanner_cur_value (priv->scanner);
         arg1 = g_strdup (value.v_string);
 
-        token = g_scanner_get_next_token (parser->priv->scanner);
+        token = g_scanner_get_next_token (priv->scanner);
         switch (token) {
         case GUPNP_SEARCH_CRITERIA_OP_EQ:
         case GUPNP_SEARCH_CRITERIA_OP_NEQ:
@@ -370,32 +375,36 @@ scan_rel_exp (GUPnPSearchCriteriaParser *parser,
         case GUPNP_SEARCH_CRITERIA_OP_DERIVED_FROM:
                 op = token;
 
-                token = g_scanner_get_next_token (parser->priv->scanner);
+                token = g_scanner_get_next_token (priv->scanner);
                 if (token != G_TOKEN_STRING) {
-                        g_set_error
-                                (error,
-                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
-                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
-                                 "Expected quoted string at position %u",
-                                 g_scanner_cur_position
-                                       (parser->priv->scanner));
+                        g_set_error (error,
+                                     GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                                     GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                                     "Expected quoted string at position %u",
+                                     g_scanner_cur_position (priv->scanner));
 
                         ret = FALSE;
 
                         break;
                 }
 
-                value = g_scanner_cur_value (parser->priv->scanner);
+                value = g_scanner_cur_value (priv->scanner);
 
-                g_signal_emit (parser, signals[EXPRESSION], 0,
-                               arg1, op, value.v_string, error, &ret);
+                g_signal_emit (parser,
+                               signals[EXPRESSION],
+                               0,
+                               arg1,
+                               op,
+                               value.v_string,
+                               error,
+                               &ret);
 
                 break;
 
         case GUPNP_SEARCH_CRITERIA_OP_EXISTS:
                 op = token;
 
-                token = g_scanner_get_next_token (parser->priv->scanner);
+                token = g_scanner_get_next_token (priv->scanner);
                 switch (token) {
                 case SYMBOL_TRUE:
                         g_signal_emit (parser, signals[EXPRESSION], 0,
@@ -408,13 +417,11 @@ scan_rel_exp (GUPnPSearchCriteriaParser *parser,
 
                         break;
                 default:
-                        g_set_error
-                                (error,
-                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
-                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
-                                 "Expected boolean value at position %u",
-                                 g_scanner_cur_position
-                                       (parser->priv->scanner));
+                        g_set_error (error,
+                                     GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                                     GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                                     "Expected boolean value at position %u",
+                                     g_scanner_cur_position (priv->scanner));
 
                         ret = FALSE;
 
@@ -428,8 +435,7 @@ scan_rel_exp (GUPnPSearchCriteriaParser *parser,
                              GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
                              GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
                              "Expected operator at position %u",
-                             g_scanner_cur_position
-                               (parser->priv->scanner));
+                             g_scanner_cur_position (priv->scanner));
 
                 ret = FALSE;
         }
@@ -450,12 +456,14 @@ scan_logical_op (GUPnPSearchCriteriaParser *parser,
 {
         gboolean ret;
         guint token;
+        GUPnPSearchCriteriaParserPrivate *priv =
+                gupnp_search_criteria_parser_get_instance_private (parser);
 
-        token = g_scanner_peek_next_token (parser->priv->scanner);
+        token = g_scanner_peek_next_token (priv->scanner);
 
         switch (token) {
                 case SYMBOL_AND:
-                        g_scanner_get_next_token (parser->priv->scanner);
+                        g_scanner_get_next_token (priv->scanner);
 
                         g_signal_emit (parser, signals[CONJUNCTION], 0);
 
@@ -464,7 +472,7 @@ scan_logical_op (GUPnPSearchCriteriaParser *parser,
                         break;
 
                 case SYMBOL_OR:
-                        g_scanner_get_next_token (parser->priv->scanner);
+                        g_scanner_get_next_token (priv->scanner);
 
                         g_signal_emit (parser, signals[DISJUNCTION], 0);
 
@@ -490,11 +498,13 @@ scan_search_exp (GUPnPSearchCriteriaParser *parser,
 {
         gboolean ret;
         guint token;
+        GUPnPSearchCriteriaParserPrivate *priv =
+                gupnp_search_criteria_parser_get_instance_private (parser);
 
-        token = g_scanner_peek_next_token (parser->priv->scanner);
+        token = g_scanner_peek_next_token (priv->scanner);
         switch (token) {
         case G_TOKEN_LEFT_PAREN:
-                g_scanner_get_next_token (parser->priv->scanner);
+                g_scanner_get_next_token (priv->scanner);
 
                 g_signal_emit (parser, signals[BEGIN_PARENS], 0);
 
@@ -502,15 +512,14 @@ scan_search_exp (GUPnPSearchCriteriaParser *parser,
                 if (ret == FALSE)
                         break;
 
-                token = g_scanner_get_next_token (parser->priv->scanner);
+                token = g_scanner_get_next_token (priv->scanner);
                 if (token != G_TOKEN_RIGHT_PAREN) {
-                        g_set_error
-                                (error,
-                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
-                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
-                                 "Expected right parenthesis at position %u",
-                                 g_scanner_cur_position
-                                        (parser->priv->scanner));
+                        g_set_error (
+                                error,
+                                GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                                GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                                "Expected right parenthesis at position %u",
+                                g_scanner_cur_position (priv->scanner));
 
                         ret = FALSE;
 
@@ -533,14 +542,14 @@ scan_search_exp (GUPnPSearchCriteriaParser *parser,
                 break;
 
         default:
-                g_scanner_get_next_token (parser->priv->scanner);
+                g_scanner_get_next_token (priv->scanner);
 
                 g_set_error (error,
                              GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
                              GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
                              "Expected property name or left parenthesis at "
                              "position %u",
-                             g_scanner_cur_position (parser->priv->scanner));
+                             g_scanner_cur_position (priv->scanner));
 
                 ret = FALSE;
         }
@@ -570,13 +579,15 @@ gupnp_search_criteria_parser_parse_text (GUPnPSearchCriteriaParser *parser,
         g_return_val_if_fail (GUPNP_IS_SEARCH_CRITERIA_PARSER (parser),
                               FALSE);
         g_return_val_if_fail (text != NULL, FALSE);
+        GUPnPSearchCriteriaParserPrivate *priv =
+                gupnp_search_criteria_parser_get_instance_private (parser);
 
         /* Feed into scanner */
-        g_scanner_input_text (parser->priv->scanner, text, strlen (text));
+        g_scanner_input_text (priv->scanner, text, strlen (text));
 
-        token = g_scanner_peek_next_token (parser->priv->scanner);
+        token = g_scanner_peek_next_token (priv->scanner);
         if (token == SYMBOL_ASTERISK) {
-                g_scanner_get_next_token (parser->priv->scanner);
+                g_scanner_get_next_token (priv->scanner);
 
                 /* Do nothing. */
 
@@ -586,15 +597,13 @@ gupnp_search_criteria_parser_parse_text (GUPnPSearchCriteriaParser *parser,
 
         if (ret == TRUE) {
                 /* Confirm that we have EOF now */
-                token = g_scanner_get_next_token (parser->priv->scanner);
+                token = g_scanner_get_next_token (priv->scanner);
                 if (token != G_TOKEN_EOF) {
-                        g_set_error
-                                (error,
-                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
-                                 GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
-                                 "Expected EOF at position %u",
-                                 g_scanner_cur_position
-                                       (parser->priv->scanner));
+                        g_set_error (error,
+                                     GUPNP_SEARCH_CRITERIA_PARSER_ERROR,
+                                     GUPNP_SEARCH_CRITERIA_PARSER_ERROR_FAILED,
+                                     "Expected EOF at position %u",
+                                     g_scanner_cur_position (priv->scanner));
                 }
         }
 

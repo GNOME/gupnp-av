@@ -38,39 +38,18 @@
 
 G_BEGIN_DECLS
 
-GType
-gupnp_didl_lite_object_get_type (void) G_GNUC_CONST;
+G_DECLARE_DERIVABLE_TYPE(GUPnPDIDLLiteObject,
+                         gupnp_didl_lite_object,
+                         GUPNP,
+                         DIDL_LITE_OBJECT,
+                         GObject)
 
 #define GUPNP_TYPE_DIDL_LITE_OBJECT \
                 (gupnp_didl_lite_object_get_type ())
-#define GUPNP_DIDL_LITE_OBJECT(obj) \
-                (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_OBJECT, \
-                 GUPnPDIDLLiteObject))
-#define GUPNP_DIDL_LITE_OBJECT_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_CAST ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_OBJECT, \
-                 GUPnPDIDLLiteObjectClass))
-#define GUPNP_IS_DIDL_LITE_OBJECT(obj) \
-                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_OBJECT))
-#define GUPNP_IS_DIDL_LITE_OBJECT_CLASS(obj) \
-                (G_TYPE_CHECK_CLASS_TYPE ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_OBJECT))
-#define GUPNP_DIDL_LITE_OBJECT_GET_CLASS(obj) \
-                (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                 GUPNP_TYPE_DIDL_LITE_OBJECT, \
-                 GUPnPDIDLLiteObjectClass))
 
 typedef struct _GUPnPDIDLLiteObjectPrivate GUPnPDIDLLiteObjectPrivate;
 
-typedef struct {
-        GObject parent;
-
-        GUPnPDIDLLiteObjectPrivate *priv;
-} GUPnPDIDLLiteObject;
-
-typedef struct {
+struct _GUPnPDIDLLiteObjectClass {
         GObjectClass parent_class;
 
         /* future padding */
@@ -78,7 +57,7 @@ typedef struct {
         void (* _gupnp_reserved2) (void);
         void (* _gupnp_reserved3) (void);
         void (* _gupnp_reserved4) (void);
-} GUPnPDIDLLiteObjectClass;
+};
 
 xmlNode *
 gupnp_didl_lite_object_get_xml_node     (GUPnPDIDLLiteObject *object);
