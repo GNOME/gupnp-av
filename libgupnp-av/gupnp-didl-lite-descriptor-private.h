@@ -19,7 +19,7 @@
 
 G_BEGIN_DECLS
 
-GUPnPDIDLLiteDescriptor *
+G_GNUC_INTERNAL GUPnPDIDLLiteDescriptor *
 gupnp_didl_lite_descriptor_new_from_xml (xmlNode     *xml_node,
                                          GUPnPAVXMLDoc *xml_doc);
 
