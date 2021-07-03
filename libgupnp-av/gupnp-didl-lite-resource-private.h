@@ -12,6 +12,7 @@
 #define GUPNP_DIDL_LITE_RESOURCE_PRIVATE_H
 
 #include "xml-util.h"
+#include "gupnp-didl-lite-resource.h"
 
 #include <stdarg.h>
 #include <glib-object.h>

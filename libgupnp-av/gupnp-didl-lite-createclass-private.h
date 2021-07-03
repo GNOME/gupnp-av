@@ -14,6 +14,7 @@
 #define GUPNP_DIDL_LITE_CREATE_CLASS_PRIVATE_H
 
 #include "xml-util.h"
+#include "gupnp-didl-lite-createclass.h"
 
 #include <glib-object.h>
 #include <libxml/tree.h>

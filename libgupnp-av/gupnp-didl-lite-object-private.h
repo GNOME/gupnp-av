@@ -14,6 +14,7 @@
 #define GUPNP_DIDL_LITE_OBJECT_PRIVATE_H
 
 #include "xml-util.h"
+#include "gupnp-didl-lite-object.h"
 
 #include <glib-object.h>
 #include <libxml/tree.h>

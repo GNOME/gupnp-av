@@ -12,6 +12,7 @@
 #define GUPNP_DIDL_LITE_DESCRIPTOR_PRIVATE_H
 
 #include "xml-util.h"
+#include "gupnp-didl-lite-descriptor.h"
 
 #include <stdarg.h>
 #include <glib-object.h>
