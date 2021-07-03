@@ -7,6 +7,8 @@
  *
  */
 
+#include <config.h>
+
 #include <libgupnp-av/gupnp-search-criteria-parser.h>
 #include <stdlib.h>
 

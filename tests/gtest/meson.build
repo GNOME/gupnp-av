@@ -21,6 +21,7 @@ foreach subtest : tests
             test_name,
             test_source,
             dependencies : [gupnp_av, gobject, libxml],
+            include_directories: config_h_inc,
             c_args: [common_cflags, '-DDATA_PATH="@0@"'.format(meson.current_source_dir())]
         ),
         env : test_env

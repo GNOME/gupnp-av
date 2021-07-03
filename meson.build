@@ -2,7 +2,9 @@ project('gupnp-av', 'c', version : '0.13.0', default_options: ['c_std=c11'])
 
 gnome = import('gnome')
 
-gobject = dependency('gobject-2.0', version : '>= 2.58')
+glib_version = '2.58'
+gobject = dependency('gobject-2.0', version : '>= ' + glib_version)
+glib = dependency('glib-2.0', version : '>= ' + glib_version)
 libxml = dependency('libxml-2.0')
 
 cc = meson.get_compiler('c')
@@ -69,9 +71,18 @@ endif
 
 common_cflags = cc.get_supported_arguments(test_cflags)
 
+add_project_arguments(cc.get_supported_arguments('-Werror=deprecated-declarations'), language: 'c')
+conf = configuration_data()
+conf.set_quoted('DATADIR', join_paths(get_option('prefix'), get_option('datadir'), 'gupnp-av'))
+conf.set_quoted('VERSION', meson.project_version())
+conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_' + glib_version.underscorify())
+conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_' + glib_version.underscorify())
+subdir('internal')
+
 subdir('libgupnp-av')
 subdir('tests')
 subdir('data')
+
 
 pkg = import('pkgconfig')
 pkg.generate(

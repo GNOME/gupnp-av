@@ -7,6 +7,8 @@
  *
  */
 
+#include <config.h>
+
 #include <libgupnp-av/gupnp-didl-lite-parser.h>
 #include <libgupnp-av/gupnp-didl-lite-writer.h>
 

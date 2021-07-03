@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  *
  */
+#include <config.h>
 
 #include <libxml/parser.h>
 #include <libxml/xmlschemas.h>

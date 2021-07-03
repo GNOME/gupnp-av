@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  *
  */
+#include <config.h>
 
 #include <libgupnp-av/gupnp-didl-lite-object.h>
 #include <libgupnp-av/gupnp-didl-lite-writer.h>

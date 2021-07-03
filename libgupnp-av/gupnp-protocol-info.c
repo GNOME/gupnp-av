@@ -18,6 +18,8 @@
  * strings used in UPnP AV specifications.
  */
 
+#include <config.h>
+
 #include <string.h>
 #include <stdlib.h>
 #include "gupnp-protocol-info.h"

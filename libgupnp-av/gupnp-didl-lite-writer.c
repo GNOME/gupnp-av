@@ -16,6 +16,8 @@
  * #GUPnPDIDLLiteWriter is a helper class for writing DIDL-Lite fragments.
  */
 
+#include <config.h>
+
 #include <string.h>
 
 #include "gupnp-didl-lite-writer.h"

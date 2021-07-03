@@ -19,6 +19,8 @@
  * over disjunction.
  */
 
+#include <config.h>
+
 #include <string.h>
 
 #include "gupnp-search-criteria-parser.h"

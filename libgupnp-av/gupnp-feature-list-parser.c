@@ -16,6 +16,8 @@
  *
  */
 
+#include <config.h>
+
 #include <string.h>
 #include "gupnp-feature-list-parser.h"
 #include "gupnp-av.h"

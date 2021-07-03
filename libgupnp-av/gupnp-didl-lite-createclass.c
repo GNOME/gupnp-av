@@ -17,6 +17,8 @@
  * #GUPnPDIDLLiteCreateClass respresents a DIDL-Lite create class element.
  */
 
+#include <config.h>
+
 #include <string.h>
 
 #include "gupnp-didl-lite-createclass.h"

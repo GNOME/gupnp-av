@@ -16,6 +16,8 @@
  * producer, director, producer and contributor) property in a DIDL-Lite object.
  */
 
+#include <config.h>
+
 #include "gupnp-didl-lite-contributor.h"
 #include "gupnp-didl-lite-contributor-private.h"
 #include "xml-util.h"

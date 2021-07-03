@@ -7,6 +7,8 @@
  *
  */
 
+#include <config.h>
+
 #include <libgupnp-av/gupnp-feature-list-parser.h>
 #include <stdlib.h>
 #include <string.h>

@@ -10,6 +10,8 @@
  *
  */
 
+#include <config.h>
+
 #include "gupnp-av-error.h"
 
 /**

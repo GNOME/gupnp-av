@@ -15,6 +15,8 @@
  * #GUPnPDIDLLiteDescriptor respresent a DIDL-Lite descriptor (desc) element.
  */
 
+#include <config.h>
+
 #include <string.h>
 
 #include "gupnp-didl-lite-descriptor.h"

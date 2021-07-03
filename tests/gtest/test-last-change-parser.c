@@ -7,6 +7,8 @@
  *
  */
 
+#include <config.h>
+
 #include <libgupnp-av/gupnp-last-change-parser.h>
 
 #define TEST_GENERAL \

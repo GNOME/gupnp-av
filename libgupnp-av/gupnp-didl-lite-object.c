@@ -17,6 +17,8 @@
  * #GUPnPDIDLLiteObject respresent a DIDL-Lite object element.
  */
 
+#include <config.h>
+
 #include <string.h>
 
 #include "gupnp-didl-lite-object.h"

@@ -14,6 +14,8 @@
  * #GUPnPFeature respresent a Feature element.
  */
 
+#include <config.h>
+
 #include "gupnp-feature.h"
 
 struct _GUPnPFeaturePrivate {

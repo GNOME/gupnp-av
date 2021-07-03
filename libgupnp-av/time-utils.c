@@ -7,6 +7,8 @@
  *
  */
 
+#include <config.h>
+
 #include <glib.h>
 
 #include "time-utils.h"

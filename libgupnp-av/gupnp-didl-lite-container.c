@@ -17,6 +17,7 @@
  *
  * #GUPnPDIDLLiteContainer respresents a DIDL-Lite container element.
  */
+#include <config.h>
 
 #include <string.h>
 

@@ -44,12 +44,13 @@ gupnp_av_lib = library('gupnp-av-1.0',
             'time-utils.c',
             'xml-util.c',
             'xsd-data.c',
-            marshall_sources
+            marshall_sources,
         ],
         install: true,
         version : version,
-        c_args : common_cflags + ['-DDATADIR="@0@"'.format(join_paths(get_option('prefix'), get_option('datadir'), 'gupnp-av'))],
-        dependencies : [gobject, libxml],
+        c_args : common_cflags,
+        include_directories : config_h_inc,
+        dependencies : [glib, gobject, libxml],
         darwin_versions : darwin_versions,
 )
 gupnp_av = declare_dependency(link_with : gupnp_av_lib, include_directories : include_directories('..'))

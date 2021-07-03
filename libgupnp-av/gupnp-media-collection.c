@@ -14,6 +14,8 @@
  * #GUPnPMediaCollection is a helper class for writing media collection files.
  **/
 
+#include <config.h>
+
 #include "gupnp-media-collection.h"
 #include "gupnp-didl-lite-writer.h"
 #include "gupnp-didl-lite-writer-private.h"

@@ -17,6 +17,8 @@
  *
  */
 
+#include <config.h>
+
 #include "xml-util.h"
 #include "gupnp-cds-last-change-parser.h"
 

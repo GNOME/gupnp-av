@@ -7,6 +7,8 @@
  *
  */
 
+#include <config.h>
+
 #include <stdarg.h>
 #include <libxml/parserInternals.h>
 

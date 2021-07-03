@@ -7,6 +7,8 @@
  *
  */
 
+#include <config.h>
+
 #include <glib-object.h>
 #include <libgupnp-av/gupnp-didl-lite-object.h>
 #include <libgupnp-av/gupnp-didl-lite-writer.h>

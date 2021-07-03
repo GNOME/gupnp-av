@@ -9,6 +9,8 @@
  *
  */
 
+#include <config.h>
+
 #include <string.h>
 
 #include <libgupnp-av/gupnp-media-collection.h>

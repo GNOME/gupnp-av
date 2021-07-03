@@ -14,6 +14,7 @@
  *
  * #GUPnPDIDLLiteItem respresents a DIDL-Lite item element.
  */
+#include <config.h>
 
 #include <string.h>
 

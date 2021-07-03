@@ -19,6 +19,8 @@
  * #GUPnPDIDLLiteResource respresent a DIDL-Lite resource (res) element.
  */
 
+#include <config.h>
+
 #include <string.h>
 
 #include "gupnp-didl-lite-resource.h"
