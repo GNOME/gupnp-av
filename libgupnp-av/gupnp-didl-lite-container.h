@@ -25,8 +25,7 @@ G_DECLARE_DERIVABLE_TYPE(GUPnPDIDLLiteContainer,
                          DIDL_LITE_CONTAINER,
                          GUPnPDIDLLiteObject)
 
-#define GUPNP_TYPE_DIDL_LITE_CONTAINER \
-                (gupnp_didl_lite_container_get_type ())
+#define GUPNP_TYPE_DIDL_LITE_CONTAINER (gupnp_didl_lite_container_get_type ())
 
 struct _GUPnPDIDLLiteContainerClass {
         GUPnPDIDLLiteObjectClass parent_class;
