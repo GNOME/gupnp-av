@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef __GUPNP_DIDL_LITE_OBJECT_H__
-#define __GUPNP_DIDL_LITE_OBJECT_H__
+#ifndef GUPNP_DIDL_LITE_OBJECT_H
+#define GUPNP_DIDL_LITE_OBJECT_H
 
 #include <stdarg.h>
 #include <glib-object.h>

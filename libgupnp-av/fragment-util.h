@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __FRAGMENT_UTIL_H__
-#define __FRAGMENT_UTIL_H__
+#ifndef GUPNP_AV_FRAGMENT_UTIL_H
+#define GUPNP_AV_FRAGMENT_UTIL_H
 
 #include <glib.h>
 #include <libxml/tree.h>

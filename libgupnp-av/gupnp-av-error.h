@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef __GUPNP_AV_ERROR_H__
-#define __GUPNP_AV_ERROR_H__
+#ifndef GUPNP_AV_ERROR_H
+#define GUPNP_AV_ERROR_H
 
 #include <glib.h>
 

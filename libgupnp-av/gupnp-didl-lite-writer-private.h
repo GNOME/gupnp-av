@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __GUPNP_DIDL_LITE_WRITER_PRIVATE_H__
-#define __GUPNP_DIDL_LITE_WRITER_PRIVATE_H__
+#ifndef GUPNP_DIDL_LITE_WRITER_PRIVATE_H
+#define GUPNP_DIDL_LITE_WRITER_PRIVATE_H
 
 #include "gupnp-didl-lite-writer.h"
 #include "gupnp-didl-lite-container.h"

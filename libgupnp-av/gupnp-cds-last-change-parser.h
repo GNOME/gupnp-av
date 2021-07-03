@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __GUPNP_CDS_LAST_CHANGE_PARSER_H__
-#define __GUPNP_CDS_LAST_CHANGE_PARSER_H__
+#ifndef GUPNP_CDS_LAST_CHANGE_PARSER_H
+#define GUPNP_CDS_LAST_CHANGE_PARSER_H
 
 #include <glib-object.h>
 

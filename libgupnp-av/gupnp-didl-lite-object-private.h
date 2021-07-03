@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef __GUPNP_DIDL_LITE_OBJECT_PRIVATE_H__
-#define __GUPNP_DIDL_LITE_OBJECT_PRIVATE_H__
+#ifndef GUPNP_DIDL_LITE_OBJECT_PRIVATE_H
+#define GUPNP_DIDL_LITE_OBJECT_PRIVATE_H
 
 #include "xml-util.h"
 

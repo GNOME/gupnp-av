@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __GUPNP_FEATURE_LIST_PARSER_H_
-#define __GUPNP_FEATURE_LIST_PARSER_H_
+#ifndef GUPNP_FEATURE_LIST_PARSER_H
+#define GUPNP_FEATURE_LIST_PARSER_H
 
 #include <glib-object.h>
 #include "gupnp-feature.h"

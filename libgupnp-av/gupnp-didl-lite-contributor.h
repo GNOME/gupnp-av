@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef __GUPNP_DIDL_LITE_CONTRIBUTOR_H__
-#define __GUPNP_DIDL_LITE_CONTRIBUTOR_H__
+#ifndef GUPNP_DIDL_LITE_CONTRIBUTOR_H
+#define GUPNP_DIDL_LITE_CONTRIBUTOR_H
 
 #include <glib-object.h>
 #include <libxml/tree.h>

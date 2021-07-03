@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __GUPNP_AV_ENUMS_H__
-#define __GUPNP_AV_ENUMS_H__
+#ifndef GUPNP_AV_ENUMS_H
+#define GUPNP_AV_ENUMS_H
 
 #include <glib.h>
 

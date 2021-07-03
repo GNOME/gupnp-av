@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __GUPNP_DIDL_LITE_WRITER_H__
-#define __GUPNP_DIDL_LITE_WRITER_H__
+#ifndef GUPNP_DIDL_LITE_WRITER_H
+#define GUPNP_DIDL_LITE_WRITER_H
 
 #include <stdarg.h>
 #include <glib-object.h>

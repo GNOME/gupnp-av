@@ -11,8 +11,8 @@
  *
  */
 
-#ifndef __GUPNP_DIDL_LITE_CONTAINER_H__
-#define __GUPNP_DIDL_LITE_CONTAINER_H__
+#ifndef GUPNP_DIDL_LITE_CONTAINER_H
+#define GUPNP_DIDL_LITE_CONTAINER_H
 
 #include <glib-object.h>
 #include "gupnp-didl-lite-object.h"
