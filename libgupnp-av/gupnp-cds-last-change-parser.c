@@ -38,7 +38,6 @@
  * Opaque struct which contains information about the event.
  **/
 struct _GUPnPCDSLastChangeEntry {
-        int ref_count;
         GUPnPCDSLastChangeEvent event;
         char *object_id;
         char *parent_id;
@@ -51,10 +50,12 @@ G_DEFINE_TYPE (GUPnPCDSLastChangeParser,
                gupnp_cds_last_change_parser,
                G_TYPE_OBJECT)
 
+#define GUPNP_TYPE_CDS_LAST_CHANGE_PARSER (gupnp_cds_last_change_entry_get_type())
+
 G_DEFINE_BOXED_TYPE (GUPnPCDSLastChangeEntry,
                      gupnp_cds_last_change_entry,
                      gupnp_cds_last_change_entry_ref,
-                     gupnp_cds_last_change_entry_unref);
+                     gupnp_cds_last_change_entry_unref)
 
 static void
 gupnp_cds_last_change_parser_init (G_GNUC_UNUSED GUPnPCDSLastChangeParser *parser)
@@ -138,8 +139,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                                              "objAdd") == 0) {
                         const char *tmp;
 
-                        entry = g_slice_new0 (GUPnPCDSLastChangeEntry);
-                        entry->ref_count = 1;
+                        entry = g_atomic_rc_box_alloc0(sizeof(GUPnPCDSLastChangeEntry));
                         entry->event = GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_ADDED;
 
                         tmp = av_xml_util_get_attribute_content (it, "objID");
@@ -164,8 +164,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                                                "objMod") == 0) {
                         const char *tmp;
 
-                        entry = g_slice_new0 (GUPnPCDSLastChangeEntry);
-                        entry->ref_count = 1;
+                        entry = g_atomic_rc_box_alloc0(sizeof(GUPnPCDSLastChangeEntry));
                         entry->event = GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_MODIFIED;
 
                         tmp = av_xml_util_get_attribute_content (it, "objID");
@@ -183,8 +182,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                                                "objDel") == 0) {
                         const char *tmp;
 
-                        entry = g_slice_new0 (GUPnPCDSLastChangeEntry);
-                        entry->ref_count = 1;
+                        entry = g_atomic_rc_box_alloc0 (sizeof(GUPnPCDSLastChangeEntry));
                         entry->event = GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_REMOVED;
 
                         tmp = av_xml_util_get_attribute_content (it, "objID");
@@ -202,8 +200,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
                                                "stDone") == 0) {
                         const char *tmp;
 
-                        entry = g_slice_new0 (GUPnPCDSLastChangeEntry);
-                        entry->ref_count = 1;
+                        entry = g_atomic_rc_box_alloc0(sizeof(GUPnPCDSLastChangeEntry));
                         entry->event = GUPNP_CDS_LAST_CHANGE_EVENT_ST_DONE;
 
                         tmp = av_xml_util_get_attribute_content (it, "objID");
@@ -244,11 +241,16 @@ GUPnPCDSLastChangeEntry *
 gupnp_cds_last_change_entry_ref (GUPnPCDSLastChangeEntry *entry)
 {
         g_return_val_if_fail (entry != NULL, NULL);
-        g_return_val_if_fail (entry->ref_count > 0, NULL);
 
-        g_atomic_int_inc (&entry->ref_count);
+        return g_atomic_rc_box_acquire(entry);
+}
 
-        return entry;
+static void
+last_change_entry_free (GUPnPCDSLastChangeEntry *entry)
+{
+    g_free (entry->class);
+    g_free (entry->object_id);
+    g_free (entry->parent_id);
 }
 
 /**
@@ -262,15 +264,8 @@ void
 gupnp_cds_last_change_entry_unref (GUPnPCDSLastChangeEntry *entry)
 {
         g_return_if_fail (entry != NULL);
-        g_return_if_fail (entry->ref_count > 0);
 
-        if (g_atomic_int_dec_and_test (&entry->ref_count)) {
-                g_free (entry->class);
-                g_free (entry->object_id);
-                g_free (entry->parent_id);
-
-                g_slice_free (GUPnPCDSLastChangeEntry, entry);
-        }
+        g_atomic_rc_box_release_full(entry, (GDestroyNotify) last_change_entry_free);
 }
 
 /**
