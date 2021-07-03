@@ -51,34 +51,22 @@ av_xml_doc_new (xmlDoc *doc)
 
         g_return_val_if_fail (doc, NULL);
 
-        ret = g_new0 (GUPnPAVXMLDoc, 1);
-        ret->refcount = 1;
+        ret = g_rc_box_new0(GUPnPAVXMLDoc);
         ret->doc = doc;
 
         return ret;
 }
 
-GUPnPAVXMLDoc *
-av_xml_doc_ref (GUPnPAVXMLDoc *doc)
+static void
+av_xml_doc_free (GUPnPAVXMLDoc *doc)
 {
-        g_return_val_if_fail (doc, NULL);
-        g_return_val_if_fail (doc->refcount > 0, NULL);
-        g_atomic_int_inc (&doc->refcount);
-
-        return doc;
+        g_clear_pointer (&doc->doc, xmlFreeDoc);
 }
 
 void
 av_xml_doc_unref (GUPnPAVXMLDoc *doc)
 {
-        g_return_if_fail (doc);
-        g_return_if_fail (doc->refcount > 0);
-
-        if (g_atomic_int_dec_and_test (&doc->refcount)) {
-                xmlFreeDoc (doc->doc);
-                doc->doc = NULL;
-                g_free (doc);
-        }
+        g_rc_box_release_full (doc, (GFreeFunc) av_xml_doc_free);
 }
 
 xmlNode *
@@ -570,4 +558,4 @@ av_xml_util_get_ns (xmlDocPtr doc, GUPnPXMLNamespace ns, xmlNsPtr *ns_out)
         return tmp_ns;
 }
 
-G_DEFINE_BOXED_TYPE (GUPnPAVXMLDoc, av_xml_doc, av_xml_doc_ref, av_xml_doc_unref)
+G_DEFINE_BOXED_TYPE (GUPnPAVXMLDoc, av_xml_doc, g_rc_box_acquire, av_xml_doc_unref)
