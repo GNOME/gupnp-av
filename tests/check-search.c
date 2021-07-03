@@ -24,10 +24,6 @@ main (G_GNUC_UNUSED int argc, G_GNUC_UNUSED char **argv)
         GError *error;
         guint i;
 
-#if !GLIB_CHECK_VERSION (2, 35, 0)
-        g_type_init ();
-#endif
-
         parser = gupnp_search_criteria_parser_new ();
 
         for (i = 0; i < G_N_ELEMENTS (searches); i++) {
