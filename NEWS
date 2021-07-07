@@ -1,3 +1,19 @@
+0.13.0
+======
+
+Changes since 0.12.11:
+
+- Fix stripping @refID
+- Port to modern GObject
+- Drop autotools
+- Allow to be used as a subproject
+- Remove hand-written ref-counting, use RcBox/AtomicRcBox instead
+- Obsolete code removal
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+ - Andre Klapper <a9016009@gmx.de>
+
 0.12.11
 =======
 
