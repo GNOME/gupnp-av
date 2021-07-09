@@ -224,6 +224,13 @@ gupnp_didl_lite_resource_get_subtitle_file_uri
 const char *
 gupnp_didl_lite_resource_get_subtitle_file_type
                                         (GUPnPDIDLLiteResource *resource);
+const char *
+gupnp_didl_lite_resource_get_id (GUPnPDIDLLiteResource *resource);
+
+void
+gupnp_didl_lite_resource_set_id (GUPnPDIDLLiteResource *resource,
+                                 const char *id);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_RESOURCE_H__ */
