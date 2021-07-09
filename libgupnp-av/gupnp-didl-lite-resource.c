@@ -54,6 +54,7 @@ enum {
         PROP_IMPORT_URI,
         PROP_PROTOCOL_INFO,
 
+        PROP_ID,
         PROP_SIZE,
         PROP_SIZE64,
         PROP_CLEAR_TEXT_SIZE,
@@ -231,6 +232,10 @@ gupnp_didl_lite_resource_set_property (GObject      *object,
                                         (resource,
                                          g_value_get_string (value));
                 break;
+        case PROP_ID:
+                gupnp_didl_lite_resource_set_id (resource,
+                                                 g_value_get_string (value));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -358,6 +363,10 @@ gupnp_didl_lite_resource_get_property (GObject    *object,
                          (value,
                           gupnp_didl_lite_resource_get_subtitle_file_uri
                                                 (resource));
+                break;
+        case PROP_ID:
+                g_value_set_string (value,
+                                    gupnp_didl_lite_resource_get_id (resource));
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -820,6 +829,21 @@ gupnp_didl_lite_resource_class_init (GUPnPDIDLLiteResourceClass *klass)
                                               NULL,
                                               G_PARAM_READWRITE |
                                               G_PARAM_STATIC_STRINGS));
+
+        /**
+         * GUPnPDIDLLiteResource:id:
+         *
+         * identifier for this resource (res@Id)
+         */
+        g_object_class_install_property (
+                object_class,
+                PROP_ID,
+                g_param_spec_string ("id",
+                                     "id",
+                                     "Identifier of the resource",
+                                     NULL,
+                                     G_PARAM_READWRITE |
+                                             G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -1945,4 +1969,51 @@ gupnp_didl_lite_resource_set_subtitle_file_type
         }
 
         g_object_notify (G_OBJECT (resource), "subtitle-file-type");
+}
+
+/**
+ * gupnp_didl_lite_resource_get_id:
+ * @resource: A #GUPnPDIDLLiteResource
+ *
+ * Get the value of res@Id for this resource. The id is optional.
+ *
+ * Returns: (transfer none)(nullable): The res@Id of this resource, nor %NULL if
+ * not set
+ *
+ * Since: 0.14.0
+ **/
+const char *
+gupnp_didl_lite_resource_get_id (GUPnPDIDLLiteResource *resource)
+{
+        g_return_val_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource), NULL);
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
+
+        return av_xml_util_get_attribute_content (priv->xml_node, "id");
+}
+
+/**
+ * gupnp_didl_lite_resource_set_id:
+ * @resource: A #GUPnPDIDLLiteResource
+ * @id:(allow-none): The res@Id for this resource or %NULL to unset.
+ *
+ * Set the value of res@Id for this resource. If @id is %NULL, it will be unset.
+ *
+ * not set
+ *
+ * Since: 0.14.0
+ **/
+void
+gupnp_didl_lite_resource_set_id (GUPnPDIDLLiteResource *resource,
+                                 const char *id)
+{
+        g_return_if_fail (GUPNP_IS_DIDL_LITE_RESOURCE (resource));
+        GUPnPDIDLLiteResourcePrivate *priv =
+                gupnp_didl_lite_resource_get_instance_private (resource);
+
+        if (id == NULL) {
+                xmlUnsetProp (priv->xml_node, BAD_CAST "id");
+        } else {
+                xmlSetProp (priv->xml_node, BAD_CAST "id", BAD_CAST id);
+        }
 }
