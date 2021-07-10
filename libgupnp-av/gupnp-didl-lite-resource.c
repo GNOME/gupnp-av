@@ -1932,7 +1932,7 @@ gupnp_didl_lite_resource_set_subtitle_file_type
         if (type == NULL)
                 xmlUnsetNsProp (priv->xml_node,
                                 priv->pv_ns,
-                                (unsigned char *) "subtitleFileUri");
+                                (unsigned char *) "subtitleFileType");
         else {
                 av_xml_util_get_ns (priv->xml_doc->doc,
                                     GUPNP_XML_NAMESPACE_PV,
