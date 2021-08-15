@@ -1,3 +1,12 @@
+0.13.1
+======
+
+- Make Feature derivable again
+- Fix unsetting subtitleFileType
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+
 0.13.0
 ======
 
