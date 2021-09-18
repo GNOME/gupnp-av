@@ -1,4 +1,9 @@
-0.13.1
+0.14.0 (stable)
+======
+
+- Re-tag of 0.13.1 as stable version, no other changes
+
+0.13.1 (development)
 ======
 
 - Make Feature derivable again
