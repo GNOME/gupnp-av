@@ -2645,3 +2645,49 @@ gupnp_didl_lite_object_get_xml_string (GUPnPDIDLLiteObject *object)
 
         return ret;
 }
+
+/**
+ * gupnp_format_date_time_for_didl_lite:
+ * @date_time: DateTime to format
+ *
+ * Get the representation of DateTime as an ISO8601 string.
+ *
+ * DLNA requires a specific subset of ISO8601
+ * Returns: (transfer full): @date_time formatted as an ISO8601 string
+ */
+char *
+gupnp_format_date_time_for_didl_lite (GDateTime *date_time, gboolean date_only)
+{
+        g_return_val_if_fail (date_time != NULL, NULL);
+
+        if (date_only) {
+                return g_date_time_format (date_time, "%F");
+        }
+
+        const char *format = "%FT%H:%M:%S";
+        char *base_string = g_date_time_format (date_time, format);
+        GString *iso_string = g_string_new (base_string);
+
+        // Check if we have sub-second precision. If so, we use that as well,
+        // but cannot use %f since that will use microsecond precision, but DLNA
+        // only allows for millisecond so we append the milliseconds manually
+        if (g_date_time_get_microsecond (date_time) % G_TIME_SPAN_SECOND != 0) {
+                g_string_append_printf (
+                        iso_string,
+                        ".%03d",
+                        g_date_time_get_microsecond (date_time) / 1000);
+        }
+
+        GTimeSpan utc_offset = g_date_time_get_utc_offset (date_time);
+        if (utc_offset == 0) {
+                g_string_append (iso_string, "Z");
+        } else {
+                char *time_zone = g_date_time_format (date_time, "%:z");
+                g_string_append (iso_string, time_zone);
+                g_free (time_zone);
+        }
+
+        g_free (base_string);
+
+        return g_string_free (iso_string, FALSE);
+}

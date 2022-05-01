@@ -277,6 +277,9 @@ gupnp_didl_lite_object_apply_fragments
 char *
 gupnp_didl_lite_object_get_xml_string   (GUPnPDIDLLiteObject *object);
 
+char *
+gupnp_format_date_time_for_didl_lite (GDateTime *date_time, gboolean date_only);
+
 G_END_DECLS
 
 #endif /* __GUPNP_DIDL_LITE_OBJECT_H__ */

@@ -12,3 +12,4 @@ SearchCriteriaParser
     .expression skip
 ProtocolError skip
 protocol_error_quark skip
+format_date_time_for_didl_lite.date_only default=false
