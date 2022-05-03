@@ -2654,6 +2654,8 @@ gupnp_didl_lite_object_get_xml_string (GUPnPDIDLLiteObject *object)
  *
  * DLNA requires a specific subset of ISO8601
  * Returns: (transfer full): @date_time formatted as an ISO8601 string
+ *
+ * Since: 0.14.1
  */
 char *
 gupnp_format_date_time_for_didl_lite (GDateTime *date_time, gboolean date_only)
