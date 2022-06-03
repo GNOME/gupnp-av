@@ -1,3 +1,11 @@
+0.14.1 (stable)
+===============
+- Add utility function to format GDateTime to the iso variant
+  DIDL expects
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+
 0.14.0 (stable)
 ======
 
