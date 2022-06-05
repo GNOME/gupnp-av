@@ -87,6 +87,12 @@ subdir('data')
 pkg = import('pkgconfig')
 pkg.generate(
     gupnp_av_lib,
+    requires : [
+      'glib-2.0',
+      'gobject-2.0',
+      'gio-2.0',
+      'libxml-2.0'
+    ],
     subdirs : 'gupnp-av-1.0',
     description : 'GObject-based AV specific UPnP library'
 )
