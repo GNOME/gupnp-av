@@ -17,11 +17,18 @@
 #include <config.h>
 
 #include "gupnp-feature.h"
+#include "gupnp-feature-private.h"
+
+#include "xml-util.h"
+
+#include <libxml/tree.h>
 
 struct _GUPnPFeaturePrivate {
         char *name;
         char *version;
         char *object_ids;
+        GUPnPAVXMLDoc *doc;
+        xmlNode *node;
 };
 typedef struct _GUPnPFeaturePrivate GUPnPFeaturePrivate;
 
@@ -33,7 +40,9 @@ enum {
         PROP_0,
         PROP_NAME,
         PROP_VERSION,
-        PROP_OBJECT_IDS
+        PROP_OBJECT_IDS,
+        PROP_DOC,
+        PROP_NODE
 };
 
 static void
@@ -78,6 +87,12 @@ gupnp_feature_get_property (GObject    *object,
                 g_value_set_string (value,
                                     gupnp_feature_get_object_ids (feature));
                 break;
+        case PROP_DOC:
+                g_value_set_boxed (value, gupnp_feature_get_doc (feature));
+                break;
+        case PROP_NODE:
+                g_value_set_pointer (value, gupnp_feature_get_node (feature));
+                break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
                 break;
@@ -101,7 +116,16 @@ gupnp_feature_set_property (GObject      *object,
                 priv->version = g_value_dup_string (value);
                 break;
         case PROP_OBJECT_IDS:
-                priv->object_ids = g_value_dup_string (value);
+                if (G_VALUE_HOLDS(value, G_TYPE_STRING))
+                        priv->object_ids = g_value_dup_string (value);
+                else
+                        priv->object_ids = NULL;
+                break;
+        case PROP_DOC:
+                priv->doc = g_value_dup_boxed (value);
+                break;
+        case PROP_NODE:
+                priv->node = g_value_get_pointer (value);
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -173,6 +197,37 @@ gupnp_feature_class_init (GUPnPFeatureClass *klass)
                                       G_PARAM_STATIC_NAME |
                                       G_PARAM_STATIC_NICK |
                                       G_PARAM_STATIC_BLURB));
+
+        /**
+         * GUPnPFeature:doc:
+         *
+         * The XML Doc of the feature list that contains this feature.
+         **/
+        g_object_class_install_property (
+                object_class,
+                PROP_DOC,
+                g_param_spec_boxed ("doc",
+                                    "XML document",
+                                    "XML document for the feature list that "
+                                    "contains this feature",
+                                    av_xml_doc_get_type (),
+                                    G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                            G_PARAM_STATIC_STRINGS));
+
+        /**
+         * GUPnPFeature:node:
+         *
+         * The XML node for this feature
+         **/
+        g_object_class_install_property (
+                object_class,
+                PROP_OBJECT_IDS,
+                g_param_spec_pointer ("node",
+                                      "XML node",
+                                      "XML node of this feature",
+                                      G_PARAM_READWRITE |
+                                              G_PARAM_CONSTRUCT_ONLY |
+                                              G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -209,6 +264,24 @@ gupnp_feature_get_version (GUPnPFeature *feature)
         return priv->version;
 }
 
+GUPnPAVXMLDoc *
+gupnp_feature_get_doc (GUPnPFeature *feature)
+{
+        GUPnPFeaturePrivate *priv =
+                gupnp_feature_get_instance_private (GUPNP_FEATURE (feature));
+
+        return av_xml_doc_ref (priv->doc);
+}
+
+xmlNode *
+gupnp_feature_get_node (GUPnPFeature *feature)
+{
+        GUPnPFeaturePrivate *priv =
+                gupnp_feature_get_instance_private (GUPNP_FEATURE (feature));
+
+        return priv->node;
+}
+
 /**
  * gupnp_feature_get_object_ids:
  * @feature: #GUPnPFeature
@@ -216,8 +289,11 @@ gupnp_feature_get_version (GUPnPFeature *feature)
  * Get the object IDs related to the @feature.
  *
  * Return value: The object IDs related to the @feature.
+ *
+ * Deprecated. Use gupnp_feature_bookmarks_get_object_ids() or
+ * gupnp_feature_epg_get_object_ids() instead
  **/
-const char *
+G_GNUC_DEPRECATED const char *
 gupnp_feature_get_object_ids (GUPnPFeature *feature)
 {
         GUPnPFeaturePrivate *priv =

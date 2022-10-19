@@ -54,6 +54,12 @@ av_xml_doc_free (GUPnPAVXMLDoc *doc)
         g_clear_pointer (&doc->doc, xmlFreeDoc);
 }
 
+GUPnPAVXMLDoc *
+av_xml_doc_ref (GUPnPAVXMLDoc *doc)
+{
+        return g_rc_box_acquire (doc);
+}
+
 void
 av_xml_doc_unref (GUPnPAVXMLDoc *doc)
 {

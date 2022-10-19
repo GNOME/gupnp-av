@@ -113,6 +113,7 @@ gupnp_feature_list_parser_parse_text
         xmlDoc       *doc;
         xmlNode      *element;
         GList        *feature_list = NULL;
+        GUPnPAVXMLDoc *xml_doc = NULL;
 
         doc = xmlRecoverMemory (text, strlen (text));
         if (doc == NULL) {
@@ -123,6 +124,8 @@ gupnp_feature_list_parser_parse_text
 
                 return NULL;
         }
+
+        xml_doc = av_xml_doc_new (doc);
 
         /* Get a pointer to root element */
         element = av_xml_util_get_element ((xmlNode *) doc, "Features", NULL);
@@ -168,9 +171,16 @@ gupnp_feature_list_parser_parse_text
                         object_ids = get_feature_object_ids (element);
 
                         feature = g_object_new (GUPNP_TYPE_FEATURE,
-                                                "name", name,
-                                                "version", version,
-                                                "object-ids", object_ids,
+                                                "doc",
+                                                xml_doc,
+                                                "node",
+                                                element,
+                                                "name",
+                                                name,
+                                                "version",
+                                                version,
+                                                "object-ids",
+                                                object_ids,
                                                 NULL);
 
                         feature_list = g_list_append (feature_list, feature);
@@ -179,7 +189,7 @@ gupnp_feature_list_parser_parse_text
                 }
         }
 
-        xmlFreeDoc (doc);
+        av_xml_doc_unref (xml_doc);
 
         return feature_list;
 }

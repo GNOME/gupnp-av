@@ -10,17 +10,21 @@
 #include <config.h>
 
 #include <libgupnp-av/gupnp-feature-list-parser.h>
+#include <libgupnp-av/gupnp-feature-container-shortcuts.h>
+
 #include <stdlib.h>
 #include <string.h>
 
 static const char * const names[] = {
         "BOOKMARK",
         "EPG",
+        "CONTAINER_SHORTCUTS",
 };
 
 static const char * const versions[] = {
         "1",
         "2",
+        "1",
 };
 
 static const char * const ids[] = {
@@ -28,6 +32,17 @@ static const char * const ids[] = {
         "epg1,epg2",
 };
 
+static const char *const container_names[] = {
+        "MUSIC_GENRES",
+        "IMAGES_ALL",
+};
+
+static const char *const container_ids[] = {
+        "container:genre",
+        "container:images_all",
+};
+
+//clang-format off
 static const char *text =
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         "<Features "
@@ -43,7 +58,20 @@ static const char *text =
                 "<Feature name=\"EPG\" version=\"2\">"
                         "<objectIDs>epg1,epg2</objectIDs>"
                 "</Feature>"
+                "<Feature name=\"CONTAINER_SHORTCUTS\" version=\"1\">"
+                        "<shortcutlist>"
+                                "<shortcut>"
+                                        "<name>MUSIC_GENRES</name>"
+                                        "<objectID>container:genre</objectID>"
+                                "</shortcut>"
+                                "<shortcut>"
+                                        "<name>IMAGES_ALL</name>"
+                                        "<objectID>container:images_all</objectID>"
+                                "</shortcut>"
+                        "</shortcutlist>"
+                "</Feature>"
         "</Features>";
+// clang-format on
 
 static gboolean
 check_feature (GUPnPFeature *feature)
@@ -54,11 +82,20 @@ check_feature (GUPnPFeature *feature)
                         return FALSE;
 
         if (strcmp (versions[index], gupnp_feature_get_version (feature)))
+                return FALSE;
+
+        if (index < 2) {
+                if (strcmp (ids[index], gupnp_feature_get_object_ids (feature)))
+                        return FALSE;
+        } else {
+                if (!GUPNP_IS_FEATURE_CONTAINER_SHORTCUTS (feature))
                         return FALSE;
 
-        if (strcmp (ids[index], gupnp_feature_get_object_ids (feature)))
-                        return FALSE;
+                GUPnPFeatureContainerShortcuts *f =
+                        GUPNP_FEATURE_CONTAINER_SHORTCUTS (feature);
 
+                GSList *s = gupnp_feature_container_shortcuts_get_list (f);
+        }
         index++;
 
         return TRUE;

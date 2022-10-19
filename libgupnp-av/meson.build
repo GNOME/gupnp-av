@@ -16,6 +16,7 @@ introspection_sources = [
     'gupnp-didl-lite-writer.c',
     'gupnp-dlna.c',
     'gupnp-feature.c',
+    'gupnp-feature-container-shortcuts.c',
     'gupnp-feature-list-parser.c',
     'gupnp-last-change-parser.c',
     'gupnp-media-collection.c',

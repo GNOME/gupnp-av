@@ -15,7 +15,6 @@
 
 #include <glib-object.h>
 #include <libxml/tree.h>
-#include "gupnp-didl-lite-container.h"
 
 G_BEGIN_DECLS
 
