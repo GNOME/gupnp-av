@@ -9,8 +9,9 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-item
- * @short_description: DIDL-Lite Item
+ * GUPnPDIDLLiteItem:
+ *
+ * DIDL-Lite Item
  *
  * #GUPnPDIDLLiteItem respresents a DIDL-Lite item element.
  */

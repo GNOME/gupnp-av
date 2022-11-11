@@ -11,8 +11,9 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-create-class
- * @short_description: DIDL-Lite CreateClass
+ * GUPnPDIDLLiteCreateClass:
+ *
+ * DIDL-Lite CreateClass
  *
  * #GUPnPDIDLLiteCreateClass respresents a DIDL-Lite create class element.
  */

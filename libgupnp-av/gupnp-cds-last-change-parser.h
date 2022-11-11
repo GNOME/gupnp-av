@@ -34,15 +34,18 @@ typedef struct _GUPnPCDSLastChangeEntry GUPnPCDSLastChangeEntry;
 
 /**
  * GUPnPCDSLastChangeEvent:
- * @GUPNP_CDS_LAST_CHANGE_EVENT_INVALID: Invalid #GUPnPCDSLastChangeEntry.
- * @GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_ADDED: The #GUPnPCDSLastChangeEntry is
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_INVALID: Invalid [struct@GUPnPAV.CDSLastChangeEntry]
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_ADDED: The [struct@GUPnPAV.CDSLastChangeEntry] is
  * an object added event.
- * @GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_REMOVED: The #GUPnPCDSLastChangeEntry
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_REMOVED: The [struct@GUPnPAV.CDSLastChangeEntry]
  * is an object removal event.
- * @GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_MODIFIED: The #GUPnPCDSLastChangeEntry
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_MODIFIED: The [struct@GUPnPAV.CDSLastChangeEntry]
  * is an object modification event.
- * @GUPNP_CDS_LAST_CHANGE_EVENT_ST_DONE: The #GUPnPCDSLastChangeEntry is a
+ * @GUPNP_CDS_LAST_CHANGE_EVENT_ST_DONE: The [struct@GUPnPAV.CDSLastChangeEntry] is a
  * subtree update done event.
+ *
+ * The type of event a [struct@GUPnPAV.CDSLastChangeEntry] is representing
+ *
  */
 typedef enum GUPnPCDSLastChangeEvent {
         GUPNP_CDS_LAST_CHANGE_EVENT_INVALID,
@@ -64,6 +67,9 @@ GUPnPCDSLastChangeEntry *
 gupnp_cds_last_change_entry_ref    (GUPnPCDSLastChangeEntry *entry);
 void
 gupnp_cds_last_change_entry_unref  (GUPnPCDSLastChangeEntry *entry);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GUPnPCDSLastChangeEntry,
+                               gupnp_cds_last_change_entry_unref)
 
 GUPnPCDSLastChangeEvent
 gupnp_cds_last_change_entry_get_event         (GUPnPCDSLastChangeEntry *entry);

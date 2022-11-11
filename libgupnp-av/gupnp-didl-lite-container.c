@@ -12,10 +12,9 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-container
- * @short_description: DIDL-Lite Container
+ * GUPnPDIDLLiteContainer:
  *
- * #GUPnPDIDLLiteContainer respresents a DIDL-Lite container element.
+ * Representation of a DIDL-Lite container element.
  */
 #include <config.h>
 
@@ -145,7 +144,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
         object_class->set_property = gupnp_didl_lite_container_set_property;
 
         /**
-         * GUPnPDIDLLiteContainer:searchable:
+         * GUPnPDIDLLiteContainer:searchable:(attributes org.gtk.Property.get=gupnp_didl_lite_container_get_searchable org.gtk.Property.set=gupnp_didl_lite_container_set_searchable):
          *
          * Whether this container is searchable.
          **/
@@ -162,7 +161,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
                                        G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteContainer:child-count:
+         * GUPnPDIDLLiteContainer:child-count:(attributes org.gtk.Property.get=gupnp_didl_lite_container_get_child_count org.gtk.Property.set=gupnp_didl_lite_container_set_child_count):
          *
          * The child count of this container.
          **/
@@ -181,7 +180,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
                                    G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteContainer:storage-used:
+         * GUPnPDIDLLiteContainer:storage-used:(attributes org.gtk.Property.get=gupnp_didl_lite_container_get_storage_used org.gtk.Property.set=gupnp_didl_lite_container_set_storage_used):
          *
          * The number of bytes used by all child items of this container.
          **/
@@ -201,7 +200,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
                                      G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteContainer:container-update-id:
+         * GUPnPDIDLLiteContainer:container-update-id:(attributes org.gtk.Property.get=gupnp_didl_lite_container_get_container_update_id org.gtk.Property.set=gupnp_didl_lite_container_set_container_update_id):
          *
          * Update ID of this container.
          **/
@@ -220,7 +219,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
                                                  G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteContainer:total-deleted-child-count:
+         * GUPnPDIDLLiteContainer:total-deleted-child-count:(attributes org.gtk.Property.get=gupnp_didl_lite_container_get_total_deleted_child_count org.gtk.Property.set=gupnp_didl_lite_container_set_total_deleted_child_count):
          *
          * Total deleted child count of this container.
          **/
@@ -240,7 +239,7 @@ gupnp_didl_lite_container_class_init (GUPnPDIDLLiteContainerClass *klass)
 }
 
 /**
- * gupnp_didl_lite_container_get_searchable:
+ * gupnp_didl_lite_container_get_searchable:(attributes org.gtk.Method.get_property=searchable):
  * @container: #GUPnPDIDLLiteContainer
  *
  * Checks whether @container is searchable.
@@ -262,7 +261,7 @@ gupnp_didl_lite_container_get_searchable (GUPnPDIDLLiteContainer *container)
 }
 
 /**
- * gupnp_didl_lite_container_get_child_count:
+ * gupnp_didl_lite_container_get_child_count:(attributes org.gtk.Method.get_property=child-count):
  * @container: #GUPnPDIDLLiteContainer
  *
  * Get the child count of the @container.  If the child count is unknown, -1 is
@@ -285,7 +284,7 @@ gupnp_didl_lite_container_get_child_count (GUPnPDIDLLiteContainer *container)
 }
 
 /**
- * gupnp_didl_lite_container_get_container_update_id:
+ * gupnp_didl_lite_container_get_container_update_id:(attributes org.gtk.Method.get_property=container-update-id):
  * @container: #GUPnPDIDLLiteContainer
  *
  * Get the container update ID of the @container.
@@ -335,7 +334,7 @@ gupnp_didl_lite_container_container_update_id_is_set
 }
 
 /**
- * gupnp_didl_lite_container_get_total_deleted_child_count:
+ * gupnp_didl_lite_container_get_total_deleted_child_count:(attributes org.gtk.Method.get_property=total-deleted-child-count):
  * @container: #GUPnPDIDLLiteContainer
  *
  * Get the total deleted child count of the @container.
@@ -363,7 +362,7 @@ gupnp_didl_lite_container_get_total_deleted_child_count
  * gupnp_didl_lite_container_total_deleted_child_count_is_set:
  * @container: #GUPnPDIDLLiteContainer
  *
- * Get whether the total deleted child conut of the @container is set.
+ * Get whether the total deleted child count of the @container is set.
  *
  * Return value: %TRUE if property is set, otherwise %FALSE
  **/
@@ -431,7 +430,7 @@ gupnp_didl_lite_container_get_create_classes (GUPnPDIDLLiteContainer *container)
  *
  * Gets the list of create classes of the @container.
  *
- * Returns: (element-type GUPnPDIDLLiteCreateClass*) (transfer full): The list
+ * Returns: (element-type GUPnPDIDLLiteCreateClass) (transfer full): The list
  * of create classes belonging to @container, or %NULL.
  * #g_list_free the returned list after usage and unref each object in it.
  **/
@@ -514,7 +513,7 @@ gupnp_didl_lite_container_get_search_classes (GUPnPDIDLLiteContainer *container)
 }
 
 /**
- * gupnp_didl_lite_container_get_storage_used:
+ * gupnp_didl_lite_container_get_storage_used:(attributes org.gtk.Method.get_property=storage-used):
  * @container: #GUPnPDIDLLiteContainer
  *
  * Get the number of bytes used by all child items of the @container.
@@ -541,11 +540,11 @@ gupnp_didl_lite_container_get_storage_used (GUPnPDIDLLiteContainer *container)
         return g_ascii_strtoll (str, NULL, 10);
 }
 /**
- * gupnp_didl_lite_container_set_searchable:
+ * gupnp_didl_lite_container_set_searchable:(attributes org.gtk.Method.set_property=searchable):
  * @container: #GUPnPDIDLLiteContainer
- * @searchable: The searchibility
+ * @searchable: The search-ability
  *
- * (Un)set the searchibility of @container.
+ * (Un)set the search-ability of @container.
  **/
 void
 gupnp_didl_lite_container_set_searchable (GUPnPDIDLLiteContainer *container,
@@ -572,7 +571,7 @@ gupnp_didl_lite_container_set_searchable (GUPnPDIDLLiteContainer *container,
 }
 
 /**
- * gupnp_didl_lite_container_set_child_count:
+ * gupnp_didl_lite_container_set_child_count:(attributes org.gtk.Method.set_property=child-count):
  * @container: #GUPnPDIDLLiteContainer
  * @child_count: The child count
  *
@@ -601,7 +600,7 @@ gupnp_didl_lite_container_set_child_count (GUPnPDIDLLiteContainer *container,
 }
 
 /**
- * gupnp_didl_lite_container_set_container_update_id:
+ * gupnp_didl_lite_container_set_container_update_id:(attributes org.gtk.Method.set_property=container-update-id):
  * @container: #GUPnPDIDLLiteContainer
  * @update_id: The container update ID
  *
@@ -661,7 +660,7 @@ gupnp_didl_lite_container_unset_container_update_id
 }
 
 /**
- * gupnp_didl_lite_container_set_total_deleted_child_count:
+ * gupnp_didl_lite_container_set_total_deleted_child_count:(attributes org.gtk.Method.set_property=total-deleted-child-count):
  * @container: #GUPnPDIDLLiteContainer
  * @count: The container update ID
  *
@@ -741,8 +740,8 @@ gupnp_didl_lite_container_add_create_class (
  * gupnp_didl_lite_container_add_create_class_full:
  * @container: #GUPnPDIDLLiteContainer
  * @create_class: The createClass to add.
- * @include_derived: Whether object with dervied classes may be created in
- * this container or not.
+ * @include_derived: Whether object with derived classes, such as
+ * object.item.imageItem.Photo for a create class of object.item.imageItem are allowed.
  *
  * Add a new create class to the @container.
  **/

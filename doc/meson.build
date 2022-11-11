@@ -1,12 +1,6 @@
 conf = configuration_data()
 conf.set('VERSION', meson.project_version())
 
-version_xml = configure_file(
-    input : 'version.xml.in',
-    output : 'version.xml',
-    configuration: conf
-)
-
 if get_option('gtk_doc')
   gidocgen = find_program('gi-docgen', required: true)
 
@@ -16,7 +10,7 @@ if get_option('gtk_doc')
       configuration: conf
   )
 
-  docs_dir = join_paths(get_option('prefix'), get_option('datadir'), 'doc')
+  docs_dir = join_paths(get_option('prefix'), get_option('datadir')) / 'doc'
 
   custom_target(
       'gupnp-av-doc',
@@ -41,4 +35,3 @@ if get_option('gtk_doc')
       install_dir : docs_dir,
   )
 endif
-

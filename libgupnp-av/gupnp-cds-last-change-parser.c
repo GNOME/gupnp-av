@@ -8,13 +8,15 @@
  */
 
 /**
- * SECTION:gupnp-cds-last-change-parser
- * @short_description: LastChange parser for the format used in
- * CDS:3
+ * GUPnPCDSLastChangeParser:
+ *
+ * LastChange parser for the format used in ContentDirectory:3
  *
  * #GUPnPCDSLastChangeParser parses XML strings from
- * CDS's LastChange state variable.
+ * ContentDirectory's LastChange state variable.
  *
+ * Unfortunately this is different enough from the renderer's
+ * LastChange syntax that it warrants a different parser.
  */
 
 #include <config.h>
@@ -76,7 +78,7 @@ gupnp_cds_last_change_parser_new (void)
  * gupnp_cds_last_change_parser_parse:
  * @parser: #GUPnPCDSLastChangeParser
  * @last_change: XML string to parse
- * @error: Return value for parser error or %NULL to ingore
+ * @error: Return value for parser error or %NULL to ignore
  *
  * Parse a LastChange XML document in the flavor defined by the
  * ContentDirectory:3 specification.
@@ -123,7 +125,8 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
         for (it = state_event->children; it != NULL; it = it->next) {
                 if (it->type == XML_TEXT_NODE)
                         continue;
-                else if (g_ascii_strcasecmp ((const char *) it->name,
+
+                if (g_ascii_strcasecmp ((const char *) it->name,
                                              "objAdd") == 0) {
                         const char *tmp;
 
@@ -221,7 +224,7 @@ out:
  * gupnp_cds_last_change_entry_ref:
  * @entry: A #GUPnPCDSLastChangeEntry
  *
- * Increase reference count of a #GUPnPCDSLastChangeEntry.
+ * Increase reference count of a [struct@GUPnPAV.CDSLastChangeEntry].
  *
  * Returns:(transfer full): The object passed in @entry.
  **/
@@ -243,10 +246,10 @@ last_change_entry_free (GUPnPCDSLastChangeEntry *entry)
 
 /**
  * gupnp_cds_last_change_entry_unref:
- * @entry: A #GUPnPCDSLastChangeEntry
+ * @entry: A [struct@GUPnPAV.CDSLastChangeEntry]
  *
- * Decrease reference count of a #GUPnPCDSLastChangeEntry. If the reference
- * count drops to 0, @entry is freed.
+ * Decrease reference count of a [struct@GUPnPAV.CDSLastChangeEntry]. If the
+ * reference count drops to 0, @entry is freed.
  **/
 void
 gupnp_cds_last_change_entry_unref (GUPnPCDSLastChangeEntry *entry)
@@ -258,12 +261,12 @@ gupnp_cds_last_change_entry_unref (GUPnPCDSLastChangeEntry *entry)
 
 /**
  * gupnp_cds_last_change_entry_get_event:
- * @entry: A #GUPnPCDSLastChangeEntry
+ * @entry: A [struct@GUPnPAV.CDSLastChangeEntry]
  *
  * Get the type of the last change entry as defined in
- * #GUPnPCDSLastChangeEvent.
+ * [enum@GUPnPAV.CDSLastChangeEvent].
  *
- * Returns: An event from the #GUPnPCDSLastChangeEvent or
+ * Returns: An event from the [enum@GUPnPAV.CDSLastChangeEvent] or
  * %GUPNP_CDS_LAST_CHANGE_EVENT_INVALID if the entry is not valid.
  **/
 GUPnPCDSLastChangeEvent
@@ -277,7 +280,7 @@ gupnp_cds_last_change_entry_get_event (GUPnPCDSLastChangeEntry *entry)
 
 /**
  * gupnp_cds_last_change_entry_get_object_id:
- * @entry: A #GUPnPCDSLastChangeEntry
+ * @entry: A [struct@GUPnPAV.CDSLastChangeEntry]
  *
  * Get the ID of the object in this change entry.
  *
@@ -293,10 +296,10 @@ gupnp_cds_last_change_entry_get_object_id (GUPnPCDSLastChangeEntry *entry)
 
 /**
  * gupnp_cds_last_change_entry_get_parent_id:
- * @entry: A #GUPnPCDSLastChangeEntry
+ * @entry: A [struct@GUPnPAV.CDSLastChangeEntry]
  *
  * Get the parent object id of the object in this change entry. This is only
- * valid if gupnp_cds_last_change_entry_get_event() returns
+ * valid if [method@GUPnPAV.CDSLastChangeEntry.get_event] returns
  * %GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_ADDED.
  *
  * Returns: (transfer none): The id of the object's parent of this entry.
@@ -311,10 +314,10 @@ gupnp_cds_last_change_entry_get_parent_id (GUPnPCDSLastChangeEntry *entry)
 
 /**
  * gupnp_cds_last_change_entry_get_class:
- * @entry: A #GUPnPCDSLastChangeEntry
+ * @entry: A [struct@GUPnPAV.CDSLastChangeEntry]
  *
- * Get the class of the object in this change entry. This is only
- * valid if gupnp_cds_last_change_entry_get_event() returns
+ * Get the UPnP class of the object in this change entry. This is only
+ * valid if [method@GUPnPAV.CDSLastChangeEntry.get_event] returns
  * %GUPNP_CDS_LAST_CHANGE_EVENT_OBJECT_ADDED.
  *
  * Returns: (transfer none): The upnp class of the object of this entry.
@@ -329,7 +332,7 @@ gupnp_cds_last_change_entry_get_class (GUPnPCDSLastChangeEntry *entry)
 
 /**
  * gupnp_cds_last_change_entry_is_subtree_update:
- * @entry: A #GUPnPCDSLastChangeEntry
+ * @entry: A [struct@GUPnPAV.CDSLastChangeEntry]
  *
  * Returns whether this entry is part of a subtree update.
  *
@@ -345,7 +348,7 @@ gupnp_cds_last_change_entry_is_subtree_update (GUPnPCDSLastChangeEntry *entry)
 
 /**
  * gupnp_cds_last_change_entry_get_update_id:
- * @entry: A #GUPnPCDSLastChangeEntry
+ * @entry: A [struct@GUPnPAV.CDSLastChangeEntry]
  *
  * Get the update id of the last change entry.
  *

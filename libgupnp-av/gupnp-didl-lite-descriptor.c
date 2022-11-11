@@ -9,10 +9,11 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-descriptor
- * @short_description: DIDL-Lite Descriptor
+ * GUPnPDIDLLiteDescriptor:
  *
- * #GUPnPDIDLLiteDescriptor respresent a DIDL-Lite descriptor (desc) element.
+ * DIDL-Lite Descriptor
+ *
+ * #GUPnPDIDLLiteDescriptor respresents a DIDL-Lite descriptor (desc) element.
  */
 
 #include <config.h>

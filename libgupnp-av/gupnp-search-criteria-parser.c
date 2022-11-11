@@ -8,8 +8,9 @@
  */
 
 /**
- * SECTION:gupnp-search-criteria-parser
- * @short_description: A/V search criteria parser
+ * GUPnPSearchCriteriaParser:
+ *
+ * A/V search criteria parser
  *
  * #GUPnPSearchCriteriaParser parses ContentDirectory search criteria
  * strings.

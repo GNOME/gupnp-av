@@ -13,8 +13,9 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-resource
- * @short_description: DIDL-Lite Resource
+ * GUPnPDIDLLiteResource:
+ *
+ * DIDL-Lite Resource
  *
  * #GUPnPDIDLLiteResource respresent a DIDL-Lite resource (res) element.
  */

@@ -10,8 +10,9 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-writer
- * @short_description: DIDL-Lite fragment writer
+ * GUPnPDIDLLiteWriter:
+ *
+ * DIDL-Lite fragment writer
  *
  * #GUPnPDIDLLiteWriter is a helper class for writing DIDL-Lite fragments.
  */
