@@ -63,72 +63,14 @@ gboolean
 xsd_data_validate_doc (XSDData *xsd_data,
                        xmlDoc  *doc)
 {
-        static xmlSAXHandler empty_handler = {
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                XML_SAX2_MAGIC,
-                NULL,
-                NULL,
-                NULL,
-                NULL
-        };
-        xmlChar *dump = NULL;
-        int size = 0;
-        xmlParserInputBufferPtr buffer = NULL;
+
         gboolean result = FALSE;
 
         if (xsd_data == NULL)
                 return TRUE;
 
-        xmlDocDumpMemory (doc, &dump, &size);
-        if (dump == NULL)
-                goto out;
-        g_debug ("Doc dump:\n%s", dump);
-        buffer = xmlParserInputBufferCreateMem ((char *) dump,
-                                                   size,
-                                                   XML_CHAR_ENCODING_NONE);
-        if (buffer == NULL)
-                goto out;
-        if (!xmlSchemaValidateStream (xsd_data->valid_context,
-                                      buffer,
-                                      XML_CHAR_ENCODING_NONE,
-                                      &empty_handler,
-                                      NULL))
+        if (!xmlSchemaValidateDoc (xsd_data->valid_context, doc))
                 result = TRUE;
- out:
-        /* Commented out, because it crashes because of double free. I
-         * suppose that it is freed by xmlSchemaValidateStream.
-         */
-        /*
-        if (buffer)
-                xmlFreeParserInputBuffer (buffer);
-        */
-        if (dump != NULL)
-                xmlFree (dump);
+
         return result;
 }
