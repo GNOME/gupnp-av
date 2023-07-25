@@ -57,6 +57,55 @@
     "</container>" \
 "</DIDL-Lite>"
 
+#define TEST_DIDL_GGO11 \
+"<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" " \
+           "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " \
+           "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\">" \
+               "<item id=\"0/1/Disque dur/Vidéos/MEGAFORCE.avi\" " \
+                "parentID=\"0/1/Disque dur/Vidéos\">" \
+                "<dc:title>MEGAFORCE.avi</dc:title>" \
+                "<upnp:class>object.item.videoItem</upnp:class>" \
+                "<dc:date>%s</dc:date>" \
+                    "<res protocolInfo=\"http-get:*:video/x-msvideo:DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=21F00000000000000000000000000000\" size=\"880839598\">" \
+                         "http://192.168.1.254:52424/files/Disque%%20dur/Vid%%C3%%A9os/MEGAFORCE.avi" \
+                    "</res>" \
+                "</item>" \
+"</DIDL-Lite>"
+
+static void
+test_ggo11 (void)
+{
+        GUPnPDIDLLiteParser *parser;
+        guint i;
+        struct {
+                const char *date;
+                gboolean success;
+        } date_tests[] = {
+                { "2008-2-28", TRUE },
+                { "200-2-28", FALSE },
+                { "2008-02-28", TRUE },
+                { "2008-2--28", FALSE },
+                { "2008-02-8", TRUE },
+                { "2008-102-8", FALSE },
+                { "2008-2-128", FALSE },
+                { "", TRUE },
+                { "0-1-2", FALSE },
+                { "2008-2-", FALSE },
+                { "2021-04-23T18:18:42Z", TRUE },
+                { ":", FALSE }
+        };
+
+        parser = gupnp_didl_lite_parser_new ();
+        for (i = 0; i < G_N_ELEMENTS (date_tests); i++) {
+                g_autofree char *didl = g_strdup_printf (TEST_DIDL_GGO11, date_tests[i].date);
+                g_test_message ("Testing validity of date '%s', expecting %s",
+                                date_tests[i].date,
+                                date_tests[i].success ? "success" : "failure");
+                g_assert_true (gupnp_didl_lite_parser_parse_didl (parser, didl, NULL) == date_tests[i].success);
+        }
+        g_clear_object (&parser);
+}
+
 static void
 test_bgo674319_on_object_available (G_GNUC_UNUSED GUPnPDIDLLiteParser *parser,
                                     GUPnPDIDLLiteObject               *object,
@@ -204,6 +253,7 @@ int main (int argc, char *argv[])
         g_test_add_func ("/bugs/gnome/705564", test_bgo705564);
 /*        g_test_add_func ("/bugs/gnome/753314", test_bgo753314); */
         g_test_add_func ("/bugs/gnome/770174", test_bgo770174);
+        g_test_add_func ("/bugs/gnome/11", test_ggo11);
 
         g_test_run ();
 
