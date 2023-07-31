@@ -71,7 +71,7 @@ endif
 
 common_cflags = cc.get_supported_arguments(test_cflags)
 
-add_project_arguments(cc.get_supported_arguments('-Werror=deprecated-declarations'), language: 'c')
+#add_project_arguments(cc.get_supported_arguments('-Werror=deprecated-declarations'), language: 'c')
 conf = configuration_data()
 conf.set_quoted('DATADIR', join_paths(get_option('prefix'), get_option('datadir'), 'gupnp-av'))
 conf.set_quoted('VERSION', meson.project_version())
