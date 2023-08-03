@@ -230,12 +230,17 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
         GUPnPAVXMLDoc *xml_doc = NULL;
         gboolean       result;
 
-        doc = xmlRecoverMemory (didl, strlen (didl));
+        doc = xmlReadMemory (didl,
+                             strlen (didl),
+                             NULL,
+                             NULL,
+                             XML_PARSE_NONET | XML_PARSE_RECOVER);
         if (doc == NULL) {
                 g_set_error (error,
                              G_MARKUP_ERROR,
                              G_MARKUP_ERROR_PARSE,
-                             "Could not parse DIDL-Lite XML:\n%s", didl);
+                             "Could not parse DIDL-Lite XML:\n%s",
+                             didl);
 
                 return FALSE;
         }

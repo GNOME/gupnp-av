@@ -114,12 +114,17 @@ gupnp_feature_list_parser_parse_text
         xmlNode      *element;
         GList        *feature_list = NULL;
 
-        doc = xmlRecoverMemory (text, strlen (text));
+        doc = xmlReadMemory (text,
+                             strlen (text),
+                             NULL,
+                             NULL,
+                             XML_PARSE_NONET | XML_PARSE_RECOVER);
         if (doc == NULL) {
                 g_set_error (error,
                              G_MARKUP_ERROR,
                              G_MARKUP_ERROR_PARSE,
-                             "Could not parse FeatureList XML:\n%s", text);
+                             "Could not parse FeatureList XML:\n%s",
+                             text);
 
                 return NULL;
         }
