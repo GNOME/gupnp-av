@@ -44,21 +44,52 @@ verify_didl_attributes (xmlNode *node)
 
         content = av_xml_util_get_child_element_content (node, "date");
         if (content) {
+                enum {
+                        NONE,
+                        YEAR,
+                        YEARMONTH_HYPHEN,
+                        MONTH,
+                        MONTHDAY_HYPHEN,
+                        DAY,
+                        END
+                };
                 /* try to roughly verify the passed date with ^\d{4}-\d{2}-\d{2} */
                 char *ptr = (char *) content;
-                int state = 0;
+                int idx = 0, state = NONE;
                 while (*ptr) {
-                        if (state == 4 || state == 7) {
-                                if (*ptr != '-')
+                        switch (*ptr) {
+                        case '-':
+                                if (state == YEAR && idx == 4)
+                                        state = YEARMONTH_HYPHEN;
+                                else if (state == MONTH && (idx == 6 || idx == 7))
+                                        state = MONTHDAY_HYPHEN;
+                                else
                                         return FALSE;
-                        } else {
+                                break;
+                        default:
                                 if (!isdigit (*ptr))
                                         return FALSE;
+                                if (state == NONE)
+                                        state = YEAR;
+                                else if (state == YEARMONTH_HYPHEN)
+                                        state = MONTH;
+                                else if (state == MONTHDAY_HYPHEN)
+                                        state = DAY;
+                                else if (state == DAY) {
+                                        if (*(ptr-1) != '-' && *(ptr-2) != '-')
+                                                return FALSE;
+                                }
                         }
 
                         ptr++;
-                        state++;
-                        if (state == 10)
+                        idx++;
+                        if (*ptr == '\0') {
+                                if (state == DAY)
+                                        break;
+                                else
+                                        return FALSE;
+                        }
+                        if (idx == 10)
                                 break;
                 }
         }
