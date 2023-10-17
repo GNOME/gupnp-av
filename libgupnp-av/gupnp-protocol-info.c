@@ -907,9 +907,10 @@ gupnp_protocol_info_set_dlna_profile (GUPnPProtocolInfo *info,
 /**
  * gupnp_protocol_info_set_play_speeds:
  * @info: A #GUPnPProtocolInfo
- * @speeds: The allowed play speeds
+ * @speeds: (array zero-terminated=1): The allowed play speeds
  *
  * Set the allowed play speeds on this info in the form of array of strings.
+ * The array must be %NULL-terminated.
  **/
 void
 gupnp_protocol_info_set_play_speeds (GUPnPProtocolInfo *info,
