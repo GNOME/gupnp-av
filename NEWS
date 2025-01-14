@@ -1,3 +1,17 @@
+0.14.2 (stable)
+===============
+
+- xml: Fix compatibility with libxml2 2.12.x
+- Add missing array annotation
+- build: Fix Requires: line of pkg-config file
+- Loosen restriction on dc:date verification
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+ - Bastien Nocera <hadess@hadess.net>
+ - Bartłomiej Piotrowski <b@bpiotrowski.pl>
+ - Jordan Petridis <jpetridis@gnome.org>
+
 0.14.1 (stable)
 ===============
 - Add utility function to format GDateTime to the iso variant
