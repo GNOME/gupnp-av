@@ -11,8 +11,9 @@
  */
 
 /**
- * SECTION:gupnp-protocol-info
- * @short_description: UPnP AV ProtocolInfo
+ * GUPnPProtocolInfo:
+ *
+ * UPnP AV ProtocolInfo
  *
  * #GUPnPProtocolInfo provides a convenient API to deal with ProtocolInfo
  * strings used in UPnP AV specifications.

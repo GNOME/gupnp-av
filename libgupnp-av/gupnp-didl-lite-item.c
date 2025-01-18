@@ -9,8 +9,9 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-item
- * @short_description: DIDL-Lite Item
+ * GUPnPDIDLLiteItem:
+ *
+ * DIDL-Lite Item
  *
  * #GUPnPDIDLLiteItem respresents a DIDL-Lite item element.
  */
@@ -189,6 +190,8 @@ gupnp_didl_lite_item_set_ref_id (GUPnPDIDLLiteItem *item,
  * gupnp_didl_lite_item_set_lifetime:
  * @item: #GUPnPDIDLLiteItem
  * @lifetime: The lifetime (in seconds) of this item in a media collection.
+ *
+ * Sets the lifetime in seconds of this item in a media collection.
  **/
 void
 gupnp_didl_lite_item_set_lifetime (GUPnPDIDLLiteItem *item,

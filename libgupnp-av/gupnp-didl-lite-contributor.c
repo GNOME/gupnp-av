@@ -9,10 +9,11 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-contributor
- * @short_description: DIDL-Lite Contributor
+ * GUPnPDIDLLiteContributor:
  *
- * #GUPnPDIDLLiteContributor respresents a contributor (artist, author, actor,
+ * Contributor attached to a DIDL-Lite object
+ *
+ * This represents a contributor (artist, author, actor,
  * producer, director, producer and contributor) property in a DIDL-Lite object.
  */
 
@@ -141,7 +142,7 @@ gupnp_didl_lite_contributor_class_init (GUPnPDIDLLiteContributorClass *klass)
         object_class->dispose = gupnp_didl_lite_contributor_dispose;
 
         /**
-         * GUPnPDIDLLiteContributor:xml-node:
+         * GUPnPDIDLLiteContributor:xml-node:(attributes org.gtk.Property.get=gupnp_didl_lite_contributor_get_xml_node):
          *
          * The pointer to object node in XML document.
          **/
@@ -182,7 +183,7 @@ gupnp_didl_lite_contributor_class_init (GUPnPDIDLLiteContributorClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteContributor:role:
+         * GUPnPDIDLLiteContributor:role:(attributes org.gtk.Property.get=gupnp_didl_lite_contributor_get_role org.gtk.Property.set=gupnp_didl_lite_contributor_set_role):
          *
          * The role of this contributor.
          **/
@@ -199,7 +200,7 @@ gupnp_didl_lite_contributor_class_init (GUPnPDIDLLiteContributorClass *klass)
                                       G_PARAM_STATIC_BLURB));
 
         /**
-         * GUPnPDIDLLiteContributor:name:
+         * GUPnPDIDLLiteContributor:name:(attributes org.gtk.Property.get=gupnp_didl_lite_contributor_get_role org.gtk.Property.set=gupnp_didl_lite_contributor_set_role):
          *
          * The name of this contributor.
          **/
@@ -217,7 +218,7 @@ gupnp_didl_lite_contributor_class_init (GUPnPDIDLLiteContributorClass *klass)
 }
 
 /**
- * gupnp_didl_lite_contributor_get_role:
+ * gupnp_didl_lite_contributor_get_role:(attributes org.gtk.Method.get_property=role):
  * @contributor: #GUPnPDIDLLiteContributor
  *
  * Get the role of the @contributor.
@@ -237,7 +238,7 @@ gupnp_didl_lite_contributor_get_role (GUPnPDIDLLiteContributor *contributor)
 }
 
 /**
- * gupnp_didl_lite_contributor_get_name:
+ * gupnp_didl_lite_contributor_get_name:(attributes org.gtk.Method.get_property=name):
  * @contributor: A #GUPnPDIDLLiteContributor
  *
  * Get the name of the @contributor.
@@ -256,7 +257,7 @@ gupnp_didl_lite_contributor_get_name (GUPnPDIDLLiteContributor *contributor)
 }
 
 /**
- * gupnp_didl_lite_contributor_set_role:
+ * gupnp_didl_lite_contributor_set_role:(attributes org.gtk.Method.set_property=role):
  * @contributor: #GUPnPDIDLLiteContributor
  * @role: The role of the @contributor
  *
@@ -280,7 +281,7 @@ gupnp_didl_lite_contributor_set_role (GUPnPDIDLLiteContributor *contributor,
 }
 
 /**
- * gupnp_didl_lite_contributor_set_name:
+ * gupnp_didl_lite_contributor_set_name:(attributes org.gtk.Method.set_property=name):
  * @contributor: A #GUPnPDIDLLiteContributor
  * @name: The name of the contributor
  *
@@ -326,7 +327,7 @@ gupnp_didl_lite_contributor_new_from_xml (xmlNode       *xml_node,
 }
 
 /**
- * gupnp_didl_lite_contributor_get_xml_node:
+ * gupnp_didl_lite_contributor_get_xml_node:(attributes org.gtk.Method.get_property=xml-node):
  * @contributor: The #GUPnPDIDLLiteContributor
  *
  * Get the pointer to relevant node in XML document.

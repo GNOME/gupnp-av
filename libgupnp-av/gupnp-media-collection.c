@@ -8,8 +8,9 @@
  */
 
 /**
- * SECTION:gupnp-media-collection
- * @short_description: Media collection writer
+ * GUPnPMediaCollection:
+ *
+ * Media collection writer
  *
  * #GUPnPMediaCollection is a helper class for writing media collection files.
  **/

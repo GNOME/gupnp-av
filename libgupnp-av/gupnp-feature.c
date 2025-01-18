@@ -8,8 +8,9 @@
  */
 
 /**
- * SECTION:gupnp-feature
- * @short_description: ContentDirectory feature
+ * GUPnPFeature:
+ *
+ * ContentDirectory feature
  *
  * #GUPnPFeature respresent a Feature element.
  */

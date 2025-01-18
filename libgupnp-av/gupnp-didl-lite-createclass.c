@@ -11,10 +11,12 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-create-class
- * @short_description: DIDL-Lite CreateClass
+ * GUPnPDIDLLiteCreateClass:
  *
- * #GUPnPDIDLLiteCreateClass respresents a DIDL-Lite create class element.
+ * DIDL-Lite CreateClass
+ *
+ * [class@GUPnPAV.DIDLLiteCreateClass] respresents a DIDL-Lite create class
+ * element.
  */
 
 #include <config.h>
@@ -258,7 +260,7 @@ gupnp_didl_lite_create_class_class_init (GUPnPDIDLLiteCreateClassClass *klass)
 
 /**
  * gupnp_didl_lite_create_class_get_content:
- * @create_class: #GUPnPDIDLLiteCreateClass
+ * @create_class: [class@GUPnPAV.DIDLLiteCreateClass]
  *
  * Get the content of the @create_class.
  *
@@ -282,7 +284,7 @@ gupnp_didl_lite_create_class_get_content
 
 /**
  * gupnp_didl_lite_create_class_set_content:
- * @create_class: #GUPnPDIDLLiteCreateClass
+ * @create_class: [class@GUPnPAV.DIDLLiteCreateClass]
  * @content: The content
  *
  * Set the content of the @create_class.
@@ -309,7 +311,7 @@ gupnp_didl_lite_create_class_set_content
 
 /**
  * gupnp_didl_lite_create_class_get_include_derived:
- * @create_class: #GUPnPDIDLLiteCreateClass
+ * @create_class: [class@GUPnPAV.DIDLLiteCreateClass]
  *
  * Checks whether @create_class can be derived.
  *
@@ -331,7 +333,7 @@ gupnp_didl_lite_create_class_get_include_derived
 
 /**
  * gupnp_didl_lite_create_class_set_include_derived:
- * @create_class: #GUPnPDIDLLiteCreateClass
+ * @create_class: [class@GUPnPAV.DIDLLiteCreateClass]
  * @include_derived: the derivability
  *
  * (Un)set the derivability of create_class.
@@ -364,7 +366,7 @@ gupnp_didl_lite_create_class_set_include_derived
 
 /**
  * gupnp_didl_lite_create_class_get_friendly_name:
- * @create_class: #GUPnPDIDLLiteCreateClass
+ * @create_class: [class@GUPnPAV.DIDLLiteCreateClass]
  *
  * Get the friendly name of the @create_class.
  *
@@ -385,7 +387,7 @@ gupnp_didl_lite_create_class_get_friendly_name
 
 /**
  * gupnp_didl_lite_create_class_set_friendly_name:
- * @create_class: #GUPnPDIDLLiteCreateClass
+ * @create_class: [class@GUPnPAV.DIDLLiteCreateClass]
  * @friendly_name: The friendly name
  *
  * Set the friendly name of the @create_class.
@@ -414,9 +416,10 @@ gupnp_didl_lite_create_class_set_friendly_name
  * @xml_node: The pointer to relevant node in XML document
  * @xml_doc: The reference to containing XML document
  *
- * Creates a new #GUPnPDIDLLiteCreateClass for the @xml_node.
+ * Creates a new [class@GUPnPAV.DIDLLiteCreateClass] for the @xml_node.
  *
- * Returns: (transfer full): A new #GUPnPDIDLLiteCreateClass object. Unref after usage.
+ * Returns: (transfer full): A new [class@GUPnPAV.DIDLLiteCreateClass] object.
+ *Unref after usage.
  **/
 GUPnPDIDLLiteCreateClass *
 gupnp_didl_lite_create_class_new_from_xml (xmlNode     *xml_node,
@@ -430,7 +433,7 @@ gupnp_didl_lite_create_class_new_from_xml (xmlNode     *xml_node,
 
 /**
  * gupnp_didl_lite_create_class_get_xml_node:
- * @create_class: The #GUPnPDIDLLiteCreateClass
+ * @create_class: The [class@GUPnPAV.DIDLLiteCreateClass]
  *
  * Get the pointer to relevant node in XML document.
  *

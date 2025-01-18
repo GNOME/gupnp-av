@@ -1,4 +1,4 @@
-project('gupnp-av', 'c', version : '0.14.3', default_options: ['c_std=c11'])
+project('gupnp-av', 'c', version : '0.14.3', default_options: ['c_std=c11'], meson_version:  '>= 0.58.0')
 
 gnome = import('gnome')
 
@@ -6,6 +6,8 @@ glib_version = '2.58'
 gobject = dependency('gobject-2.0', version : '>= ' + glib_version)
 glib = dependency('glib-2.0', version : '>= ' + glib_version)
 libxml = dependency('libxml-2.0')
+
+GUPNP_AV_API_NAME='gupnp-av-1.0'
 
 cc = meson.get_compiler('c')
 
@@ -97,10 +99,28 @@ pkg.generate(
     description : 'GObject-based AV specific UPnP library'
 )
 
+gidocgen_dep = dependency('gi-docgen', version: '>= 2021.1',
+                          fallback: ['gi-docgen', 'dummy_dep'],
+                          native: true,
+                          required: get_option('gtk_doc') and get_option('introspection')
+                      )
+
 if get_option('gtk_doc')
+
+gidocgen_dep = dependency('gi-docgen', version: '>= 2021.1',
+                          fallback: ['gi-docgen', 'dummy_dep'],
+                          required: get_option('gtk_doc') and get_option('introspection')
+                      )
+
     subdir('doc')
 endif
 
 if get_option('introspection') and get_option('vapi')
     subdir('vala')
 endif
+
+if not meson.is_subproject()
+    meson.add_dist_script('build-aux/dist-docs.py')
+endif
+
+

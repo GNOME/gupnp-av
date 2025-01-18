@@ -1,5 +1,5 @@
 test_env = [
-    'GUPNP_AV_DATADIR="@0@"'.format(join_paths(meson.source_root(), 'data')),
+    'GUPNP_AV_DATADIR="@0@"'.format(join_paths(meson.project_source_root(), 'data')),
     'MALLOC_PERTURB_=170',
     'MALLOC_CHECK_=2'
 ]

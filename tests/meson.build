@@ -27,7 +27,7 @@ check_feature_list_parser = executable(
 fragments = executable(
     'fragments',
     'fragments.c',
-    c_args : [common_cflags, '-DABS_TOP_SRCDIR="@0@"'.format(meson.source_root())],
+    c_args : [common_cflags, '-DABS_TOP_SRCDIR="@0@"'.format(meson.project_source_root())],
     include_directories: config_h_inc,
     dependencies : [gobject, libxml, gupnp_av]
 )

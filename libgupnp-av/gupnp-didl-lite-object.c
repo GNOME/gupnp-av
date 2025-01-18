@@ -11,8 +11,9 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-object
- * @short_description: DIDL-Lite Object
+ * GUPnPDIDLLiteObject:
+ *
+ * DIDL-Lite Object
  *
  * #GUPnPDIDLLiteObject respresent a DIDL-Lite object element.
  */

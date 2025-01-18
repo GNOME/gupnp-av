@@ -15,11 +15,6 @@
 #include "gupnp-av-error.h"
 
 /**
- * SECTION:gupnp-av-error
- * @short_description: Error domains and codes.
- */
-
-/**
  * GUPNP_PROTOCOL_ERROR:
  *
  * The #GQuark uniquely used by GUPnP AV protocol related errors.
