@@ -1,30 +1,37 @@
 conf = configuration_data()
 conf.set('VERSION', meson.project_version())
 
-version_xml = configure_file(
-    input : 'version.xml.in',
-    output : 'version.xml',
-    configuration: conf
-)
+if get_option('gtk_doc')
+  gidocgen = find_program('gi-docgen', required: true)
 
-gnome.gtkdoc(
-    'gupnp-av',
-    src_dir : ['libgupnp-av'],
-    main_sgml : 'gupnp-av-docs.sgml',
-    content_files : version_xml,
-    scan_args : ['--deprecated-guards=GUPNP_DISABLE_DEPRECATED'],
-    mkdb_args : ['--sgml-mode', '--output-format=xml'],
-    dependencies : gupnp_av,
-    ignore_headers : [
-        'xml-util.h',
-        'xsd-data.h',
-        'fragment-util.h',
-        'gvalue-util.h',
-        'gupnp-av-marshal.h',
-        'gunpp-didl-lite-contributor-private.h',
-        'gupnp-didl-lite-descriptior-private.h',
-        'gupnp-didl-lite-object-private.h',
-        'gupnp-didl-lite-resource-private.h'
-    ],
-    install : true
-)
+  gupnp_av_toml = configure_file (
+      input: 'gupnp-av.toml.in',
+      output: 'gupnp-av.toml',
+      configuration: conf
+  )
+
+  docs_dir = join_paths(get_option('prefix'), get_option('datadir')) / 'doc'
+
+  custom_target(
+      'gupnp-av-doc',
+      input: [ gupnp_av_toml, gupnp_av_gir[0] ],
+      output: GUPNP_AV_API_NAME,
+      command : [
+          gidocgen,
+          'generate',
+          '--quiet',
+          '--add-include-path=@0@'.format(meson.current_build_dir() / '../libgupnp-av'),
+          '--config', gupnp_av_toml,
+          '--output-dir=@OUTPUT@',
+          '--no-namespace-dir',
+          '--content-dir=@0@'.format(meson.current_source_dir()),
+          '@INPUT1@',
+      ],
+      depend_files : [
+          gupnp_av_toml,
+      ],
+      build_by_default: true,
+      install: true,
+      install_dir : docs_dir,
+  )
+endif

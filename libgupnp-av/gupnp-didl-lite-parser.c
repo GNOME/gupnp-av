@@ -8,8 +8,9 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-parser
- * @short_description: A/V DIDL-Lite XML parser
+ * GUPnPDIDLLiteParser:
+ *
+ * A/V DIDL-Lite XML parser
  *
  * #GUPnPDIDLLiteParser parses DIDL-Lite XML strings.
  *

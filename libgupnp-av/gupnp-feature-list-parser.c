@@ -8,8 +8,9 @@
  */
 
 /**
- * SECTION:gupnp-feature-list-parser
- * @short_description: FeatureList state variable XML parser
+ * GUPnPFeatureListParser:
+ *
+ * FeatureList state variable XML parser
  *
  * #GUPnPFeatureListParser parses XML strings from ContentDirectory
  * FeatureList state variable.
@@ -99,10 +100,10 @@ get_feature_object_ids (xmlNode *feature)
  * @error: The location where to store the error information if any, or NULL
  *
  * Parses @text and returns the list of available features.
- * If an error occured @error will be set.
+ * If an error occurred @error will be set.
  *
- * Return value: (transfer full) (element-type GUPnPFeature)(nullable): The list of
- * features or %NULL if an error occured.
+ * Return value: (transfer full) (element-type GUPnPFeature)(nullable): The list
+ *of features or %NULL if an error occurred.
  **/
 GList *
 gupnp_feature_list_parser_parse_text

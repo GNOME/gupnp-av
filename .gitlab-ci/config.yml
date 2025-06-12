@@ -1,0 +1,27 @@
+project: gupnp-av
+api_version: 1.0
+
+# TODO: Hardcode architecture for now
+arch: x86_64
+
+# Those are all jobs that are just run once, not on all distributions and versions
+# format has to be distribution:version@arch
+targets:
+  coverage: fedora:42@x86_64
+  coverity: fedora:42@x86_64
+  static-scan: fedora:42@x86_64
+  pages: fedora:42@x86_64
+  downstream: fedora:42@x86_64
+  dist: fedora:42@x86_64
+
+# Projects to trigger after a successful build
+# Format is name: gitlab project on this server
+triggers:
+
+# Distribution configurations
+distributions:
+  fedora: [42]
+
+packages:
+  fedora:
+    needed: ['clang', 'clang-analyzer', 'gcovr', 'git', 'libasan', 'libubsan', 'python3-gobject', 'meson', 'python3-pip', 'xmlto', 'gobject-introspection-devel', 'libxml2-devel', 'vala', 'ninja-build', 'libnghttp2-devel', 'libpsl-devel', 'sqlite-devel', 'python3-setuptools']

@@ -6,7 +6,6 @@ GUPnPAV cheader_filename="libgupnp-av/gupnp-av.h"
 *.dc_namespace type="Xml.Ns*"
 *.upnp_namespace type="Xml.Ns*"
 DIDL_LITE_WRITER_NAMESPACE_* skip
-*.gupnp_reserved skip
 SearchCriteriaParserError skip
 SearchCriteriaParser
     .expression skip

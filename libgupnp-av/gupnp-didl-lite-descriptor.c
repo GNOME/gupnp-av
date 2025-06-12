@@ -9,10 +9,11 @@
  */
 
 /**
- * SECTION:gupnp-didl-lite-descriptor
- * @short_description: DIDL-Lite Descriptor
+ * GUPnPDIDLLiteDescriptor:
  *
- * #GUPnPDIDLLiteDescriptor respresent a DIDL-Lite descriptor (desc) element.
+ * DIDL-Lite Descriptor
+ *
+ * #GUPnPDIDLLiteDescriptor respresents a DIDL-Lite descriptor (desc) element.
  */
 
 #include <config.h>
@@ -277,6 +278,8 @@ gupnp_didl_lite_descriptor_class_init (GUPnPDIDLLiteDescriptorClass *klass)
 
 /**
  * gupnp_didl_lite_descriptor_new:
+ *
+ * Create a new GUPnPDIDLLiteDescriptor oobject.
  *
  * Return value: A new #GUPnPDIDLLiteDescriptor object. Unref after usage.
  **/
