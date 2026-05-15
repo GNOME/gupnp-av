@@ -206,7 +206,7 @@ gupnp_search_criteria_parser_finalize (GObject *object)
 
         gobject_class =
                 G_OBJECT_CLASS (gupnp_search_criteria_parser_parent_class);
-        gobject_class->dispose (object);
+        gobject_class->finalize (object);
 }
 
 static void
