@@ -86,59 +86,74 @@ xsd_data_free (XSDData *xsd_data)
         g_slice_free (XSDData, xsd_data);
 }
 
+static xmlBuffer *
+serialize_doc (xmlDoc *doc)
+{
+        xmlBuffer *buffer;
+        xmlSaveCtxtPtr save_context;
+
+        buffer = xmlBufferCreate ();
+        if (buffer == NULL) {
+                return NULL;
+        }
+        save_context = xmlSaveToBuffer (buffer, NULL, 0);
+        if (save_context == NULL) {
+                xmlBufferFree (buffer);
+
+                return NULL;
+        }
+        if (xmlSaveDoc (save_context, doc) < 0) {
+                xmlSaveClose (save_context);
+                xmlBufferFree (buffer);
+
+                return NULL;
+        }
+        /* Flushes the buffer and frees the save context. */
+        if (xmlSaveClose (save_context) < 0) {
+                xmlBufferFree (buffer);
+
+                return NULL;
+        }
+        if (xmlBufferContent (buffer) == NULL) {
+                xmlBufferFree (buffer);
+
+                return NULL;
+        }
+
+        return buffer;
+}
+
 gboolean
 xsd_data_validate_doc (XSDData *xsd_data,
                        xmlDoc  *doc)
 {
         g_autoptr (xmlBuffer) buffer = NULL;
         g_autoptr (xmlDoc) dump_doc = NULL;
-        xmlSaveCtxtPtr save_context = NULL;
-        const xmlChar *content;
         gboolean result = FALSE;
 
         if (xsd_data == NULL) {
                 return TRUE;
         }
 
-        buffer = xmlBufferCreate ();
+        buffer = serialize_doc (doc);
         if (buffer == NULL) {
                 return FALSE;
         }
-        save_context = xmlSaveToBuffer (buffer, NULL, 0);
-        if (save_context == NULL) {
-                goto out;
-        }
-        if (xmlSaveDoc (save_context, doc) < 0) {
-                goto out;
-        }
-        /* Flushes the buffer and frees the save context. */
-        if (xmlSaveClose (save_context) < 0) {
-                save_context = NULL;
-                goto out;
-        }
-        save_context = NULL;
-        content = xmlBufferContent (buffer);
-        if (content == NULL) {
-                goto out;
-        }
         g_debug ("Doc dump:\n%.*s",
                  (int) xmlBufferLength (buffer),
-                 (const char *) content);
+                 (const char *) xmlBufferContent (buffer));
         /* Nodes may lack namespace info; validate a re-parsed copy. */
-        dump_doc = xmlReadMemory ((const char *) content,
+        dump_doc = xmlReadMemory ((const char *) xmlBufferContent (buffer),
                                   (int) xmlBufferLength (buffer),
                                   NULL,
                                   NULL,
                                   XML_PARSE_NONET);
         if (dump_doc == NULL) {
-                goto out;
+                return FALSE;
         }
         if (xmlSchemaValidateDoc (xsd_data->valid_context, dump_doc) == 0) {
                 result = TRUE;
         }
- out:
-        if (save_context != NULL) {
-                xmlSaveClose (save_context);
-        }
+
         return result;
 }

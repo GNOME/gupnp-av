@@ -10,9 +10,10 @@
 #include <config.h>
 
 #include <glib-object.h>
+#include <libgupnp-av/gupnp-didl-lite-item.h>
 #include <libgupnp-av/gupnp-didl-lite-object.h>
 #include <libgupnp-av/gupnp-didl-lite-writer.h>
-#include <libgupnp-av/gupnp-didl-lite-item.h>
+#include <libxml/tree.h>
 
 /* creates an item described by:
 static const gchar * const didllite =
@@ -101,13 +102,13 @@ static const gchar *new_fragments[] = {
 static void
 debug_dump (GUPnPDIDLLiteObject *object)
 {
-        xmlChar *dump = NULL;
+        xmlBuffer *buffer;
         xmlNodePtr node = gupnp_didl_lite_object_get_xml_node (object);
-        xmlDocPtr doc = node->doc;
 
-        xmlDocDumpMemory (doc, &dump, NULL);
-        g_debug ("Obj dump:\n%s", dump);
-        xmlFree (dump);
+        buffer = xmlBufferCreate ();
+        xmlNodeDump (buffer, node->doc, xmlDocGetRootElement (node->doc), 0, 0);
+        g_debug ("Obj dump:\n%s", (const char *) xmlBufferContent (buffer));
+        xmlBufferFree (buffer);
 }
 
 int main (void)

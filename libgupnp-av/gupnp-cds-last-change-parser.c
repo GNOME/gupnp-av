@@ -101,7 +101,10 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
         g_return_val_if_fail (GUPNP_IS_CDS_LAST_CHANGE_PARSER (parser),
                               NULL);
 
-        doc = xmlParseDoc ((const xmlChar *) last_change);
+        doc = xmlReadDoc ((const xmlChar *) last_change,
+                          NULL,
+                          NULL,
+                          XML_PARSE_NONET);
         if (doc == NULL) {
                 g_set_error (error,
                              G_MARKUP_ERROR,

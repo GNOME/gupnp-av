@@ -150,7 +150,10 @@ gupnp_last_change_parser_parse_last_change_valist
 
         g_return_val_if_fail (last_change_xml, FALSE);
 
-        doc = xmlParseDoc ((const xmlChar *) last_change_xml);
+        doc = xmlReadDoc ((const xmlChar *) last_change_xml,
+                          NULL,
+                          NULL,
+                          XML_PARSE_NONET);
         if (doc == NULL) {
                 g_set_error (error,
                              G_MARKUP_ERROR,
