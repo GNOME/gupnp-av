@@ -253,6 +253,9 @@ gupnp_didl_lite_contributor_get_name (GUPnPDIDLLiteContributor *contributor)
         GUPnPDIDLLiteContributorPrivate *priv =
                 gupnp_didl_lite_contributor_get_instance_private (contributor);
 
+        if (priv->xml_node->children == NULL)
+                return NULL;
+
         return (const char *) priv->xml_node->children->content;
 }
 
