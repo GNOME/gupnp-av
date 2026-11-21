@@ -166,12 +166,11 @@ static-scan:
     - meson --buildtype=debug _scan_build -Dintrospection=false
     - export SCANBUILD="$PWD/.gitlab-ci/scanbuild-wrapper.sh"
     - ninja -C _scan_build scan-build
-  artifacts:
-    paths:
-      - _scan_build/meson-logs
   after_script:
     - .gitlab-ci/scanbuild-plist-to-junit.py _scan_build/meson-logs/scanbuild/ > _scan_build/junit-scan-build.xml
   artifacts:
+    paths:
+      - _scan_build/meson-logs
     reports:
       junit: "_scan_build/junit-scan-build.xml"
 
@@ -182,24 +181,25 @@ coverity:
   stage: analysis
   allow_failure: true
   script:
-    - curl https://scan.coverity.com/download/linux64 --data "token=$COVERITY_TOKEN&project=gupnp-av" --output /tmp/coverity_tool.tgz
+    - curl --fail https://scan.coverity.com/download/linux64 --data-urlencode "token=$COVERITY_TOKEN" --data-urlencode "project=gupnp-av" --output /tmp/coverity_tool.tgz
     - tar zxf /tmp/coverity_tool.tgz
     - mkdir coverity-build
     - cd coverity-build
     - env CC=clang meson ..
     - ../cov-analysis-linux64-*/bin/cov-build --dir cov-int ninja
     - tar czf cov-int.tar.gz cov-int
-    - curl https://scan.coverity.com/builds?project=gupnp-av
+    - curl --fail https://scan.coverity.com/builds?project=gupnp-av
       --form token=$COVERITY_TOKEN --form email=mail@jensge.org
       --form file=@cov-int.tar.gz --form version="`git describe --tags`"
       --form description="gitlab CI build"
   needs:
     - build-container-fedora:45@x86_64
-  only:
-    - master
-  except:
-    changes:
-      - po/*.po
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - po/*.po
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 pages:
   extends:
@@ -208,7 +208,13 @@ pages:
   stage: website
   script:
       - mkdir -p public
-      - mv build/doc/gupnp-av-1.0 public/docs
+      - |
+        if [ -d build/doc/gupnp-av-1.0 ]; then
+          mv build/doc/gupnp-av-1.0 public/docs
+        else
+          echo "::error::Documentation was not built (build/doc/gupnp-av-1.0 missing)"
+          exit 1
+        fi
 
   artifacts:
     paths:
