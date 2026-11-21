@@ -5,7 +5,7 @@ gnome = import('gnome')
 glib_version = '2.58'
 gobject = dependency('gobject-2.0', version : '>= ' + glib_version)
 glib = dependency('glib-2.0', version : '>= ' + glib_version)
-libxml = dependency('libxml-2.0')
+libxml = dependency('libxml-2.0', version : '>= 2.14.0')
 
 GUPNP_AV_API_NAME='gupnp-av-1.0'
 
