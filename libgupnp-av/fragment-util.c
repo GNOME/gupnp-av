@@ -10,7 +10,7 @@
 #include <config.h>
 
 #include <stdarg.h>
-#include <libxml/parserInternals.h>
+#include <libxml/parser.h>
 
 #include "fragment-util.h"
 #include "xml-util.h"
@@ -745,38 +745,11 @@ get_xsd_path (const gchar *path)
                                 path);
 }
 
-static xmlParserInputPtr
-our_own_loader (const char       *url,
-                const char       *id,
-                xmlParserCtxtPtr  context)
-{
-        gchar *basename;
-        gchar *path;
-        xmlParserInputPtr input;
-
-        g_debug ("URL: %s, ID: %s.", url, id);
-
-        basename = g_path_get_basename (url);
-        path = get_xsd_path (basename);
-        g_debug ("BASENAME: %s, PATH: %s", basename, path);
-        input = xmlNewInputFromFile (context, path);
-
-        g_free (basename);
-        g_free (path);
-
-        return input;
-}
-
 XSDData *
 fragment_util_get_didl_lite_xsd_data (void)
 {
         gchar *path = get_xsd_path ("didl-lite-v2.xsd");
-        xmlExternalEntityLoader original_loader = xmlGetExternalEntityLoader ();
-        XSDData *xsd_data;
-
-        xmlSetExternalEntityLoader (our_own_loader);
-        xsd_data = xsd_data_new (path);
-        xmlSetExternalEntityLoader (original_loader);
+        XSDData *xsd_data = xsd_data_new (path);
 
         g_free (path);
 
