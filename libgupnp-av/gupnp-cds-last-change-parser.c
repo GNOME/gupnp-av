@@ -127,7 +127,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
         }
 
         for (it = state_event->children; it != NULL; it = it->next) {
-                if (it->type == XML_TEXT_NODE)
+                if (it->type != XML_ELEMENT_NODE)
                         continue;
 
                 if (g_ascii_strcasecmp ((const char *) it->name,
