@@ -342,7 +342,10 @@ gupnp_didl_lite_descriptor_get_content (GUPnPDIDLLiteDescriptor *descriptor)
         GUPnPDIDLLiteDescriptorPrivate *priv =
                 gupnp_didl_lite_descriptor_get_instance_private (descriptor);
 
-        return (const char *) priv->xml_node->children;
+        if (priv->xml_node->children == NULL)
+                return NULL;
+
+        return (const char *) priv->xml_node->children->content;
 }
 
 /**
